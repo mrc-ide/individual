@@ -1,0 +1,13 @@
+Package: individual
+Title: A package for specifying and simulating individial based models.
+Version: 0.0.0.9000
+Authors@R:
+    person(given = "Giovanni",
+           family = "Charles"
+           )
+Description: What the package does (one paragraph).
+License: None
+Encoding: UTF-8
+LazyData: true
+Suggests:
+    testthat (>= 2.1.0)
