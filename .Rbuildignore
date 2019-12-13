@@ -1,0 +1,3 @@
+^LICENSE\.md$
+.travis.yml
+docker
