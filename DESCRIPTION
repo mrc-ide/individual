@@ -1,13 +1,31 @@
 Package: individual
-Title: A package for specifying and simulating individial based models.
-Version: 0.0.0.9000
-Authors@R:
-    person(given = "Giovanni",
-           family = "Charles"
-           )
-Description: What the package does (one paragraph).
-License: None
+Title: A package for specifying and simulating individial based models
+Version: 0.0.1
+Authors@R: c(
+  person(
+    given = "Giovanni",
+    family = "Charles",
+    role = c('aut', 'cre'),
+    email = 'giovanni.charles@gmail.com'
+  ),
+  person(
+    given = "Imperial College of Science, Technology and Medicine",
+    family = "",
+    role = c('cph'),
+    email = 'giovanni.charles10@imperial.ac.uk'
+  ))
+Description: This package gives you useful primitives for structuring and simulating individual based epidemiological models.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Collate:
+  'utils.R'
+  'individual.R'
+  'simulate.R'
+Imports:
+  R6
 Suggests:
-    testthat (>= 2.1.0)
+  testthat (>= 2.1.0),
+  roxygen2,
+  mockery
+RoxygenNote: 7.0.2
