@@ -24,6 +24,6 @@ processes <- list(
 )
 
 
-simulation <- simulate(human, processes, 1 * 1000)
+simulation <- simulate(human, processes, 1 * 100)
 rendered <- simulation$render(human)
 print('done')
