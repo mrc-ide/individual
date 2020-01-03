@@ -1,5 +1,6 @@
 #' Class: StateUpdate
 #' Represents a state update
+#' @export StateUpdate
 StateUpdate <- DataClass(
   'StateUpdate',
   c('individual', 'index', 'state'),
@@ -132,6 +133,7 @@ Simulation <- R6::R6Class(
 )
 
 # Main simulation loop
+#' @export simulate
 simulate <- function(individuals, processes, end_timestep) {
   if (end_timestep < 0) {
     stop('End timestep must be > 0')

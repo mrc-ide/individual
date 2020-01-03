@@ -1,5 +1,6 @@
 #' Class: Individual
 #' Represents an individual in our simulation
+#' @export Individual
 Individual <- DataClass(
   'Individual',
   c('name', 'states'),
@@ -31,6 +32,7 @@ Individual$set(
 
 #' Class: State
 #' Represents a state for an individual in our simulation
+#' @export State
 State <- DataClass(
   'State',
   c('name', 'initial_size'),
