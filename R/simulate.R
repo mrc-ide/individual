@@ -145,7 +145,11 @@ Simulation <- R6::R6Class(
   )
 )
 
-# Main simulation loop
+#' Main simulation loop
+#'
+#' @param individuals a list of Individual to simulate
+#' @param processes a list of processes to execute on each timestep
+#' @param end_timestep the number of timesteps to simulate
 #' @export simulate
 simulate <- function(individuals, processes, end_timestep) {
   if (end_timestep <= 0) {
