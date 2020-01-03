@@ -1,7 +1,8 @@
-#' Sorts a state simulation by timestep and state making it comparable to others
-#' @param df to sort
-sort_simulation <- function(df) {
-  df <- df[with(df, order(timestep, state)), c('timestep', 'state')]
-  rownames(df) <- NULL
-  df
+#' Sorts a simulation by timestep and state making it comparable to others
+#' @param simulation to sort
+sort_simulation <- function(a) {
+  a[order(
+    slice.index(a, 3), #timestep
+    a                  #state
+  )]
 }

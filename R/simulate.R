@@ -23,111 +23,124 @@ StateUpdate <- DataClass(
 SimFrame <- R6::R6Class(
   'SimFrame',
   private = list(
-    .frames = list()
-  ),
-  active = list(
-    frames = readonly_accessor('frames', '.frames')
-  ),
-  public = list(
+    .frames = list(),
+    .individuals = list(),
+
     #' @description
     #' Get the entire frame of an individual
     #' @param individual of interest
-    get_frame = function(individual) {
-      if (!(individual$name %in% names(self$frames))) {
+    .get_frame = function(individual) {
+      if (!(individual$name %in% names(private$.frames))) {
         stop('Unregistered individual')
       }
-      self$frames[[individual$name]]
-    },
-
+      private$.frames[[individual$name]]
+    }
+  ),
+  public = list(
     #' @description
     #' Get the indecies of individuals with a particular state
     #' @param individual of interest
     #' @param state of interest
     get_state = function(individual, state) {
-      individual_frame <- self$get_frame(individual)
+      individual_frame <- private$.get_frame(individual)
       if (!individual$check_state(state)) {
         stop('Invalid state')
       }
-      which(individual_frame$state == state$name)
-    },
-
-    #' @description
-    #' Perform updates on the dataframe
-    #' @param updates is a list of updates to apply
-    apply_updates = function(updates) {
-      for (update in updates) {
-        if (class(update)[1] == 'StateUpdate') {
-          private$.frames[[
-            update$individual$name
-          ]]$state[update$index] <- update$state$name
-        }
-      }
+      which(individual_frame == state$name)
     },
 
     #' @description
     #' Create an initial SimFrame
-    #' @param frames is a list of dataframes, one for each individual
-    initialize = function(individuals) {
+    #' @param individuals is a list of Individual
+    #' @param arrays is a list of arrays for each individual at the current
+    #' timestep
+    initialize = function(individuals, arrays) {
       if (!is.list(individuals)) {
         individuals <- list(individuals)
       }
+      if (!is.list(arrays)) {
+        arrays <- list(arrays)
+      }
       names <- lapply(individuals, function(i) { i$name })
-      frames <- lapply(
-        individuals,
-        function(i) {
-          levels <- vapply(i$states, function(state) {state$name}, character(1))
-          data.frame(
-            state = factor(
-              unlist(
-                lapply(i$states, function(state) {
-                  rep(state$name, state$initial_size)
-                })
-              ),
-              levels = levels
-            )
-          )
-        }
-      )
-      private$.frames <- setNames(frames, names)
+      private$.frames <- setNames(arrays, names)
+      private$.individuals <- individuals
     }
   )
 )
 
 #' Class: Simulation
-#' Representation class for a list of simframes spanning a timescale
+#' Class to store and update the simulation for each type of individual
 Simulation <- R6::R6Class(
   'Simulation',
   private = list(
-    .sim_frames = list()
+    .individual_to_array = list(),
+    .current_timestep = 1,
+    .individuals = list()
   ),
   public = list(
-    #' @description
-    #' Create a simulation frame to the simulation
-    #' @param frame to add
-    #' @param timestep to add it to
-    add_frame = function(frame, timestep) {
-      private$.sim_frames[[length(private$.sim_frames) + 1]] <- list(
-        frame = frame,
-        timestep = timestep
-      )
-    },
-
     #' @description
     #' Create a dataframe for the entire timeline
     #' @param individual in question
     render = function(individual) {
-      do.call(rbind, lapply(private$.sim_frames, function(entry) {
-        individual_frame <- entry$frame$get_frame(individual)
-        individual_frame$timestep <- entry$timestep
-        return(individual_frame)
-      }))
+      private$.individual_to_array[[individual$name]]
     },
 
     #' @description
-    #' Create a blank simulation
-    initialize = function() {
-      # replace the default list
-      private$.sim_frames <- list()
+    #' Get a SimFrame for the current timestep
+    get_current_frame = function() {
+      SimFrame$new(
+        private$.individuals,
+        lapply(private$.individuals, function(i) {
+          private$.individual_to_array[[i$name]][,,private$.current_timestep]
+        })
+      )
+    },
+
+    #' @description
+    #' Perform updates on the a simulation, increment the counter and return the
+    #' next simulation frame
+    #' @param updates is a list of updates to apply
+    apply_updates = function(updates) {
+
+      # Copy over values to next timestep
+      for (name in names(private$.individual_to_array)) {
+        private$.individual_to_array[[name]][
+          ,,private$.current_timestep + 1
+        ] <- private$.individual_to_array[[name]][,,private$.current_timestep]
+      }
+
+      # perform updates
+      for (update in updates) {
+        if (class(update)[1] == 'StateUpdate') {
+          private$.individual_to_array[[
+            update$individual$name
+          ]][update$index, 1, private$.current_timestep + 1] <- update$state$name
+        }
+      }
+
+      # increment timestep
+      private$.current_timestep <- private$.current_timestep + 1
+      self$get_current_frame()
+    },
+
+    #' @description
+    #' Create a blank simulation and then initialize first timestep
+    #' @param individuals a list of Individual to initialise for
+    #' @param timesteps the number of timesteps to initialise for
+    initialize = function(individuals, timesteps) {
+      names <- lapply(individuals, function(i) { i$name })
+      arrays <- lapply(individuals, function(i) {
+        n <- sum(vapply(i$states, function(s) s$initial_size, numeric(1)))
+        a <- array(rep(NA, n * timesteps), c(n, 1, timesteps))
+        a[,1,1] <- unlist(
+          lapply(i$states, function(state) {
+            rep(state$name, state$initial_size)
+          })
+        )
+        a
+      })
+      private$.individual_to_array <- setNames(arrays, names)
+      private$.individuals <- individuals
     }
   )
 )
@@ -135,26 +148,19 @@ Simulation <- R6::R6Class(
 # Main simulation loop
 #' @export simulate
 simulate <- function(individuals, processes, end_timestep) {
-  if (end_timestep < 0) {
+  if (end_timestep <= 0) {
     stop('End timestep must be > 0')
   }
   if (! is.list(individuals)) {
     individuals <- list(individuals)
   }
-  initial_frame <- SimFrame$new(individuals)
-  output <- Simulation$new()
-  output$add_frame(initial_frame$clone(), 0)
-  frame <- initial_frame
-  if (end_timestep > 0) {
-    for (timestep in seq_len(end_timestep)) {
-      updates <- unlist(
-        lapply(processes, function(process) { process(frame) })
-      )
-      if (length(updates) > 0) {
-        frame$apply_updates(updates)
-      }
-      output$add_frame(frame$clone(), timestep)
-    }
+  output <- Simulation$new(individuals, end_timestep)
+  frame <- output$get_current_frame()
+  for (timestep in seq_len(end_timestep - 1)) {
+    updates <- unlist(
+      lapply(processes, function(process) { process(frame) })
+    )
+    frame <- output$apply_updates(updates)
   }
   output
 }

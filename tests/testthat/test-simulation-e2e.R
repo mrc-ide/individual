@@ -1,4 +1,3 @@
-
 test_that("empty simulation exits gracefully", {
   population <- 4
   S <- State$new('S', population)
@@ -6,25 +5,21 @@ test_that("empty simulation exits gracefully", {
   R <- State$new('R', 0)
   human <- Individual$new('human', S, I, R)
   simulation <- simulate(human, list(), 4)
-  true_df <- data.frame(
-    timestep=as.numeric(rep(0:4, 1, NA, 4)),
-    state=factor(c(
-      rep('S', 20)
-    ), levels = c('S', 'I', 'R'))
+  true_render  <- array(
+    rep('S', 20),
+    c(4, 1, 4)
   )
-  expect_mapequal(true_df, simulation$render(human))
+  expect_equal(true_render, simulation$render(human))
 
-  simulation <- simulate(human, list(), 0)
-  true_df <- data.frame(
-    timestep=0,
-    state=factor(c(
-      rep('S', 4)
-    ), levels = c('S', 'I', 'R'))
+  simulation <- simulate(human, list(), 1)
+  true_render <- array(
+    rep('S', 4),
+    c(4, 1, 1)
   )
-  expect_mapequal(true_df, simulation$render(human))
+  expect_equal(true_render, simulation$render(human))
 
   expect_error(
-    simulate(human, list(), -1),
+    simulate(human, list(), 0),
     '*'
   )
 })
@@ -52,24 +47,21 @@ test_that("deterministic model works", {
     shift_generator(I, R, 1)
   )
 
-  simulation <- simulate(human, processes, 4)
-  true_df <- data.frame(
-    timestep=as.numeric(rep(0:4, 1, NA, 4)),
-    state=factor(c(
-      rep('S', 4), #t=0
-      rep('S', 2), #t=1
+  simulation <- simulate(human, processes, 5)
+  true_render <- array(
+    c(
+      rep('S', 4), #t=1
+      rep('S', 2), #t=2
       rep('I', 2),
-      rep('I', 3), #t=2
+      rep('I', 3), #t=3
       'R',
-      rep('I', 2), #t=3
+      rep('I', 2), #t=4
       rep('R', 2),
-      rep('I', 1), #t=4
+      rep('I', 1), #t=5
       rep('R', 3)
-    ), levels = c('S', 'I', 'R'))
+    ),
+    c(4, 1, 5)
   )
   rendered <- simulation$render(human)
-  expect_mapequal(
-    sort_simulation(true_df),
-    sort_simulation(rendered)
-  )
+  expect_equal(sort_simulation(true_render), sort_simulation(rendered))
 })
