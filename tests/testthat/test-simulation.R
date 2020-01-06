@@ -4,14 +4,14 @@ test_that("getting a state index works", {
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
 
-  expect_identical(frame$get_state(human, S), 1:10)
+  expect_equal(frame$get_state(human, S), 1:10)
 
   I <- State$new('I', 100)
   human <- Individual$new('test', S, I)
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
 
-  expect_identical(frame$get_state(human, I), 11:110)
+  expect_equal(frame$get_state(human, I), 11:110)
 })
 
 test_that("getting a non registered state index fails", {
@@ -38,8 +38,8 @@ test_that("getting variables works", {
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
 
-  expect_identical(frame$get_variable(human, sequence), 1:10)
-  expect_identical(frame$get_variable(human, sequence_2), (1:10) + 10)
+  expect_equal(frame$get_variable(human, sequence), 1:10)
+  expect_equal(frame$get_variable(human, sequence_2), (1:10) + 10)
 })
 
 test_that("updating variables works", {
@@ -51,16 +51,16 @@ test_that("updating variables works", {
   )
   human <- Individual$new('test', S, variables=list(sequence))
 
-  simulation <- Simulation$new(list(human), 1)
+  simulation <- Simulation$new(list(human), 3)
   first <- simulation$get_current_frame()
   simulation$apply_updates(list())
   middle <- simulation$get_current_frame()
   simulation$apply_updates(list())
   last <- simulation$get_current_frame()
 
-  expect_identical(first$get_variable(human, sequence), 1:10)
-  expect_identical(middle$get_variable(human, sequence), (1:10) + 1)
-  expect_identical(last$get_variable(human, sequence), (1:10) + 3)
+  expect_equal(first$get_variable(human, sequence), 1:10)
+  expect_equal(middle$get_variable(human, sequence), (1:10) + 1)
+  expect_equal(last$get_variable(human, sequence), (1:10) + 3)
 })
 
 test_that("updating variables on an interval works", {
@@ -73,16 +73,16 @@ test_that("updating variables on an interval works", {
   )
   human <- Individual$new('test', S, variables=list(sequence))
 
-  simulation <- Simulation$new(list(human), 1)
+  simulation <- Simulation$new(list(human), 3)
   first <- simulation$get_current_frame()
   simulation$apply_updates(list())
   middle <- simulation$get_current_frame()
   simulation$apply_updates(list())
   last <- simulation$get_current_frame()
 
-  expect_identical(first$get_variable(human, sequence), 1:10)
-  expect_identical(middle$get_variable(human, sequence), 1:10)
-  expect_identical(last$get_variable(human, sequence), (1:10) + 2)
+  expect_equal(first$get_variable(human, sequence), 1:10)
+  expect_equal(middle$get_variable(human, sequence), 1:10)
+  expect_equal(last$get_variable(human, sequence), (1:10) + 2)
 })
 
 test_that("updating variables from a VariableUpdate class works", {
@@ -90,7 +90,7 @@ test_that("updating variables from a VariableUpdate class works", {
   sequence <- Variable$new('sequence', function(size) seq_len(size))
   human <- Individual$new('test', S, variables=list(sequence))
 
-  simulation <- Simulation$new(list(human), 1)
+  simulation <- Simulation$new(list(human), 3)
   first <- simulation$get_current_frame()
   simulation$apply_updates(
     list(VariableUpdate$new(human, 1:5, (1:5) * 2, sequence))
@@ -101,14 +101,14 @@ test_that("updating variables from a VariableUpdate class works", {
   )
   last <- simulation$get_current_frame()
 
-  expect_identical(first$get_variable(human, sequence), 1:10)
-  expect_identical(middle$get_variable(human, sequence), c((1:5) * 2, 6:10))
-  expect_identical(last$get_variable(human, sequence), c(2, rep(11, 5), 7:10))
+  expect_equal(first$get_variable(human, sequence), 1:10)
+  expect_equal(middle$get_variable(human, sequence), c((1:5) * 2, 6:10))
+  expect_equal(last$get_variable(human, sequence), c(2, rep(11, 5), 7:10))
 
   # States are unchanged
-  expect_identical(first$get_state(human, S), 1:10)
-  expect_identical(middle$get_state(human, S), 1:10)
-  expect_identical(last$get_state(human, S), 1:10)
+  expect_equal(first$get_state(human, S), 1:10)
+  expect_equal(middle$get_state(human, S), 1:10)
+  expect_equal(last$get_state(human, S), 1:10)
 })
 
 test_that("Getting constants works", {
@@ -119,7 +119,7 @@ test_that("Getting constants works", {
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
 
-  expect_identical(frame$get_constant(human, sequence), 1:10)
+  expect_equal(frame$get_constant(human, sequence), 1:10)
 })
 
 test_that("Updating constants errors", {
@@ -147,7 +147,7 @@ test_that("Simulation can render one frame", {
   simulation <- Simulation$new(list(human), 1)
   rendered <- simulation$render(human)
   true_render <- array(c(rep('S', 10), rep('I', 100)), c(110, 1, 1))
-  expect_identical(true_render, rendered)
+  expect_equal(true_render, rendered)
 })
 
 test_that("Simulation state updates work", {
