@@ -7,16 +7,16 @@ test_that("empty simulation exits gracefully", {
   simulation <- simulate(human, list(), 4)
   true_render  <- array(
     rep('S', 20),
-    c(4, 1, 4)
+    c(4, 4)
   )
-  expect_equal(true_render, simulation$render(human))
+  expect_equal(true_render, simulation$render(human)$states)
 
   simulation <- simulate(human, list(), 1)
   true_render <- array(
     rep('S', 4),
-    c(4, 1, 1)
+    c(4, 1)
   )
-  expect_equal(true_render, simulation$render(human))
+  expect_equal(true_render, simulation$render(human)$states)
 
   expect_error(
     simulate(human, list(), 0),
@@ -24,7 +24,7 @@ test_that("empty simulation exits gracefully", {
   )
 })
 
-test_that("deterministic model works", {
+test_that("deterministic state model works", {
   population <- 4
   S <- State$new('S', population)
   I <- State$new('I', 0)
@@ -60,8 +60,11 @@ test_that("deterministic model works", {
       rep('I', 1), #t=5
       rep('R', 3)
     ),
-    c(4, 1, 5)
+    c(4, 5)
   )
-  rendered <- simulation$render(human)
-  expect_equal(sort_simulation(true_render), sort_simulation(rendered))
+  rendered <- simulation$render(human)$states
+  expect_equal(
+    sort_simulation_states(true_render),
+    sort_simulation_states(rendered)
+  )
 })

@@ -44,49 +44,6 @@ test_that("getting variables works", {
 
 test_that("updating variables works", {
   S <- State$new('S', 10)
-  sequence <- Variable$new(
-    'sequence',
-    function(size) seq_len(size),
-    function(v, timestep) v + timestep
-  )
-  human <- Individual$new('test', S, variables=list(sequence))
-
-  simulation <- Simulation$new(list(human), 3)
-  first <- simulation$get_current_frame()
-  simulation$apply_updates(list())
-  middle <- simulation$get_current_frame()
-  simulation$apply_updates(list())
-  last <- simulation$get_current_frame()
-
-  expect_equal(first$get_variable(human, sequence), 1:10)
-  expect_equal(middle$get_variable(human, sequence), (1:10) + 1)
-  expect_equal(last$get_variable(human, sequence), (1:10) + 3)
-})
-
-test_that("updating variables on an interval works", {
-  S <- State$new('S', 10)
-  sequence <- Variable$new(
-    'sequence',
-    function(size) seq_len(size),
-    function(v, timestep) v + timestep,
-    2
-  )
-  human <- Individual$new('test', S, variables=list(sequence))
-
-  simulation <- Simulation$new(list(human), 3)
-  first <- simulation$get_current_frame()
-  simulation$apply_updates(list())
-  middle <- simulation$get_current_frame()
-  simulation$apply_updates(list())
-  last <- simulation$get_current_frame()
-
-  expect_equal(first$get_variable(human, sequence), 1:10)
-  expect_equal(middle$get_variable(human, sequence), 1:10)
-  expect_equal(last$get_variable(human, sequence), (1:10) + 2)
-})
-
-test_that("updating variables from a VariableUpdate class works", {
-  S <- State$new('S', 10)
   sequence <- Variable$new('sequence', function(size) seq_len(size))
   human <- Individual$new('test', S, variables=list(sequence))
 
@@ -146,8 +103,8 @@ test_that("Simulation can render one frame", {
 
   simulation <- Simulation$new(list(human), 1)
   rendered <- simulation$render(human)
-  true_render <- array(c(rep('S', 10), rep('I', 100)), c(110, 1, 1))
-  expect_equal(true_render, rendered)
+  true_render <- array(c(rep('S', 10), rep('I', 100)), c(110, 1))
+  expect_equal(true_render, rendered$states)
 })
 
 test_that("Simulation state updates work", {

@@ -5,13 +5,14 @@ Simulation <- R6::R6Class(
   private = list(
     .individual_to_states = list(),
     .individual_to_variables = list(),
+    .individual_to_constants = list(),
     .current_timestep = 1,
     .individuals = list()
   ),
   public = list(
     #' @description
-    #' Create a dataframe for the entire timeline
-    #' @param individual in question
+    #' Return a list of the simulated states and variables for the simulation
+    #' @param individual to render
     render = function(individual) {
       list(
         states=private$.individual_to_states[[individual$name]],
@@ -31,6 +32,9 @@ Simulation <- R6::R6Class(
           private$.individual_to_variables[[i$name]][
             ,,private$.current_timestep, drop=FALSE
           ]
+        }),
+        lapply(private$.individuals, function(i) {
+          private$.individual_to_constants[[i$name]]
         })
       )
     },
@@ -55,26 +59,16 @@ Simulation <- R6::R6Class(
         ]
       }
 
-      # execute variable updates
-      for (individual in private$.individuals) {
-        for (variable in individual$variables) {
-          if (!is.null(variable$updater)) {
-            v <- private$.individual_to_variables[[individual$name]][
-              ,,private$.current_timestep
-            ]
-            private$.individual_to_variables[[individual$name]][
-              ,,private$.current_timestep + 1
-            ] <- variable$updater(v, private$.current_timestep)
-          }
-        }
-      }
-
       # execute process updates
       for (update in updates) {
         if (class(update)[1] == 'StateUpdate') {
           private$.individual_to_states[[update$individual$name]][
             update$index, private$.current_timestep + 1
           ] <- update$state$name
+        } else if (class(update)[1] == 'VariableUpdate') {
+          private$.individual_to_variables[[update$individual$name]][
+            update$index, update$variable$name ,private$.current_timestep + 1
+          ] <- update$value
         }
       }
 
@@ -124,8 +118,30 @@ Simulation <- R6::R6Class(
         dimnames(a)[[2]] <- variable_names
         a
       })
+
+      constants <- lapply(individuals, function(i) {
+        population <- sum(
+          vapply(i$states, function(s) s$initial_size, numeric(1))
+        )
+        n_columns <- length(i$constants)
+        variable_names <- lapply(i$constants, function(v) v$name)
+
+        a <- array(
+          rep(NA, population * n_columns),
+          c(population, n_columns)
+        )
+
+        for (j in seq_len(length(i$constants))) {
+          a[,j] <- i$constants[[j]]$initialiser(population)
+        }
+
+        dimnames(a)[[2]] <- variable_names
+        a
+      })
+
       private$.individual_to_states <- setNames(states, individual_names)
       private$.individual_to_variables <- setNames(variables, individual_names)
+      private$.individual_to_constants <- setNames(constants, individual_names)
       private$.individuals <- individuals
     }
   )
