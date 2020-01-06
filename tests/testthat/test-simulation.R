@@ -31,9 +31,9 @@ test_that("getting a non registered state index fails", {
 
 test_that("getting variables works", {
   S <- State$new('S', 10)
-  human <- Individual$new('test', S)
   sequence <- Variable$new('sequence', function(size) seq_len(size))
   sequence_2 <- Variable$new('sequence 2', function(size) seq_len(size) + 10)
+  human <- Individual$new('test', S, variables=list(sequence, sequence_2))
 
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
@@ -44,12 +44,12 @@ test_that("getting variables works", {
 
 test_that("updating variables works", {
   S <- State$new('S', 10)
-  human <- Individual$new('test', S)
   sequence <- Variable$new(
     'sequence',
     function(size) seq_len(size),
     function(v, timestep) v + timestep
   )
+  human <- Individual$new('test', S, variables=list(sequence))
 
   simulation <- Simulation$new(list(human), 1)
   first <- simulation$get_current_frame()
@@ -65,13 +65,13 @@ test_that("updating variables works", {
 
 test_that("updating variables on an interval works", {
   S <- State$new('S', 10)
-  human <- Individual$new('test', S)
   sequence <- Variable$new(
     'sequence',
     function(size) seq_len(size),
     function(v, timestep) v + timestep,
     2
   )
+  human <- Individual$new('test', S, variables=list(sequence))
 
   simulation <- Simulation$new(list(human), 1)
   first <- simulation$get_current_frame()
@@ -87,8 +87,8 @@ test_that("updating variables on an interval works", {
 
 test_that("updating variables from a VariableUpdate class works", {
   S <- State$new('S', 10)
-  human <- Individual$new('test', S)
   sequence <- Variable$new('sequence', function(size) seq_len(size))
+  human <- Individual$new('test', S, variables=list(sequence))
 
   simulation <- Simulation$new(list(human), 1)
   first <- simulation$get_current_frame()
@@ -104,12 +104,17 @@ test_that("updating variables from a VariableUpdate class works", {
   expect_identical(first$get_variable(human, sequence), 1:10)
   expect_identical(middle$get_variable(human, sequence), c((1:5) * 2, 6:10))
   expect_identical(last$get_variable(human, sequence), c(2, rep(11, 5), 7:10))
+
+  # States are unchanged
+  expect_identical(first$get_state(human, S), 1:10)
+  expect_identical(middle$get_state(human, S), 1:10)
+  expect_identical(last$get_state(human, S), 1:10)
 })
 
 test_that("Getting constants works", {
   S <- State$new('S', 10)
-  human <- Individual$new('test', S)
   sequence <- Constant$new('sequence', function(size) seq_len(size))
+  human <- Individual$new('test', S, constants=list(sequence))
 
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
@@ -119,8 +124,8 @@ test_that("Getting constants works", {
 
 test_that("Updating constants errors", {
   S <- State$new('S', 10)
-  human <- Individual$new('test', S)
   sequence <- Constant$new('sequence', function(size) seq_len(size))
+  human <- Individual$new('test', S, constants=list(sequence))
 
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()

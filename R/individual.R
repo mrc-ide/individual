@@ -3,30 +3,50 @@
 #' @export Individual
 Individual <- DataClass(
   'Individual',
-  c('name', 'states'),
+  c('name', 'states', 'variables', 'constants'),
 
   #' @description
   #' Create a new Individual
   #' @param name is a unique idetifier which is used in the output
   #' $param ... a list of State objects
+  #' $param variables a list of Variable objects
+  #' $param constants a list of Constant objects
 
-  initialize = function(name, ...) {
+  initialize = function(name, ..., variables = list(), constants = list()) {
     states <- list(...)
-    names <- vapply(states, function(state) { state$name }, character(1))
+    names <- c(
+      vapply(states, function(state) { state$name }, character(1)),
+      vapply(variables, function(v) { v$name }, character(1)),
+      vapply(constants, function(c) { c$name }, character(1))
+    )
+
     if (any(duplicated(names))) {
-      stop('No duplicate states allowed')
+      stop('No duplicate state, variable or constant names allowed')
     }
+
     private$.name <- name
     private$.states <- states
+    private$.variables <- variables
+    private$.constants <- constants
   },
   print_fields = c('name')
 )
+
 Individual$set(
   'public',
   'check_state',
   function(state) {
     names <- vapply(self$states, function(s) { s$name }, character(1))
     state$name %in% names
+  }
+)
+
+Individual$set(
+  'public',
+  'check_variable',
+  function(variable) {
+    names <- vapply(self$variables, function(v) { v$name }, character(1))
+    variable$name %in% names
   }
 )
 

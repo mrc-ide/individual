@@ -60,7 +60,7 @@ SimFrame <- R6::R6Class(
   ),
   public = list(
     #' @description
-    #' Get the indecies of individuals with a particular state
+    #' Get the index of individuals with a particular state
     #' @param individual of interest
     #' @param state of interest
     get_state = function(individual, state) {
@@ -68,7 +68,19 @@ SimFrame <- R6::R6Class(
       if (!individual$check_state(state)) {
         stop('Invalid state')
       }
-      which(individual_frame == state$name)
+      which(individual_frame[,'state',] == state$name)
+    },
+
+    #' @description
+    #' Get a variable vector for an individual
+    #' @param individual of interest
+    #' @param variable of interest
+    get_variable = function(individual, variable) {
+      individual_frame <- private$.get_frame(individual)
+      if (!individual$check_variable(variable)) {
+        stop('Invalid variable')
+      }
+      individual_frame[,variable$name,]
     },
 
     #' @description
@@ -113,7 +125,9 @@ Simulation <- R6::R6Class(
       SimFrame$new(
         private$.individuals,
         lapply(private$.individuals, function(i) {
-          private$.individual_to_array[[i$name]][,,private$.current_timestep]
+          private$.individual_to_array[[i$name]][
+            ,,private$.current_timestep, drop = FALSE
+          ]
         })
       )
     },
@@ -134,9 +148,9 @@ Simulation <- R6::R6Class(
       # perform updates
       for (update in updates) {
         if (class(update)[1] == 'StateUpdate') {
-          private$.individual_to_array[[
-            update$individual$name
-          ]][update$index, 1, private$.current_timestep + 1] <- update$state$name
+          private$.individual_to_array[[update$individual$name]][
+            update$index, 1, private$.current_timestep + 1
+          ] <- update$state$name
         }
       }
 
@@ -150,18 +164,33 @@ Simulation <- R6::R6Class(
     #' @param individuals a list of Individual to initialise for
     #' @param timesteps the number of timesteps to initialise for
     initialize = function(individuals, timesteps) {
-      names <- lapply(individuals, function(i) { i$name })
+      individual_names <- lapply(individuals, function(i) { i$name })
       arrays <- lapply(individuals, function(i) {
-        n <- sum(vapply(i$states, function(s) s$initial_size, numeric(1)))
-        a <- array(rep(NA, n * timesteps), c(n, 1, timesteps))
+        population <- sum(
+          vapply(i$states, function(s) s$initial_size, numeric(1))
+        )
+        n_columns <- 1 + length(i$variables)
+        variable_names <- lapply(i$variables, function(v) v$name)
+
+        a <- array(
+          rep(NA, population * n_columns * timesteps),
+          c(population, n_columns, timesteps)
+        )
+
         a[,1,1] <- unlist(
           lapply(i$states, function(state) {
             rep(state$name, state$initial_size)
           })
         )
+
+        for (j in seq_len(length(i$variables))) {
+          a[,j + 1,1] <- i$variables[[j]]$initialiser(population)
+        }
+
+        dimnames(a)[[2]] <- c('state', variable_names)
         a
       })
-      private$.individual_to_array <- setNames(arrays, names)
+      private$.individual_to_array <- setNames(arrays, individual_names)
       private$.individuals <- individuals
     }
   )
