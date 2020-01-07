@@ -50,11 +50,11 @@ test_that("updating variables works", {
   simulation <- Simulation$new(list(human), 3)
   first <- simulation$get_current_frame()
   simulation$apply_updates(
-    list(VariableUpdate$new(human, 1:5, (1:5) * 2, sequence))
+    list(VariableUpdate$new(human, sequence, (1:5) * 2, 1:5))
   )
   middle <- simulation$get_current_frame()
   simulation$apply_updates(
-    list(VariableUpdate$new(human, 2:6, 11, sequence))
+    list(VariableUpdate$new(human, sequence, 11, 2:6))
   )
   last <- simulation$get_current_frame()
 
@@ -66,6 +66,22 @@ test_that("updating variables works", {
   expect_equal(first$get_state(human, S), 1:10)
   expect_equal(middle$get_state(human, S), 1:10)
   expect_equal(last$get_state(human, S), 1:10)
+})
+
+test_that("updating the complete variable vector works", {
+  S <- State$new('S', 10)
+  sequence <- Variable$new('sequence', function(size) seq_len(size))
+  human <- Individual$new('test', S, variables=list(sequence))
+
+  simulation <- Simulation$new(list(human), 2)
+  before <- simulation$get_current_frame()
+  simulation$apply_updates(
+    list(VariableUpdate$new(human, sequence, 11:20))
+  )
+  after <- simulation$get_current_frame()
+
+  expect_equal(before$get_variable(human, sequence), 1:10)
+  expect_equal(after$get_variable(human, sequence), 11:20)
 })
 
 test_that("Getting constants works", {

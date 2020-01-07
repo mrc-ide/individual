@@ -23,16 +23,16 @@ StateUpdate <- DataClass(
 #' @export VariableUpdate
 VariableUpdate <- DataClass(
   'VariableUpdate',
-  c('individual', 'index', 'value', 'variable'),
+  c('individual', 'variable', 'value', 'index'),
 
   #' @description
   #' Create a new VariableUpdate descriptor
   #' @param individual is the type of individual to update
-  #' @param index is the index at which to apply the change
-  #' @param value a vector or scalar of values to assign at the index
   #' @param variable a Variable object representing the variable to change
+  #' @param value a vector or scalar of values to assign at the index
+  #' @param index is the index at which to apply the change
 
-  initialize = function(individual, index, value, variable) {
+  initialize = function(individual, variable, value, index=TRUE) {
     private$.individual <- individual
     private$.index <- index
     private$.value <- value
