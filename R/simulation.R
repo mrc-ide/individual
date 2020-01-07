@@ -152,8 +152,9 @@ Simulation <- R6::R6Class(
 #' @param individuals a list of Individual to simulate
 #' @param processes a list of processes to execute on each timestep
 #' @param end_timestep the number of timesteps to simulate
+#' @param parameters a list of named parameters to pass to the process functions
 #' @export simulate
-simulate <- function(individuals, processes, end_timestep) {
+simulate <- function(individuals, processes, end_timestep, parameters=list()) {
   if (end_timestep <= 0) {
     stop('End timestep must be > 0')
   }
@@ -164,7 +165,10 @@ simulate <- function(individuals, processes, end_timestep) {
   frame <- output$get_current_frame()
   for (timestep in seq_len(end_timestep - 1)) {
     updates <- unlist(
-      lapply(processes, function(process) { process(frame) })
+      lapply(
+        processes,
+        function(process) { process(frame, timestep, parameters) }
+      )
     )
     frame <- output$apply_updates(updates)
   }

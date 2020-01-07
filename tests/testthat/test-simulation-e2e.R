@@ -32,7 +32,7 @@ test_that("deterministic state model works", {
   human <- Individual$new('human', list(S, I, R))
 
   shift_generator <- function(from, to, rate) {
-    return(function(frame) {
+    return(function(frame, timestep, parameters) {
       from_state <- frame$get_state(human, from)
       StateUpdate$new(
         human,
