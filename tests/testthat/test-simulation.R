@@ -4,14 +4,25 @@ test_that("getting the state works", {
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
 
-  expect_equal(frame$get_state(human, S), 1:10)
+  expect_length(frame$get_state(human, S), 10)
 
   I <- State$new('I', 100)
   human <- Individual$new('test', list(S, I))
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
 
-  expect_equal(frame$get_state(human, I), 11:110)
+  expect_length(frame$get_state(human, I), 100)
+})
+
+test_that("Getting multiple states works", {
+  S <- State$new('S', 10)
+  I <- State$new('I', 100)
+  R <- State$new('R', 20)
+  human <- Individual$new('test', list(S, I, R))
+
+  simulation <- Simulation$new(list(human), 1)
+  frame <- simulation$get_current_frame()
+  expect_length(frame$get_state(human, S, R), 30)
 })
 
 test_that("getting a non registered state index fails", {

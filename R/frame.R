@@ -12,15 +12,29 @@ SimFrame <- R6::R6Class(
     #' Get the index of individuals with a particular state
     #' @param individual of interest
     #' @param state of interest
-    get_state = function(individual, state) {
+    get_state = function(individual, ...) {
+      states <- list(...)
       if (!(individual$name %in% names(private$.states))) {
         stop('Unregistered individual')
       }
-      if (!individual$check_state(state)) {
+      valid_states <- all(
+        vapply(
+          states,
+          function(state) individual$check_state(state),
+          logical(1)
+        )
+      )
+      if (!valid_states) {
         stop('Invalid state')
       }
       individual_frame <- private$.states[[individual$name]]
-      which(individual_frame == state$name)
+      which(
+        individual_frame %in% vapply(
+          states,
+          function(state) state$name,
+          character(1)
+        )
+      )
     },
 
     #' @description
