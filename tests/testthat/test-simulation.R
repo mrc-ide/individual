@@ -1,13 +1,13 @@
-test_that("getting a state index works", {
+test_that("getting the state works", {
   S <- State$new('S', 10)
-  human <- Individual$new('test', S)
+  human <- Individual$new('test', list(S))
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
 
   expect_equal(frame$get_state(human, S), 1:10)
 
   I <- State$new('I', 100)
-  human <- Individual$new('test', S, I)
+  human <- Individual$new('test', list(S, I))
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
 
@@ -18,7 +18,7 @@ test_that("getting a non registered state index fails", {
   S <- State$new('S', 10)
   I <- State$new('I', 100)
   R <- State$new('R', 0)
-  human <- Individual$new('test', S, I)
+  human <- Individual$new('test', list(S, I))
 
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
@@ -33,7 +33,7 @@ test_that("getting variables works", {
   S <- State$new('S', 10)
   sequence <- Variable$new('sequence', function(size) seq_len(size))
   sequence_2 <- Variable$new('sequence 2', function(size) seq_len(size) + 10)
-  human <- Individual$new('test', S, variables=list(sequence, sequence_2))
+  human <- Individual$new('test', list(S), variables=list(sequence, sequence_2))
 
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
@@ -45,7 +45,7 @@ test_that("getting variables works", {
 test_that("updating variables works", {
   S <- State$new('S', 10)
   sequence <- Variable$new('sequence', function(size) seq_len(size))
-  human <- Individual$new('test', S, variables=list(sequence))
+  human <- Individual$new('test', list(S), variables=list(sequence))
 
   simulation <- Simulation$new(list(human), 3)
   first <- simulation$get_current_frame()
@@ -71,7 +71,7 @@ test_that("updating variables works", {
 test_that("updating the complete variable vector works", {
   S <- State$new('S', 10)
   sequence <- Variable$new('sequence', function(size) seq_len(size))
-  human <- Individual$new('test', S, variables=list(sequence))
+  human <- Individual$new('test', list(S), variables=list(sequence))
 
   simulation <- Simulation$new(list(human), 2)
   before <- simulation$get_current_frame()
@@ -87,7 +87,7 @@ test_that("updating the complete variable vector works", {
 test_that("Getting constants works", {
   S <- State$new('S', 10)
   sequence <- Constant$new('sequence', function(size) seq_len(size))
-  human <- Individual$new('test', S, constants=list(sequence))
+  human <- Individual$new('test', list(S), constants=list(sequence))
 
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
@@ -98,7 +98,7 @@ test_that("Getting constants works", {
 test_that("Updating constants errors", {
   S <- State$new('S', 10)
   sequence <- Constant$new('sequence', function(size) seq_len(size))
-  human <- Individual$new('test', S, constants=list(sequence))
+  human <- Individual$new('test', list(S), constants=list(sequence))
 
   simulation <- Simulation$new(list(human), 1)
   frame <- simulation$get_current_frame()
@@ -115,7 +115,7 @@ test_that("Simulation can render one frame", {
   S <- State$new('S', 10)
   I <- State$new('I', 100)
   R <- State$new('R', 0)
-  human <- Individual$new('test', S, I, R)
+  human <- Individual$new('test', list(S, I, R))
 
   simulation <- Simulation$new(list(human), 1)
   rendered <- simulation$render(human)
@@ -126,7 +126,7 @@ test_that("Simulation can render one frame", {
 test_that("Simulation state updates work", {
   S <- State$new('S', 10)
   I <- State$new('I', 0)
-  human <- Individual$new('test', S, I)
+  human <- Individual$new('test', list(S, I))
   simulation <- Simulation$new(list(human), 2)
   updates = list(StateUpdate$new(human, c(1, 3), I))
   frame <- simulation$apply_updates(updates)

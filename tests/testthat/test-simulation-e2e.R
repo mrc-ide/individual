@@ -3,7 +3,7 @@ test_that("empty simulation exits gracefully", {
   S <- State$new('S', population)
   I <- State$new('I', 0)
   R <- State$new('R', 0)
-  human <- Individual$new('human', S, I, R)
+  human <- Individual$new('human', list(S, I, R))
   simulation <- simulate(human, list(), 4)
   true_render  <- array(
     rep('S', 20),
@@ -29,7 +29,7 @@ test_that("deterministic state model works", {
   S <- State$new('S', population)
   I <- State$new('I', 0)
   R <- State$new('R', 0)
-  human <- Individual$new('human', S, I, R)
+  human <- Individual$new('human', list(S, I, R))
 
   shift_generator <- function(from, to, rate) {
     return(function(frame) {

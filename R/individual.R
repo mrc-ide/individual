@@ -12,8 +12,7 @@ Individual <- DataClass(
   #' $param variables a list of Variable objects
   #' $param constants a list of Constant objects
 
-  initialize = function(name, ..., variables = list(), constants = list()) {
-    states <- list(...)
+  initialize = function(name, states, variables = list(), constants = list()) {
     names <- c(
       vapply(states, function(state) { state$name }, character(1)),
       vapply(variables, function(v) { v$name }, character(1)),
