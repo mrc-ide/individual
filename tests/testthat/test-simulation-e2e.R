@@ -36,8 +36,8 @@ test_that("deterministic state model works", {
       from_state <- frame$get_state(human, from)
       StateUpdate$new(
         human,
-        from_state[seq_len(min(rate,length(from_state)))],
-        to
+        to,
+        from_state[seq_len(min(rate,length(from_state)))]
       )
     })
   }

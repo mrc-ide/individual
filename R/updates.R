@@ -3,15 +3,15 @@
 #' @export StateUpdate
 StateUpdate <- DataClass(
   'StateUpdate',
-  c('individual', 'index', 'state'),
+  c('individual', 'state', 'index'),
 
   #' @description
   #' Create a new StateUpdate descriptor
   #' @param individual is the type of individual to update
-  #' @param index is the index at which to apply the change
   #' @param state is the destination state of the update
+  #' @param index is the index at which to apply the change
 
-  initialize = function(individual, index, state) {
+  initialize = function(individual, state, index) {
     private$.individual <- individual
     private$.index <- index
     private$.state <- state

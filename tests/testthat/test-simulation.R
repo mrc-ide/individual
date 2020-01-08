@@ -139,7 +139,7 @@ test_that("Simulation state updates work", {
   I <- State$new('I', 0)
   human <- Individual$new('test', list(S, I))
   simulation <- Simulation$new(list(human), 2)
-  updates = list(StateUpdate$new(human, c(1, 3), I))
+  updates = list(StateUpdate$new(human, I, c(1, 3)))
   frame <- simulation$apply_updates(updates)
   expect_equal(frame$get_state(human, I), c(1, 3))
   expect_equal(frame$get_state(human, S), c(2, 4:10))

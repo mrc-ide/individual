@@ -4,15 +4,15 @@ population <- 1 * 100 * 1000
 S <- State$new('S', population)
 I <- State$new('I', 0)
 R <- State$new('R', 0)
-human <- Individual$new('human', S, I, R)
+human <- Individual$new('human', list(S, I, R))
 
 shift_generator <- function(from, to, rate) {
-  return(function(frame) {
+  return(function(frame, timestep, parameters) {
     from_state <- frame$get_state(human, from)
     StateUpdate$new(
       human,
-      from_state[seq_len(min(rate,length(from_state)))],
-      to
+      to,
+      from_state[seq_len(min(rate,length(from_state)))]
     )
   })
 }
