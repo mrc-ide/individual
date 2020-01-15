@@ -1,6 +1,6 @@
 Package: individual
 Title: A package for specifying and simulating individial based models
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
   person(
     given = "Giovanni",
@@ -21,7 +21,9 @@ LazyData: true
 Collate:
   'utils.R'
   'individual.R'
-  'simulate.R'
+  'frame.R'
+  'updates.R'
+  'simulation.R'
 Imports:
   R6
 Suggests:
