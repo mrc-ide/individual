@@ -61,11 +61,11 @@ Simulation <- R6::R6Class(
 
       # execute process updates
       for (update in updates) {
-        if (class(update)[1] == 'StateUpdate') {
+        if (inherits(update, 'StateUpdate')) {
           private$.individual_to_states[[update$individual$name]][
             update$index, private$.current_timestep + 1
           ] <- update$state$name
-        } else if (class(update)[1] == 'VariableUpdate') {
+        } else if (inherits(update, 'VariableUpdate')) {
           private$.individual_to_variables[[update$individual$name]][
             update$index, update$variable$name ,private$.current_timestep + 1
           ] <- update$value
@@ -85,23 +85,22 @@ Simulation <- R6::R6Class(
       individual_names <- lapply(individuals, function(i) { i$name })
       states <- lapply(individuals, function(i) {
         population <- sum(
-          vapply(i$states, function(s) s$initial_size, numeric(1))
+          vnapply(i$states, function(s) s$initial_size)
         )
         a <- array(
           rep(NA, population * timesteps),
           c(population, timesteps)
         )
-        a[,1] <- unlist(
-          lapply(i$states, function(state) {
-            rep(state$name, state$initial_size)
-          })
+        a[,1] <- rep(
+          vcapply(i$states, function(x) x$name),
+          vnapply(i$states, function(x) x$initial_size)
         )
         a
       })
 
       variables <- lapply(individuals, function(i) {
         population <- sum(
-          vapply(i$states, function(s) s$initial_size, numeric(1))
+          vnapply(i$states, function(s) s$initial_size)
         )
         n_columns <- length(i$variables)
         variable_names <- lapply(i$variables, function(v) v$name)
@@ -111,7 +110,7 @@ Simulation <- R6::R6Class(
           c(population, n_columns, timesteps)
         )
 
-        for (j in seq_len(length(i$variables))) {
+        for (j in seq_len(n_columns)) {
           a[,j,1] <- i$variables[[j]]$initialiser(population)
         }
 
@@ -121,7 +120,7 @@ Simulation <- R6::R6Class(
 
       constants <- lapply(individuals, function(i) {
         population <- sum(
-          vapply(i$states, function(s) s$initial_size, numeric(1))
+          vnapply(i$states, function(s) s$initial_size)
         )
         n_columns <- length(i$constants)
         variable_names <- lapply(i$constants, function(v) v$name)

@@ -17,15 +17,10 @@ SimFrame <- R6::R6Class(
       if (!(individual$name %in% names(private$.states))) {
         stop('Unregistered individual')
       }
-      valid_states <- all(
-        vapply(
-          states,
-          function(state) individual$check_state(state),
-          logical(1)
-        )
-      )
-      if (!valid_states) {
-        stop('Invalid state')
+      for (state in states) {
+        if(!individual$check_state(state)) {
+          stop('Invalid state')
+        }
       }
       individual_frame <- private$.states[[individual$name]]
       which(
