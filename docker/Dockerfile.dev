@@ -13,7 +13,7 @@ RUN apt-get update && apt-get -y install \
   pandoc \
   time
 
-RUN R -e "install.packages(c('devtools', 'roxygen2', 'testthat', 'pkgdown', 'ggplot2'))"
+RUN R -e "install.packages(c('devtools', 'roxygen2', 'testthat', 'pkgdown'))"
 
 COPY DESCRIPTION /tmp/DESCRIPTION
 

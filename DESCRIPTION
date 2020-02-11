@@ -30,6 +30,7 @@ Suggests:
   testthat (>= 2.1.0),
   mockery,
   knitr,
-  rmarkdown
+  rmarkdown,
+  ggplot2
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
