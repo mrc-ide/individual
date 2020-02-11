@@ -18,9 +18,9 @@ shift_generator <- function(from, to, rate) {
 }
 
 processes <- list(
-  shift_generator(S, I, 2),
-  shift_generator(I, R, 1),
-  shift_generator(R, S, 1)
+  shift_generator(S, I, 2000),
+  shift_generator(I, R, 1000),
+  shift_generator(R, S, 1500)
 )
 
 

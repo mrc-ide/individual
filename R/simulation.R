@@ -152,7 +152,32 @@ Simulation <- R6::R6Class(
 #' @param processes a list of processes to execute on each timestep
 #' @param end_timestep the number of timesteps to simulate
 #' @param parameters a list of named parameters to pass to the process functions
-#' @export simulate
+#' @example
+#' population <- 4
+#' S <- State$new('S', population)
+#' I <- State$new('I', 0)
+#' R <- State$new('R', 0)
+#' human <- Individual$new('human', list(S, I, R))
+#'
+#' transition <- function(from, to, rate) {
+#'   return(function(frame, timestep, parameters) {
+#'     from_state <- frame$get_state(human, from)
+#'     StateUpdate$new(
+#'       human,
+#'       to,
+#'       from_state[runif(length(from_state), 0, 1) < rate]
+#'     )
+#'   })
+#' }
+#'
+#' processes <- list(
+#'   transition(S, I, .2),
+#'   transition(I, R, .1),
+#'   transition(R, S, .05)
+#' )
+#'
+#' simulate(human, processes, 5)
+#' @export
 simulate <- function(individuals, processes, end_timestep, parameters=list()) {
   if (end_timestep <= 0) {
     stop('End timestep must be > 0')
