@@ -144,12 +144,14 @@ Represents a constant for an individual in our simulation</p>
 </ul>
 <p><hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-<p>Create a new State</p><h3>Usage</h3>
+<p>Create a new Constant. Constant represent a numerical value for each
+individual. Constants differ from variables in that they cannot be updated
+in the simulation.</p><h3>Usage</h3>
 <p><div class="r"></p><pre>Constant$new(name, initialiser)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl class='dl-horizontal'>
-<dt><code>name</code></dt><dd><p>is a unique idetifier which is used in the output</p></dd>
+<dt><code>name</code></dt><dd><p>is a unique identifier which is used in the output</p></dd>
 
 <dt><code>initialiser</code></dt><dd><p>a function used to initialise the constant at the start
 of the simulation. The initialiser function takes the population size as

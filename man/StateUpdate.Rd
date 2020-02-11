@@ -24,7 +24,7 @@ Describes a state update
 \subsection{Method \code{new()}}{
 Create a new StateUpdate descriptor
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StateUpdate$new(individual, index, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StateUpdate$new(individual, state, index)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -32,9 +32,9 @@ Create a new StateUpdate descriptor
 \describe{
 \item{\code{individual}}{is the type of individual to update}
 
-\item{\code{index}}{is the index at which to apply the change}
-
 \item{\code{state}}{is the destination state of the update}
+
+\item{\code{index}}{is the index at which to apply the change}
 }
 \if{html}{\out{</div>}}
 }

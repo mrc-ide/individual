@@ -22,7 +22,9 @@ Represents a constant for an individual in our simulation
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
-Create a new State
+Create a new Constant. Constant represent a numerical value for each
+individual. Constants differ from variables in that they cannot be updated
+in the simulation.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Constant$new(name, initialiser)}\if{html}{\out{</div>}}
 }
@@ -30,7 +32,7 @@ Create a new State
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{name}}{is a unique idetifier which is used in the output}
+\item{\code{name}}{is a unique identifier which is used in the output}
 
 \item{\code{initialiser}}{a function used to initialise the constant at the start
 of the simulation. The initialiser function takes the population size as

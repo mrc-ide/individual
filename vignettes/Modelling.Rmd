@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, results = 'hide'}
+```{r setup, message = FALSE}
 library(individual)
 library(ggplot2)
 ```
@@ -37,7 +37,7 @@ structures to handle your simulation.
 ###Defining the processes
 
 ```{r}
-population <- 1 * 100 * 1000
+population <- 1000
 S <- State$new('S', population)
 I <- State$new('I', 0)
 R <- State$new('R', 0)

@@ -83,11 +83,6 @@
     
     
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(individual)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'individual'</span>
-<span class="co">#&gt; The following object is masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     simulate</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</code></pre></div>
 <div id="creating-an-epidemiological-models" class="section level1">
 <h1 class="hasAnchor">
@@ -102,7 +97,7 @@
 <div id="defining-the-processes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#defining-the-processes" class="anchor"></a>Defining the processes</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">population &lt;-<span class="st"> </span><span class="dv">1</span> *<span class="st"> </span><span class="dv">100</span> *<span class="st"> </span><span class="dv">1000</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">population &lt;-<span class="st"> </span><span class="dv">1000</span>
 S &lt;-<span class="st"> </span>State$<span class="kw">new</span>(<span class="st">'S'</span>, population)
 I &lt;-<span class="st"> </span>State$<span class="kw">new</span>(<span class="st">'I'</span>, <span class="dv">0</span>)
 R &lt;-<span class="st"> </span>State$<span class="kw">new</span>(<span class="st">'R'</span>, <span class="dv">0</span>)
@@ -138,7 +133,7 @@ processes &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.i
 )</code></pre></div>
 <p>Running the simulation</p>
 <p>To see the model output, you simply run simulate. It will return a <a href="'/reference/Simulation.html'">Simulation</a> object, which you can analyse however you want.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">simulation &lt;-<span class="st"> </span><span class="kw"><a href="../reference/simulate.html">simulate</a></span>(human, processes, <span class="dv">100</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">simulation &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/individual/man/simulate.html">simulate</a></span>(human, processes, <span class="dv">100</span>)
 rendered &lt;-<span class="st"> </span>simulation$<span class="kw">render</span>(human)
 
 plot_states &lt;-<span class="st"> </span>function(output) {
@@ -224,7 +219,7 @@ processes_with_immunity &lt;-<span class="st"> </span><span class="kw"><a href="
 <li>We have used the parameters, object to specify the immunity level to set. This can be specified when we decide to run the simulation.</li>
 </ol>
 <p>You can see how this affects our outputs by re-simulating the model.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rendered &lt;-<span class="st"> </span><span class="kw"><a href="../reference/simulate.html">simulate</a></span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rendered &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/individual/man/simulate.html">simulate</a></span>(
   human,
   processes_with_immunity,
   <span class="dv">100</span>,
