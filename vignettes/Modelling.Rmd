@@ -145,6 +145,8 @@ We can then start to describe how this affects our processes...
 ```{r}
 infection <- function(frame, timestep, parameters) {
   from_state <- frame$get_state(human, S)
+  # Get the immunity for susceptable humans and use the complement to modify the
+  # infection rate
   rate_modifier <- 1 - frame$get_variable(human, immunity)[from_state]
   rate <- .3
   StateUpdate$new(
