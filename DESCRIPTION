@@ -25,7 +25,8 @@ Collate:
   'updates.R'
   'simulation.R'
 Imports:
-  R6
+  R6,
+  Rcpp
 Suggests:
   testthat (>= 2.1.0),
   mockery,
@@ -34,3 +35,5 @@ Suggests:
   ggplot2
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
+LinkingTo: 
+  Rcpp
