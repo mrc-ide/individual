@@ -1,7 +1,9 @@
 language: r
 
-before_script:
-  - R -e "library('roxygen2'); roxygenise()"
-
-apt_packages:
-  - libxml2-dev
+before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
+deploy:
+  provider: script
+  script: Rscript -e 'pkgdown::deploy_site_github()'
+  skip_cleanup: true
+  on:
+    branch: master

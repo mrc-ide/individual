@@ -5,7 +5,7 @@ RUN apt-get update && apt-get -y install \
   texlive-latex-base \
   texlive-fonts-extra \
   texinfo \
-  libxml2-dev
+  libcurl4-gnutls-dev
 
 RUN R -e "install.packages('remotes')"
 

@@ -10,10 +10,11 @@ RUN apt-get update && apt-get -y install \
   libssl-dev \
   libxml2-dev \
   libgit2-dev \
+  pandoc \
   time
 
-RUN R -e "install.packages(c('devtools', 'roxygen2', 'testthat'))"
+RUN R -e "install.packages(c('devtools', 'roxygen2', 'testthat', 'pkgdown'))"
 
-COPY DESCRIPTION /home/docker/individual/
+COPY DESCRIPTION /tmp/DESCRIPTION
 
-RUN R -e "library('remotes'); install_deps('/home/docker/individual', dependencies = TRUE)"
+RUN R -e "library('remotes'); install_deps('/tmp', dependencies = TRUE)"
