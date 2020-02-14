@@ -11,3 +11,4 @@ man
 .project
 .settings
 *.o
+*.so
