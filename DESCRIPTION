@@ -35,5 +35,5 @@ Suggests:
   ggplot2
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
-LinkingTo: 
+LinkingTo:
   Rcpp
