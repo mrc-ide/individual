@@ -24,6 +24,8 @@ Collate:
   'frame.R'
   'updates.R'
   'simulation.R'
+  'RcppExports.R'
+  'individual-package.R'
 Imports:
   R6,
   Rcpp
