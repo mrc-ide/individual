@@ -9,5 +9,6 @@ jobs:
     name: Deploy github pages
     steps:
       - uses: actions/checkout@v2
+      - run: |
+            git fetch --no-tags --prune --depth=1 origin gh-pages
       - uses: mrc-ide/pkgdown-action@v1
-
