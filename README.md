@@ -48,17 +48,6 @@ docker build . -f docker/Dockerfile.dev -t [your image name]
 Please refer to the "Modelling" vignette for a tutorial on how to create a basic
 SIR model.
 
-Define the types of individuals in your model using the `Individual` class.
-
-You can then assign your individuals `States`, `Variables` and `Constants`
-to describe their attributes during the simulation.
-
-Finally you, can then define behaviours by creating a list of processes. These
-are functions which take a `SimFrame`, the current timestep and the model
-parameters and define the change in an individual's state and variables.
-
-To create a simple SIR model, see the examples in the `simulate` documentation.
-
 ## Code organisation
 
 *frame.R* - Defines the SimFrame class. This is the interface for process
