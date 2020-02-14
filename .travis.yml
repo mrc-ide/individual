@@ -1,7 +1,1 @@
 language: r
-
-before_script:
-  - R -e "library('roxygen2'); roxygenise()"
-
-apt_packages:
-  - libxml2-dev
