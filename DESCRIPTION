@@ -24,7 +24,6 @@ Collate:
   'frame.R'
   'updates.R'
   'simulation.R'
-  'RcppExports.R'
   'individual-package.R'
 Imports:
   R6,
@@ -39,3 +38,4 @@ RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 LinkingTo:
   Rcpp
+RcppModules: individual_cpp

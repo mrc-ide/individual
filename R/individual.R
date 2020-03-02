@@ -1,62 +1,10 @@
+#individual_cpp <- Module('individual_cpp', getDynLib(fx))
+
 #' Class: Individual
 #' Represents an individual in our simulation
 #' @export Individual
-Individual <- DataClass(
-  'Individual',
-  c('name', 'states', 'variables', 'constants'),
-
-  #' @description
-  #' Create a new Individual
-  #' @param name is a unique idetifier which is used in the output
-  #' $param ... a list of State objects
-  #' $param variables a list of Variable objects
-  #' $param constants a list of Constant objects
-
-  initialize = function(name, states, variables = list(), constants = list()) {
-    names <- c(
-      vcapply(states, function(state) state$name),
-      vcapply(variables, function(v) v$name),
-      vcapply(constants, function(c) c$name)
-    )
-
-    if (any(duplicated(names))) {
-      stop('No duplicate state, variable or constant names allowed')
-    }
-
-    private$.name <- name
-    private$.states <- states
-    private$.variables <- variables
-    private$.constants <- constants
-  },
-  print_fields = c('name')
-)
-
-Individual$set(
-  'public',
-  'check_state',
-  function(state) {
-    names <- vcapply(self$states, function(s) s$name)
-    state$name %in% names
-  }
-)
-
-Individual$set(
-  'public',
-  'check_variable',
-  function(variable) {
-    names <- vcapply(self$variables, function(v) v$name)
-    variable$name %in% names
-  }
-)
-
-Individual$set(
-  'public',
-  'check_constant',
-  function(constant) {
-    names <- vcapply(self$constants, function(v) v$name)
-    constant$name %in% names
-  }
-)
+#Individual <- individual_cpp$Individual
+Individual <- list()
 
 #' Class: State
 #' Represents a state for an individual in our simulation
