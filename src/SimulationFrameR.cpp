@@ -7,16 +7,21 @@
 
 #include "interface.h"
 
-SimulationFrame::SimulationFrame(List individuals, List states, List variables, List constants) {
-	// TODO Auto-generated constructor stub
+SimulationFrame::SimulationFrame(
+        List individuals,
+        List states,
+        List variables,
+        List constants
+) {
+    // TODO Auto-generated constructor stub
 }
 
 IntegerVector SimulationFrame::get_state(
-		Individual individual,
-		State state) {
+        string individual_name,
+        string state_name) {
 }
 
 NumericVector SimulationFrame::get_variable(
-		Individual individual,
-		State state) {
+        string individual_name,
+        string state_name) {
 }

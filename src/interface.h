@@ -13,28 +13,11 @@
 using namespace Rcpp;
 using namespace std;
 
-//' @export Individual
-class Individual {
-	string name;
-public:
-	Individual(string, List, List, List);
-	string get_name();
-};
-
-//' @export State
-class State {
-	string name;
-public:
-	State(string, int);
-	string get_name();
-};
-
-//' @export SimulationFrame
 class SimulationFrame {
 public:
-	SimulationFrame(List, List, List, List);
-	IntegerVector get_state(Individual, State);
-	NumericVector get_variable(Individual, State);
+    SimulationFrame(List, List, List, List);
+    IntegerVector get_state(string, string);
+    NumericVector get_variable(string, string);
 };
 
 

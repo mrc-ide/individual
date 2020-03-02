@@ -3,9 +3,7 @@
 SimFrame <- R6::R6Class(
   'SimFrame',
   private = list(
-    .states = list(),
-    .variables = list(),
-    .constants = list()
+    .impl = NULL
   ),
   public = list(
     #' @description
@@ -14,22 +12,23 @@ SimFrame <- R6::R6Class(
     #' @param state of interest
     get_state = function(individual, ...) {
       states <- list(...)
-      if (!(individual$name %in% names(private$.states))) {
-        stop('Unregistered individual')
-      }
-      for (state in states) {
-        if(!individual$check_state(state)) {
-          stop('Invalid state')
-        }
-      }
-      individual_frame <- private$.states[[individual$name]]
-      which(
-        individual_frame %in% vapply(
-          states,
-          function(state) state$name,
-          character(1)
-        )
-      )
+      private$.impl$get_state(individual, states)
+      #if (!(individual$name %in% names(private$.states))) {
+        #stop('Unregistered individual')
+      #}
+      #for (state in states) {
+        #if(!individual$check_state(state)) {
+          #stop('Invalid state')
+        #}
+      #}
+      #individual_frame <- private$.states[[individual$name]]
+      #which(
+        #individual_frame %in% vapply(
+          #states,
+          #function(state) state$name,
+          #character(1)
+        #)
+      #)
     },
 
     #' @description
@@ -37,14 +36,15 @@ SimFrame <- R6::R6Class(
     #' @param individual of interest
     #' @param variable of interest
     get_variable = function(individual, variable) {
-      if (!(individual$name %in% names(private$.variables))) {
-        stop('Unregistered individual')
-      }
-      if (!individual$check_variable(variable)) {
-        stop('Invalid variable')
-      }
-      individual_frame <- private$.variables[[individual$name]]
-      individual_frame[,variable$name,]
+      private$.impl$get_variable(individual, variable)
+      #if (!(individual$name %in% names(private$.variables))) {
+        #stop('Unregistered individual')
+      #}
+      #if (!individual$check_variable(variable)) {
+        #stop('Invalid variable')
+      #}
+      #individual_frame <- private$.variables[[individual$name]]
+      #individual_frame[,variable$name,]
     },
 
     #' @description
@@ -52,14 +52,15 @@ SimFrame <- R6::R6Class(
     #' @param individual of interest
     #' @param constant of interest
     get_constant = function(individual, constant) {
-      if (!(individual$name %in% names(private$.variables))) {
-        stop('Unregistered individual')
-      }
-      if (!individual$check_constant(constant)) {
-        stop('Invalid constant')
-      }
-      individual_frame <- private$.constants[[individual$name]]
-      individual_frame[,constant$name]
+      private$.impl$get_variable(individual, constant)
+      #if (!(individual$name %in% names(private$.variables))) {
+        #stop('Unregistered individual')
+      #}
+      #if (!individual$check_constant(constant)) {
+        #stop('Invalid constant')
+      #}
+      #individual_frame <- private$.constants[[individual$name]]
+      #individual_frame[,constant$name]
     },
 
     #' @description
@@ -73,9 +74,13 @@ SimFrame <- R6::R6Class(
     #' current timestep
     initialize = function(individuals, states, variables, constants) {
       names <- lapply(individuals, function(i) { i$name })
-      private$.states <- setNames(states, names)
-      private$.variables <- setNames(variables, names)
-      private$.constants <- setNames(constants, names)
+      private$.impl <- new(
+        SimFrameCpp,
+        individuals,
+        setNames(states, names),
+        setNames(variables, names),
+        setNames(constants, names)
+      )
     }
   )
 )
