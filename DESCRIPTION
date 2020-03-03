@@ -26,9 +26,8 @@ Collate:
   'updates.R'
   'simulation.R'
   'individual-package.R'
-Depends:
-  Rcpp
 Imports:
+  Rcpp,
   R6
 Suggests:
   testthat (>= 2.1.0),

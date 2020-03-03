@@ -95,33 +95,6 @@ test_that("updating the complete variable vector works", {
   expect_equal(after$get_variable(human, sequence), 11:20)
 })
 
-test_that("Getting constants works", {
-  S <- State$new('S', 10)
-  sequence <- Constant$new('sequence', function(size) seq_len(size))
-  human <- Individual$new('test', list(S), constants=list(sequence))
-
-  simulation <- Simulation$new(list(human), 1)
-  frame <- simulation$get_current_frame()
-
-  expect_equal(frame$get_constant(human, sequence), 1:10)
-})
-
-test_that("Updating constants errors", {
-  S <- State$new('S', 10)
-  sequence <- Constant$new('sequence', function(size) seq_len(size))
-  human <- Individual$new('test', list(S), constants=list(sequence))
-
-  simulation <- Simulation$new(list(human), 1)
-  frame <- simulation$get_current_frame()
-
-  expect_error(
-    simulation$apply_updates(
-      list(VariableUpdate$new(human, 2:6, (1:5), sequence))
-    ),
-    '*'
-  )
-})
-
 test_that("Simulation can render one frame", {
   S <- State$new('S', 10)
   I <- State$new('I', 100)

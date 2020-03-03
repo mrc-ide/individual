@@ -102,26 +102,3 @@ Variable <- DataClass(
   },
   print_fields = c('name')
 )
-
-#' Class: Constant
-#' Represents a constant for an individual in our simulation
-#' @export Constant
-Constant <- DataClass(
-  'Constant',
-  c('name', 'initialiser'),
-
-  #' @description
-  #' Create a new Constant. Constant represent a numerical value for each
-  #' individual. Constants differ from variables in that they cannot be updated
-  #' in the simulation.
-  #' @param name is a unique identifier which is used in the output
-  #' @param initialiser a function used to initialise the constant at the start
-  #' of the simulation. The initialiser function takes the population size as
-  #' its only argument
-
-  initialize = function(name, initialiser) {
-    private$.name <- name
-    private$.initialiser <- initialiser
-  },
-  print_fields = c('name')
-)
