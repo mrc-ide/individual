@@ -12,23 +12,13 @@ SimFrame <- R6::R6Class(
     #' @param state of interest
     get_state = function(individual, ...) {
       states <- list(...)
-      private$.impl$get_state(individual, states)
-      #if (!(individual$name %in% names(private$.states))) {
-        #stop('Unregistered individual')
-      #}
-      #for (state in states) {
-        #if(!individual$check_state(state)) {
-          #stop('Invalid state')
-        #}
-      #}
-      #individual_frame <- private$.states[[individual$name]]
-      #which(
-        #individual_frame %in% vapply(
-          #states,
-          #function(state) state$name,
-          #character(1)
-        #)
-      #)
+      for (state in states) {
+        if(!individual$check_state(state)) {
+          stop('Invalid state')
+        }
+      }
+      state_names <- vcapply(states, function(state) state$name)
+      private$.impl$get_state(individual$name, state_names)
     },
 
     #' @description
@@ -36,15 +26,7 @@ SimFrame <- R6::R6Class(
     #' @param individual of interest
     #' @param variable of interest
     get_variable = function(individual, variable) {
-      private$.impl$get_variable(individual, variable)
-      #if (!(individual$name %in% names(private$.variables))) {
-        #stop('Unregistered individual')
-      #}
-      #if (!individual$check_variable(variable)) {
-        #stop('Invalid variable')
-      #}
-      #individual_frame <- private$.variables[[individual$name]]
-      #individual_frame[,variable$name,]
+      private$.impl$get_variable(individual$name, variable$name)
     },
 
     #' @description
@@ -52,15 +34,7 @@ SimFrame <- R6::R6Class(
     #' @param individual of interest
     #' @param constant of interest
     get_constant = function(individual, constant) {
-      private$.impl$get_variable(individual, constant)
-      #if (!(individual$name %in% names(private$.variables))) {
-        #stop('Unregistered individual')
-      #}
-      #if (!individual$check_constant(constant)) {
-        #stop('Invalid constant')
-      #}
-      #individual_frame <- private$.constants[[individual$name]]
-      #individual_frame[,constant$name]
+      private$.impl$get_variable(individual$name, constant$name)
     },
 
     #' @description

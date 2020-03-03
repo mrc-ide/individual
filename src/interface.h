@@ -14,9 +14,13 @@ using namespace Rcpp;
 using namespace std;
 
 class SimulationFrame {
+    List individuals;
+    List states;
+    List constants;
+    List variables;
 public:
     SimulationFrame(List, List, List, List);
-    IntegerVector get_state(string, string);
+    vector<unsigned int> get_state(string, vector<string>);
     NumericVector get_variable(string, string);
 };
 

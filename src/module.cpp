@@ -12,7 +12,8 @@ using namespace Rcpp;
 
 RCPP_MODULE(individual_cpp) {
     class_<SimulationFrame>("SimFrameCpp")
-		        .constructor<List, List, List, List>();
-    //.method('get_state', &SimulationFrame::get_state)
-    //.method('get_variable', &SimulationFrame::get_variable);
+            .constructor<List, List, List, List>()
+            .method("get_state", &SimulationFrame::get_state, "Get the state for a set of individuals")
+            .method("get_variable", &SimulationFrame::get_variable, "Get a variable for a set of individuals")
+            ;
 }

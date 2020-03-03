@@ -29,12 +29,18 @@ Simulation <- R6::R6Class(
           private$.individual_to_states[[i$name]][,private$.current_timestep]
         }),
         lapply(private$.individuals, function(i) {
-          private$.individual_to_variables[[i$name]][
+          values <- private$.individual_to_variables[[i$name]][
             ,,private$.current_timestep, drop=FALSE
           ]
+          m <- matrix(values, dim(values)[1:2])
+          colnames(m) <-dimnames(values)[[2]]
+          m
         }),
         lapply(private$.individuals, function(i) {
-          private$.individual_to_constants[[i$name]]
+          values <- private$.individual_to_constants[[i$name]]
+          m <- matrix(values, dim(values))
+          colnames(m) <-dimnames(values)[[2]]
+          m
         })
       )
     },
