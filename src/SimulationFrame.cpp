@@ -5,29 +5,29 @@
  *      Author: giovanni
  */
 
-#include "interface.h"
+#include "SimulationFrame.h"
 using namespace std;
 
 SimulationFrame::SimulationFrame(
-        List individuals,
-        List states,
-        List variables,
-        List constants
-)
+        shared_ptr<const states_t> states,
+        shared_ptr<const variables_t> variables,
+        const unsigned int current_timestep
+    )
     : states(states),
-      constants(constants),
-      variables(variables)
+      variables(variables),
+      current_timestep(current_timestep)
 {}
 
 vector<unsigned int> SimulationFrame::get_state(
         const string individual_name,
-        const vector<string> state_names) {
-    auto individual_states = as<vector<string>>(states[individual_name]);
+        const vector<string> state_names
+    ) const {
+    auto& individual_states = *states->at(individual_name)[current_timestep];
     vector<unsigned int> result;
-    for (auto it = individual_states.begin(); it != individual_states.end(); ++it) {
+    for (auto it = begin(individual_states); it != end(individual_states); ++it) {
         for (auto const& state_name : state_names) {
             if (*it == state_name) {
-                result.push_back(distance(individual_states.begin(), it) + 1);
+                result.push_back(distance(begin(individual_states), it) + 1);
                 break;
             }
         }
@@ -37,12 +37,12 @@ vector<unsigned int> SimulationFrame::get_state(
 
 NumericVector SimulationFrame::get_variable(
         string individual_name,
-        string variable) {
-    NumericMatrix individual_variables = variables[individual_name];
-    CharacterVector variable_names = colnames(individual_variables);
-    auto it = find(variable_names.begin(), variable_names.end(), variable);
-    if (it == variable_names.end()) {
+        string variable
+    ) const {
+    auto& individual_variables = variables->at(individual_name);
+    if (individual_variables.find(variable) == individual_variables.end()) {
         stop("Unknown variable");
     }
-    return individual_variables(_, distance(variable_names.begin(), it));
+    auto& variable_vector = *individual_variables.at(variable)[current_timestep];
+    return NumericVector::import(begin(variable_vector), end(variable_vector));
 }
