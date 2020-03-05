@@ -12,6 +12,8 @@
 
 using namespace Rcpp;
 
+RCPP_EXPOSED_CLASS(SimulationFrame)
+
 RCPP_MODULE(individual_cpp) {
     class_<SimulationFrame>("SimFrameCpp")
         .method("get_state", &SimulationFrame::get_state, "Get the state for a set of individuals")

@@ -19,14 +19,14 @@ SimulationFrame::SimulationFrame(
 {}
 
 vector<unsigned int> SimulationFrame::get_state(
-        const string individual_name,
-        const vector<string> state_names
+        const Environment individual,
+        const List state_descriptors
     ) const {
-    auto& individual_states = *states->at(individual_name)[current_timestep];
+    auto& individual_states = *states->at(as<string>(individual["name"]))[current_timestep];
     vector<unsigned int> result;
     for (auto it = begin(individual_states); it != end(individual_states); ++it) {
-        for (auto const& state_name : state_names) {
-            if (*it == state_name) {
+        for (auto const& state : state_descriptors) {
+            if (*it == as<string>(state_descriptors["name"])) {
                 result.push_back(distance(begin(individual_states), it) + 1);
                 break;
             }
@@ -36,13 +36,13 @@ vector<unsigned int> SimulationFrame::get_state(
 }
 
 NumericVector SimulationFrame::get_variable(
-        string individual_name,
-        string variable
+        Environment individual,
+        Environment variable
     ) const {
-    auto& individual_variables = variables->at(individual_name);
-    if (individual_variables.find(variable) == individual_variables.end()) {
+    auto& individual_variables = variables->at(as<string>(individual["name"]));
+    if (individual_variables.find(as<string>(variable["name"])) == individual_variables.end()) {
         stop("Unknown variable");
     }
-    auto& variable_vector = *individual_variables.at(variable)[current_timestep];
+    auto& variable_vector = *individual_variables.at(as<string>(variable["name"]))[current_timestep];
     return NumericVector::import(begin(variable_vector), end(variable_vector));
 }

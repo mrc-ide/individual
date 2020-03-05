@@ -17,44 +17,31 @@ SimFrame <- R6::R6Class(
           stop('Invalid state')
         }
       }
-      state_names <- vcapply(states, function(state) state$name)
-      private$.impl$get_state(individual$name, state_names)
+      private$.impl$get_state(individual, states)
     },
 
     #' @description
     #' Get a variable vector for an individual
     #' @param individual of interest
     #' @param variable of interest
-    get_variable = function(individual, variable) {
-      private$.impl$get_variable(individual$name, variable$name)
+    get_variable = function(...) {
+      private$.impl$get_variable(...)
     },
 
     #' @description
     #' Get a constant vector for an individual
     #' @param individual of interest
     #' @param constant of interest
-    get_constant = function(individual, constant) {
-      private$.impl$get_variable(individual$name, constant$name)
+    get_constant = function(...) {
+      private$.impl$get_variable(...)
     },
 
     #' @description
     #' Create an initial SimFrame
-    #' @param individuals is a list of Individual
-    #' @param state is a list of states for each individual at the current
-    #' timestep
-    #' @param variables is a list of variables for each individual at the
     #' current timestep
-    #' @param constants is a list of constants for each individual at the
-    #' current timestep
-    initialize = function(individuals, states, variables, constants) {
-      names <- lapply(individuals, function(i) { i$name })
-      private$.impl <- new(
-        SimFrameCpp,
-        individuals,
-        setNames(states, names),
-        setNames(variables, names),
-        setNames(constants, names)
-      )
+    #' @param the cpp implementation of this class
+    initialize = function(impl) {
+      private$.impl <- impl
     }
   )
 )

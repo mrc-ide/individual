@@ -14,9 +14,6 @@
 using namespace Rcpp;
 using namespace std;
 
-class SimulationFrame;
-RCPP_EXPOSED_CLASS(SimulationFrame);
-
 class SimulationFrame {
     shared_ptr<const states_t> states;
     shared_ptr<const variables_t> variables;
@@ -27,8 +24,8 @@ public:
         shared_ptr<const variables_t>,
         const unsigned int
     );
-    vector<unsigned int> get_state(string, vector<string>) const;
-    NumericVector get_variable(string, string) const;
+    vector<unsigned int> get_state(Environment, List) const;
+    NumericVector get_variable(Environment, Environment) const;
 };
 
 

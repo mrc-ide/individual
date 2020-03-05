@@ -3,7 +3,7 @@
 Simulation <- R6::R6Class(
   'Simulation',
   private = list(
-    .impl = NULL,
+    .impl = NULL
     #.individual_to_states = list(),
     #.individual_to_variables = list(),
     #.individual_to_constants = list(),
@@ -24,7 +24,7 @@ Simulation <- R6::R6Class(
     #' @description
     #' Get a SimFrame for the current timestep
     get_current_frame = function() {
-      private$.impl$get_current_frame()
+      SimFrame$new(private$.impl$get_current_frame())
       #SimFrame$new(
         #private$.individuals,
         #lapply(private$.individuals, function(i) {
