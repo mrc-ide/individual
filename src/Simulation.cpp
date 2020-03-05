@@ -27,7 +27,7 @@ Simulation::Simulation(const List individuals, const int timesteps) :states(null
         for (Environment state : state_descriptors) {
             auto size = as<size_t>(state["initial_size"]);
             if (size == 0) continue;
-            (*initial_state)[slice(start, start + size, 0)] = as<string>(state["name"]);
+            (*initial_state)[slice(start, size, 1)] = valarray<string>(as<string>(state["name"]), size);
             start += as<size_t>(state["initial_size"]);
         }
 

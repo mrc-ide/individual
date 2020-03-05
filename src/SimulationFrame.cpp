@@ -25,8 +25,8 @@ vector<unsigned int> SimulationFrame::get_state(
     auto& individual_states = *states->at(as<string>(individual["name"]))[current_timestep];
     vector<unsigned int> result;
     for (auto it = begin(individual_states); it != end(individual_states); ++it) {
-        for (auto const& state : state_descriptors) {
-            if (*it == as<string>(state_descriptors["name"])) {
+        for (Environment state : state_descriptors) {
+            if (*it == as<string>(state["name"])) {
                 result.push_back(distance(begin(individual_states), it) + 1);
                 break;
             }
