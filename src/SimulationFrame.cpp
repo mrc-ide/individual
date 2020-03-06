@@ -24,10 +24,10 @@ vector<unsigned int> SimulationFrame::get_state(
     ) const {
     auto& individual_states = *states->at(as<string>(individual["name"]))[current_timestep];
     vector<unsigned int> result;
-    for (auto it = begin(individual_states); it != end(individual_states); ++it) {
+    for (auto it = cbegin(individual_states); it != cend(individual_states); ++it) {
         for (Environment state : state_descriptors) {
             if (*it == as<string>(state["name"])) {
-                result.push_back(distance(begin(individual_states), it) + 1);
+                result.push_back(distance(cbegin(individual_states), it) + 1);
                 break;
             }
         }
@@ -44,5 +44,5 @@ NumericVector SimulationFrame::get_variable(
         stop("Unknown variable");
     }
     auto& variable_vector = *individual_variables.at(as<string>(variable["name"]))[current_timestep];
-    return NumericVector::import(begin(variable_vector), end(variable_vector));
+    return NumericVector::import(cbegin(variable_vector), cend(variable_vector));
 }

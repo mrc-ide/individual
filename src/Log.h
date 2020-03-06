@@ -23,7 +23,7 @@ enum class log_level {
 
 struct structlog {
     bool headers = true;
-    log_level level = log_level::warn;
+    log_level level = log_level::debug;
     ostream& output = Rcout;
 };
 

@@ -12,6 +12,7 @@
 #include <valarray>
 #include <vector>
 #include <unordered_map>
+#include <Rcpp.h>
 
 using namespace std;
 
@@ -29,6 +30,5 @@ using variable_vector_t = valarray<double>;
 
 using states_t = named_array_t<timeline_t<state_vector_t>>;
 using variables_t = named_array_t<named_array_t<timeline_t<variable_vector_t>>>;
-
 
 #endif /* SRC_TYPES_H_ */

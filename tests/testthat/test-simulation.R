@@ -95,16 +95,25 @@ test_that("updating the complete variable vector works", {
   expect_equal(after$get_variable(human, sequence), 11:20)
 })
 
-test_that("Simulation can render one frame", {
+test_that("Simulation can render two frames", {
   S <- State$new('S', 10)
   I <- State$new('I', 100)
   R <- State$new('R', 0)
-  human <- Individual$new('test', list(S, I, R))
+  sequence <- Variable$new('sequence', function(size) seq_len(size))
+  sequence_2 <- Variable$new('sequence_2', function(size) seq_len(size) * 10)
+  human <- Individual$new('test', list(S, I, R), list(sequence, sequence_2))
 
-  simulation <- Simulation$new(list(human), 1)
+  simulation <- Simulation$new(list(human), 2)
+  simulation$apply_updates(list())
   rendered <- simulation$render(human)
-  true_render <- array(c(rep('S', 10), rep('I', 100)), c(110, 1))
-  expect_equal(true_render, rendered$states)
+  true_states <- array(rep(c(rep('S', 10), rep('I', 100)), 2), c(110, 2))
+  true_sequence <- array(
+    c(seq_len(110), seq_len(110)),
+    c(110, 2)
+  )
+  expect_equal(true_states, rendered$states)
+  expect_equal(true_sequence, rendered$variables['sequence',,])
+  expect_equal(true_sequence * 10, rendered$variables['sequence_2',,])
 })
 
 test_that("Simulation state updates work", {
@@ -113,7 +122,10 @@ test_that("Simulation state updates work", {
   human <- Individual$new('test', list(S, I))
   simulation <- Simulation$new(list(human), 2)
   updates = list(StateUpdate$new(human, I, c(1, 3)))
-  frame <- simulation$apply_updates(updates)
+  simulation$apply_updates(updates)
+  frame <- simulation$get_current_frame()
+  expect_equal(frame$get_state(human, I), c(1, 3))
+  expect_equal(frame$get_state(human, S), c(2, 4:10))
   expect_equal(frame$get_state(human, I), c(1, 3))
   expect_equal(frame$get_state(human, S), c(2, 4:10))
 })
