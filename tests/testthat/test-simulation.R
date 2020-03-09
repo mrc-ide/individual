@@ -112,8 +112,8 @@ test_that("Simulation can render two frames", {
     c(110, 2)
   )
   expect_equal(true_states, rendered$states)
-  expect_equal(true_sequence, rendered$variables['sequence',,])
-  expect_equal(true_sequence * 10, rendered$variables['sequence_2',,])
+  expect_equal(true_sequence, rendered$variables[,,'sequence'])
+  expect_equal(true_sequence * 10, rendered$variables[,,'sequence_2'])
 })
 
 test_that("Simulation state updates work", {

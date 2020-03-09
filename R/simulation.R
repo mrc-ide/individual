@@ -16,10 +16,6 @@ Simulation <- R6::R6Class(
     #' @param individual to render
     render = function(...) {
       private$.impl$render(...)
-      #list(
-        #states=private$.individual_to_states[[individual$name]],
-        #variables=private$.individual_to_variables[[individual$name]]
-      #)
     },
 
     #' @description

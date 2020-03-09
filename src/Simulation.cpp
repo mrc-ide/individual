@@ -70,7 +70,7 @@ Simulation::Simulation(const List individuals, const int timesteps) :states(null
         List variable_descriptors(individual["variables"]);
         for (Environment variable : variable_descriptors) {
             auto variable_name = as<string>(variable["name"]);
-            variable_names.push_back(variable_name);
+            variable_names[individual_name].push_back(variable_name);
             auto& variable_timeline = (*variables)[as<string>(individual["name"])][variable_name];
             variable_timeline = timeline_t<variable_vector_t>(timesteps, nullptr);
             Function initialiser(variable["initialiser"]);
@@ -90,7 +90,7 @@ void Simulation::apply_updates(const List updates) {
     auto next_timestep = current_timestep + 1;
     for (auto& individual_name : individual_names) {
         states->at(individual_name)[next_timestep] = states->at(individual_name)[current_timestep];
-        for (auto& variable_name : variable_names) {
+        for (auto& variable_name : variable_names[individual_name]) {
             auto& variable_timeline = variables->at(individual_name)[variable_name];
             variable_timeline[next_timestep] = variable_timeline[current_timestep];
         }
@@ -110,8 +110,8 @@ void Simulation::apply_updates(const List updates) {
 }
 
 void Simulation::apply_state_update(const Environment update, const size_t timestep) {
-    auto individual_name = nested_accessor<string>(update, vector<string>{"individual", "name"});
-    auto state_name = nested_accessor<string>(update, vector<string>{"state", "name"});
+    auto individual_name = nested_accessor<string>(update, {"individual", "name"});
+    auto state_name = nested_accessor<string>(update, {"state", "name"});
     auto new_vector = make_shared<state_vector_t>(state_vector_t(*states->at(individual_name)[timestep]));
     auto index = static_cast<valarray<size_t>>(to_valarray<size_t>(update["index"]) - 1UL);
     (*new_vector)[index] = state_name;
@@ -125,8 +125,8 @@ void Simulation::apply_variable_update(const Environment update, const size_t ti
         return;
     }
     Log(log_level::debug).get() << "getting names" << endl;
-    auto individual_name = nested_accessor<string>(update, vector<string>{"individual", "name"});
-    auto variable_name = nested_accessor<string>(update, vector<string>{"variable", "name"});
+    auto individual_name = nested_accessor<string>(update, {"individual", "name"});
+    auto variable_name = nested_accessor<string>(update, {"variable", "name"});
 
     Log(log_level::debug).get() << "creating variable for " << individual_name << " " << variable_name << endl;
 
@@ -155,22 +155,60 @@ void Simulation::apply_variable_update(const Environment update, const size_t ti
 List Simulation::render(const Environment individual) const {
     auto name = as<string>(individual["name"]);
     return List::create(
-        Named("states") = render_states(name)
+        Named("states") = render_states(name),
+        Named("variables") = render_variables(name)
     );
 }
 
-CharacterVector Simulation::render_states(const string name) const {
+CharacterVector Simulation::render_states(const string individual_name) const {
     auto state_values = vector<string>();
-    state_values.reserve(population_sizes.at(name) * timesteps);
-    Log(log_level::debug).get() << "timeline size " << states->at(name).size() << endl;
-    for(const auto& state_vector : states->at(name)) {
+    state_values.reserve(population_sizes.at(individual_name) * timesteps);
+    Log(log_level::debug).get() << "timeline size " << states->at(individual_name).size() << endl;
+    for(const auto& state_vector : states->at(individual_name)) {
         Log(log_level::debug).get() << "adding state vector size " << state_vector->size() << endl;
         state_values.insert(state_values.end(), cbegin(*state_vector), cend(*state_vector));
     }
     CharacterVector rendered_states = CharacterVector::import(cbegin(state_values), cend(state_values));
     rendered_states.attr("dim") = IntegerVector::create(
-        static_cast<int>(population_sizes.at(name)),
+        static_cast<int>(population_sizes.at(individual_name)),
         static_cast<int>(timesteps)
     );
     return rendered_states;
+}
+
+NumericVector Simulation::render_variables(const string individual_name) const {
+    auto variable_values = vector<double>();
+
+    // stop early if no variables were set
+    if (variable_names.find(individual_name) == variable_names.end()) {
+        return NumericVector();
+    }
+
+    const auto& vnames = variable_names.at(individual_name);
+    auto num_variables = vnames.size();
+    variable_values.reserve(population_sizes.at(individual_name) * num_variables * timesteps);
+    for(const auto& variable_name : vnames) {
+        const auto& variable_timeline = variables->at(individual_name).at(variable_name);
+        for(const auto& variable_vector : variable_timeline) {
+            variable_values.insert(variable_values.end(), cbegin(*variable_vector), cend(*variable_vector));
+        }
+    }
+    NumericVector rendered_variables = NumericVector::import(cbegin(variable_values), cend(variable_values));
+    rendered_variables.attr("dim") = IntegerVector::create(
+        static_cast<int>(population_sizes.at(individual_name)),
+        static_cast<int>(num_variables),
+        static_cast<int>(timesteps)
+    );
+
+    // dimnames is not trivially exposed through SEXP.attr
+    Rf_setAttrib(
+        rendered_variables,
+        R_DimNamesSymbol,
+        List::create(
+            R_NilValue,
+            R_NilValue,
+            CharacterVector::import(cbegin(vnames), cend(vnames))
+        )
+    );
+    return rendered_variables;
 }
