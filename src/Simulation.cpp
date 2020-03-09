@@ -209,8 +209,8 @@ NumericVector Simulation::render_variables(const string individual_name) const {
     NumericVector rendered_variables = NumericVector::import(cbegin(variable_values), cend(variable_values));
     rendered_variables.attr("dim") = IntegerVector::create(
         static_cast<int>(population_sizes.at(individual_name)),
-        static_cast<int>(num_variables),
-        static_cast<int>(timesteps)
+        static_cast<int>(timesteps),
+        static_cast<int>(num_variables)
     );
 
     // dimnames is not trivially exposed through SEXP.attr
