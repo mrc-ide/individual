@@ -12,6 +12,7 @@
 #include <valarray>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include <Rcpp.h>
 
 using namespace std;
@@ -25,7 +26,7 @@ using timeline_t = vector<shared_ptr<T>>;
 template<class T>
 using named_array_t = unordered_map<string, T>;
 
-using state_vector_t = valarray<string>;
+using state_vector_t = named_array_t<unordered_set<size_t>>;
 using variable_vector_t = valarray<double>;
 
 using states_t = named_array_t<timeline_t<state_vector_t>>;

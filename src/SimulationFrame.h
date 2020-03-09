@@ -24,7 +24,7 @@ public:
         shared_ptr<const variables_t>,
         const unsigned int
     );
-    vector<unsigned int> get_state(Environment, List) const;
+    vector<size_t> get_state(Environment, List) const;
     NumericVector get_variable(Environment, Environment) const;
 };
 

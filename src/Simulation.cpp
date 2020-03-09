@@ -48,13 +48,16 @@ Simulation::Simulation(const List individuals, const int timesteps) :states(null
 
         Log(log_level::debug).get() << "initial state" << endl;
         // Initialise the initial state
-        auto initial_state = make_shared<state_vector_t>(state_vector_t(population_size));
-        auto start = 0;
+        auto initial_state = make_shared<state_vector_t>(state_vector_t(state_descriptors.size()));
+        auto start = 1;
         for (Environment state : state_descriptors) {
             auto size = as<size_t>(state["initial_size"]);
-            if (size == 0) continue;
-            (*initial_state)[slice(start, size, 1)] = as<string>(state["name"]);
-            start += as<size_t>(state["initial_size"]);
+            auto state_set = unordered_set<size_t>();
+            for (auto i = start; i < start + size; ++i) {
+                state_set.insert(i);
+            }
+            (*initial_state)[as<string>(state["name"])] = state_set;
+            start += size;
         }
 
         Log(log_level::debug).get() << "state container" << endl;
@@ -110,11 +113,16 @@ void Simulation::apply_updates(const List updates) {
 }
 
 void Simulation::apply_state_update(const Environment update, const size_t timestep) {
-    auto individual_name = nested_accessor<string>(update, {"individual", "name"});
-    auto state_name = nested_accessor<string>(update, {"state", "name"});
-    auto new_vector = make_shared<state_vector_t>(state_vector_t(*states->at(individual_name)[timestep]));
-    auto index = static_cast<valarray<size_t>>(to_valarray<size_t>(update["index"]) - 1UL);
-    (*new_vector)[index] = state_name;
+    const auto individual_name = nested_accessor<string>(update, {"individual", "name"});
+    const auto state_name = nested_accessor<string>(update, {"state", "name"});
+    const auto new_vector = make_shared<state_vector_t>(state_vector_t(*states->at(individual_name)[timestep]));
+    auto index = static_cast<IntegerVector>(update["index"]);
+    for (auto& pair : *new_vector) {
+        for (auto i : index) {
+            pair.second.erase(i);
+        }
+    }
+    (*new_vector)[state_name].insert(cbegin(index), cend(index));
     states->at(individual_name)[timestep] = new_vector;
 }
 
@@ -164,9 +172,14 @@ CharacterVector Simulation::render_states(const string individual_name) const {
     auto state_values = vector<string>();
     state_values.reserve(population_sizes.at(individual_name) * timesteps);
     Log(log_level::debug).get() << "timeline size " << states->at(individual_name).size() << endl;
-    for(const auto& state_vector : states->at(individual_name)) {
-        Log(log_level::debug).get() << "adding state vector size " << state_vector->size() << endl;
-        state_values.insert(state_values.end(), cbegin(*state_vector), cend(*state_vector));
+    for(const auto& state_storage : states->at(individual_name)) {
+        auto state_vector = vector<string>(population_sizes.at(individual_name));
+        for (const auto& state : *state_storage) {
+            for (const auto index : state.second) {
+                state_vector[index - 1] = state.first;
+            }
+        }
+        state_values.insert(state_values.end(), cbegin(state_vector), cend(state_vector));
     }
     CharacterVector rendered_states = CharacterVector::import(cbegin(state_values), cend(state_values));
     rendered_states.attr("dim") = IntegerVector::create(

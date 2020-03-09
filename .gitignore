@@ -13,3 +13,4 @@ man
 *.o
 *.so
 /Debug/
+.Rproj.user

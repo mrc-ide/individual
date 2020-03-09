@@ -74,9 +74,9 @@ test_that("updating variables works", {
   expect_equal(last$get_variable(human, sequence), c(2, rep(11, 5), 7:10))
 
   # States are unchanged
-  expect_equal(first$get_state(human, S), 1:10)
-  expect_equal(middle$get_state(human, S), 1:10)
-  expect_equal(last$get_state(human, S), 1:10)
+  expect_setequal(first$get_state(human, S), 1:10)
+  expect_setequal(middle$get_state(human, S), 1:10)
+  expect_setequal(last$get_state(human, S), 1:10)
 })
 
 test_that("updating the complete variable vector works", {
@@ -124,8 +124,6 @@ test_that("Simulation state updates work", {
   updates = list(StateUpdate$new(human, I, c(1, 3)))
   simulation$apply_updates(updates)
   frame <- simulation$get_current_frame()
-  expect_equal(frame$get_state(human, I), c(1, 3))
-  expect_equal(frame$get_state(human, S), c(2, 4:10))
-  expect_equal(frame$get_state(human, I), c(1, 3))
-  expect_equal(frame$get_state(human, S), c(2, 4:10))
+  expect_setequal(frame$get_state(human, I), c(1, 3))
+  expect_setequal(frame$get_state(human, S), c(2, 4:10))
 })

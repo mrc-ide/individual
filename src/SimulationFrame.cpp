@@ -18,21 +18,19 @@ SimulationFrame::SimulationFrame(
       current_timestep(current_timestep)
 {}
 
-vector<unsigned int> SimulationFrame::get_state(
+vector<size_t> SimulationFrame::get_state(
         const Environment individual,
         const List state_descriptors
     ) const {
-    auto& individual_states = *states->at(as<string>(individual["name"]))[current_timestep];
-    vector<unsigned int> result;
+    const auto& individual_states = *states->at(as<string>(individual["name"]))[current_timestep];
+    unordered_set<size_t> result;
     for (auto it = cbegin(individual_states); it != cend(individual_states); ++it) {
         for (Environment state : state_descriptors) {
-            if (*it == as<string>(state["name"])) {
-                result.push_back(distance(cbegin(individual_states), it) + 1);
-                break;
-            }
+            const auto& state_set = individual_states.at(as<string>(state["name"]));
+            result.insert(cbegin(state_set), cend(state_set));
         }
     }
-    return result;
+    return vector<size_t>(cbegin(result), cend(result));
 }
 
 NumericVector SimulationFrame::get_variable(
