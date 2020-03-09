@@ -13,6 +13,7 @@
 #include <Rcpp.h>
 
 using namespace std;
+using namespace Rcpp;
 
 enum class log_level {
     debug,
@@ -27,7 +28,7 @@ struct structlog {
     ostream& output = Rcout;
 };
 
-structlog LOGCFG;
+extern structlog LOGCFG;
 
 class Log {
 public:

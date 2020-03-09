@@ -32,6 +32,8 @@ T nested_accessor(Environment e, vector<string> fields) {
 
 Simulation::Simulation(const List individuals, const int timesteps) :states(nullptr), variables(nullptr) {
     this->timesteps = timesteps;
+    states = make_shared<states_t>(states_t());
+    variables = make_shared<variables_t>(variables_t());
 
     for (const Environment& individual : individuals) {
         auto individual_name = as<string>(individual["name"]);
@@ -62,14 +64,12 @@ Simulation::Simulation(const List individuals, const int timesteps) :states(null
 
         Log(log_level::debug).get() << "state container" << endl;
         // Initialise the state container
-        states = make_shared<states_t>(states_t());
         auto& state_timeline = (*states)[as<string>(individual["name"])];
         state_timeline = timeline_t<state_vector_t>(timesteps, nullptr);
         state_timeline[0] = initial_state;
 
         Log(log_level::debug).get() << "variable container" << endl;
         // Initialise the variable container
-        variables = make_shared<variables_t>(variables_t());
         List variable_descriptors(individual["variables"]);
         for (Environment variable : variable_descriptors) {
             auto variable_name = as<string>(variable["name"]);

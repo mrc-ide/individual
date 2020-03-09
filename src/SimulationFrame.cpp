@@ -7,6 +7,7 @@
 
 #include "SimulationFrame.h"
 using namespace std;
+#include "Log.h"
 
 SimulationFrame::SimulationFrame(
         shared_ptr<const states_t> states,
@@ -37,6 +38,9 @@ NumericVector SimulationFrame::get_variable(
         Environment individual,
         Environment variable
     ) const {
+    Log(log_level::debug).get() << "getting variable" << endl;
+    Log(log_level::debug).get() << "variable name " << as<string>(variable["name"]) << endl;
+    Log(log_level::debug).get() << "individual name " << as<string>(individual["name"]) << endl;
     auto& individual_variables = variables->at(as<string>(individual["name"]));
     if (individual_variables.find(as<string>(variable["name"])) == individual_variables.end()) {
         stop("Unknown variable");
