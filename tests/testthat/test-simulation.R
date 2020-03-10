@@ -79,6 +79,73 @@ test_that("updating variables works", {
   expect_setequal(last$get_state(human, S), 1:10)
 })
 
+test_that("updating variables tolerates empty fills", {
+  S <- State$new('S', 10)
+  sequence <- Variable$new('sequence', function(size) seq_len(size))
+  human <- Individual$new('test', list(S), variables=list(sequence))
+
+  simulation <- Simulation$new(list(human), 2)
+  before <- simulation$get_current_frame()
+  simulation$apply_updates(
+    list(VariableUpdate$new(human, sequence, 11, numeric(0)))
+  )
+  after <- simulation$get_current_frame()
+
+  expect_equal(before$get_variable(human, sequence), 1:10)
+  expect_equal(after$get_variable(human, sequence), 1:10)
+})
+
+test_that("updating past the last timestep errors gracefully", {
+  S <- State$new('S', 10)
+  sequence <- Variable$new('sequence', function(size) seq_len(size))
+  human <- Individual$new('test', list(S), variables=list(sequence))
+  simulation <- Simulation$new(list(human), 2)
+
+  simulation$apply_updates(
+    list(VariableUpdate$new(human, sequence, 11, 2:6))
+  )
+
+  expect_error(
+    simulation$apply_updates(
+      list(VariableUpdate$new(human, sequence, 11, 2:6))
+    ),
+    '*'
+  )
+})
+
+test_that("updating variables with silly indecies errors gracefully", {
+  S <- State$new('S', 10)
+  sequence <- Variable$new('sequence', function(size) seq_len(size))
+  human <- Individual$new('test', list(S), variables=list(sequence))
+
+  simulation <- Simulation$new(list(human), 2)
+
+  expect_error(
+    simulation$apply_updates(
+      list(VariableUpdate$new(human, sequence, c(1.0, 2.0), 1:5))
+    ),
+    '*'
+  )
+
+  simulation <- Simulation$new(list(human), 2)
+
+  expect_error(
+    simulation$apply_updates(
+      list(VariableUpdate$new(human, sequence, 11, -1:3))
+    ),
+    '*'
+  )
+
+  simulation <- Simulation$new(list(human), 2)
+
+  expect_error(
+    simulation$apply_updates(
+      list(VariableUpdate$new(human, sequence, 11, 9:15))
+    ),
+    '*'
+  )
+})
+
 test_that("updating the complete variable vector works", {
   S <- State$new('S', 10)
   sequence <- Variable$new('sequence', function(size) seq_len(size))

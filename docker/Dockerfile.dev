@@ -12,6 +12,7 @@ RUN apt-get update && apt-get -y install \
   libgit2-dev \
   pandoc \
   time \
+  valgrind \
   gdb
 
 RUN R -e "install.packages(c('devtools', 'roxygen2', 'testthat', 'pkgdown'))"
