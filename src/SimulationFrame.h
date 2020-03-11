@@ -25,7 +25,7 @@ public:
         const unsigned int
     );
     vector<size_t> get_state(Environment, List) const;
-    NumericVector get_variable(Environment, Environment) const;
+    vector<double> get_variable(Environment, Environment) const;
 };
 
 

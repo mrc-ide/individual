@@ -6,8 +6,9 @@
  */
 
 #include "SimulationFrame.h"
-using namespace std;
 #include "Log.h"
+
+using namespace std;
 
 SimulationFrame::SimulationFrame(
         shared_ptr<const states_t> states,
@@ -24,17 +25,20 @@ vector<size_t> SimulationFrame::get_state(
         const List state_descriptors
     ) const {
     const auto& individual_states = *states->at(as<string>(individual["name"]))[current_timestep];
-    unordered_set<size_t> result;
-    for (auto it = cbegin(individual_states); it != cend(individual_states); ++it) {
-        for (Environment state : state_descriptors) {
-            const auto& state_set = individual_states.at(as<string>(state["name"]));
-            result.insert(cbegin(state_set), cend(state_set));
+    vector<size_t> result;
+    auto added_states = unordered_set<string>();
+    for (Environment state : state_descriptors) {
+        auto state_name = as<string>(state["name"]);
+        if (added_states.find(state_name) == added_states.end()) {
+            const auto& state_set = individual_states.at(state_name);
+            result.insert(result.end(), cbegin(state_set), cend(state_set));
+            added_states.insert(state_name);
         }
     }
-    return vector<size_t>(cbegin(result), cend(result));
+    return result;
 }
 
-NumericVector SimulationFrame::get_variable(
+vector<double> SimulationFrame::get_variable(
         Environment individual,
         Environment variable
     ) const {
@@ -46,5 +50,5 @@ NumericVector SimulationFrame::get_variable(
         stop("Unknown variable");
     }
     auto& variable_vector = *individual_variables.at(as<string>(variable["name"]))[current_timestep];
-    return NumericVector::import(cbegin(variable_vector), cend(variable_vector));
+    return vector<double>(cbegin(variable_vector), cend(variable_vector));
 }
