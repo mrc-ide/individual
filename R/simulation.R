@@ -4,11 +4,6 @@ Simulation <- R6::R6Class(
   'Simulation',
   private = list(
     .impl = NULL
-    #.individual_to_states = list(),
-    #.individual_to_variables = list(),
-    #.individual_to_constants = list(),
-    #.current_timestep = 1,
-    #.individuals = list()
   ),
   public = list(
     #' @description

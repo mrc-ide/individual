@@ -24,7 +24,11 @@ T nested_accessor(Environment e, vector<string> fields) {
     auto last = fields.size() - 1;
     auto i = 0;
     while (i < last) {
-        e = static_cast<Environment>(e[fields[i]]);
+        SEXP next = e.get(fields[i]);
+        if (next == R_NilValue) {
+            stop("Malformed R6 object");
+        }
+        e = static_cast<Environment>(next);
         ++i;
     }
     return as<T>(e[fields[i]]);
@@ -126,10 +130,13 @@ void Simulation::apply_updates(const List updates) {
 }
 
 void Simulation::apply_state_update(const Environment update, const size_t timestep) {
+    Log(log_level::debug).get() << "updating state" << endl;
     const auto individual_name = nested_accessor<string>(update, {"individual", "name"});
     const auto state_name = nested_accessor<string>(update, {"state", "name"});
+    Log(log_level::debug).get() << "state: " << individual_name << ":" << state_name << endl;
     const auto new_vector = make_shared<state_vector_t>(state_vector_t(*states->at(individual_name)[timestep]));
     auto index = static_cast<IntegerVector>(update["index"]);
+    Log(log_level::debug).get() << index << endl;
     for (auto& pair : *new_vector) {
         for (auto i : index) {
             pair.second.erase(i);
@@ -140,9 +147,9 @@ void Simulation::apply_state_update(const Environment update, const size_t times
 }
 
 void Simulation::apply_variable_update(const Environment update, const size_t timestep) {
-    Log(log_level::debug).get() << "updating variable" << endl;
     auto individual_name = nested_accessor<string>(update, {"individual", "name"});
     auto variable_name = nested_accessor<string>(update, {"variable", "name"});
+    Log(log_level::debug).get() << "variable: " << individual_name << ":" << variable_name << endl;
 
     //sanity checking
     auto rvalues = static_cast<NumericVector>(update["value"]);
@@ -152,15 +159,16 @@ void Simulation::apply_variable_update(const Environment update, const size_t ti
 
     auto vector_replacement = is_null(update["index"]);
     auto value_fill = rvalues.size() == 1;
+    auto vector_size = population_sizes.at(individual_name);
+    Log(log_level::debug).get() << "replacement: " << vector_replacement << " fill: " << value_fill << endl;
 
     if (!vector_replacement) {
-        auto rindex = static_cast<NumericVector>(update["index"]);
+        auto rindex = static_cast<IntegerVector>(update["index"]);
         if (value_fill && rindex.size() == 0) {
             return;
         }
 
-        auto bound = population_sizes.at(individual_name);
-        if ((any_sug(rindex < 0)) || any_sug(rindex >= bound)) {
+        if ((any_sug(rindex < 0)) || any_sug(rindex >= static_cast<int>(vector_size) + 1)) {
             stop("Index is out of bounds");
         }
 
@@ -171,12 +179,14 @@ void Simulation::apply_variable_update(const Environment update, const size_t ti
 
     auto values = to_valarray<double>(update["value"]);
 
-    Log(log_level::debug).get() << "creating variable for " << individual_name << " " << variable_name << endl;
-
     shared_ptr<variable_vector_t> new_vector;
     if (vector_replacement) {
         // For a full vector replacement
-        new_vector = make_shared<variable_vector_t>(values);
+        if (value_fill) {
+            new_vector = make_shared<variable_vector_t>(values[0], vector_size);
+        } else {
+            new_vector = make_shared<variable_vector_t>(values);
+        }
     } else {
         auto v = variable_vector_t(*variables->at(individual_name)[variable_name][timestep]);
         auto index = static_cast<valarray<size_t>>(to_valarray<size_t>(update["index"]) - 1UL);
