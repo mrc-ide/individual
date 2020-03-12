@@ -5,17 +5,23 @@ test_that("empty simulation exits gracefully", {
   R <- State$new('R', 0)
   human <- Individual$new('human', list(S, I, R))
   simulation <- simulate(human, list(), 4)
-  true_render  <- array(
-    rep('S', 20),
-    c(4, 4)
+  true_render <- data.frame(
+    timestep = c(1, 2, 3, 4),
+    S_count = c(4, 4, 4, 4),
+    I_count = c(0, 0, 0, 0),
+    R_count = c(0, 0, 0, 0)
   )
   expect_equal(true_render, simulation$render(human)$states)
 
   simulation <- simulate(human, list(), 1)
-  true_render <- array(
-    rep('S', 4),
-    c(4, 1)
+
+  true_render <- data.frame(
+    timestep = c(1),
+    S_count = c(4),
+    I_count = c(0),
+    R_count = c(0)
   )
+
   expect_equal(true_render, simulation$render(human)$states)
 
   expect_error(
@@ -48,24 +54,16 @@ test_that("deterministic state model works", {
   )
 
   simulation <- simulate(human, processes, 5)
-  true_render <- array(
-    c(
-      rep('S', 4), #t=1
-      rep('S', 2), #t=2
-      rep('I', 2),
-      rep('I', 3), #t=3
-      'R',
-      rep('I', 2), #t=4
-      rep('R', 2),
-      rep('I', 1), #t=5
-      rep('R', 3)
-    ),
-    c(4, 5)
+  true_render <- data.frame(
+    timestep = c(1, 2, 3, 4, 5),
+    S_count = c(4, 2, 0, 0, 0),
+    I_count = c(0, 2, 3, 2, 1),
+    R_count = c(0, 0, 1, 2, 3)
   )
-  rendered <- simulation$render(human)$states
-  expect_equal(
-    sort_simulation_states(true_render),
-    sort_simulation_states(rendered)
+  rendered <- simulation$render(human)
+  expect_mapequal(
+    true_render,
+    rendered
   )
 })
 
@@ -102,37 +100,27 @@ test_that("deterministic state & variable model works", {
     doubler
   )
 
-  simulation <- simulate(human, processes, 5)
-  true_states <- array(
-    c(
-      rep('S', 4), #t=1
-      rep('S', 2), #t=2
-      rep('I', 2),
-      rep('I', 3), #t=3
-      'R',
-      rep('I', 2), #t=4
-      rep('R', 2),
-      rep('I', 1), #t=5
-      rep('R', 3)
-    ),
-    c(4, 5)
+  render_mean <- function(individual, variable) {
+    function(frame) {
+      mean(frame$get_variable(individual, variable))
+    }
+  }
+
+  simulation <- simulate(
+    human,
+    processes,
+    5,
+    renderers=list(value_mean=render_mean(human, sequence))
   )
 
-  true_variables <- array(
-    c(
-      rep(1, 4),
-      rep(2, 4),
-      rep(4, 4),
-      rep(8, 4),
-      rep(16, 4)
-    ),
-    c(4, 5)
+  true_render <- data.frame(
+    timestep = c(1, 2, 3, 4, 5),
+    S_count = c(4, 2, 0, 0, 0),
+    I_count = c(0, 2, 3, 2, 1),
+    R_count = c(0, 0, 1, 2, 3),
+    value_mean = c(1, 2, 4, 8, 16)
   )
-  rendered_states <- simulation$render(human)$states
-  rendered_value <- simulation$render(human)$variables[,,'value']
-  expect_equal(
-    sort_simulation_states(true_states),
-    sort_simulation_states(rendered_states)
-  )
-  expect_equal(true_variables, rendered_value)
+
+  rendered <- simulation$render(human)
+  expect_mapequal(true_render, rendered)
 })

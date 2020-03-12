@@ -35,7 +35,6 @@ T nested_accessor(Environment e, vector<string> fields) {
 }
 
 inline bool any_sug(LogicalVector x){
-   // Note the use of is_true to return a bool type
    return is_true(any(x == TRUE));
 }
 
@@ -213,7 +212,8 @@ CharacterVector Simulation::render_states(const string individual_name) const {
     auto state_values = vector<string>();
     state_values.reserve(population_sizes.at(individual_name) * timesteps);
     Log(log_level::debug).get() << "timeline size " << states->at(individual_name).size() << endl;
-    for(const auto& state_storage : states->at(individual_name)) {
+    for(auto timestep = 0; timestep <= current_timestep; ++timestep) {
+        const auto& state_storage = states->at(individual_name).at(timestep);
         auto state_vector = vector<string>(population_sizes.at(individual_name));
         for (const auto& state : *state_storage) {
             for (const auto index : state.second) {
@@ -225,7 +225,7 @@ CharacterVector Simulation::render_states(const string individual_name) const {
     CharacterVector rendered_states = CharacterVector::import(cbegin(state_values), cend(state_values));
     rendered_states.attr("dim") = IntegerVector::create(
         static_cast<int>(population_sizes.at(individual_name)),
-        static_cast<int>(timesteps)
+        static_cast<int>(current_timestep)
     );
     return rendered_states;
 }
@@ -243,7 +243,8 @@ NumericVector Simulation::render_variables(const string individual_name) const {
     variable_values.reserve(population_sizes.at(individual_name) * num_variables * timesteps);
     for(const auto& variable_name : vnames) {
         const auto& variable_timeline = variables->at(individual_name).at(variable_name);
-        for(const auto& variable_vector : variable_timeline) {
+        for(auto timestep = 0; timestep <= current_timestep; ++timestep) {
+            const auto& variable_vector = variable_timeline[timestep];
             variable_values.insert(variable_values.end(), cbegin(*variable_vector), cend(*variable_vector));
         }
     }
