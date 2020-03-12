@@ -15,10 +15,6 @@ inline valarray<T> to_valarray(SEXP vectorsexp) {
     return valarray<T>(&v[0], v.size());
 }
 
-/*
- * Pre:
- *  - there exists a field that can be cast to type T from accessing `fields` in order on `e`
- */
 template <class T>
 T nested_accessor(Environment e, vector<string> fields) {
     auto last = fields.size() - 1;
@@ -62,7 +58,7 @@ Simulation::Simulation(const List individuals, const int timesteps) :states(null
 
         Log(log_level::debug).get() << "initial state" << endl;
         // Initialise the initial state
-        auto initial_state = make_shared<state_vector_t>(state_vector_t(state_descriptors.size()));
+        auto initial_state = state_vector_t(state_descriptors.size());
         auto start = 1;
         for (Environment state : state_descriptors) {
             auto size = as<size_t>(state["initial_size"]);
@@ -71,15 +67,13 @@ Simulation::Simulation(const List individuals, const int timesteps) :states(null
             for (auto i = start; i < start + size; ++i) {
                 state_set.insert(i);
             }
-            (*initial_state)[state_name] = state_set;
+            initial_state[state_name] = state_set;
             start += size;
         }
 
         Log(log_level::debug).get() << "state container" << endl;
         // Initialise the state container
-        auto& state_timeline = (*states)[as<string>(individual["name"])];
-        state_timeline = timeline_t<state_vector_t>(timesteps, nullptr);
-        state_timeline[current_timestep] = initial_state;
+        (*states)[as<string>(individual["name"])] = move(initial_state);
 
         Log(log_level::debug).get() << "variable container" << endl;
         // Initialise the variable container
@@ -87,66 +81,55 @@ Simulation::Simulation(const List individuals, const int timesteps) :states(null
         for (Environment variable : variable_descriptors) {
             auto variable_name = as<string>(variable["name"]);
             variable_names[individual_name].push_back(variable_name);
-            auto& variable_timeline = (*variables)[as<string>(individual["name"])][variable_name];
-            variable_timeline = timeline_t<variable_vector_t>(timesteps, nullptr);
             Function initialiser(variable["initialiser"]);
             auto initial_values = to_valarray<double>(initialiser(population_size));
-            variable_timeline[current_timestep] = make_shared<variable_vector_t>(initial_values);
+            (*variables)[as<string>(individual["name"])][variable_name] = initial_values;
         }
     }
 }
 
 SimulationFrame Simulation::get_current_frame() const {
-    return SimulationFrame(states, variables, current_timestep);
+    return SimulationFrame(states, variables);
 }
 
 void Simulation::apply_updates(const List updates) {
-    // initialise next timestep
-    auto next_timestep = current_timestep + 1;
-    if (next_timestep == timesteps) {
+    ++current_timestep;
+    if (current_timestep == timesteps) {
         stop("We have reached the end of the simulation");
     }
-    Log(log_level::debug).get() << "updating timestep: " << next_timestep << " out of: " << timesteps << endl;
+    Log(log_level::debug).get() << "updating timestep: " << current_timestep << " out of: " << timesteps << endl;
 
-    for (auto& individual_name : individual_names) {
-        states->at(individual_name)[next_timestep] = states->at(individual_name)[current_timestep];
-        for (auto& variable_name : variable_names[individual_name]) {
-            auto& variable_timeline = variables->at(individual_name)[variable_name];
-            variable_timeline[next_timestep] = variable_timeline[current_timestep];
-        }
-    }
+    auto& new_states = *states;
+    auto& new_variables = *variables;
 
     for (const Environment& update : updates) {
         auto update_type = as<string>(update["type"]);
         if (update_type == "state") {
-            apply_state_update(update, next_timestep);
+            apply_state_update(update, new_states);
         } else if (update_type == "variable") {
-            apply_variable_update(update, next_timestep);
+            apply_variable_update(update, new_variables);
         } else {
             stop("Unknown update type");
         }
     }
-    current_timestep = next_timestep;
 }
 
-void Simulation::apply_state_update(const Environment update, const size_t timestep) {
+void Simulation::apply_state_update(const Environment update, states_t& new_states) {
     Log(log_level::debug).get() << "updating state" << endl;
     const auto individual_name = nested_accessor<string>(update, {"individual", "name"});
     const auto state_name = nested_accessor<string>(update, {"state", "name"});
     Log(log_level::debug).get() << "state: " << individual_name << ":" << state_name << endl;
-    const auto new_vector = make_shared<state_vector_t>(state_vector_t(*states->at(individual_name)[timestep]));
     auto index = static_cast<IntegerVector>(update["index"]);
     Log(log_level::debug).get() << index << endl;
-    for (auto& pair : *new_vector) {
+    for (auto& pair : new_states.at(individual_name)) {
         for (auto i : index) {
             pair.second.erase(i);
         }
     }
-    (*new_vector)[state_name].insert(cbegin(index), cend(index));
-    states->at(individual_name)[timestep] = new_vector;
+    new_states.at(individual_name).at(state_name).insert(cbegin(index), cend(index));
 }
 
-void Simulation::apply_variable_update(const Environment update, const size_t timestep) {
+void Simulation::apply_variable_update(const Environment update, variables_t& new_variables) {
     auto individual_name = nested_accessor<string>(update, {"individual", "name"});
     auto variable_name = nested_accessor<string>(update, {"variable", "name"});
     Log(log_level::debug).get() << "variable: " << individual_name << ":" << variable_name << endl;
@@ -178,25 +161,22 @@ void Simulation::apply_variable_update(const Environment update, const size_t ti
     }
 
     auto values = to_valarray<double>(update["value"]);
+    auto& to_update = new_variables[individual_name][variable_name];
 
-    shared_ptr<variable_vector_t> new_vector;
     if (vector_replacement) {
         // For a full vector replacement
         if (value_fill) {
-            new_vector = make_shared<variable_vector_t>(values[0], vector_size);
+            to_update = variable_vector_t(values[0], vector_size);
         } else {
-            new_vector = make_shared<variable_vector_t>(values);
+            to_update = move(values);
         }
     } else {
-        auto v = variable_vector_t(*variables->at(individual_name)[variable_name][timestep]);
         auto index = static_cast<valarray<size_t>>(to_valarray<size_t>(update["index"]) - 1UL);
         if (value_fill) {
             // For a fill update
-            v[index] = values[0];
+            to_update[index] = values[0];
         } else {
-            v[index] = values;
+            to_update[index] = values;
         }
-        new_vector = make_shared<variable_vector_t>(v);
     }
-    variables->at(individual_name)[variable_name][timestep] = new_vector;
 }

@@ -12,19 +12,17 @@ using namespace std;
 
 SimulationFrame::SimulationFrame(
         shared_ptr<const states_t> states,
-        shared_ptr<const variables_t> variables,
-        const unsigned int current_timestep
+        shared_ptr<const variables_t> variables
     )
     : states(states),
-      variables(variables),
-      current_timestep(current_timestep)
+      variables(variables)
 {}
 
 vector<size_t> SimulationFrame::get_state(
         const Environment individual,
         const List state_descriptors
     ) const {
-    const auto& individual_states = *states->at(as<string>(individual["name"]))[current_timestep];
+    const auto& individual_states = states->at(as<string>(individual["name"]));
     vector<size_t> result;
     auto added_states = unordered_set<string>();
     for (Environment state : state_descriptors) {
@@ -49,6 +47,6 @@ vector<double> SimulationFrame::get_variable(
     if (individual_variables.find(as<string>(variable["name"])) == individual_variables.end()) {
         stop("Unknown variable");
     }
-    auto& variable_vector = *individual_variables.at(as<string>(variable["name"]))[current_timestep];
+    auto& variable_vector = individual_variables.at(as<string>(variable["name"]));
     return vector<double>(cbegin(variable_vector), cend(variable_vector));
 }

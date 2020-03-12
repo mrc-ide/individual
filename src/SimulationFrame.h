@@ -17,13 +17,8 @@ using namespace std;
 class SimulationFrame {
     shared_ptr<const states_t> states;
     shared_ptr<const variables_t> variables;
-    const unsigned int current_timestep;
 public:
-    SimulationFrame(
-        shared_ptr<const states_t>,
-        shared_ptr<const variables_t>,
-        const unsigned int
-    );
+    SimulationFrame(shared_ptr<const states_t>,shared_ptr<const variables_t>);
     vector<size_t> get_state(Environment, List) const;
     vector<double> get_variable(Environment, Environment) const;
 };

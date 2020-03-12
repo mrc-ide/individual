@@ -23,8 +23,8 @@ class Simulation {
     named_array_t<vector<string>> variable_names;
     named_array_t<size_t> population_sizes;
     size_t timesteps;
-    void apply_state_update(const Environment, const size_t);
-    void apply_variable_update(const Environment, const size_t);
+    void apply_state_update(const Environment, states_t&);
+    void apply_variable_update(const Environment, variables_t&);
     NumericVector render_variables(const string name) const;
 public:
     Simulation(const List, const int);
