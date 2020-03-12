@@ -72,7 +72,6 @@ Simulation::Simulation(const List individuals, const int timesteps) :states(null
                 state_set.insert(i);
             }
             (*initial_state)[state_name] = state_set;
-            state_names.push_back(state_name);
             start += size;
         }
 
@@ -200,69 +199,4 @@ void Simulation::apply_variable_update(const Environment update, const size_t ti
         new_vector = make_shared<variable_vector_t>(v);
     }
     variables->at(individual_name)[variable_name][timestep] = new_vector;
-}
-
-DataFrame Simulation::render(const Environment individual) const {
-    auto name = as<string>(individual["name"]);
-    auto values = List();
-    auto colnames = vector<string>();
-
-    //render timesteps
-    auto timesteps = vector<size_t>(current_timestep + 1);
-    iota(begin(timesteps), end(timesteps), 1);
-    values.push_back(timesteps, "timestep");
-    colnames.push_back("timestep");
-
-    //render states
-    for (const auto& state_name : state_names) {
-        auto state_counts = vector<size_t>(current_timestep + 1);
-        auto colname = state_name + "_count";
-        for(auto timestep = 0; timestep <= current_timestep; ++timestep) {
-            state_counts[timestep] = states->at(name).at(timestep)->at(state_name).size();
-        }
-        values.push_back(state_counts);
-        colnames.push_back(colname);
-    }
-
-    auto df = DataFrame(values);
-    df.attr("names") = colnames;
-    return df;
-}
-
-NumericVector Simulation::render_variables(const string individual_name) const {
-    auto variable_values = vector<double>();
-
-    // stop early if no variables were set
-    if (variable_names.find(individual_name) == variable_names.end()) {
-        return NumericVector();
-    }
-
-    const auto& vnames = variable_names.at(individual_name);
-    auto num_variables = vnames.size();
-    variable_values.reserve(population_sizes.at(individual_name) * num_variables * timesteps);
-    for(const auto& variable_name : vnames) {
-        const auto& variable_timeline = variables->at(individual_name).at(variable_name);
-        for(auto timestep = 0; timestep <= current_timestep; ++timestep) {
-            const auto& variable_vector = variable_timeline[timestep];
-            variable_values.insert(variable_values.end(), cbegin(*variable_vector), cend(*variable_vector));
-        }
-    }
-    NumericVector rendered_variables = NumericVector::import(cbegin(variable_values), cend(variable_values));
-    rendered_variables.attr("dim") = IntegerVector::create(
-        static_cast<int>(population_sizes.at(individual_name)),
-        static_cast<int>(timesteps),
-        static_cast<int>(num_variables)
-    );
-
-    // dimnames is not trivially exposed through SEXP.attr
-    Rf_setAttrib(
-        rendered_variables,
-        R_DimNamesSymbol,
-        List::create(
-            R_NilValue,
-            R_NilValue,
-            CharacterVector::import(cbegin(vnames), cend(vnames))
-        )
-    );
-    return rendered_variables;
 }

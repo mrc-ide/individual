@@ -22,7 +22,6 @@ RCPP_MODULE(individual_cpp) {
     class_<Simulation>("SimulationCpp")
         .constructor<const List, const int>()
         .method("apply_updates", &Simulation::apply_updates, "Apply updates to the simulation")
-        .method("render", &Simulation::render, "Return the complete simulation")
         .method("get_current_frame", &Simulation::get_current_frame, "Return the current SimulationFrame")
     ;
 }

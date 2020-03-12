@@ -20,7 +20,6 @@ class Simulation {
     shared_ptr<variables_t> variables;
     size_t current_timestep = 0;
     vector<string> individual_names;
-    vector<string> state_names;
     named_array_t<vector<string>> variable_names;
     named_array_t<size_t> population_sizes;
     size_t timesteps;
@@ -31,7 +30,6 @@ public:
     Simulation(const List, const int);
     void apply_updates(const List);
     SimulationFrame get_current_frame() const;
-    DataFrame render(const Environment) const;
 };
 
 #endif /* SRC_SIMULATION_H_ */

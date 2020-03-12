@@ -4,25 +4,25 @@ test_that("empty simulation exits gracefully", {
   I <- State$new('I', 0)
   R <- State$new('R', 0)
   human <- Individual$new('human', list(S, I, R))
-  simulation <- simulate(human, list(), 4)
+  render <- simulate(human, list(), 4)
   true_render <- data.frame(
     timestep = c(1, 2, 3, 4),
-    S_count = c(4, 4, 4, 4),
-    I_count = c(0, 0, 0, 0),
-    R_count = c(0, 0, 0, 0)
+    human_S_count = c(4, 4, 4, 4),
+    human_I_count = c(0, 0, 0, 0),
+    human_R_count = c(0, 0, 0, 0)
   )
-  expect_equal(true_render, simulation$render(human))
+  expect_equal(true_render, render)
 
-  simulation <- simulate(human, list(), 1)
+  render <- simulate(human, list(), 1)
 
   true_render <- data.frame(
     timestep = c(1),
-    S_count = c(4),
-    I_count = c(0),
-    R_count = c(0)
+    human_S_count = c(4),
+    human_I_count = c(0),
+    human_R_count = c(0)
   )
 
-  expect_equal(true_render, simulation$render(human))
+  expect_equal(true_render, render)
 
   expect_error(
     simulate(human, list(), 0),
@@ -53,17 +53,16 @@ test_that("deterministic state model works", {
     shift_generator(I, R, 1)
   )
 
-  simulation <- simulate(human, processes, 5)
+  render <- simulate(human, processes, 5)
   true_render <- data.frame(
     timestep = c(1, 2, 3, 4, 5),
-    S_count = c(4, 2, 0, 0, 0),
-    I_count = c(0, 2, 3, 2, 1),
-    R_count = c(0, 0, 1, 2, 3)
+    human_S_count = c(4, 2, 0, 0, 0),
+    human_I_count = c(0, 2, 3, 2, 1),
+    human_R_count = c(0, 0, 1, 2, 3)
   )
-  rendered <- simulation$render(human)
   expect_mapequal(
     true_render,
-    rendered
+    render
   )
 })
 
@@ -100,27 +99,22 @@ test_that("deterministic state & variable model works", {
     doubler
   )
 
-  render_mean <- function(individual, variable) {
-    function(frame) {
-      mean(frame$get_variable(individual, variable))
-    }
-  }
-
-  simulation <- simulate(
+  render <- simulate(
     human,
     processes,
     5,
-    renderers=list(value_mean=render_mean(human, sequence))
+    custom_renderers=list(function(frame) {
+      list(value_mean=mean(frame$get_variable(human, value)))
+    })
   )
 
   true_render <- data.frame(
     timestep = c(1, 2, 3, 4, 5),
-    S_count = c(4, 2, 0, 0, 0),
-    I_count = c(0, 2, 3, 2, 1),
-    R_count = c(0, 0, 1, 2, 3),
+    human_S_count = c(4, 2, 0, 0, 0),
+    human_I_count = c(0, 2, 3, 2, 1),
+    human_R_count = c(0, 0, 1, 2, 3),
     value_mean = c(1, 2, 4, 8, 16)
   )
 
-  rendered <- simulation$render(human)
-  expect_mapequal(true_render, rendered)
+  expect_mapequal(true_render, render)
 })
