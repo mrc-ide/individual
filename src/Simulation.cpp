@@ -66,11 +66,13 @@ Simulation::Simulation(const List individuals, const int timesteps) :states(null
         auto start = 1;
         for (Environment state : state_descriptors) {
             auto size = as<size_t>(state["initial_size"]);
+            auto state_name = as<string>(state["name"]);
             auto state_set = unordered_set<size_t>();
             for (auto i = start; i < start + size; ++i) {
                 state_set.insert(i);
             }
-            (*initial_state)[as<string>(state["name"])] = state_set;
+            (*initial_state)[state_name] = state_set;
+            state_names.push_back(state_name);
             start += size;
         }
 
@@ -200,34 +202,31 @@ void Simulation::apply_variable_update(const Environment update, const size_t ti
     variables->at(individual_name)[variable_name][timestep] = new_vector;
 }
 
-List Simulation::render(const Environment individual) const {
+DataFrame Simulation::render(const Environment individual) const {
     auto name = as<string>(individual["name"]);
-    return List::create(
-        Named("states") = render_states(name),
-        Named("variables") = render_variables(name)
-    );
-}
+    auto values = List();
+    auto colnames = vector<string>();
 
-CharacterVector Simulation::render_states(const string individual_name) const {
-    auto state_values = vector<string>();
-    state_values.reserve(population_sizes.at(individual_name) * timesteps);
-    Log(log_level::debug).get() << "timeline size " << states->at(individual_name).size() << endl;
-    for(auto timestep = 0; timestep <= current_timestep; ++timestep) {
-        const auto& state_storage = states->at(individual_name).at(timestep);
-        auto state_vector = vector<string>(population_sizes.at(individual_name));
-        for (const auto& state : *state_storage) {
-            for (const auto index : state.second) {
-                state_vector[index - 1] = state.first;
-            }
+    //render timesteps
+    auto timesteps = vector<size_t>(current_timestep + 1);
+    iota(begin(timesteps), end(timesteps), 1);
+    values.push_back(timesteps, "timestep");
+    colnames.push_back("timestep");
+
+    //render states
+    for (const auto& state_name : state_names) {
+        auto state_counts = vector<size_t>(current_timestep + 1);
+        auto colname = state_name + "_count";
+        for(auto timestep = 0; timestep <= current_timestep; ++timestep) {
+            state_counts[timestep] = states->at(name).at(timestep)->at(state_name).size();
         }
-        state_values.insert(state_values.end(), cbegin(state_vector), cend(state_vector));
+        values.push_back(state_counts);
+        colnames.push_back(colname);
     }
-    CharacterVector rendered_states = CharacterVector::import(cbegin(state_values), cend(state_values));
-    rendered_states.attr("dim") = IntegerVector::create(
-        static_cast<int>(population_sizes.at(individual_name)),
-        static_cast<int>(current_timestep)
-    );
-    return rendered_states;
+
+    auto df = DataFrame(values);
+    df.attr("names") = colnames;
+    return df;
 }
 
 NumericVector Simulation::render_variables(const string individual_name) const {

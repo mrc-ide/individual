@@ -11,7 +11,7 @@ test_that("empty simulation exits gracefully", {
     I_count = c(0, 0, 0, 0),
     R_count = c(0, 0, 0, 0)
   )
-  expect_equal(true_render, simulation$render(human)$states)
+  expect_equal(true_render, simulation$render(human))
 
   simulation <- simulate(human, list(), 1)
 
@@ -22,7 +22,7 @@ test_that("empty simulation exits gracefully", {
     R_count = c(0)
   )
 
-  expect_equal(true_render, simulation$render(human)$states)
+  expect_equal(true_render, simulation$render(human))
 
   expect_error(
     simulate(human, list(), 0),
