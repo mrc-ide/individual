@@ -66,6 +66,49 @@ test_that("deterministic state model works", {
   )
 })
 
+test_that("deterministic state model works w 2 individuals", {
+  population <- 4
+  S <- State$new('S', population)
+  I <- State$new('I', 0)
+  R <- State$new('R', 0)
+  human <- Individual$new('human', list(S, I, R))
+  alien <- Individual$new('alien', list(S, I, R))
+
+  shift_generator <- function(individual, from, to, rate) {
+    return(function(frame, timestep, parameters) {
+      from_state <- frame$get_state(individual, from)
+      StateUpdate$new(
+        individual,
+        to,
+        from_state[seq_len(min(rate,length(from_state)))]
+      )
+    })
+  }
+
+  processes <- list(
+    shift_generator(human, S, I, 2),
+    shift_generator(human, I, R, 1),
+    shift_generator(alien, S, I, 1),
+    shift_generator(alien, I, R, 2)
+  )
+
+  render <- simulate(list(human, alien), processes, 5)
+  true_render <- data.frame(
+    timestep = c(1, 2, 3, 4, 5),
+    human_S_count = c(4, 2, 0, 0, 0),
+    human_I_count = c(0, 2, 3, 2, 1),
+    human_R_count = c(0, 0, 1, 2, 3),
+    alien_S_count = c(4, 3, 2, 1, 0),
+    alien_I_count = c(0, 1, 1, 1, 1),
+    alien_R_count = c(0, 0, 1, 2, 3)
+  )
+  expect_mapequal(
+    true_render,
+    render
+  )
+})
+
+
 test_that("deterministic state & variable model works", {
   population <- 4
   S <- State$new('S', population)
