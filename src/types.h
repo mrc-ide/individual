@@ -25,7 +25,7 @@ template<class T>
 using named_array_t = unordered_map<string, T>;
 
 using state_vector_t = named_array_t<unordered_set<size_t>>;
-using variable_vector_t = valarray<double>;
+using variable_vector_t = vector<double>;
 
 using states_t = named_array_t<state_vector_t>;
 using variables_t = named_array_t<named_array_t<variable_vector_t>>;

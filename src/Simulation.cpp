@@ -10,19 +10,13 @@
 #include "Log.h"
 
 template <class T>
-inline valarray<T> to_valarray(SEXP vectorsexp) {
-    auto v = as<vector<T>>(vectorsexp);
-    return valarray<T>(&v[0], v.size());
-}
-
-template <class T>
 T nested_accessor(Environment e, vector<string> fields) {
     auto last = fields.size() - 1;
     auto i = 0;
     while (i < last) {
         SEXP next = e.get(fields[i]);
         if (next == R_NilValue) {
-            stop("Malformed R6 object");
+            stop("Malformed object");
         }
         e = static_cast<Environment>(next);
         ++i;
@@ -47,7 +41,6 @@ Simulation::Simulation(const List individuals, const int timesteps) :states(null
         auto individual_name = as<string>(individual["name"]);
         individual_names.push_back(individual_name);
 
-        Log(log_level::debug).get() << "pop size" << endl;
         // Get the population size
         List state_descriptors(individual["states"]);
         auto population_size = 0;
@@ -55,8 +48,8 @@ Simulation::Simulation(const List individuals, const int timesteps) :states(null
             population_size += as<size_t>(state["initial_size"]);
         }
         population_sizes[individual_name] = population_size;
+        Log(log_level::debug).get() << "initialising " << individual_name << " x " << population_size << endl;
 
-        Log(log_level::debug).get() << "initial state" << endl;
         // Initialise the initial state
         auto initial_state = state_vector_t(state_descriptors.size());
         auto start = 1;
@@ -71,18 +64,18 @@ Simulation::Simulation(const List individuals, const int timesteps) :states(null
             start += size;
         }
 
-        Log(log_level::debug).get() << "state container" << endl;
+        Log(log_level::debug).get() << "initialising state container" << endl;
         // Initialise the state container
         (*states)[as<string>(individual["name"])] = move(initial_state);
 
-        Log(log_level::debug).get() << "variable container" << endl;
+        Log(log_level::debug).get() << "initialising variable container" << endl;
         // Initialise the variable container
         List variable_descriptors(individual["variables"]);
         for (Environment variable : variable_descriptors) {
             auto variable_name = as<string>(variable["name"]);
             variable_names[individual_name].push_back(variable_name);
             Function initialiser(variable["initialiser"]);
-            auto initial_values = to_valarray<double>(initialiser(population_size));
+            auto initial_values = as<variable_vector_t>(initialiser(population_size));
             (*variables)[as<string>(individual["name"])][variable_name] = initial_values;
         }
     }
@@ -160,23 +153,28 @@ void Simulation::apply_variable_update(const Environment update, variables_t& ne
         }
     }
 
-    auto values = to_valarray<double>(update["value"]);
+    auto values = as<vector<double>>(update["value"]);
     auto& to_update = new_variables[individual_name][variable_name];
 
     if (vector_replacement) {
         // For a full vector replacement
         if (value_fill) {
-            to_update = variable_vector_t(values[0], vector_size);
+            to_update = variable_vector_t(vector_size, values[0]);
         } else {
             to_update = move(values);
         }
     } else {
-        auto index = static_cast<valarray<size_t>>(to_valarray<size_t>(update["index"]) - 1UL);
+        auto index = as<vector<double>>(update["index"]);
         if (value_fill) {
             // For a fill update
-            to_update[index] = values[0];
+            for (auto i : index) {
+              to_update[i - 1] = values[0];
+            }
         } else {
-            to_update[index] = values;
+            // Subset assignment
+            for (auto i = 0; i < index.size(); ++i) {
+              to_update[index[i] - 1] = values[i];
+            }
         }
     }
 }
