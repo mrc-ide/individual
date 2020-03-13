@@ -4,24 +4,19 @@ test_that("updating variables works", {
   human <- Individual$new('test', list(S), variables=list(sequence))
 
   simulation <- Simulation$new(list(human), 3)
-  first <- simulation$get_current_frame()
+  first <- simulation$get_current_frame()$get_variable(human, sequence)
   simulation$apply_updates(
     list(VariableUpdate$new(human, sequence, (1:5) * 2, 1:5))
   )
-  middle <- simulation$get_current_frame()
+  middle <- simulation$get_current_frame()$get_variable(human, sequence)
   simulation$apply_updates(
     list(VariableUpdate$new(human, sequence, 11, 2:6))
   )
-  last <- simulation$get_current_frame()
+  last <- simulation$get_current_frame()$get_variable(human, sequence)
 
-  expect_equal(first$get_variable(human, sequence), 1:10)
-  expect_equal(middle$get_variable(human, sequence), c((1:5) * 2, 6:10))
-  expect_equal(last$get_variable(human, sequence), c(2, rep(11, 5), 7:10))
-
-  # States are unchanged
-  expect_setequal(first$get_state(human, S), 1:10)
-  expect_setequal(middle$get_state(human, S), 1:10)
-  expect_setequal(last$get_state(human, S), 1:10)
+  expect_equal(first, 1:10)
+  expect_equal(middle, c((1:5) * 2, 6:10))
+  expect_equal(last, c(2, rep(11, 5), 7:10))
 })
 
 test_that("updating variables at the boundaries works", {
@@ -30,14 +25,14 @@ test_that("updating variables at the boundaries works", {
   human <- Individual$new('test', list(S), variables=list(sequence))
 
   simulation <- Simulation$new(list(human), 3)
-  before <- simulation$get_current_frame()
+  before <- simulation$get_current_frame()$get_variable(human, sequence)
   simulation$apply_updates(
     list(VariableUpdate$new(human, sequence, 2, 10))
   )
-  after <- simulation$get_current_frame()
+  after <- simulation$get_current_frame()$get_variable(human, sequence)
 
-  expect_equal(before$get_variable(human, sequence), 1:10)
-  expect_equal(after$get_variable(human, sequence), c(1:9, 2))
+  expect_equal(before, 1:10)
+  expect_equal(after, c(1:9, 2))
 })
 
 test_that("updating variables tolerates empty fills", {
@@ -46,14 +41,14 @@ test_that("updating variables tolerates empty fills", {
   human <- Individual$new('test', list(S), variables=list(sequence))
 
   simulation <- Simulation$new(list(human), 2)
-  before <- simulation$get_current_frame()
+  before <- simulation$get_current_frame()$get_variable(human, sequence)
   simulation$apply_updates(
     list(VariableUpdate$new(human, sequence, 11, numeric(0)))
   )
-  after <- simulation$get_current_frame()
+  after <- simulation$get_current_frame()$get_variable(human, sequence)
 
-  expect_equal(before$get_variable(human, sequence), 1:10)
-  expect_equal(after$get_variable(human, sequence), 1:10)
+  expect_equal(before, 1:10)
+  expect_equal(after, 1:10)
 })
 
 test_that("updating past the last timestep errors gracefully", {
@@ -113,14 +108,14 @@ test_that("updating the complete variable vector works", {
   human <- Individual$new('test', list(S), variables=list(sequence))
 
   simulation <- Simulation$new(list(human), 2)
-  before <- simulation$get_current_frame()
+  before <- simulation$get_current_frame()$get_variable(human, sequence)
   simulation$apply_updates(
     list(VariableUpdate$new(human, sequence, 11:20))
   )
-  after <- simulation$get_current_frame()
+  after <- simulation$get_current_frame()$get_variable(human, sequence)
 
-  expect_equal(before$get_variable(human, sequence), 1:10)
-  expect_equal(after$get_variable(human, sequence), 11:20)
+  expect_equal(before, 1:10)
+  expect_equal(after, 11:20)
 })
 
 test_that("Vector fill variable updates work", {
@@ -129,14 +124,14 @@ test_that("Vector fill variable updates work", {
   human <- Individual$new('test', list(S), variables=list(sequence))
 
   simulation <- Simulation$new(list(human), 2)
-  before <- simulation$get_current_frame()
+  before <- simulation$get_current_frame()$get_variable(human, sequence)
   simulation$apply_updates(
     list(VariableUpdate$new(human, sequence, 14))
   )
-  after <- simulation$get_current_frame()
+  after <- simulation$get_current_frame()$get_variable(human, sequence)
 
-  expect_equal(before$get_variable(human, sequence), 1:10)
-  expect_equal(after$get_variable(human, sequence), rep(14, 10))
+  expect_equal(before, 1:10)
+  expect_equal(after, rep(14, 10))
 })
 
 test_that("Simulation state updates work", {
@@ -179,4 +174,6 @@ test_that("Simulation state updates work with duplicate elements", {
   expect_setequal(frame$get_state(human, S), c(2, 4:10))
   simulation$apply_updates(updates)
   frame <- simulation$get_current_frame()
+  expect_setequal(frame$get_state(human, I), c(1, 3))
+  expect_setequal(frame$get_state(human, S), c(2, 4:10))
 })
