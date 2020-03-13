@@ -27,6 +27,9 @@ vector<size_t> SimulationFrame::get_state(
     auto added_states = unordered_set<string>();
     for (Environment state : state_descriptors) {
         auto state_name = as<string>(state["name"]);
+        if (individual_states.find(state_name) == individual_states.end()) {
+            stop("Unknown state");
+        }
         if (added_states.find(state_name) == added_states.end()) {
             const auto& state_set = individual_states.at(state_name);
             result.insert(result.end(), cbegin(state_set), cend(state_set));

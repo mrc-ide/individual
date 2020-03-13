@@ -12,11 +12,6 @@ SimFrame <- R6::R6Class(
     #' @param state of interest
     get_state = function(individual, ...) {
       states <- list(...)
-      for (state in states) {
-        if(!individual$check_state(state)) {
-          stop('Invalid state')
-        }
-      }
       private$.impl$get_state(individual, states)
     },
 
