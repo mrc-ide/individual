@@ -19,6 +19,8 @@ simulate(
 
 \item{end_timestep}{the number of timesteps to simulate}
 
+\item{custom_renderers}{a list of renderers to pass to Render$initialize}
+
 \item{parameters}{a list of named parameters to pass to the process functions}
 }
 \description{
