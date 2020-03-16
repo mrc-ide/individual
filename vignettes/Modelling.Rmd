@@ -88,34 +88,29 @@ however you want.
 
 ```{r}
 simulation <- simulate(human, processes, 100)
-rendered <- simulation$render(human)
 
 plot_states <- function(output) {
-  df <- rbind(
-    data.frame(
-      counts = colSums(rendered$states == 'S'),
-      timestep = seq_len(ncol(rendered$states)),
-      state = 'S'
-    ),
-    data.frame(
-      counts = colSums(rendered$states == 'I'),
-      timestep = seq_len(ncol(rendered$states)),
-      state = 'I'
-    ),
-    data.frame(
-      counts = colSums(rendered$states == 'R'),
-      timestep = seq_len(ncol(rendered$states)),
-      state = 'R'
-    )
+  # group the state counts into one column 
+  cols <- colnames(output)[colnames(output) != 'timestep']
+  reshaped <- reshape(
+    output,
+    varying = cols,
+    idvar = 'timestep',
+    timevar = 'state',
+    direction = 'long',
+    v.names = c('counts')
   )
 
+  # make the state column more readable
+  reshaped$state <- vapply(reshaped$state, function(i) cols[[i]], character(1))
+
   ggplot(
-    df,
+    reshaped,
     aes(x = timestep, y = counts, group = state)
   ) + geom_line(aes(color = state))
 }
 
-plot_states(rendered)
+plot_states(simulation)
 ```
 
 ###Adding Variables
@@ -190,13 +185,13 @@ There are two new features in this example that have not yet been mentioned:
 You can see how this affects our outputs by re-simulating the model.
 
 ```{r}
-rendered <- simulate(
+simulation <- simulate(
   human,
   processes_with_immunity,
   100,
-  list(immunity_level = .6)
-)$render(human)
-plot_states(rendered)
+  parameters = list(immunity_level = .6)
+)
+plot_states(simulation)
 ```
 
 You could also analyse the variables in your population.
@@ -204,13 +199,21 @@ You could also analyse the variables in your population.
 Let’s say you wanted to see the average immunity in your population:
 
 ```{r}
-immunity <- data.frame(
-  immunity = colMeans(rendered$variables[,'immunity',]),
-  timestep = 1:100
+simulation <- simulate(
+  human,
+  processes_with_immunity,
+  100,
+  parameters = list(immunity_level = .6),
+  custom_renderers = list(
+    function(frame) {
+      list(mean_immunity=mean(frame$get_variable(human, immunity)))
+    }
+  )
 )
+
 ggplot(
-  immunity,
-  aes(x = timestep, y = immunity)
+  simulation,
+  aes(x = timestep, y = mean_immunity)
 ) + geom_line()
 ```
 

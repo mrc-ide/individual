@@ -13,13 +13,8 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
-#include <Rcpp.h>
 
 using namespace std;
-
-/*
- * timeline_t is for storing a series of data point for a population
- */
 
 template<class T>
 using named_array_t = unordered_map<string, T>;

@@ -11,11 +11,28 @@ Represents a state for an individual in our simulation
 Class: State
 Represents a state for an individual in our simulation
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{name, }}{the string label for this state}
+
+\item{\code{initial_size, }}{the string label for this state}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{name, }}{the string label for this state}
+
+\item{\code{initial_size, }}{the string label for this state}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{State$new()}}
-\item \href{#method-print}{\code{State$print()}}
 \item \href{#method-clone}{\code{State$clone()}}
 }
 }
@@ -36,14 +53,6 @@ Create a new State
 }
 \if{html}{\out{</div>}}
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\subsection{Method \code{print()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{State$print()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

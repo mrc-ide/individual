@@ -9,7 +9,7 @@ SimFrame <- R6::R6Class(
     #' @description
     #' Get the index of individuals with a particular state
     #' @param individual of interest
-    #' @param state of interest
+    #' @param ... the states of interest
     get_state = function(individual, ...) {
       states <- list(...)
       private$.impl$get_state(individual, states)
@@ -17,24 +17,15 @@ SimFrame <- R6::R6Class(
 
     #' @description
     #' Get a variable vector for an individual
-    #' @param individual of interest
-    #' @param variable of interest
+    #' @param ... the individual and variable of interest
     get_variable = function(...) {
-      private$.impl$get_variable(...)
-    },
-
-    #' @description
-    #' Get a constant vector for an individual
-    #' @param individual of interest
-    #' @param constant of interest
-    get_constant = function(...) {
       private$.impl$get_variable(...)
     },
 
     #' @description
     #' Create an initial SimFrame
     #' current timestep
-    #' @param the cpp implementation of this class
+    #' @param impl the cpp implementation of this class
     initialize = function(impl) {
       private$.impl <- impl
     }

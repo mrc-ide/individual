@@ -11,20 +11,61 @@ Describes an update to a variable
 Class: VariableUpdate
 Describes an update to a variable
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{individual, }}{the individual to update}
+
+\item{\code{variable, }}{the variable to to update}
+
+\item{\code{value, }}{the value to update the variable with}
+
+\item{\code{index, }}{the index of the variable to update}
+
+\item{\code{type, }}{a helper field for the cpp implementation}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{individual, }}{the individual to update}
+
+\item{\code{variable, }}{the variable to to update}
+
+\item{\code{value, }}{the value to update the variable with}
+
+\item{\code{index, }}{the index of the variable to update}
+
+\item{\code{type, }}{a helper field for the cpp implementation}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{VariableUpdate$new()}}
-\item \href{#method-print}{\code{VariableUpdate$print()}}
 \item \href{#method-clone}{\code{VariableUpdate$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
-Create a new VariableUpdate descriptor
+Create a new VariableUpdate descriptor. There are 4 types of variable
+Update:
+
+1. Subset update. The index vector represents a subset of the variable to
+update. The value vector, of the same size, represents the new values for
+that subset
+2. Subset fill. The index vector represents a subset of the variable to
+update. The value vector, of size 1, will fill the specified subset
+3. Variable reset. The index vector is set to `NULL` and the value vector
+replaces all of the current values in the simulation. The value vector is
+should match the size of the population.
+4. Variable fill. The index vector is set to `NULL` and the value vector,
+of size 1, is used to fill all of the variable values in the population.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VariableUpdate$new(individual, variable, value, index = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{VariableUpdate$new(individual, variable, value, index = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -36,18 +77,11 @@ Create a new VariableUpdate descriptor
 
 \item{\code{value}}{a vector or scalar of values to assign at the index}
 
-\item{\code{index}}{is the index at which to apply the change}
+\item{\code{index}}{is the index at which to apply the change, use NULL for the
+fill options}
 }
 \if{html}{\out{</div>}}
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\subsection{Method \code{print()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VariableUpdate$print()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

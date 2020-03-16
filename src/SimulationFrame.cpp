@@ -1,5 +1,5 @@
 /*
- * SimulationFrameR.cpp
+ * SimulationFrame.cpp
  *
  *  Created on: 14 Feb 2020
  *      Author: giovanni

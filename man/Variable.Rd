@@ -11,11 +11,28 @@ Represents a variable for an individual in our simulation
 Class: Variable
 Represents a variable for an individual in our simulation
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{name, }}{the string label for this variable}
+
+\item{\code{initialiser, }}{the function to initialise the values for this variable}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{name, }}{the string label for this variable}
+
+\item{\code{initialiser, }}{the function to initialise the values for this variable}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Variable$new()}}
-\item \href{#method-print}{\code{Variable$print()}}
 \item \href{#method-clone}{\code{Variable$clone()}}
 }
 }
@@ -40,14 +57,6 @@ its only argument}
 }
 \if{html}{\out{</div>}}
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\subsection{Method \code{print()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Variable$print()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

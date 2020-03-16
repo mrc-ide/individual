@@ -4,7 +4,13 @@
 \alias{simulate}
 \title{Main simulation loop}
 \usage{
-simulate(individuals, processes, end_timestep, parameters = list())
+simulate(
+  individuals,
+  processes,
+  end_timestep,
+  custom_renderers = list(),
+  parameters = list()
+)
 }
 \arguments{
 \item{individuals}{a list of Individual to simulate}
@@ -17,4 +23,30 @@ simulate(individuals, processes, end_timestep, parameters = list())
 }
 \description{
 Main simulation loop
+}
+\examples{
+population <- 4
+S <- State$new('S', population)
+I <- State$new('I', 0)
+R <- State$new('R', 0)
+human <- Individual$new('human', list(S, I, R))
+
+transition <- function(from, to, rate) {
+  return(function(frame, timestep, parameters) {
+    from_state <- frame$get_state(human, from)
+    StateUpdate$new(
+      human,
+      to,
+      from_state[runif(length(from_state), 0, 1) < rate]
+    )
+  })
+}
+
+processes <- list(
+  transition(S, I, .2),
+  transition(I, R, .1),
+  transition(R, S, .05)
+)
+
+simulate(human, processes, 5)
 }

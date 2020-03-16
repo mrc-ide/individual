@@ -8,7 +8,7 @@ Simulation <- R6::R6Class(
   public = list(
     #' @description
     #' Return a list of the simulated states and variables for the simulation
-    #' @param individual to render
+    #' @param ... the individual to render
     render = function(...) {
       private$.impl$render(...)
     },
@@ -22,15 +22,15 @@ Simulation <- R6::R6Class(
     #' @description
     #' Perform updates on the a simulation, increment the counter and return the
     #' next simulation frame
-    #' @param updates is a list of updates to apply
+    #' @param ... the updates as a list of update objects to apply
     apply_updates = function(...) {
       private$.impl$apply_updates(...)
     },
 
     #' @description
     #' Create a blank simulation and then initialize first timestep
-    #' @param individuals a list of Individual to initialise for
-    #' @param timesteps the number of timesteps to initialise for
+    #' @param ... a list of Individual and the number of timesteps to
+    #' initialise for
     initialize = function(...) {
       private$.impl <- new(SimulationCpp, ...)
     }
@@ -61,6 +61,14 @@ Render <- R6::R6Class(
     }
   ),
   public = list(
+    #' @description
+    #' Initialise a renderer for the simulation, creates the default state
+    #' renderers
+    #' @param individuals to render states for
+    #' @param timesteps number of timesteps in the simulation
+    #' @param renderers additional renderers to execute. Renderers are functions
+    #' which take a SimFrame as an argument and return a list of
+    #' scalar outputs to store to the final render
     initialize = function(individuals, timesteps, renderers = list()) {
       private$.renderers <- c(
         private$.state_renderer(individuals),
@@ -69,6 +77,11 @@ Render <- R6::R6Class(
       private$.timesteps = timesteps
       private$.vectors[['timestep']] <- seq_len(timesteps)
     },
+
+    #' @description
+    #' Update the render with new simulation data
+    #' @param frame the new SimFrame
+    #' @param timestep the timestep of the frame
     update = function(frame, timestep) {
       for (renderer in private$.renderers) {
         values <- renderer(frame)
@@ -80,6 +93,8 @@ Render <- R6::R6Class(
         }
       }
     },
+    #' @description
+    #' Make a dataframe for the render
     to_dataframe = function() {
       data.frame(private$.vectors)
     }
@@ -91,8 +106,9 @@ Render <- R6::R6Class(
 #' @param individuals a list of Individual to simulate
 #' @param processes a list of processes to execute on each timestep
 #' @param end_timestep the number of timesteps to simulate
+#' @param custom_renderers a list of renderers to pass to Render$initialize
 #' @param parameters a list of named parameters to pass to the process functions
-#' @example
+#' @examples
 #' population <- 4
 #' S <- State$new('S', population)
 #' I <- State$new('I', 0)
@@ -117,8 +133,6 @@ Render <- R6::R6Class(
 #' )
 #'
 #' simulate(human, processes, 5)
-#' @export
-simulate <- function(individuals, processes, end_timestep, parameters=list()) {
 #' @export simulate
 simulate <- function(
   individuals,
