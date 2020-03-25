@@ -113,7 +113,6 @@ void Simulation::apply_state_update(const Environment update, states_t& new_stat
     const auto state_name = nested_accessor<string>(update, {"state", "name"});
     Log(log_level::debug).get() << "state: " << individual_name << ":" << state_name << endl;
     auto index = static_cast<IntegerVector>(update["index"]);
-    Log(log_level::debug).get() << index << endl;
     for (auto& pair : new_states.at(individual_name)) {
         for (auto i : index) {
             pair.second.erase(i);
