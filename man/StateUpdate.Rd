@@ -11,11 +11,36 @@ Describes a state update
 Class: StateUpdate
 Describes a state update
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{individual, }}{the individual to update}
+
+\item{\code{state, }}{the state to move individuals to}
+
+\item{\code{index, }}{the index at which to update the states}
+
+\item{\code{type, }}{a helper field for the cpp implementation}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{individual, }}{the individual to update}
+
+\item{\code{state, }}{the state to move individuals to}
+
+\item{\code{index, }}{the index at which to update the states}
+
+\item{\code{type, }}{a helper field for the cpp implementation}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{StateUpdate$new()}}
-\item \href{#method-print}{\code{StateUpdate$print()}}
 \item \href{#method-clone}{\code{StateUpdate$clone()}}
 }
 }
@@ -38,14 +63,6 @@ Create a new StateUpdate descriptor
 }
 \if{html}{\out{</div>}}
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\subsection{Method \code{print()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StateUpdate$print()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

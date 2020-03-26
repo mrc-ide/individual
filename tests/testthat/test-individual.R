@@ -9,8 +9,3 @@ test_that("incorrect initialisations fail", {
     '*'
   )
 })
-
-test_that("individuals are readonly", {
-  i <- Individual$new('test', list(State$new('S', 1)))
-  expect_error(i$name <- 'not test', '*')
-})

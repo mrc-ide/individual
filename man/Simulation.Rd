@@ -26,13 +26,13 @@ Class to store and update the simulation for each type of individual
 \subsection{Method \code{render()}}{
 Return a list of the simulated states and variables for the simulation
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$render(individual)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$render(...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{individual}}{to render}
+\item{\code{...}}{the individual to render}
 }
 \if{html}{\out{</div>}}
 }
@@ -52,13 +52,13 @@ Get a SimFrame for the current timestep
 Perform updates on the a simulation, increment the counter and return the
 next simulation frame
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$apply_updates(updates)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$apply_updates(...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{updates}}{is a list of updates to apply}
+\item{\code{...}}{the updates as a list of update objects to apply}
 }
 \if{html}{\out{</div>}}
 }
@@ -68,15 +68,14 @@ next simulation frame
 \subsection{Method \code{new()}}{
 Create a blank simulation and then initialize first timestep
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$new(individuals, timesteps)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$new(...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{individuals}}{a list of Individual to initialise for}
-
-\item{\code{timesteps}}{the number of timesteps to initialise for}
+\item{\code{...}}{a list of Individual and the number of timesteps to
+initialise for}
 }
 \if{html}{\out{</div>}}
 }

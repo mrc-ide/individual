@@ -18,13 +18,8 @@ Description: This package gives you useful primitives for structuring and simula
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Collate:
-  'utils.R'
-  'individual.R'
-  'frame.R'
-  'updates.R'
-  'simulation.R'
 Imports:
+  Rcpp,
   R6
 Suggests:
   testthat (>= 2.1.0),
@@ -34,3 +29,6 @@ Suggests:
   ggplot2
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
+LinkingTo:
+  Rcpp
+RcppModules: individual_cpp

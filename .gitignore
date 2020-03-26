@@ -6,3 +6,11 @@ individual_*.tar.gz
 .Rd2pdf*
 inst/doc
 docs/
+.cproject
+.project
+.settings
+*.o
+*.so
+*.dll
+/Debug/
+.Rproj.user

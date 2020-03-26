@@ -3,145 +3,100 @@
 Simulation <- R6::R6Class(
   'Simulation',
   private = list(
-    .individual_to_states = list(),
-    .individual_to_variables = list(),
-    .individual_to_constants = list(),
-    .current_timestep = 1,
-    .individuals = list()
+    .impl = NULL
   ),
   public = list(
     #' @description
     #' Return a list of the simulated states and variables for the simulation
-    #' @param individual to render
-    render = function(individual) {
-      list(
-        states=private$.individual_to_states[[individual$name]],
-        variables=private$.individual_to_variables[[individual$name]]
-      )
+    #' @param ... the individual to render
+    render = function(...) {
+      private$.impl$render(...)
     },
 
     #' @description
     #' Get a SimFrame for the current timestep
     get_current_frame = function() {
-      SimFrame$new(
-        private$.individuals,
-        lapply(private$.individuals, function(i) {
-          private$.individual_to_states[[i$name]][,private$.current_timestep]
-        }),
-        lapply(private$.individuals, function(i) {
-          private$.individual_to_variables[[i$name]][
-            ,,private$.current_timestep, drop=FALSE
-          ]
-        }),
-        lapply(private$.individuals, function(i) {
-          private$.individual_to_constants[[i$name]]
-        })
-      )
+      SimFrame$new(private$.impl$get_current_frame())
     },
 
     #' @description
     #' Perform updates on the a simulation, increment the counter and return the
     #' next simulation frame
-    #' @param updates is a list of updates to apply
-    apply_updates = function(updates) {
-
-      # Copy over values to next timestep
-      for (name in names(private$.individual_to_states)) {
-        private$.individual_to_states[[name]][
-          ,private$.current_timestep + 1
-        ] <- private$.individual_to_states[[name]][,private$.current_timestep]
-      }
-      for (name in names(private$.individual_to_variables)) {
-        private$.individual_to_variables[[name]][
-          ,,private$.current_timestep + 1
-        ] <- private$.individual_to_variables[[name]][
-          ,,private$.current_timestep
-        ]
-      }
-
-      # execute process updates
-      for (update in updates) {
-        if (inherits(update, 'StateUpdate')) {
-          private$.individual_to_states[[update$individual$name]][
-            update$index, private$.current_timestep + 1
-          ] <- update$state$name
-        } else if (inherits(update, 'VariableUpdate')) {
-          private$.individual_to_variables[[update$individual$name]][
-            update$index, update$variable$name ,private$.current_timestep + 1
-          ] <- update$value
-        }
-      }
-
-      # increment timestep
-      private$.current_timestep <- private$.current_timestep + 1
-      self$get_current_frame()
+    #' @param ... the updates as a list of update objects to apply
+    apply_updates = function(...) {
+      private$.impl$apply_updates(...)
     },
 
     #' @description
     #' Create a blank simulation and then initialize first timestep
-    #' @param individuals a list of Individual to initialise for
-    #' @param timesteps the number of timesteps to initialise for
-    initialize = function(individuals, timesteps) {
-      individual_names <- lapply(individuals, function(i) { i$name })
-      states <- lapply(individuals, function(i) {
-        population <- sum(
-          vnapply(i$states, function(s) s$initial_size)
-        )
-        a <- array(
-          rep(NA, population * timesteps),
-          c(population, timesteps)
-        )
-        a[,1] <- rep(
-          vcapply(i$states, function(x) x$name),
-          vnapply(i$states, function(x) x$initial_size)
-        )
-        a
-      })
+    #' @param ... a list of Individual and the number of timesteps to
+    #' initialise for
+    initialize = function(...) {
+      private$.impl <- new(SimulationCpp, ...)
+    }
+  )
+)
 
-      variables <- lapply(individuals, function(i) {
-        population <- sum(
-          vnapply(i$states, function(s) s$initial_size)
-        )
-        n_columns <- length(i$variables)
-        variable_names <- lapply(i$variables, function(v) v$name)
-
-        a <- array(
-          rep(NA, population * n_columns * timesteps),
-          c(population, n_columns, timesteps)
-        )
-
-        for (j in seq_len(n_columns)) {
-          a[,j,1] <- i$variables[[j]]$initialiser(population)
+#' Class: Render
+#' Class to render output for the simulation
+Render <- R6::R6Class(
+  'Render',
+  private = list(
+    .vectors = list(),
+    .renderers = list(),
+    .timesteps = 0,
+    .state_renderer = function(individuals) {
+      function(frame) {
+        values = list()
+        for (individual in individuals) {
+          for (state in individual$states) {
+            colname <- paste(individual$name, '_', state$name, '_count', sep='')
+            values[[colname]] <- length(
+              frame$get_state(individual, state)
+            )
+          }
         }
+        values
+      }
+    }
+  ),
+  public = list(
+    #' @description
+    #' Initialise a renderer for the simulation, creates the default state
+    #' renderers
+    #' @param individuals to render states for
+    #' @param timesteps number of timesteps in the simulation
+    #' @param renderers additional renderers to execute. Renderers are functions
+    #' which take a SimFrame as an argument and return a list of
+    #' scalar outputs to store to the final render
+    initialize = function(individuals, timesteps, renderers = list()) {
+      private$.renderers <- c(
+        private$.state_renderer(individuals),
+        renderers
+      )
+      private$.timesteps = timesteps
+      private$.vectors[['timestep']] <- seq_len(timesteps)
+    },
 
-        dimnames(a)[[2]] <- variable_names
-        a
-      })
-
-      constants <- lapply(individuals, function(i) {
-        population <- sum(
-          vnapply(i$states, function(s) s$initial_size)
-        )
-        n_columns <- length(i$constants)
-        variable_names <- lapply(i$constants, function(v) v$name)
-
-        a <- array(
-          rep(NA, population * n_columns),
-          c(population, n_columns)
-        )
-
-        for (j in seq_len(length(i$constants))) {
-          a[,j] <- i$constants[[j]]$initialiser(population)
+    #' @description
+    #' Update the render with new simulation data
+    #' @param frame the new SimFrame
+    #' @param timestep the timestep of the frame
+    update = function(frame, timestep) {
+      for (renderer in private$.renderers) {
+        values <- renderer(frame)
+        for (name in names(values)) {
+          if (timestep == 1) {
+            private$.vectors[[name]] = rep(NA, private$.timesteps)
+          }
+          private$.vectors[[name]][[timestep]] = values[[name]]
         }
-
-        dimnames(a)[[2]] <- variable_names
-        a
-      })
-
-      private$.individual_to_states <- setNames(states, individual_names)
-      private$.individual_to_variables <- setNames(variables, individual_names)
-      private$.individual_to_constants <- setNames(constants, individual_names)
-      private$.individuals <- individuals
+      }
+    },
+    #' @description
+    #' Make a dataframe for the render
+    to_dataframe = function() {
+      data.frame(private$.vectors)
     }
   )
 )
@@ -151,8 +106,9 @@ Simulation <- R6::R6Class(
 #' @param individuals a list of Individual to simulate
 #' @param processes a list of processes to execute on each timestep
 #' @param end_timestep the number of timesteps to simulate
+#' @param custom_renderers a list of renderers to pass to Render$initialize
 #' @param parameters a list of named parameters to pass to the process functions
-#' @example
+#' @examples
 #' population <- 4
 #' S <- State$new('S', population)
 #' I <- State$new('I', 0)
@@ -177,24 +133,34 @@ Simulation <- R6::R6Class(
 #' )
 #'
 #' simulate(human, processes, 5)
-#' @export
-simulate <- function(individuals, processes, end_timestep, parameters=list()) {
+#' @export simulate
+simulate <- function(
+  individuals,
+  processes,
+  end_timestep,
+  custom_renderers=list(),
+  parameters=list()
+  ) {
   if (end_timestep <= 0) {
     stop('End timestep must be > 0')
   }
   if (! is.list(individuals)) {
     individuals <- list(individuals)
   }
-  output <- Simulation$new(individuals, end_timestep)
-  frame <- output$get_current_frame()
-  for (timestep in seq_len(end_timestep - 1)) {
+  simulation <- Simulation$new(individuals, end_timestep)
+  render <- Render$new(individuals, end_timestep, custom_renderers)
+  frame <- simulation$get_current_frame()
+  render$update(frame, 1)
+  for (timestep in seq_len(end_timestep - 1) + 1) {
     updates <- unlist(
       lapply(
         processes,
         function(process) { process(frame, timestep, parameters) }
       )
     )
-    frame <- output$apply_updates(updates)
+    simulation$apply_updates(updates)
+    frame <- simulation$get_current_frame()
+    render$update(frame, timestep)
   }
-  output
+  render$to_dataframe()
 }

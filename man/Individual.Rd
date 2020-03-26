@@ -11,14 +11,32 @@ Represents an individual in our simulation
 Class: Individual
 Represents an individual in our simulation
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{name, }}{the string label for this individual}
+
+\item{\code{states, }}{a list of state objects which apply to this individual}
+
+\item{\code{variables, }}{a list of variable objects which apply to this individual}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{name, }}{the string label for this individual}
+
+\item{\code{states, }}{a list of state objects which apply to this individual}
+
+\item{\code{variables, }}{a list of variable objects which apply to this individual}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Individual$new()}}
-\item \href{#method-check_state}{\code{Individual$check_state()}}
-\item \href{#method-check_variable}{\code{Individual$check_variable()}}
-\item \href{#method-check_constant}{\code{Individual$check_constant()}}
-\item \href{#method-print}{\code{Individual$print()}}
 \item \href{#method-clone}{\code{Individual$clone()}}
 }
 }
@@ -27,51 +45,19 @@ Represents an individual in our simulation
 \subsection{Method \code{new()}}{
 Create a new Individual
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Individual$new(name, states, variables = list(), constants = list())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Individual$new(name, states, variables = list())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{name}}{is a unique idetifier which is used in the output
-$param ... a list of State objects
+$param states a list of State objects
 $param variables a list of Variable objects
 $param constants a list of Constant objects}
 }
 \if{html}{\out{</div>}}
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check_state"></a>}}
-\subsection{Method \code{check_state()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Individual$check_state(state)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check_variable"></a>}}
-\subsection{Method \code{check_variable()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Individual$check_variable(variable)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check_constant"></a>}}
-\subsection{Method \code{check_constant()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Individual$check_constant(constant)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\subsection{Method \code{print()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Individual$print()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

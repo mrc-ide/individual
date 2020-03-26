@@ -1,127 +1,92 @@
 #' Class: Individual
 #' Represents an individual in our simulation
 #' @export Individual
-Individual <- DataClass(
+Individual <- R6::R6Class(
   'Individual',
-  c('name', 'states', 'variables', 'constants'),
+  public = list(
 
-  #' @description
-  #' Create a new Individual
-  #' @param name is a unique idetifier which is used in the output
-  #' $param ... a list of State objects
-  #' $param variables a list of Variable objects
-  #' $param constants a list of Constant objects
+    #' @field name, the string label for this individual
+    name = '',
 
-  initialize = function(name, states, variables = list(), constants = list()) {
-    names <- c(
-      vcapply(states, function(state) state$name),
-      vcapply(variables, function(v) v$name),
-      vcapply(constants, function(c) c$name)
-    )
+    #' @field states, a list of state objects which apply to this individual
+    states = list(),
 
-    if (any(duplicated(names))) {
-      stop('No duplicate state, variable or constant names allowed')
+    #' @field variables, a list of variable objects which apply to this individual
+    variables = list(),
+
+    #' @description
+    #' Create a new Individual
+    #' @param name is a unique idetifier which is used in the output
+    #' $param states a list of State objects
+    #' $param variables a list of Variable objects
+    #' $param constants a list of Constant objects
+    initialize = function(name, states, variables = list()) {
+      if (any(duplicated(vcapply(states, function (state) state$name)))) {
+        stop('No duplicate state names allowed')
+      }
+
+      if (any(duplicated(vcapply(variables, function (v) v$name)))) {
+        stop('No duplicate variable names allowed')
+      }
+
+      self$name <- name
+      self$states <- states
+      self$variables <- variables
     }
-
-    private$.name <- name
-    private$.states <- states
-    private$.variables <- variables
-    private$.constants <- constants
-  },
-  print_fields = c('name')
-)
-
-Individual$set(
-  'public',
-  'check_state',
-  function(state) {
-    names <- vcapply(self$states, function(s) s$name)
-    state$name %in% names
-  }
-)
-
-Individual$set(
-  'public',
-  'check_variable',
-  function(variable) {
-    names <- vcapply(self$variables, function(v) v$name)
-    variable$name %in% names
-  }
-)
-
-Individual$set(
-  'public',
-  'check_constant',
-  function(constant) {
-    names <- vcapply(self$constants, function(v) v$name)
-    constant$name %in% names
-  }
+  )
 )
 
 #' Class: State
 #' Represents a state for an individual in our simulation
 #' @export State
-State <- DataClass(
+State <- R6::R6Class(
   'State',
-  c('name', 'initial_size'),
+  public = list(
 
-  #' @description
-  #' Create a new State
-  #' @param name is a unique idetifier which is used in the output
-  #' @param initial_size used to initialise the state at the start of the sim
+    #' @field name, the string label for this state
+    name = '',
 
-  initialize = function(name, initial_size) {
-    if (initial_size < 0) {
-      stop('Invalid size')
+    #' @field initial_size, the string label for this state
+    initial_size = 0,
+
+    #' @description
+    #' Create a new State
+    #' @param name is a unique idetifier which is used in the output
+    #' @param initial_size used to initialise the state at the start of the sim
+    initialize = function(name, initial_size) {
+      if (initial_size < 0) {
+        stop('Invalid size')
+      }
+      self$name <- name
+      self$initial_size <- initial_size
     }
-    private$.name <- name
-    private$.initial_size <- initial_size
-  },
-  print_fields = c('name', 'initial_size')
+  )
 )
 
 #' Class: Variable
 #' Represents a variable for an individual in our simulation
 #' @export Variable
-Variable <- DataClass(
+Variable <- R6::R6Class(
   'Variable',
-  c('name', 'initialiser'),
+  public = list(
 
-  #' @description
-  #' Create a new Variable. Variables represent a numerical value for each
-  #' individual. Variables are updated during a simulation when a process
-  #' returns a VariableUpdate object.
-  #' @param name is a unique identifier which is used in the output
-  #' @param initialiser a function used to initialise the variable at the start
-  #' of the simulation. The initialiser function takes the population size as
-  #' its only argument
+    #' @field name, the string label for this variable
+    name = '',
 
-  initialize = function(name, initialiser) {
-    private$.name <- name
-    private$.initialiser <- initialiser
-  },
-  print_fields = c('name')
-)
+    #' @field initialiser, the function to initialise the values for this variable
+    initialiser = NULL,
 
-#' Class: Constant
-#' Represents a constant for an individual in our simulation
-#' @export Constant
-Constant <- DataClass(
-  'Constant',
-  c('name', 'initialiser'),
-
-  #' @description
-  #' Create a new Constant. Constant represent a numerical value for each
-  #' individual. Constants differ from variables in that they cannot be updated
-  #' in the simulation.
-  #' @param name is a unique identifier which is used in the output
-  #' @param initialiser a function used to initialise the constant at the start
-  #' of the simulation. The initialiser function takes the population size as
-  #' its only argument
-
-  initialize = function(name, initialiser) {
-    private$.name <- name
-    private$.initialiser <- initialiser
-  },
-  print_fields = c('name')
+    #' @description
+    #' Create a new Variable. Variables represent a numerical value for each
+    #' individual. Variables are updated during a simulation when a process
+    #' returns a VariableUpdate object.
+    #' @param name is a unique identifier which is used in the output
+    #' @param initialiser a function used to initialise the variable at the start
+    #' of the simulation. The initialiser function takes the population size as
+    #' its only argument
+    initialize = function(name, initialiser) {
+      self$name <- name
+      self$initialiser <- initialiser
+    }
+  )
 )

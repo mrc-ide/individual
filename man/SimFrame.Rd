@@ -16,7 +16,6 @@ Represents the state of all individuals in a timestep
 \itemize{
 \item \href{#method-get_state}{\code{SimFrame$get_state()}}
 \item \href{#method-get_variable}{\code{SimFrame$get_variable()}}
-\item \href{#method-get_constant}{\code{SimFrame$get_constant()}}
 \item \href{#method-new}{\code{SimFrame$new()}}
 \item \href{#method-clone}{\code{SimFrame$clone()}}
 }
@@ -34,7 +33,7 @@ Get the index of individuals with a particular state
 \describe{
 \item{\code{individual}}{of interest}
 
-\item{\code{state}}{of interest}
+\item{\code{...}}{the states of interest}
 }
 \if{html}{\out{</div>}}
 }
@@ -44,33 +43,13 @@ Get the index of individuals with a particular state
 \subsection{Method \code{get_variable()}}{
 Get a variable vector for an individual
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimFrame$get_variable(individual, variable)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimFrame$get_variable(...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{individual}}{of interest}
-
-\item{\code{variable}}{of interest}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_constant"></a>}}
-\subsection{Method \code{get_constant()}}{
-Get a constant vector for an individual
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimFrame$get_constant(individual, constant)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{individual}}{of interest}
-
-\item{\code{constant}}{of interest}
+\item{\code{...}}{the individual and variable of interest}
 }
 \if{html}{\out{</div>}}
 }
@@ -79,23 +58,15 @@ Get a constant vector for an individual
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
 Create an initial SimFrame
+current timestep
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimFrame$new(individuals, states, variables, constants)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimFrame$new(impl)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{individuals}}{is a list of Individual}
-
-\item{\code{variables}}{is a list of variables for each individual at the
-current timestep}
-
-\item{\code{constants}}{is a list of constants for each individual at the
-current timestep}
-
-\item{\code{state}}{is a list of states for each individual at the current
-timestep}
+\item{\code{impl}}{the cpp implementation of this class}
 }
 \if{html}{\out{</div>}}
 }
