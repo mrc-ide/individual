@@ -11,9 +11,7 @@
 #define SRC_LOG_H_
 
 #include <Rcpp.h>
-
-using namespace std;
-using namespace Rcpp;
+#include <string>
 
 enum class log_level {
     debug,
@@ -25,7 +23,7 @@ enum class log_level {
 struct structlog {
     bool headers = true;
     log_level level = log_level::warn;
-    ostream& output = Rcout;
+    std::ostream& output = Rcpp::Rcout;
 };
 
 extern structlog LOGCFG;
@@ -34,7 +32,7 @@ class Log {
 public:
     Log() {}
     Log(log_level level): msglevel(level) {}
-    ostream& get()
+    std::ostream& get()
     {
         if (msglevel >= LOGCFG.level) {
             LOGCFG.output.clear();
@@ -50,8 +48,8 @@ public:
 private:
     bool opened = false;
     log_level msglevel = log_level::debug;
-    string get_label(log_level level) {
-        string label;
+    std::string get_label(log_level level) {
+        std::string label;
         switch(level) {
             case log_level::debug: label = "DEBUG"; break;
             case log_level::info:  label = "INFO "; break;

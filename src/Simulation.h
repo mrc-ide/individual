@@ -12,22 +12,19 @@
 #include "SimulationFrame.h"
 #include "types.h"
 
-using namespace Rcpp;
-using namespace std;
-
 class Simulation {
-    shared_ptr<states_t> states;
-    shared_ptr<variables_t> variables;
+    std::shared_ptr<states_t> states;
+    std::shared_ptr<variables_t> variables;
     size_t current_timestep = 0;
-    vector<string> individual_names;
-    named_array_t<vector<string>> variable_names;
+    std::vector<std::string> individual_names;
+    named_array_t<std::vector<std::string>> variable_names;
     named_array_t<size_t> population_sizes;
     size_t timesteps;
-    void apply_state_update(const Environment, states_t&);
-    void apply_variable_update(const Environment, variables_t&);
+    void apply_state_update(const Rcpp::Environment, states_t&);
+    void apply_variable_update(const Rcpp::Environment, variables_t&);
 public:
-    Simulation(const List, const int);
-    void apply_updates(const List);
+    Simulation(const Rcpp::List, const int);
+    void apply_updates(const Rcpp::List);
     SimulationFrame get_current_frame() const;
 };
 

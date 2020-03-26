@@ -11,5 +11,6 @@ docs/
 .settings
 *.o
 *.so
+*.dll
 /Debug/
 .Rproj.user

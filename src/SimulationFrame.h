@@ -11,16 +11,13 @@
 #include <Rcpp.h>
 #include "types.h"
 
-using namespace Rcpp;
-using namespace std;
-
 class SimulationFrame {
-    shared_ptr<const states_t> states;
-    shared_ptr<const variables_t> variables;
+    std::shared_ptr<const states_t> states;
+    std::shared_ptr<const variables_t> variables;
 public:
-    SimulationFrame(shared_ptr<const states_t>,shared_ptr<const variables_t>);
-    vector<size_t> get_state(Environment, List) const;
-    vector<double> get_variable(Environment, Environment) const;
+    SimulationFrame(std::shared_ptr<const states_t>,std::shared_ptr<const variables_t>);
+    std::vector<size_t> get_state(Rcpp::Environment, Rcpp::List) const;
+    std::vector<double> get_variable(Rcpp::Environment, Rcpp::Environment) const;
 };
 
 
