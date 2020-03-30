@@ -2,16 +2,16 @@ test_that("getting the state works", {
   S <- State$new('S', 10)
   human <- Individual$new('test', list(S))
   simulation <- Simulation$new(list(human), 1)
-  frame <- simulation$get_current_frame()
+  api <- simulation$get_api()
 
-  expect_length(frame$get_state(human, S), 10)
+  expect_length(api$get_state(human, S), 10)
 
   I <- State$new('I', 100)
   human <- Individual$new('test', list(S, I))
   simulation <- Simulation$new(list(human), 1)
-  frame <- simulation$get_current_frame()
+  api <- simulation$get_api()
 
-  expect_length(frame$get_state(human, I), 100)
+  expect_length(api$get_state(human, I), 100)
 })
 
 test_that("Getting multiple states works", {
@@ -21,8 +21,8 @@ test_that("Getting multiple states works", {
   human <- Individual$new('test', list(S, I, R))
 
   simulation <- Simulation$new(list(human), 1)
-  frame <- simulation$get_current_frame()
-  expect_length(frame$get_state(human, S, R), 30)
+  api <- simulation$get_api()
+  expect_length(api$get_state(human, S, R), 30)
 })
 
 test_that("getting a non registered state index fails", {
@@ -32,10 +32,10 @@ test_that("getting a non registered state index fails", {
   human <- Individual$new('test', list(S, I))
 
   simulation <- Simulation$new(list(human), 1)
-  frame <- simulation$get_current_frame()
+  api <- simulation$get_api()
 
   expect_error(
-    frame$get_state(human, R),
+    api$get_state(human, R),
     '*'
   )
 })
@@ -47,8 +47,8 @@ test_that("getting variables works", {
   human <- Individual$new('test', list(S), variables=list(sequence, sequence_2))
 
   simulation <- Simulation$new(list(human), 1)
-  frame <- simulation$get_current_frame()
+  api <- simulation$get_api()
 
-  expect_equal(frame$get_variable(human, sequence), 1:10)
-  expect_equal(frame$get_variable(human, sequence_2), (1:10) + 10)
+  expect_equal(api$get_variable(human, sequence), 1:10)
+  expect_equal(api$get_variable(human, sequence_2), (1:10) + 10)
 })

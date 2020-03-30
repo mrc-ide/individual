@@ -1,7 +1,7 @@
 #' Class: SimFrame
 #' Represents the state of all individuals in a timestep
-SimFrame <- R6::R6Class(
-  'SimFrame',
+SimAPI <- R6::R6Class(
+  'SimAPI',
   private = list(
     .impl = NULL
   ),
@@ -23,8 +23,7 @@ SimFrame <- R6::R6Class(
     },
 
     #' @description
-    #' Create an initial SimFrame
-    #' current timestep
+    #' Create an R wrapper for the API
     #' @param impl the cpp implementation of this class
     initialize = function(impl) {
       private$.impl <- impl

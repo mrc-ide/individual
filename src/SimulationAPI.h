@@ -11,11 +11,11 @@
 #include <Rcpp.h>
 #include "types.h"
 
-class SimulationFrame {
+class SimulationAPI {
     std::shared_ptr<const states_t> states;
     std::shared_ptr<const variables_t> variables;
 public:
-    SimulationFrame(std::shared_ptr<const states_t>,std::shared_ptr<const variables_t>);
+    SimulationAPI(std::shared_ptr<const states_t>,std::shared_ptr<const variables_t>);
     std::vector<size_t> get_state(Rcpp::Environment, Rcpp::List) const;
     std::vector<double> get_variable(Rcpp::Environment, Rcpp::Environment) const;
 };

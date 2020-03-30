@@ -15,8 +15,8 @@ Simulation <- R6::R6Class(
 
     #' @description
     #' Get a SimFrame for the current timestep
-    get_current_frame = function() {
-      SimFrame$new(private$.impl$get_current_frame())
+    get_api = function() {
+      SimAPI$new(private$.impl$get_api())
     },
 
     #' @description
@@ -116,8 +116,8 @@ Render <- R6::R6Class(
 #' human <- Individual$new('human', list(S, I, R))
 #'
 #' transition <- function(from, to, rate) {
-#'   return(function(frame, timestep, parameters) {
-#'     from_state <- frame$get_state(human, from)
+#'   return(function(api) {
+#'     from_state <- api$get_state(human, from)
 #'     StateUpdate$new(
 #'       human,
 #'       to,
@@ -149,18 +149,19 @@ simulate <- function(
   }
   simulation <- Simulation$new(individuals, end_timestep)
   render <- Render$new(individuals, end_timestep, custom_renderers)
-  frame <- simulation$get_current_frame()
-  render$update(frame, 1)
+  api <- simulation$get_api()
+  render$update(api, 1)
   for (timestep in seq_len(end_timestep - 1) + 1) {
     updates <- unlist(
       lapply(
         processes,
-        function(process) { process(frame, timestep, parameters) }
+        function(process) { process(api) }
       )
     )
     simulation$apply_updates(updates)
-    frame <- simulation$get_current_frame()
-    render$update(frame, timestep)
+    api <- simulation$get_api()
+    render$update(api, timestep)
+    simulation$tick()
   }
   render$to_dataframe()
 }

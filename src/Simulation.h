@@ -9,7 +9,8 @@
 #define SRC_SIMULATION_H_
 
 #include <Rcpp.h>
-#include "SimulationFrame.h"
+
+#include "SimulationAPI.h"
 #include "types.h"
 
 class Simulation {
@@ -25,7 +26,7 @@ class Simulation {
 public:
     Simulation(const Rcpp::List, const int);
     void apply_updates(const Rcpp::List);
-    SimulationFrame get_current_frame() const;
+    SimulationAPI get_api() const;
 };
 
 #endif /* SRC_SIMULATION_H_ */

@@ -6,8 +6,8 @@
  */
 
 #include "Simulation.h"
-#include "SimulationFrame.h"
 #include "Log.h"
+#include "SimulationAPI.h"
 
 template <class T>
 T nested_accessor(Rcpp::Environment e, std::vector<std::string> fields) {
@@ -81,8 +81,8 @@ Simulation::Simulation(const Rcpp::List individuals, const int timesteps) :state
     }
 }
 
-SimulationFrame Simulation::get_current_frame() const {
-    return SimulationFrame(states, variables);
+SimulationAPI Simulation::get_api() const {
+    return SimulationAPI(states, variables);
 }
 
 void Simulation::apply_updates(const Rcpp::List updates) {

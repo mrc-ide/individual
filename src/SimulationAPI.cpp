@@ -5,9 +5,9 @@
  *      Author: giovanni
  */
 
-#include "SimulationFrame.h"
+#include "SimulationAPI.h"
 
-SimulationFrame::SimulationFrame(
+SimulationAPI::SimulationAPI(
 		std::shared_ptr<const states_t> states,
 		std::shared_ptr<const variables_t> variables
     )
@@ -15,7 +15,7 @@ SimulationFrame::SimulationFrame(
       variables(variables)
 {}
 
-std::vector<size_t> SimulationFrame::get_state(
+std::vector<size_t> SimulationAPI::get_state(
         const Rcpp::Environment individual,
         const Rcpp::List state_descriptors
     ) const {
@@ -36,7 +36,7 @@ std::vector<size_t> SimulationFrame::get_state(
     return result;
 }
 
-std::vector<double> SimulationFrame::get_variable(
+std::vector<double> SimulationAPI::get_variable(
 		Rcpp::Environment individual,
 		Rcpp::Environment variable
     ) const {
