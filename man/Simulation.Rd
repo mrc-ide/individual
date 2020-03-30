@@ -15,7 +15,8 @@ Class to store and update the simulation for each type of individual
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-render}{\code{Simulation$render()}}
-\item \href{#method-get_current_frame}{\code{Simulation$get_current_frame()}}
+\item \href{#method-get_api}{\code{Simulation$get_api()}}
+\item \href{#method-tick}{\code{Simulation$tick()}}
 \item \href{#method-apply_updates}{\code{Simulation$apply_updates()}}
 \item \href{#method-new}{\code{Simulation$new()}}
 \item \href{#method-clone}{\code{Simulation$clone()}}
@@ -38,11 +39,20 @@ Return a list of the simulated states and variables for the simulation
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_current_frame"></a>}}
-\subsection{Method \code{get_current_frame()}}{
+\if{html}{\out{<a id="method-get_api"></a>}}
+\subsection{Method \code{get_api()}}{
 Get a SimFrame for the current timestep
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Simulation$get_current_frame()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$get_api()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-tick"></a>}}
+\subsection{Method \code{tick()}}{
+Increment the timestep
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulation$tick()}\if{html}{\out{</div>}}
 }
 
 }

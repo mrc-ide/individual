@@ -92,8 +92,7 @@ test_that("deterministic state model w events works", {
 
   delayed_shift_generator <- function(from, to, event, delay, rate) {
     return(function(simulation) {
-      frame <- simulation$get_current_frame()
-      from_state <- frame$get_state(human, from)
+      from_state <- simulation$get_state(human, from)
       # remove the already scheduled individuals
       from_state <- setdiff(from_state, simulation$get_scheduled(event))
       target <- from_state[seq_len(min(rate,length(from_state)))]
@@ -102,8 +101,8 @@ test_that("deterministic state model w events works", {
   }
 
   processes <- list(
-    shift_generator(S, I, infection, infection_delay, 2),
-    shift_generator(I, R, recovery, recovery_delay, 1)
+    delayed_shift_generator(S, I, infection, infection_delay, 2),
+    delayed_shift_generator(I, R, recovery, recovery_delay, 1)
   )
 
   render <- simulate(human, processes, 6)

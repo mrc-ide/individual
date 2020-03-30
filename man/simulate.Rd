@@ -34,8 +34,8 @@ R <- State$new('R', 0)
 human <- Individual$new('human', list(S, I, R))
 
 transition <- function(from, to, rate) {
-  return(function(frame, timestep, parameters) {
-    from_state <- frame$get_state(human, from)
+  return(function(api) {
+    from_state <- api$get_state(human, from)
     StateUpdate$new(
       human,
       to,
