@@ -39,8 +39,7 @@ test_that("deterministic state model works", {
 
   shift_generator <- function(from, to, rate) {
     return(function(simulation) {
-      frame <- simulation$get_current_frame()
-      from_state <- frame$get_state(human, from)
+      from_state <- simulation$get_state(human, from)
       StateUpdate$new(
         human,
         to,

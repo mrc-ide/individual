@@ -21,5 +21,6 @@ RCPP_MODULE(individual_cpp) {
         .constructor<const Rcpp::List, const int>()
         .method("apply_updates", &Simulation::apply_updates, "Apply updates to the simulation")
         .method("get_api", &Simulation::get_api, "Return the simulation API")
+        .method("tick", &Simulation::tick, "Increment the current timestep")
     ;
 }

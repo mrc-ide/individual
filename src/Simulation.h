@@ -26,6 +26,7 @@ class Simulation {
 public:
     Simulation(const Rcpp::List, const int);
     void apply_updates(const Rcpp::List);
+    void tick();
     SimulationAPI get_api() const;
 };
 

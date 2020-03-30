@@ -51,24 +51,6 @@ test_that("updating variables tolerates empty fills", {
   expect_equal(after, 1:10)
 })
 
-test_that("updating past the last timestep errors gracefully", {
-  S <- State$new('S', 10)
-  sequence <- Variable$new('sequence', function(size) seq_len(size))
-  human <- Individual$new('test', list(S), variables=list(sequence))
-  simulation <- Simulation$new(list(human), 2)
-
-  simulation$apply_updates(
-    list(VariableUpdate$new(human, sequence, 11, 2:6))
-  )
-
-  expect_error(
-    simulation$apply_updates(
-      list(VariableUpdate$new(human, sequence, 11, 2:6))
-    ),
-    '*'
-  )
-})
-
 test_that("updating variables with silly indecies errors gracefully", {
   S <- State$new('S', 10)
   sequence <- Variable$new('sequence', function(size) seq_len(size))

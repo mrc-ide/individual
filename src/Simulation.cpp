@@ -79,14 +79,18 @@ Simulation::Simulation(const Rcpp::List individuals, const int timesteps) :state
             (*variables)[Rcpp::as<std::string>(individual["name"])][variable_name] = initial_values;
         }
     }
+    tick();
 }
 
 SimulationAPI Simulation::get_api() const {
     return SimulationAPI(states, variables);
 }
 
+void Simulation::tick() {
+	++current_timestep;
+}
+
 void Simulation::apply_updates(const Rcpp::List updates) {
-    ++current_timestep;
     if (current_timestep == timesteps) {
       Rcpp::stop("We have reached the end of the simulation");
     }

@@ -20,6 +20,12 @@ Simulation <- R6::R6Class(
     },
 
     #' @description
+    #' Increment the timestep
+    tick = function() {
+      private$.impl$tick()
+    },
+
+    #' @description
     #' Perform updates on the a simulation, increment the counter and return the
     #' next simulation frame
     #' @param ... the updates as a list of update objects to apply
