@@ -38,7 +38,8 @@ test_that("deterministic state model works", {
   human <- Individual$new('human', list(S, I, R))
 
   shift_generator <- function(from, to, rate) {
-    return(function(frame, timestep, parameters) {
+    return(function(simulation) {
+      frame <- simulation$get_current_frame()
       from_state <- frame$get_state(human, from)
       StateUpdate$new(
         human,
@@ -66,6 +67,59 @@ test_that("deterministic state model works", {
   )
 })
 
+test_that("deterministic state model w events works", {
+  population <- 4
+  S <- State$new('S', population)
+  I <- State$new('I', 0)
+  R <- State$new('R', 0)
+  infection <- Event$new('infection')
+  recovery <- Event$new('recovery')
+  infection_delay <- 1
+  recovery_delay <- 2
+
+  human <- Individual$new(
+    'human',
+    list(S, I, R),
+    events = list(infection, recovery)
+  )
+
+  infection$add_listener(function(simulation, target) {
+    StateUpdate$new(human, I, target)
+  })
+
+  recovery$add_listener(function(simulation, target) {
+    StateUpdate$new(human, R, target)
+  })
+
+  delayed_shift_generator <- function(from, to, event, delay, rate) {
+    return(function(simulation) {
+      frame <- simulation$get_current_frame()
+      from_state <- frame$get_state(human, from)
+      # remove the already scheduled individuals
+      from_state <- setdiff(from_state, simulation$get_scheduled(event))
+      target <- from_state[seq_len(min(rate,length(from_state)))]
+      simulation$schedule(event, target, delay);
+    })
+  }
+
+  processes <- list(
+    shift_generator(S, I, infection, infection_delay, 2),
+    shift_generator(I, R, recovery, recovery_delay, 1)
+  )
+
+  render <- simulate(human, processes, 6)
+  expected_render <- data.frame(
+    timestep = c(1, 2, 3, 4, 5, 6),
+    human_S_count = c(4, 2, 0, 0, 0, 0),
+    human_I_count = c(0, 2, 4, 3, 2, 1),
+    human_R_count = c(0, 0, 0, 1, 2, 3)
+  )
+  expect_mapequal(
+    expected_render,
+    render
+  )
+})
+
 test_that("deterministic state model works w 2 individuals", {
   population <- 4
   S <- State$new('S', population)
@@ -75,8 +129,8 @@ test_that("deterministic state model works w 2 individuals", {
   alien <- Individual$new('alien', list(S, I, R))
 
   shift_generator <- function(individual, from, to, rate) {
-    return(function(frame, timestep, parameters) {
-      from_state <- frame$get_state(individual, from)
+    return(function(simulation) {
+      from_state <- simulation$get_state(individual, from)
       StateUpdate$new(
         individual,
         to,
@@ -118,8 +172,8 @@ test_that("deterministic state & variable model works", {
   human <- Individual$new('human', list(S, I, R), list(value))
 
   shift_generator <- function(from, to, rate) {
-    return(function(frame, timestep, parameters) {
-      from_state <- frame$get_state(human, from)
+    return(function(simulation) {
+      from_state <- simulation$get_state(human, from)
       StateUpdate$new(
         human,
         to,
@@ -128,11 +182,11 @@ test_that("deterministic state & variable model works", {
     })
   }
 
-  doubler <- function(frame, timestep, parameters) {
+  doubler <- function(simulation) {
     VariableUpdate$new(
       human,
       value,
-      frame$get_variable(human, value) * 2
+      simulation$get_variable(human, value) * 2
     )
   }
 
@@ -146,8 +200,8 @@ test_that("deterministic state & variable model works", {
     human,
     processes,
     5,
-    custom_renderers=list(function(frame) {
-      list(value_mean=mean(frame$get_variable(human, value)))
+    custom_renderers=list(function(simulation) {
+      list(value_mean=mean(simulation$get_variable(human, value)))
     })
   )
 
