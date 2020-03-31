@@ -3,7 +3,7 @@
 SimAPI <- R6::R6Class(
   'SimAPI',
   private = list(
-    .simulation = NULL
+    .simulation = NULL,
     .scheduler = NULL
   ),
   public = list(
@@ -48,7 +48,7 @@ SimAPI <- R6::R6Class(
     #' Create an R wrapper for the API
     #' @param simulation, the cpp implementation of the simulation api
     initialize = function(simulation, scheduler) {
-      private$.simulation <- simulation 
+      private$.simulation <- simulation
       private$.scheduler <- scheduler
     }
   )

@@ -4,14 +4,14 @@ test_that("getting the state works", {
   simulation <- Simulation$new(list(human), 1)
   api <- simulation$get_api()
 
-  expect_length(api$get_state(human, S), 10)
+  expect_length(api$get_state(human, list(S)), 10)
 
   I <- State$new('I', 100)
   human <- Individual$new('test', list(S, I))
   simulation <- Simulation$new(list(human), 1)
   api <- simulation$get_api()
 
-  expect_length(api$get_state(human, I), 100)
+  expect_length(api$get_state(human, list(I)), 100)
 })
 
 test_that("Getting multiple states works", {
@@ -22,7 +22,7 @@ test_that("Getting multiple states works", {
 
   simulation <- Simulation$new(list(human), 1)
   api <- simulation$get_api()
-  expect_length(api$get_state(human, S, R), 30)
+  expect_length(api$get_state(human, list(S, R)), 30)
 })
 
 test_that("getting a non registered state index fails", {
@@ -35,7 +35,7 @@ test_that("getting a non registered state index fails", {
   api <- simulation$get_api()
 
   expect_error(
-    api$get_state(human, R),
+    api$get_state(human, list(R)),
     '*'
   )
 })

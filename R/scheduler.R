@@ -15,7 +15,7 @@ Scheduler <- R6::R6Class(
     #' Get the individuals who are scheduled for a particular event
     #' @param event, the event of interest
     get_scheduled = function(event) {
-    }
+    },
 
     #' @description
     #' Stop a future event from triggering for a subset of individuals
