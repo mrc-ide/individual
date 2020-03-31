@@ -91,19 +91,19 @@ simulate <- function(
   }
   simulation <- Simulation$new(individuals, end_timestep)
   render <- Render$new(individuals, end_timestep, custom_renderers)
-  scheduler <- Scheduler$new(individuals, simulation, end_timestep)
+  scheduler <- Scheduler$new(end_timestep)
   api <- SimAPI$new(simulation$get_api(), scheduler)
   render$update(api, 1)
   for (timestep in seq_len(end_timestep - 1) + 1) {
-    updates <- unlist(
-      lapply(
-        processes,
-        function(process) { process(api) }
-      )
-    )
+    updates <- list()
+    for (process in processes) {
+      updates <- c(updates, process(api))
+    }
+    updates <- c(updates, scheduler$process_events(api))
     simulation$apply_updates(updates)
     render$update(api, timestep)
     simulation$tick()
+    scheduler$tick()
   }
   render$to_dataframe()
 }

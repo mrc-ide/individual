@@ -78,8 +78,7 @@ test_that("deterministic state model w events works", {
 
   human <- Individual$new(
     'human',
-    list(S, I, R),
-    events = list(infection, recovery)
+    list(S, I, R)
   )
 
   infection$add_listener(function(simulation, target) {

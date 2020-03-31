@@ -3,13 +3,11 @@
 #' @export Event
 Event <- R6::R6Class(
   'Event',
-  private = list(
-    .listeners = list()
-  ),
   public = list(
 
     #' @field name, the unique name of the event
     name = '',
+    listeners = list(),
 
     #' @description
     #' Initialise an Event
@@ -23,7 +21,7 @@ Event <- R6::R6Class(
     #' @param listener, the function to be executed on the event. This function
     #' should take the simulation api and target individuals as arguments
     add_listener = function(listener) {
-      private$.listeners[[length(private$.listeners) + 1]] <- listener
+      self$listeners <- c(self$listeners, listener)
     }
   )
 )
