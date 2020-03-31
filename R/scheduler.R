@@ -35,6 +35,7 @@ Scheduler <- R6::R6Class(
           list(list(event, target))
         )
       }
+      return()
     },
 
     #' @description
@@ -42,14 +43,15 @@ Scheduler <- R6::R6Class(
     #' @param event, the event of interest
     get_scheduled = function(event) {
       scheduled <- c()
-      for(timestep in private$.timeline) {
+      for(t in seq(private$.current_timestep, length(private$.timeline))) {
+        timestep <- private$.timeline[[t]]
         for (pair in timestep) {
           if (pair[[1]]$name == event$name) {
             scheduled <- c(scheduled, pair[[2]])
           }
         }
       }
-      scheduled
+      unique(scheduled)
     },
 
     #' @description
@@ -57,11 +59,12 @@ Scheduler <- R6::R6Class(
     #' @param event, the event to stop
     #' @param target, the individuals to clear
     clear_schedule = function(event, target) {
-      for(t in seq_along(private$.timeline)) {
+      for(t in seq(private$.current_timestep, length(private$.timeline))) {
+        timestep <- private$.timeline[[t]]
         for (i in seq_along(timestep)) {
           pair <- private$.timeline[[t]][[i]]
           if (pair[[1]]$name == event$name) {
-            private$timeline[[t]][[i]][[2]] <- setdiff(pair[[2]], target)
+            private$.timeline[[t]][[i]][[2]] <- setdiff(pair[[2]], target)
           }
         }
       }

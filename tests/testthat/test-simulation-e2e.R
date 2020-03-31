@@ -96,6 +96,7 @@ test_that("deterministic state model w events works", {
       from_state <- setdiff(from_state, simulation$get_scheduled(event))
       target <- from_state[seq_len(min(rate,length(from_state)))]
       simulation$schedule(event, target, delay);
+      return()
     })
   }
 
@@ -107,9 +108,9 @@ test_that("deterministic state model w events works", {
   render <- simulate(human, processes, 6)
   expected_render <- data.frame(
     timestep = c(1, 2, 3, 4, 5, 6),
-    human_S_count = c(4, 2, 0, 0, 0, 0),
-    human_I_count = c(0, 2, 4, 3, 2, 1),
-    human_R_count = c(0, 0, 0, 1, 2, 3)
+    human_S_count = c(4, 4, 2, 0, 0, 0),
+    human_I_count = c(0, 0, 2, 4, 4, 3),
+    human_R_count = c(0, 0, 0, 0, 0, 1)
   )
   expect_mapequal(
     expected_render,

@@ -25,7 +25,7 @@ test_that("events can be scheduled for the future", {
   #time = 4
   scheduler$process_events(api)
   mockery::expect_called(listener, 1)
-  mockery::expect_args(listener, 1, target = c(2, 4))
+  mockery::expect_args(listener, 1, api = api, target = c(2, 4))
 })
 
 test_that("you can see which individuals are scheduled for an event", {
@@ -37,7 +37,7 @@ test_that("you can see which individuals are scheduled for an event", {
   scheduler <- Scheduler$new(5)
 
   #time = 0
-  expect_setequal(scheduler$get_scheduled(event), c())
+  expect_null(scheduler$get_scheduled(event))
 
   #time = 1
   scheduler$schedule(event, c(2, 4), 2)
@@ -53,12 +53,12 @@ test_that("you can see which individuals are scheduled for an event", {
 
   #time = 3
   scheduler$process_events(api)
-  expect_setequal(scheduler$get_scheduled(event), c())
+  expect_setequal(scheduler$get_scheduled(event), c(2, 3, 4))
   scheduler$tick()
 
   #time = 4
   scheduler$process_events(api)
-  expect_setequal(scheduler$get_scheduled(event), c())
+  expect_null(scheduler$get_scheduled(event))
 })
 
 test_that("events can be cleared for an individual", {
@@ -69,7 +69,7 @@ test_that("events can be cleared for an individual", {
   scheduler <- Scheduler$new(5)
 
   #time = 0
-  expect_setequal(scheduler$get_scheduled(event), c())
+  expect_null(scheduler$get_scheduled(event))
 
   #time = 1
   scheduler$schedule(event, c(2, 3, 4), 1)
@@ -81,6 +81,6 @@ test_that("events can be cleared for an individual", {
   scheduler$clear_schedule(event, c(3, 4))
   expect_setequal(scheduler$get_scheduled(event), c(2))
   scheduler$process_events(api)
-  expect_called(listener, 1)
-  expect_args(listener, 1, target = c(2))
+  mockery::expect_called(listener, 1)
+  mockery::expect_args(listener, 1, api = api, target = c(2))
 })
