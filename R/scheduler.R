@@ -91,6 +91,12 @@ Scheduler <- R6::R6Class(
     },
 
     #' @description
+    #' get current timestep
+    get_timestep = function() {
+      private$.current_timestep
+    },
+
+    #' @description
     #' initialise the scheduler
     #' @param end_timestep, the number of timesteps to initialise for
     initialize = function(end_timestep) {

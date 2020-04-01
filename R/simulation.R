@@ -92,7 +92,7 @@ simulate <- function(
   simulation <- Simulation$new(individuals, end_timestep)
   render <- Render$new(individuals, end_timestep, custom_renderers)
   scheduler <- Scheduler$new(end_timestep)
-  api <- SimAPI$new(simulation$get_api(), scheduler)
+  api <- SimAPI$new(simulation$get_api(), scheduler, parameters)
   render$update(api, 1)
   for (timestep in seq_len(end_timestep - 1) + 1) {
     updates <- list()

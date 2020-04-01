@@ -15,6 +15,9 @@ Describes an event in the simulation
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{name, }}{the unique name of the event}
+
+\item{\code{listeners, }}{the listener functions to be executed when the event is
+triggered}
 }
 \if{html}{\out{</div>}}
 }
@@ -22,6 +25,9 @@ Describes an event in the simulation
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
 \item{\code{name, }}{the unique name of the event}
+
+\item{\code{listeners, }}{the listener functions to be executed when the event is
+triggered}
 }
 \if{html}{\out{</div>}}
 }

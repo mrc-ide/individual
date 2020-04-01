@@ -7,6 +7,9 @@ Event <- R6::R6Class(
 
     #' @field name, the unique name of the event
     name = '',
+
+    #' @field listeners, the listener functions to be executed when the event is
+    #' triggered
     listeners = list(),
 
     #' @description

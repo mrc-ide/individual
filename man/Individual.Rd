@@ -19,6 +19,9 @@ Represents an individual in our simulation
 \item{\code{states, }}{a list of state objects which apply to this individual}
 
 \item{\code{variables, }}{a list of variable objects which apply to this individual}
+
+\item{\code{events, }}{a list of event objects that can be scheduled for an
+individual}
 }
 \if{html}{\out{</div>}}
 }
@@ -30,6 +33,9 @@ Represents an individual in our simulation
 \item{\code{states, }}{a list of state objects which apply to this individual}
 
 \item{\code{variables, }}{a list of variable objects which apply to this individual}
+
+\item{\code{events, }}{a list of event objects that can be scheduled for an
+individual}
 }
 \if{html}{\out{</div>}}
 }
@@ -45,7 +51,7 @@ Represents an individual in our simulation
 \subsection{Method \code{new()}}{
 Create a new Individual
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Individual$new(name, states, variables = list())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Individual$new(name, states, variables = list(), events = list())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

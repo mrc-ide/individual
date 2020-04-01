@@ -2,20 +2,25 @@
 % Please edit documentation in R/api.R
 \name{SimAPI}
 \alias{SimAPI}
-\title{Class: SimFrame
-Represents the state of all individuals in a timestep}
+\title{Class: SimAPI
+The entry point for models to inspect and manipulate the simulation}
 \description{
-Class: SimFrame
-Represents the state of all individuals in a timestep
+Class: SimAPI
+The entry point for models to inspect and manipulate the simulation
 
-Class: SimFrame
-Represents the state of all individuals in a timestep
+Class: SimAPI
+The entry point for models to inspect and manipulate the simulation
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-get_state}{\code{SimAPI$get_state()}}
 \item \href{#method-get_variable}{\code{SimAPI$get_variable()}}
+\item \href{#method-schedule}{\code{SimAPI$schedule()}}
+\item \href{#method-get_scheduled}{\code{SimAPI$get_scheduled()}}
+\item \href{#method-clear_schedule}{\code{SimAPI$clear_schedule()}}
+\item \href{#method-get_timestep}{\code{SimAPI$get_timestep()}}
+\item \href{#method-get_parameters}{\code{SimAPI$get_parameters()}}
 \item \href{#method-new}{\code{SimAPI$new()}}
 \item \href{#method-clone}{\code{SimAPI$clone()}}
 }
@@ -55,17 +60,85 @@ Get a variable vector for an individual
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\subsection{Method \code{new()}}{
-Create an R wrapper for the API
+\if{html}{\out{<a id="method-schedule"></a>}}
+\subsection{Method \code{schedule()}}{
+Schedule an event to occur in the future
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimAPI$new(impl)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$schedule(...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{impl}}{the cpp implementation of this class}
+\item{\code{..., }}{forwarded to Scheduler$schedule}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_scheduled"></a>}}
+\subsection{Method \code{get_scheduled()}}{
+Get the individuals who are scheduled for a particular event
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$get_scheduled(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{..., }}{forwarded to Scheduler$get_schedule}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clear_schedule"></a>}}
+\subsection{Method \code{clear_schedule()}}{
+Stop a future event from triggering for a subset of individuals
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$clear_schedule(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{..., }}{forwarded to Scheduler$clear_schedule}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_timestep"></a>}}
+\subsection{Method \code{get_timestep()}}{
+Get the current timestep of the simulation
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$get_timestep()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_parameters"></a>}}
+\subsection{Method \code{get_parameters()}}{
+Get the parameters of the simulation
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$get_parameters()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\subsection{Method \code{new()}}{
+Create an R wrapper for the API
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$new(simulation, scheduler, parameters)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{simulation, }}{the cpp implementation of the simulation api}
+
+\item{\code{scheduler, }}{the implementation of the scheduler interface}
 }
 \if{html}{\out{</div>}}
 }

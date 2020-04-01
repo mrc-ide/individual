@@ -4,7 +4,8 @@ SimAPI <- R6::R6Class(
   'SimAPI',
   private = list(
     .simulation = NULL,
-    .scheduler = NULL
+    .scheduler = NULL,
+    .parameters = NULL
   ),
   public = list(
     #' @description
@@ -45,11 +46,25 @@ SimAPI <- R6::R6Class(
     },
 
     #' @description
+    #' Get the current timestep of the simulation
+    get_timestep = function() {
+      private$.scheduler$get_timestep()
+    },
+
+    #' @description
+    #' Get the parameters of the simulation
+    get_parameters = function() {
+      private$.parameters
+    },
+
+    #' @description
     #' Create an R wrapper for the API
     #' @param simulation, the cpp implementation of the simulation api
-    initialize = function(simulation, scheduler) {
+    #' @param scheduler, the implementation of the scheduler interface
+    initialize = function(simulation, scheduler, parameters) {
       private$.simulation <- simulation
       private$.scheduler <- scheduler
+      private$.parameters <- parameters
     }
   )
 )

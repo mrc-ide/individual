@@ -51,20 +51,15 @@ Now let's specify how individuals move between states.
 In "individual", we can do that with "processes". They run every timestep and
 specify model updates based on the current state of the model.
 
-Process functions take 3 arguments:
-
-* frame, a [SimFrame](/reference/SimFrame.html') which exposes the current 
-model state
-* timestep, an integer representing the current timestep
-* parameters, a list of user specified model parameters
+Process functions take a single argument, the [SimAPI](/reference/SimAPI.html').
 
 Some of these processes can be repetitive, so it is often a good idea to
 generate these functions, as demonstrated below:
 
 ```{r}
 random_transition_generator <- function(from, to, rate) {
-  function(frame, timestep, parameters) {
-    from_state <- frame$get_state(human, from)
+  function(api) {
+    from_state <- api$get_state(human, from)
     StateUpdate$new(
       human,
       to,
@@ -136,11 +131,11 @@ human <- Individual$new(
 We can then start to describe how this affects our processes...
 
 ```{r}
-infection <- function(frame, timestep, parameters) {
-  from_state <- frame$get_state(human, S)
+infection <- function(api) {
+  from_state <- api$get_state(human, S)
   # Get the immunity for susceptable humans and use the complement to modify the
   # infection rate
-  rate_modifier <- 1 - frame$get_variable(human, immunity)[from_state]
+  rate_modifier <- 1 - api$get_variable(human, immunity)[from_state]
   rate <- .3
   StateUpdate$new(
     human,
@@ -149,8 +144,8 @@ infection <- function(frame, timestep, parameters) {
   )
 }
 
-recovery <- function(frame, timestep, parameters) {
-  from_state <- frame$get_state(human, I)
+recovery <- function(api) {
+  from_state <- api$get_state(human, I)
   rate <- .2
   recovered <- from_state[runif(length(from_state)) < rate]
   list(
@@ -162,7 +157,7 @@ recovery <- function(frame, timestep, parameters) {
     VariableUpdate$new(
       human,
       immunity,
-      parameters$immunity_level,
+      api$get_parameters()$immunity_level,
       recovered
     )
   )
@@ -205,8 +200,8 @@ simulation <- simulate(
   100,
   parameters = list(immunity_level = .6),
   custom_renderers = list(
-    function(frame) {
-      list(mean_immunity=mean(frame$get_variable(human, immunity)))
+    function(api) {
+      list(mean_immunity=mean(api$get_variable(human, immunity)))
     }
   )
 )
