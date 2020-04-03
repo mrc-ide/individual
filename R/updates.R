@@ -72,6 +72,13 @@ VariableUpdate <- R6::R6Class(
     #' @param index is the index at which to apply the change, use NULL for the
     #' fill options
     initialize = function(individual, variable, value, index=NULL) {
+      if (is.null(individual)) {
+        stop('individual cannot be null')
+      }
+
+      if (is.null(variable)) {
+        stop('variable cannot be null')
+      }
       self$individual <- individual
       self$value <- value
       self$variable <- variable

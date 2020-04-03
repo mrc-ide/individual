@@ -13,6 +13,7 @@ Scheduler <- R6::R6Class(
     #' @param target, the individuals to pass to the listener
     #' @param delay, the number of timesteps to wait before triggering the event
     schedule = function(event, target, delay) {
+      delay <- round(delay)
       if (delay < 1) {
         stop("delay must be > 0")
       }

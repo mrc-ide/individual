@@ -6,12 +6,6 @@ Simulation <- R6::R6Class(
     .impl = NULL
   ),
   public = list(
-    #' @description
-    #' Return a list of the simulated states and variables for the simulation
-    #' @param ... the individual to render
-    render = function(...) {
-      private$.impl$render(...)
-    },
 
     #' @description
     #' Get a SimFrame for the current timestep
