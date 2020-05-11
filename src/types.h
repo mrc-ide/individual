@@ -18,8 +18,10 @@
 template<class T>
 using named_array_t = std::unordered_map<std::string, T>;
 
-using state_vector_t = named_array_t<std::unordered_set<size_t>>;
+using individual_index_t = std::unordered_set<size_t>;
+using state_vector_t = named_array_t<individual_index_t>;
 using variable_vector_t = std::vector<double>;
+using params_t = named_array_t<std::vector<double>>;
 
 using states_t = named_array_t<state_vector_t>;
 using variables_t = named_array_t<named_array_t<variable_vector_t>>;

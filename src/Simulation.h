@@ -10,7 +10,8 @@
 
 #include <Rcpp.h>
 
-#include "SimulationAPI.h"
+#include "StateAPI.h"
+#include "StateCppAPI.h"
 #include "types.h"
 
 class Simulation {
@@ -27,7 +28,8 @@ public:
     Simulation(const Rcpp::List, const int);
     void apply_updates(const Rcpp::List);
     void tick();
-    SimulationAPI get_api() const;
+    StateAPI get_state_api() const;
+    StateCppAPI get_state_cpp_api() const;
 };
 
 #endif /* SRC_SIMULATION_H_ */
