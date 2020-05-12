@@ -1,42 +1,3 @@
-#' Class: Simulation
-#' Class to store and update the simulation for each type of individual
-Simulation <- R6::R6Class(
-  'Simulation',
-  private = list(
-    .impl = NULL
-  ),
-  public = list(
-
-    #' @description
-    #' Get a SimFrame for the current timestep
-    get_api = function() {
-      private$.impl$get_api()
-    },
-
-    #' @description
-    #' Increment the timestep
-    tick = function() {
-      private$.impl$tick()
-    },
-
-    #' @description
-    #' Perform updates on the a simulation, increment the counter and return the
-    #' next simulation frame
-    #' @param ... the updates as a list of update objects to apply
-    apply_updates = function(...) {
-      private$.impl$apply_updates(...)
-    },
-
-    #' @description
-    #' Create a blank simulation and then initialize first timestep
-    #' @param ... a list of Individual and the number of timesteps to
-    #' initialise for
-    initialize = function(...) {
-      private$.impl <- new(SimulationCpp, ...)
-    }
-  )
-)
-
 #' Main simulation loop
 #'
 #' @param individuals a list of Individual to simulate
@@ -83,20 +44,19 @@ simulate <- function(
   if (! is.list(individuals)) {
     individuals <- list(individuals)
   }
-  simulation <- Simulation$new(individuals, end_timestep)
   render <- Render$new(individuals, end_timestep, custom_renderers)
   scheduler <- Scheduler$new(end_timestep)
-  api <- SimAPI$new(simulation$get_api(), scheduler, parameters)
+  state <- create_state(individuals)
+  api <- SimAPI$new(state, scheduler, parameters)
   render$update(api, 1)
   for (timestep in seq_len(end_timestep - 1) + 1) {
-    updates <- list()
     for (process in processes) {
-      updates <- c(updates, process(api))
+      updates <- process(api)
+      queue_updates(api, updates)
     }
-    updates <- c(updates, scheduler$process_events(api))
-    simulation$apply_updates(updates)
+    scheduler$process_events(api)
+    state_apply_updates(state)
     render$update(api, timestep)
-    simulation$tick()
     scheduler$tick()
   }
   render$to_dataframe()

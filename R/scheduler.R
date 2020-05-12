@@ -76,13 +76,11 @@ Scheduler <- R6::R6Class(
     #' @param api, the api to pass to the listeners
     process_events = function(api) {
       scheduled <- private$.timeline[[private$.current_timestep]]
-      updates <- list()
       for (pair in scheduled) {
         for (listener in pair[[1]]$listeners) {
-          updates <- c(updates, listener(api, pair[[2]]))
+          queue_updates(api, listener(api, pair[[2]]))
         }
       }
-      updates
     },
 
     #' @description

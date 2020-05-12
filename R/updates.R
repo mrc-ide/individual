@@ -1,3 +1,5 @@
+#TODO: Make obsolete in favour of explicit API call
+
 #' Class: StateUpdate
 #' Describes a state update
 #' @export StateUpdate
