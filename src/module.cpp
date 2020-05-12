@@ -15,8 +15,8 @@
 
 //[[Rcpp::export]]
 Rcpp::XPtr<State> create_state(const Rcpp::List individuals) {
-    const auto state = new State(individuals);
-    return Rcpp::XPtr<State>(&state, true);
+    auto state = new State(individuals);
+    return Rcpp::XPtr<State>(state, true);
 }
 
 //[[Rcpp::export]]
@@ -34,8 +34,8 @@ Rcpp::XPtr<ProcessAPI> create_process_api(
     Rcpp::XPtr<State> state,
     Rcpp::Environment scheduler,
     Rcpp::List params) {
-    const auto api = new ProcessAPI(state, scheduler, params);
-    return Rcpp::XPtr<State>(&api, true);
+    auto api = new ProcessAPI(state, scheduler, params);
+    return Rcpp::XPtr<ProcessAPI>(api, true);
 }
 
 //[[Rcpp::export]]
@@ -43,8 +43,8 @@ std::vector<size_t> process_get_state(
     Rcpp::XPtr<ProcessAPI> api,
     const std::string individual,
     const std::vector<std::string> states) {
-    const auto& result = api->get_state(individual, states);
-    auto result_vector = std::vector<size_t>(result.size());
+    const auto result = api->get_state(individual, states);
+    auto result_vector = std::vector<size_t>();
     result_vector.insert(end(result_vector), cbegin(result), cend(result));
     return result_vector;
 }
@@ -55,7 +55,7 @@ std::vector<double> process_get_variable(
     const std::string individual,
     const std::string variable) {
     const auto& result = api->get_variable(individual, variable);
-    auto result_vector = std::vector<double>(result.size());
+    auto result_vector = std::vector<double>();
     result_vector.insert(end(result_vector), cbegin(result), cend(result));
     return result_vector;
 }
@@ -65,7 +65,7 @@ void process_queue_state_update(
     Rcpp::XPtr<ProcessAPI> api,
     const std::string individual,
     const std::string state,
-    const vector<size_t> index_vector
+    const std::vector<size_t> index_vector
 ) {
     auto index = individual_index_t(index_vector.begin(), index_vector.end());
     api->queue_state_update(individual, state, index);
@@ -76,9 +76,8 @@ void process_queue_variable_update(
     Rcpp::XPtr<ProcessAPI> api,
     const std::string individual,
     const std::string variable,
-    const vector<size_t> index_vector,
-    const vector<double> values
+    const std::vector<size_t> index,
+    const std::vector<double> values
 ) {
-    auto index = individual_index_t(index_vector.begin(), index_vector.end());
-    api->queue_state_update(individual, variable, index, values);
+    api->queue_variable_update(individual, variable, index, values);
 }

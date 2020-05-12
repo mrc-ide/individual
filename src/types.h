@@ -28,6 +28,6 @@ using states_t = named_array_t<state_vector_t>;
 using variables_t = named_array_t<named_array_t<variable_vector_t>>;
 
 using state_update_t = std::tuple<std::string, std::string, individual_index_t>;
-using variable_update_t = std::tuple<std::string, std::string, individual_index_t, variable_vector_t>;
+using variable_update_t = std::tuple<std::string, std::string, std::vector<size_t>, variable_vector_t>;
 
 #endif /* SRC_TYPES_H_ */

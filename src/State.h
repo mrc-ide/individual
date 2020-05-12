@@ -9,6 +9,7 @@
 #define SRC_STATE_H_
 
 #include <Rcpp.h>
+#include <queue>
 #include "types.h"
 
 class State {
@@ -24,10 +25,10 @@ class State {
 public:
     State(const Rcpp::List);
     void apply_updates();
-    individual_index_t& get_state(std::string, std::vector<std::string>) const;
-    variable_vector_t& get_variable(std::string, std::string) const;
+    const individual_index_t get_state(const std::string, const std::vector<std::string>) const;
+    const variable_vector_t& get_variable(const std::string, const std::string) const;
     void queue_state_update(const std::string, const std::string, const individual_index_t&);
-    void queue_variable_update(const std::string, const std::string, const individual_index_t&, const variable_vector_t&);
+    void queue_variable_update(const std::string, const std::string, const std::vector<size_t>&, const variable_vector_t&);
 };
 
 #endif

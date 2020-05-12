@@ -8,7 +8,7 @@
 #include "State.h"
 #include "Log.h"
 
-State::State(const Rcpp::List individuals) :states(nullptr), variables(nullptr) {
+State::State(const Rcpp::List individuals) {
     states = states_t();
     variables = variables_t();
 
@@ -31,7 +31,7 @@ State::State(const Rcpp::List individuals) :states(nullptr), variables(nullptr) 
         for (Rcpp::Environment state : state_descriptors) {
             auto size = Rcpp::as<size_t>(state["initial_size"]);
             auto state_name = Rcpp::as<std::string>(state["name"]);
-            auto state_set = std::unordered_set<size_t>();
+            auto state_set = individual_index_t();
             for (auto i = start; i < start + size; ++i) {
                 state_set.insert(i);
             }
@@ -58,14 +58,16 @@ State::State(const Rcpp::List individuals) :states(nullptr), variables(nullptr) 
 
 void State::apply_updates() {
     while(state_update_queue.size() > 0) {
-        apply_state_update(state_update_queue.pop());
+        apply_state_update(state_update_queue.front());
+        state_update_queue.pop();
     }
     while(variable_update_queue.size() > 0) {
-        apply_variable_update(state_update_queue.pop());
+        apply_variable_update(variable_update_queue.front());
+        variable_update_queue.pop();
     }
 }
 
-void State::apply_state_update(const state_update_t update) {
+void State::apply_state_update(const state_update_t& update) {
     const auto& individual_name = std::get<0>(update);
     const auto& state_name = std::get<1>(update);
     Log(log_level::debug).get() << "updating state: " << individual_name << ":" << state_name << std::endl;
@@ -78,7 +80,7 @@ void State::apply_state_update(const state_update_t update) {
     states.at(individual_name).at(state_name).insert(std::cbegin(index), std::cend(index));
 }
 
-void State::apply_variable_update(const variable_update_t update) {
+void State::apply_variable_update(const variable_update_t& update) {
     const auto& individual_name = std::get<0>(update);
     const auto& variable_name = std::get<1>(update);
     Log(log_level::debug).get() << "updating variable: " << individual_name << ":" << variable_name << std::endl;
@@ -135,31 +137,33 @@ void State::apply_variable_update(const variable_update_t update) {
     }
 }
 
-individual_index_t& State::get_state(std::string individual,
-    std::vector<std::string> states) const {
-    const auto& individual_states = states->at(individual);
+const individual_index_t State::get_state(
+    std::string individual,
+    std::vector<std::string> state_names) const {
+    const auto& individual_states = states.at(individual);
     individual_index_t result;
     auto added_states = std::unordered_set<std::string>();
-    for (auto i = 0u; i < states.size(); ++i) {
-        const auto& state_name = states[i];
+    for (auto i = 0u; i < state_names.size(); ++i) {
+        const auto& state_name = state_names[i];
         if (individual_states.find(state_name) == individual_states.end()) {
             Rcpp::stop("Unknown state");
         }
-        if (states.size() == 1) {
+        if (state_names.size() == 1) {
             return individual_states.at(state_name);
         }
         if (added_states.find(state_name) == added_states.end()) {
             const auto& state_set = individual_states.at(state_name);
-            result.insert(result.end(), std::cbegin(state_set), std::cend(state_set));
+            result.insert(std::cbegin(state_set), std::cend(state_set));
             added_states.insert(state_name);
         }
     }
     return result;
 }
 
-variable_vector_t& State::get_variable(std::string individual,
+const variable_vector_t& State::get_variable(
+    std::string individual,
     std::string variable) const {
-    auto& individual_variables = variables->at(individual);
+    auto& individual_variables = variables.at(individual);
     if (individual_variables.find(variable) == individual_variables.end()) {
         Rcpp::stop("Unknown variable");
     }
@@ -172,6 +176,6 @@ void State::queue_state_update(const std::string individual, const std::string s
 }
 
 void State::queue_variable_update(const std::string individual, const std::string variable,
-    const individual_index_t& index, const variable_vector_t& values) {
+    const std::vector<size_t>& index, const variable_vector_t& values) {
     variable_update_queue.push({individual, variable, index, values});
 }

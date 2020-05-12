@@ -25,7 +25,7 @@ process_queue_state_update <- function(api, individual, state, index_vector) {
     invisible(.Call(`_individual_process_queue_state_update`, api, individual, state, index_vector))
 }
 
-process_queue_variable_update <- function(api, individual, variable, index_vector, values) {
-    invisible(.Call(`_individual_process_queue_variable_update`, api, individual, variable, index_vector, values))
+process_queue_variable_update <- function(api, individual, variable, index, values) {
+    invisible(.Call(`_individual_process_queue_variable_update`, api, individual, variable, index, values))
 }
 

@@ -16,6 +16,8 @@ The entry point for models to inspect and manipulate the simulation
 \itemize{
 \item \href{#method-get_state}{\code{SimAPI$get_state()}}
 \item \href{#method-get_variable}{\code{SimAPI$get_variable()}}
+\item \href{#method-queue_state_update}{\code{SimAPI$queue_state_update()}}
+\item \href{#method-queue_variable_update}{\code{SimAPI$queue_variable_update()}}
 \item \href{#method-schedule}{\code{SimAPI$schedule()}}
 \item \href{#method-get_scheduled}{\code{SimAPI$get_scheduled()}}
 \item \href{#method-clear_schedule}{\code{SimAPI$clear_schedule()}}
@@ -48,13 +50,57 @@ Get the index of individuals with a particular state
 \subsection{Method \code{get_variable()}}{
 Get a variable vector for an individual
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimAPI$get_variable(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$get_variable(individual, variable)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{the individual and variable of interest}
+\item{\code{individual}}{the individual of interest}
+
+\item{\code{variable}}{the variable of interest}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-queue_state_update"></a>}}
+\subsection{Method \code{queue_state_update()}}{
+Queue a state update for the end of the timestep
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$queue_state_update(individual, state, index)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{individual}}{the individual of interest}
+
+\item{\code{state}}{the target state}
+
+\item{\code{index}}{the index of individuals to move to the target state}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-queue_variable_update"></a>}}
+\subsection{Method \code{queue_variable_update()}}{
+Queue a variable update for the end of the timestep
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$queue_variable_update(individual, variable, index, values)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{individual}}{the individual of interest}
+
+\item{\code{variable}}{the variable to update}
+
+\item{\code{index}}{the index of individuals to update}
+
+\item{\code{values}}{the values to apply at index}
 }
 \if{html}{\out{</div>}}
 }
@@ -130,15 +176,15 @@ Get the parameters of the simulation
 \subsection{Method \code{new()}}{
 Create an R wrapper for the API
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimAPI$new(simulation, scheduler, parameters)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$new(state, scheduler, parameters)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{simulation, }}{the cpp implementation of the simulation api}
-
 \item{\code{scheduler, }}{the implementation of the scheduler interface}
+
+\item{\code{simulation, }}{the cpp implementation of the simulation api}
 }
 \if{html}{\out{</div>}}
 }

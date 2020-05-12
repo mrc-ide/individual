@@ -13,7 +13,7 @@ SimAPI <- R6::R6Class(
     #' @param individual of interest
     #' @param ... the states of interest
     get_state = function(individual, ...) {
-      state_names <- vcapply(list(...), function(s) s$name)
+      state_names <- vcapply(unlist(list(...)), function(s) s$name)
       process_get_state(private$.api, individual$name, state_names)
     },
 
@@ -45,7 +45,7 @@ SimAPI <- R6::R6Class(
     #' @param variable the variable to update
     #' @param index the index of individuals to update
     #' @param values the values to apply at index
-    queue_state_update = function(individual, variable, index, values) {
+    queue_variable_update = function(individual, variable, index, values) {
       process_queue_variable_update(
         private$.api,
         individual$name,
