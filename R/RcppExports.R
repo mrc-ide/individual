@@ -29,3 +29,23 @@ process_queue_variable_update <- function(api, individual, variable, index, valu
     invisible(.Call(`_individual_process_queue_variable_update`, api, individual, variable, index, values))
 }
 
+execute_process <- function(process, api) {
+    invisible(.Call(`_individual_execute_process`, process, api))
+}
+
+execute_listener <- function(listener, api, target) {
+    invisible(.Call(`_individual_execute_listener`, listener, api, target))
+}
+
+fixed_probability_state_change_process <- function(individual, state_from, state_to, rate) {
+    .Call(`_individual_fixed_probability_state_change_process`, individual, state_from, state_to, rate)
+}
+
+update_state_listener <- function(individual, state) {
+    .Call(`_individual_update_state_listener`, individual, state)
+}
+
+reschedule_listener <- function(event, delay) {
+    .Call(`_individual_reschedule_listener`, event, delay)
+}
+

@@ -176,15 +176,17 @@ Get the parameters of the simulation
 \subsection{Method \code{new()}}{
 Create an R wrapper for the API
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimAPI$new(state, scheduler, parameters)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$new(cpp_api, scheduler, parameters)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{cpp_api, }}{the cpp implementation of the simulation api}
+
 \item{\code{scheduler, }}{the implementation of the scheduler interface}
 
-\item{\code{simulation, }}{the cpp implementation of the simulation api}
+\item{\code{parameters, }}{model parameters}
 }
 \if{html}{\out{</div>}}
 }

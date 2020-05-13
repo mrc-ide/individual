@@ -74,11 +74,15 @@ Scheduler <- R6::R6Class(
     #' @description
     #' Get scheduled updates for the current timestep
     #' @param api, the api to pass to the listeners
-    process_events = function(api) {
+    process_events = function(api, cpp_api) {
       scheduled <- private$.timeline[[private$.current_timestep]]
       for (pair in scheduled) {
         for (listener in pair[[1]]$listeners) {
-          queue_updates(api, listener(api, pair[[2]]))
+          if (inherits(listener, "externalptr")) {
+            execute_listener(listener, cpp_api, pair[[2]])
+          } else {
+            queue_updates(api, listener(api, pair[[2]]))
+          }
         }
       }
     },

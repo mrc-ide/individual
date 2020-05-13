@@ -93,6 +93,69 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// execute_process
+void execute_process(Rcpp::XPtr<process_t> process, Rcpp::XPtr<ProcessAPI> api);
+RcppExport SEXP _individual_execute_process(SEXP processSEXP, SEXP apiSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<process_t> >::type process(processSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    execute_process(process, api);
+    return R_NilValue;
+END_RCPP
+}
+// execute_listener
+void execute_listener(Rcpp::XPtr<listener_t> listener, Rcpp::XPtr<ProcessAPI> api, std::vector<size_t> target);
+RcppExport SEXP _individual_execute_listener(SEXP listenerSEXP, SEXP apiSEXP, SEXP targetSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<listener_t> >::type listener(listenerSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type target(targetSEXP);
+    execute_listener(listener, api, target);
+    return R_NilValue;
+END_RCPP
+}
+// fixed_probability_state_change_process
+Rcpp::XPtr<process_t> fixed_probability_state_change_process(const std::string individual, const std::string state_from, const std::string state_to, double rate);
+RcppExport SEXP _individual_fixed_probability_state_change_process(SEXP individualSEXP, SEXP state_fromSEXP, SEXP state_toSEXP, SEXP rateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type state_from(state_fromSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type state_to(state_toSEXP);
+    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
+    rcpp_result_gen = Rcpp::wrap(fixed_probability_state_change_process(individual, state_from, state_to, rate));
+    return rcpp_result_gen;
+END_RCPP
+}
+// update_state_listener
+Rcpp::XPtr<listener_t> update_state_listener(const std::string individual, const std::string state);
+RcppExport SEXP _individual_update_state_listener(SEXP individualSEXP, SEXP stateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type state(stateSEXP);
+    rcpp_result_gen = Rcpp::wrap(update_state_listener(individual, state));
+    return rcpp_result_gen;
+END_RCPP
+}
+// reschedule_listener
+Rcpp::XPtr<listener_t> reschedule_listener(const std::string event, double delay);
+RcppExport SEXP _individual_reschedule_listener(SEXP eventSEXP, SEXP delaySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< double >::type delay(delaySEXP);
+    rcpp_result_gen = Rcpp::wrap(reschedule_listener(event, delay));
+    return rcpp_result_gen;
+END_RCPP
+}
+
+RcppExport SEXP run_testthat_tests();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_individual_create_state", (DL_FUNC) &_individual_create_state, 1},
@@ -102,6 +165,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_process_get_variable", (DL_FUNC) &_individual_process_get_variable, 3},
     {"_individual_process_queue_state_update", (DL_FUNC) &_individual_process_queue_state_update, 4},
     {"_individual_process_queue_variable_update", (DL_FUNC) &_individual_process_queue_variable_update, 5},
+    {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
+    {"_individual_execute_listener", (DL_FUNC) &_individual_execute_listener, 3},
+    {"_individual_fixed_probability_state_change_process", (DL_FUNC) &_individual_fixed_probability_state_change_process, 4},
+    {"_individual_update_state_listener", (DL_FUNC) &_individual_update_state_listener, 2},
+    {"_individual_reschedule_listener", (DL_FUNC) &_individual_reschedule_listener, 2},
+    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
     {NULL, NULL, 0}
 };
 

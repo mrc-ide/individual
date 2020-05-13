@@ -90,10 +90,11 @@ SimAPI <- R6::R6Class(
 
     #' @description
     #' Create an R wrapper for the API
-    #' @param simulation, the cpp implementation of the simulation api
+    #' @param cpp_api, the cpp implementation of the simulation api
     #' @param scheduler, the implementation of the scheduler interface
-    initialize = function(state, scheduler, parameters) {
-      private$.api <- create_process_api(state, scheduler, parameters)
+    #' @param parameters, model parameters
+    initialize = function(cpp_api, scheduler, parameters) {
+      private$.api <- cpp_api
       private$.scheduler <- scheduler
       private$.parameters <- parameters
     }

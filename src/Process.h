@@ -39,8 +39,7 @@ public:
     );
 };
 
-class Process {
-   virtual void run(ProcessAPI&)=0;
-};
+using listener_t = std::function<void (ProcessAPI&, individual_index_t&)>;
+using process_t = std::function<void (ProcessAPI&)>;
 
 #endif /* PROCESS_H_ */

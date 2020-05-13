@@ -8,19 +8,19 @@
 #include "State.h"
 #include "Log.h"
 
-State::State(const Rcpp::List individuals) {
+State::State(const sim_state_spec_t& spec) {
     states = states_t();
     variables = variables_t();
 
-    for (const Rcpp::Environment& individual : individuals) {
-        auto individual_name = Rcpp::as<std::string>(individual["name"]);
+    for (const auto& individual : spec) {
+        auto individual_name = std::get<0>(individual);
         individual_names.push_back(individual_name);
 
         // Get the population size
-        Rcpp::List state_descriptors(individual["states"]);
+        auto state_descriptors = std::get<1>(individual);
         auto population_size = 0;
-        for (Rcpp::Environment state : state_descriptors) {
-            population_size += Rcpp::as<size_t>(state["initial_size"]);
+        for (const auto& state : state_descriptors) {
+            population_size += state.second;
         }
         population_sizes[individual_name] = population_size;
         Log(log_level::debug).get() << "initialising " << individual_name << " x " << population_size << std::endl;
@@ -28,9 +28,9 @@ State::State(const Rcpp::List individuals) {
         // Initialise the initial state
         auto initial_state = state_vector_t(state_descriptors.size());
         auto start = 1;
-        for (Rcpp::Environment state : state_descriptors) {
-            auto size = Rcpp::as<size_t>(state["initial_size"]);
-            auto state_name = Rcpp::as<std::string>(state["name"]);
+        for (const auto& state : state_descriptors) {
+            auto size = state.second;
+            auto state_name = state.first;
             auto state_set = individual_index_t();
             for (auto i = start; i < start + size; ++i) {
                 state_set.insert(i);
@@ -41,17 +41,15 @@ State::State(const Rcpp::List individuals) {
 
         Log(log_level::debug).get() << "initialising state container" << std::endl;
         // Initialise the state container
-        states[Rcpp::as<std::string>(individual["name"])] = move(initial_state);
+        states[individual_name] = move(initial_state);
 
         Log(log_level::debug).get() << "initialising variable container" << std::endl;
         // Initialise the variable container
-        Rcpp::List variable_descriptors(individual["variables"]);
-        for (Rcpp::Environment variable : variable_descriptors) {
-            auto variable_name = Rcpp::as<std::string>(variable["name"]);
+        const auto& variable_descriptors = std::get<2>(individual);
+        for (const auto& variable : variable_descriptors) {
+            auto variable_name = variable.first;
             variable_names[individual_name].push_back(variable_name);
-            Rcpp::Function initialiser(variable["initialiser"]);
-            auto initial_values = Rcpp::as<variable_vector_t>(initialiser(population_size));
-            variables[Rcpp::as<std::string>(individual["name"])][variable_name] = initial_values;
+            variables[individual_name][variable_name] = variable.second;
         }
     }
 }

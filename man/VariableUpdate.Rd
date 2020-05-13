@@ -65,7 +65,7 @@ should match the size of the population.
 4. Variable fill. The index vector is set to `NULL` and the value vector,
 of size 1, is used to fill all of the variable values in the population.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{VariableUpdate$new(individual, variable, value, index = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{VariableUpdate$new(individual, variable, value, index = numeric(0))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

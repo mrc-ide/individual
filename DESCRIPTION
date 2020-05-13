@@ -30,5 +30,6 @@ Suggests:
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 LinkingTo:
-  Rcpp
+  Rcpp,
+  testthat
 RcppModules: individual_cpp
