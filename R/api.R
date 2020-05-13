@@ -106,6 +106,9 @@ SimAPI <- R6::R6Class(
 #' @param updates, the list of updates to enqueue
 queue_updates <- function(api, updates) {
   if (!is.null(updates)) {
+    if(!is.vector(updates)) {
+      updates <- list(updates)
+    }
     for (update in updates) {
       if (update$type == 'state') {
         api$queue_state_update(update$individual, update$state, update$index)

@@ -97,22 +97,6 @@ void State::apply_variable_update(const variable_update_t& update) {
     auto vector_size = population_sizes.at(individual_name);
     Log(log_level::debug).get() << "replacement: " << vector_replacement << " fill: " << value_fill << std::endl;
 
-    if (!vector_replacement) {
-        if (value_fill && index.size() == 0) {
-            return;
-        }
-
-        for (const auto i : index) {
-            if (i < 0 || i > vector_size) {
-                Rcpp::stop("Index is out of bounds");
-            }
-        }
-
-        if (!value_fill && (index.size() != values.size())) {
-            Rcpp::stop("Index and value size mismatch");
-        }
-    }
-
     auto& to_update = variables[individual_name][variable_name];
 
     if (vector_replacement) {
@@ -177,5 +161,24 @@ void State::queue_state_update(const std::string individual, const std::string s
 
 void State::queue_variable_update(const std::string individual, const std::string variable,
     const std::vector<size_t>& index, const variable_vector_t& values) {
+    auto vector_replacement = (index.size() == 0);
+    auto value_fill = (values.size() == 1);
+    auto vector_size = population_sizes.at(individual);
+    if (!vector_replacement) {
+        if (value_fill && index.size() == 0) {
+            return;
+        }
+
+        for (const auto i : index) {
+            if (i < 0 || i > vector_size) {
+                Rcpp::stop("Index is out of bounds");
+            }
+        }
+
+        if (!value_fill && (index.size() != values.size())) {
+            Rcpp::stop("Index and value size mismatch");
+        }
+    }
+
     variable_update_queue.push({individual, variable, index, values});
 }
