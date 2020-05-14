@@ -37,14 +37,17 @@ execute_listener <- function(listener, api, target) {
     invisible(.Call(`_individual_execute_listener`, listener, api, target))
 }
 
+#' @export
 fixed_probability_state_change_process <- function(individual, state_from, state_to, rate) {
     .Call(`_individual_fixed_probability_state_change_process`, individual, state_from, state_to, rate)
 }
 
+#' @export
 update_state_listener <- function(individual, state) {
     .Call(`_individual_update_state_listener`, individual, state)
 }
 
+#' @export
 reschedule_listener <- function(event, delay) {
     .Call(`_individual_reschedule_listener`, event, delay)
 }

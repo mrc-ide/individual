@@ -39,8 +39,7 @@ const variable_vector_t& ProcessAPI::get_variable(
 
 void ProcessAPI::schedule(const std::string event, const individual_index_t& index, double delay) {
     Rcpp::Function schedule = scheduler["schedule"];
-    auto index_vector = std::vector<size_t>(index.size());
-    index_vector.insert(std::end(index_vector), std::cbegin(index), std::cend(index));
+    const auto index_vector = std::vector<size_t>(std::cbegin(index), std::cend(index));
     schedule(make_handle(event), index_vector, delay);
 }
 
@@ -52,8 +51,7 @@ individual_index_t ProcessAPI::get_scheduled(const std::string event) const {
 
 void ProcessAPI::clear_schedule(const std::string event, const individual_index_t& index) {
     Rcpp::Function f = scheduler["clear_scheduled"];
-    auto index_vector = std::vector<size_t>(index.size());
-    index_vector.insert(std::end(index_vector), std::cbegin(index), std::cend(index));
+    const auto index_vector = std::vector<size_t>(std::cbegin(index), std::cend(index));
     f(make_handle(event), index_vector);
 }
 

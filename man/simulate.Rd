@@ -9,7 +9,8 @@ simulate(
   processes,
   end_timestep,
   custom_renderers = list(),
-  parameters = list()
+  parameters = list(),
+  events = list()
 )
 }
 \arguments{

@@ -36,7 +36,8 @@ simulate <- function(
   processes,
   end_timestep,
   custom_renderers=list(),
-  parameters=list()
+  parameters=list(),
+  events=list()
   ) {
   if (end_timestep <= 0) {
     stop('End timestep must be > 0')
@@ -45,9 +46,10 @@ simulate <- function(
     individuals <- list(individuals)
   }
   render <- Render$new(individuals, end_timestep, custom_renderers)
-  scheduler <- Scheduler$new(end_timestep)
+  scheduler <- Scheduler$new(events, end_timestep)
   state <- create_state(individuals)
-  api <- SimAPI$new(state, scheduler, parameters)
+  cpp_api <- create_process_api(state, scheduler, parameters)
+  api <- SimAPI$new(cpp_api, scheduler, parameters)
   render$update(api, 1)
   for (timestep in seq_len(end_timestep - 1) + 1) {
     for (process in processes) {

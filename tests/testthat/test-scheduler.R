@@ -3,7 +3,7 @@ test_that("events can be scheduled for the future", {
   listener <- mockery::mock()
   api <- mockery::mock()
   event$add_listener(listener)
-  scheduler <- Scheduler$new(5)
+  scheduler <- Scheduler$new(list(event), 5)
   #time = 0
   scheduler$schedule(event, c(2, 4), 2)
 
@@ -33,7 +33,7 @@ test_that("events can be scheduled for for a Real time", {
   listener <- mockery::mock()
   api <- mockery::mock()
   event$add_listener(listener)
-  scheduler <- Scheduler$new(5)
+  scheduler <- Scheduler$new(list(event), 5)
   #time = 0
   scheduler$schedule(event, c(2, 4), 1.9)
 
@@ -64,7 +64,7 @@ test_that("you can see which individuals are scheduled for an event", {
   api <- mockery::mock()
   event$add_listener(listener)
 
-  scheduler <- Scheduler$new(5)
+  scheduler <- Scheduler$new(list(event), 5)
 
   #time = 0
   expect_null(scheduler$get_scheduled(event))
@@ -100,7 +100,7 @@ test_that("multiple events can be scheduled", {
   event1$add_listener(listener1)
   event2$add_listener(listener2)
 
-  scheduler <- Scheduler$new(3)
+  scheduler <- Scheduler$new(list(event1, event2), 3)
 
   #time = 0
   expect_null(scheduler$get_scheduled(event1))
@@ -128,7 +128,7 @@ test_that("events can be cleared for an individual", {
   listener <- mockery::mock()
   api <- mockery::mock()
   event$add_listener(listener)
-  scheduler <- Scheduler$new(5)
+  scheduler <- Scheduler$new(list(event), 5)
 
   #time = 0
   expect_null(scheduler$get_scheduled(event))

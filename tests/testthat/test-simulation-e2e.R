@@ -105,7 +105,7 @@ test_that("deterministic state model w events works", {
     delayed_shift_generator(I, R, recovery, recovery_delay, 1)
   )
 
-  render <- simulate(human, processes, 6)
+  render <- simulate(human, processes, 6, events=list(infection, recovery))
   expected_render <- data.frame(
     timestep = c(1, 2, 3, 4, 5, 6),
     human_S_count = c(4, 4, 2, 0, 0, 0),

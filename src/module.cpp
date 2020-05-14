@@ -133,6 +133,7 @@ void execute_listener(
  * Prefab processes and listeners
  */
 
+//' @export
 //[[Rcpp::export]]
 Rcpp::XPtr<process_t> fixed_probability_state_change_process(
     const std::string individual,
@@ -144,12 +145,14 @@ Rcpp::XPtr<process_t> fixed_probability_state_change_process(
     return Rcpp::XPtr<process_t>(new process_t(process), true);
 }
 
+//' @export
 //[[Rcpp::export]]
 Rcpp::XPtr<listener_t> update_state_listener(const std::string individual, const std::string state) {
     auto listener = update_state(individual, state);
     return Rcpp::XPtr<listener_t>(new listener_t(listener), true);
 }
 
+//' @export
 //[[Rcpp::export]]
 Rcpp::XPtr<listener_t> reschedule_listener(const std::string event, double delay) {
     auto listener = reschedule(event, delay);

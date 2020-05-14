@@ -3,7 +3,7 @@ test_that("fixed_probability_state_change moves a sane number of individuals aro
   I <- State$new('I', 1)
   human <- Individual$new('test', list(S, I))
   state <- create_state(list(human))
-  scheduler <- Scheduler$new(1)
+  scheduler <- new.env()
   cpp_api <- create_process_api(state, scheduler, list())
   execute_process(
     fixed_probability_state_change_process(
@@ -28,7 +28,7 @@ test_that("update_state_listener updates the state correctly", {
   I <- State$new('I', 1)
   human <- Individual$new('test', list(S, I))
   state <- create_state(list(human))
-  scheduler <- Scheduler$new(1)
+  scheduler <- new.env()
   cpp_api <- create_process_api(state, scheduler, list())
   execute_listener(
     update_state_listener('test', 'I'),
@@ -49,7 +49,7 @@ test_that("reschedule_listener schedules the correct update", {
   event$add_listener(event_listener)
   followup_listener <- mockery::mock()
   followup$add_listener(followup_listener)
-  scheduler <- Scheduler$new(5)
+  scheduler <- Scheduler$new(list(event, followup), 5)
   state <- create_state(list())
   cpp_api <- create_process_api(state, scheduler, list())
   r_api <- SimAPI$new(cpp_api, scheduler, list())
@@ -78,6 +78,9 @@ test_that("reschedule_listener schedules the correct update", {
   scheduler$process_events(r_api, cpp_api)
   mockery::expect_called(followup_listener, 1)
   mockery::expect_called(event_listener, 1)
-  mockery::expect_args(followup_listener, 1, api = r_api, target = c(2, 4))
   mockery::expect_args(event_listener, 1, api = r_api, target = c(2, 4))
+  args <- mockery::mock_args(followup_listener)
+  expect_equal(length(args), 1)
+  expect_equal(args[[1]][[1]], r_api)
+  expect_setequal(args[[1]][[2]], c(2, 4))
 })

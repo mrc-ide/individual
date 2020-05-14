@@ -4,6 +4,7 @@ Scheduler <- R6::R6Class(
   'Scheduler',
   private = list(
     .current_timestep = 1,
+    .events = NULL,
     .timeline = NULL
   ),
   public = list(
@@ -31,9 +32,12 @@ Scheduler <- R6::R6Class(
         }
       }
       if (!added) {
+        if (!(event$name %in% names(private$.events))) {
+          stop('unknown event')
+        }
         private$.timeline[[target_timestep]] <- c(
           timestep,
-          list(list(event, target))
+          list(list(private$.events[[event$name]], target))
         )
       }
       return()
@@ -101,8 +105,11 @@ Scheduler <- R6::R6Class(
 
     #' @description
     #' initialise the scheduler
+    #' @param events, a list of event objects for the simulation
     #' @param end_timestep, the number of timesteps to initialise for
-    initialize = function(end_timestep) {
+    initialize = function(events, end_timestep) {
+      private$.events <- events
+      names(private$.events) <- vcapply(events, function (e) e$name)
       private$.timeline <- vector(mode = 'list', length = end_timestep)
     }
   )

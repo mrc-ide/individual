@@ -83,7 +83,7 @@ Stop a future event from triggering for a subset of individuals
 \subsection{Method \code{process_events()}}{
 Get scheduled updates for the current timestep
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Scheduler$process_events(api)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Scheduler$process_events(api, cpp_api)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -117,12 +117,14 @@ get current timestep
 \subsection{Method \code{new()}}{
 initialise the scheduler
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Scheduler$new(end_timestep)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Scheduler$new(events, end_timestep)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{events, }}{a list of event objects for the simulation}
+
 \item{\code{end_timestep, }}{the number of timesteps to initialise for}
 }
 \if{html}{\out{</div>}}
