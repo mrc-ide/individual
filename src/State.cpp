@@ -119,27 +119,14 @@ void State::apply_variable_update(const variable_update_t& update) {
     }
 }
 
-const individual_index_t State::get_state(
+const individual_index_t& State::get_state(
     std::string individual,
-    std::vector<std::string> state_names) const {
+    std::string state_name) const {
     const auto& individual_states = states.at(individual);
-    individual_index_t result;
-    auto added_states = std::unordered_set<std::string>();
-    for (auto i = 0u; i < state_names.size(); ++i) {
-        const auto& state_name = state_names[i];
-        if (individual_states.find(state_name) == individual_states.end()) {
-            Rcpp::stop("Unknown state");
-        }
-        if (state_names.size() == 1) {
-            return individual_states.at(state_name);
-        }
-        if (added_states.find(state_name) == added_states.end()) {
-            const auto& state_set = individual_states.at(state_name);
-            result.insert(std::cbegin(state_set), std::cend(state_set));
-            added_states.insert(state_name);
-        }
+    if (individual_states.find(state_name) == individual_states.end()) {
+        Rcpp::stop("Unknown state");
     }
-    return result;
+    return individual_states.at(state_name);
 }
 
 const variable_vector_t& State::get_variable(

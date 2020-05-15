@@ -53,10 +53,13 @@ simulate <- function(
   render$update(api, 1)
   for (timestep in seq_len(end_timestep - 1) + 1) {
     for (process in processes) {
-      updates <- process(api)
-      queue_updates(api, updates)
+      if (inherits(process, "externalptr")) {
+        execute_process(process, cpp_api)
+      } else {
+        queue_updates(api, process(api))
+      }
     }
-    scheduler$process_events(api)
+    scheduler$process_events(api, cpp_api)
     state_apply_updates(state)
     render$update(api, timestep)
     scheduler$tick()

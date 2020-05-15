@@ -5,10 +5,10 @@
  *      Author: giovanni
  */
 
-#include <Rcpp.h>
 #include "Process.h"
 #include "State.h"
 #include "prefab.h"
+#include "module.h"
 
 /*
  * State exports
@@ -71,10 +71,12 @@ std::vector<size_t> process_get_state(
     Rcpp::XPtr<ProcessAPI> api,
     const std::string individual,
     const std::vector<std::string> states) {
-    const auto result = api->get_state(individual, states);
-    auto result_vector = std::vector<size_t>();
-    result_vector.insert(end(result_vector), cbegin(result), cend(result));
-    return result_vector;
+    auto result = std::vector<size_t>();
+    for (const auto& state : states) {
+        const auto& index = api->get_state(individual, state);
+        result.insert(result.end(), cbegin(index), cend(index));
+    }
+    return result;
 }
 
 //[[Rcpp::export]]

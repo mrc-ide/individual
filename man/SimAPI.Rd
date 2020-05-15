@@ -88,7 +88,7 @@ Queue a state update for the end of the timestep
 \subsection{Method \code{queue_variable_update()}}{
 Queue a variable update for the end of the timestep
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimAPI$queue_variable_update(individual, variable, index, values)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$queue_variable_update(individual, variable, values, index = numeric(0))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -98,9 +98,9 @@ Queue a variable update for the end of the timestep
 
 \item{\code{variable}}{the variable to update}
 
-\item{\code{index}}{the index of individuals to update}
-
 \item{\code{values}}{the values to apply at index}
+
+\item{\code{index}}{the index of individuals to update}
 }
 \if{html}{\out{</div>}}
 }

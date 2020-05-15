@@ -20,15 +20,15 @@ ProcessAPI::ProcessAPI(Rcpp::XPtr<State> state, Rcpp::Environment scheduler, Rcp
     if (r_params.size() > 0) {
         const auto& names = Rcpp::as<std::vector<std::string>>(r_params.names());
         for (const auto& name : names) {
-            params.insert({ name, Rcpp::as<std::vector<double>>(r_params["name"]) });
+            params.insert({ name, Rcpp::as<std::vector<double>>(r_params[name]) });
         }
     }
 }
 
-const individual_index_t ProcessAPI::get_state(
+const individual_index_t& ProcessAPI::get_state(
     const std::string individual,
-    const std::vector<std::string> states) const {
-    return state->get_state(individual, states);
+    const std::string state_name) const {
+    return state->get_state(individual, state_name);
 }
 
 const variable_vector_t& ProcessAPI::get_variable(

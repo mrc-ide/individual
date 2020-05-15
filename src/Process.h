@@ -19,7 +19,7 @@ private:
     params_t params;
 public:
     ProcessAPI(Rcpp::XPtr<State>, Rcpp::Environment, Rcpp::List);
-    const individual_index_t get_state(const std::string, const std::vector<std::string>) const;
+    const individual_index_t& get_state(const std::string, std::string) const;
     const variable_vector_t& get_variable(const std::string, const std::string) const;
     void schedule(const std::string, const individual_index_t&, double);
     individual_index_t get_scheduled(const std::string) const;

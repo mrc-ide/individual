@@ -1,2 +1,2 @@
 CXX_STD = CXX14
-CXX_FLAGS = -g
+PKG_CXXFLAGS = -g

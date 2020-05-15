@@ -66,6 +66,43 @@ test_that("deterministic state model works", {
   )
 })
 
+test_that("deterministic state model works w parameters", {
+  population <- 4
+  S <- State$new('S', population)
+  I <- State$new('I', 0)
+  R <- State$new('R', 0)
+  human <- Individual$new('human', list(S, I, R))
+
+  shift_generator <- function(from, to) {
+    return(function(simulation) {
+      from_state <- simulation$get_state(human, from)
+      rate <- simulation$get_parameters()$rate
+      StateUpdate$new(
+        human,
+        to,
+        from_state[seq_len(min(rate,length(from_state)))]
+      )
+    })
+  }
+
+  processes <- list(
+    shift_generator(S, I),
+    shift_generator(I, R)
+  )
+
+  render <- simulate(human, processes, 5, parameters=list(rate = 2))
+  true_render <- data.frame(
+    timestep = c(1, 2, 3, 4, 5),
+    human_S_count = c(4, 2, 0, 0, 0),
+    human_I_count = c(0, 2, 2, 0, 0),
+    human_R_count = c(0, 0, 2, 4, 4)
+  )
+  expect_mapequal(
+    true_render,
+    render
+  )
+})
+
 test_that("deterministic state model w events works", {
   population <- 4
   S <- State$new('S', population)

@@ -32,7 +32,7 @@ process_t fixed_probability_state_change(
     double rate
     ) {
     return [=] (ProcessAPI& api) {
-        const auto& source_individuals = api.get_state(individual, { from_state });
+        const auto& source_individuals = api.get_state(individual, from_state);
         const auto& random = Rcpp::runif(source_individuals.size());
         auto target_individuals = individual_index_t();
         auto random_index = 0;

@@ -45,7 +45,7 @@ SimAPI <- R6::R6Class(
     #' @param variable the variable to update
     #' @param index the index of individuals to update
     #' @param values the values to apply at index
-    queue_variable_update = function(individual, variable, index, values) {
+    queue_variable_update = function(individual, variable, values, index=numeric(0)) {
       process_queue_variable_update(
         private$.api,
         individual$name,
@@ -117,8 +117,8 @@ queue_updates <- function(api, updates) {
         api$queue_variable_update(
           update$individual,
           update$variable,
-          update$index,
-          update$value
+          update$value,
+          update$index
         )
       }
     }
