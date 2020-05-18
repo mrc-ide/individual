@@ -52,3 +52,7 @@ reschedule_listener <- function(event, delay) {
     .Call(`_individual_reschedule_listener`, event, delay)
 }
 
+# Register entry points for exported C++ functions
+methods::setLoadAction(function(ns) {
+    .Call('_individual_RcppExport_registerCCallable', PACKAGE = 'individual')
+})

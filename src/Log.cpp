@@ -5,6 +5,6 @@
  *      Author: giovanni
  */
 
-#include "Log.h"
+#include "../inst/include/Log.h"
 
 structlog LOGCFG;

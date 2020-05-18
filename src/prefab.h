@@ -8,7 +8,7 @@
 #ifndef PREFAB_H_
 #define PREFAB_H_
 
-#include "Process.h"
+#include "../inst/include/individual_types.h"
 
 listener_t update_state(const std::string, const std::string);
 listener_t reschedule(const std::string, double);

@@ -4,9 +4,8 @@
  *  Created on: 2 Mar 2020
  *      Author: giovanni
  */
-
-#include "Process.h"
-#include "State.h"
+//[[Rcpp::interfaces(r, cpp)]]
+#include "../inst/include/individual_types.h"
 #include "prefab.h"
 #include "module.h"
 

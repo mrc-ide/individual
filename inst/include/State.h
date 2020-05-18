@@ -1,14 +1,53 @@
 /*
- * Simulation.cpp
+ * state.h
  *
- *  Created on: 3 Mar 2020
- *      Author: giovanni
+ *  Created on: 18 May 2020
+ *      Author: gc1610
  */
 
-#include "State.h"
+#ifndef INST_INCLUDE_STATE_H_
+#define INST_INCLUDE_STATE_H_
+
+#include <unordered_set>
+#include <tuple>
+#include <queue>
+#include "common_types.h"
 #include "Log.h"
 
-State::State(const sim_state_spec_t& spec) {
+using individual_index_t = std::unordered_set<size_t>;
+using variable_vector_t = std::vector<double>;
+using state_vector_t = named_array_t<individual_index_t>;
+
+using states_t = named_array_t<state_vector_t>;
+using variables_t = named_array_t<named_array_t<variable_vector_t>>;
+using state_update_t = std::tuple<std::string, std::string, individual_index_t>;
+using variable_update_t = std::tuple<std::string, std::string, std::vector<size_t>, variable_vector_t>;
+
+using variable_spec_t = std::pair<std::string, std::vector<double>>;
+using state_spec_t = std::pair<std::string, size_t>;
+using individual_spec_t = std::tuple<std::string, std::vector<state_spec_t>, std::vector<variable_spec_t>>;
+using sim_state_spec_t = std::vector<individual_spec_t>;
+
+class State {
+    states_t states;
+    variables_t variables;
+    std::vector<std::string> individual_names;
+    named_array_t<std::vector<std::string>> variable_names;
+    named_array_t<size_t> population_sizes;
+    std::queue<state_update_t> state_update_queue;
+    std::queue<variable_update_t> variable_update_queue;
+    void apply_state_update(const state_update_t&);
+    void apply_variable_update(const variable_update_t&);
+public:
+    State(const sim_state_spec_t&);
+    void apply_updates();
+    const individual_index_t& get_state(const std::string, const std::string) const;
+    const variable_vector_t& get_variable(const std::string, const std::string) const;
+    void queue_state_update(const std::string, const std::string, const individual_index_t&);
+    void queue_variable_update(const std::string, const std::string, const std::vector<size_t>&, const variable_vector_t&);
+};
+
+inline State::State(const sim_state_spec_t& spec) {
     states = states_t();
     variables = variables_t();
 
@@ -54,7 +93,7 @@ State::State(const sim_state_spec_t& spec) {
     }
 }
 
-void State::apply_updates() {
+inline void State::apply_updates() {
     while(state_update_queue.size() > 0) {
         apply_state_update(state_update_queue.front());
         state_update_queue.pop();
@@ -65,7 +104,7 @@ void State::apply_updates() {
     }
 }
 
-void State::apply_state_update(const state_update_t& update) {
+inline void State::apply_state_update(const state_update_t& update) {
     const auto& individual_name = std::get<0>(update);
     const auto& state_name = std::get<1>(update);
     Log(log_level::debug).get() << "updating state: " << individual_name << ":" << state_name << std::endl;
@@ -78,7 +117,7 @@ void State::apply_state_update(const state_update_t& update) {
     states.at(individual_name).at(state_name).insert(std::cbegin(index), std::cend(index));
 }
 
-void State::apply_variable_update(const variable_update_t& update) {
+inline void State::apply_variable_update(const variable_update_t& update) {
     const auto& individual_name = std::get<0>(update);
     const auto& variable_name = std::get<1>(update);
     Log(log_level::debug).get() << "updating variable: " << individual_name << ":" << variable_name << std::endl;
@@ -119,7 +158,7 @@ void State::apply_variable_update(const variable_update_t& update) {
     }
 }
 
-const individual_index_t& State::get_state(
+inline const individual_index_t& State::get_state(
     std::string individual,
     std::string state_name) const {
     const auto& individual_states = states.at(individual);
@@ -129,7 +168,7 @@ const individual_index_t& State::get_state(
     return individual_states.at(state_name);
 }
 
-const variable_vector_t& State::get_variable(
+inline const variable_vector_t& State::get_variable(
     std::string individual,
     std::string variable) const {
     auto& individual_variables = variables.at(individual);
@@ -139,12 +178,12 @@ const variable_vector_t& State::get_variable(
     return individual_variables.at(variable);
 }
 
-void State::queue_state_update(const std::string individual, const std::string state,
+inline void State::queue_state_update(const std::string individual, const std::string state,
     const individual_index_t& index) {
     state_update_queue.push({individual, state, index});
 }
 
-void State::queue_variable_update(const std::string individual, const std::string variable,
+inline void State::queue_variable_update(const std::string individual, const std::string variable,
     const std::vector<size_t>& index, const variable_vector_t& values) {
     auto vector_replacement = (index.size() == 0);
     auto value_fill = (values.size() == 1);
@@ -167,3 +206,5 @@ void State::queue_variable_update(const std::string individual, const std::strin
 
     variable_update_queue.push({individual, variable, index, values});
 }
+
+#endif /* INST_INCLUDE_STATE_H_ */
