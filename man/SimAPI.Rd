@@ -23,6 +23,7 @@ The entry point for models to inspect and manipulate the simulation
 \item \href{#method-clear_schedule}{\code{SimAPI$clear_schedule()}}
 \item \href{#method-get_timestep}{\code{SimAPI$get_timestep()}}
 \item \href{#method-get_parameters}{\code{SimAPI$get_parameters()}}
+\item \href{#method-render}{\code{SimAPI$render()}}
 \item \href{#method-new}{\code{SimAPI$new()}}
 \item \href{#method-clone}{\code{SimAPI$clone()}}
 }
@@ -172,11 +173,20 @@ Get the parameters of the simulation
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-render"></a>}}
+\subsection{Method \code{render()}}{
+Get the parameters of the simulation
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$render(name, value, timestep = NULL)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
 Create an R wrapper for the API
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimAPI$new(cpp_api, scheduler, parameters)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$new(cpp_api, scheduler, parameters, renderer)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

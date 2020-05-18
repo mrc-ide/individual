@@ -4,7 +4,8 @@ test_that("fixed_probability_state_change moves a sane number of individuals aro
   human <- Individual$new('test', list(S, I))
   state <- create_state(list(human))
   scheduler <- new.env()
-  cpp_api <- create_process_api(state, scheduler, list())
+  renderer <- new.env()
+  cpp_api <- create_process_api(state, scheduler, list(), renderer)
   execute_process(
     fixed_probability_state_change_process(
       'test',
@@ -14,7 +15,7 @@ test_that("fixed_probability_state_change moves a sane number of individuals aro
     ),
     cpp_api
   )
-  r_api <- SimAPI$new(cpp_api, scheduler, list())
+  r_api <- SimAPI$new(cpp_api, scheduler, list(), renderer)
   state_apply_updates(state)
   n_s <- length(r_api$get_state(human, S))
   n_i <- length(r_api$get_state(human, I))
@@ -29,13 +30,14 @@ test_that("update_state_listener updates the state correctly", {
   human <- Individual$new('test', list(S, I))
   state <- create_state(list(human))
   scheduler <- new.env()
-  cpp_api <- create_process_api(state, scheduler, list())
+  renderer <- new.env()
+  cpp_api <- create_process_api(state, scheduler, list(), renderer)
   execute_listener(
     update_state_listener('test', 'I'),
     cpp_api,
     c(2, 5)
   )
-  r_api <- SimAPI$new(cpp_api, scheduler, list())
+  r_api <- SimAPI$new(cpp_api, scheduler, list(), renderer)
   state_apply_updates(state)
   expect_setequal(r_api$get_state(human, S), c(1, 3:4, 6:10))
   expect_setequal(r_api$get_state(human, I), c(11, 2, 5))
@@ -50,9 +52,10 @@ test_that("reschedule_listener schedules the correct update", {
   followup_listener <- mockery::mock()
   followup$add_listener(followup_listener)
   scheduler <- Scheduler$new(list(event, followup), 5)
+  renderer <- new.env()
   state <- create_state(list())
-  cpp_api <- create_process_api(state, scheduler, list())
-  r_api <- SimAPI$new(cpp_api, scheduler, list())
+  cpp_api <- create_process_api(state, scheduler, list(), renderer)
+  r_api <- SimAPI$new(cpp_api, scheduler, list(), renderer)
   #time = 0
   scheduler$schedule(event, c(2, 4), 2)
 

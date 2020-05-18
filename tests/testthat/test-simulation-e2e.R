@@ -6,21 +6,13 @@ test_that("empty simulation exits gracefully", {
   human <- Individual$new('human', list(S, I, R))
   render <- simulate(human, list(), 4)
   true_render <- data.frame(
-    timestep = c(1, 2, 3, 4),
-    human_S_count = c(4, 4, 4, 4),
-    human_I_count = c(0, 0, 0, 0),
-    human_R_count = c(0, 0, 0, 0)
+    timestep = c(1, 2, 3, 4)
   )
   expect_equal(true_render, render)
 
   render <- simulate(human, list(), 1)
 
-  true_render <- data.frame(
-    timestep = c(1),
-    human_S_count = c(4),
-    human_I_count = c(0),
-    human_R_count = c(0)
-  )
+  true_render <- data.frame(timestep = c(1))
 
   expect_equal(true_render, render)
 
@@ -50,19 +42,20 @@ test_that("deterministic state model works", {
 
   processes <- list(
     shift_generator(S, I, 2),
-    shift_generator(I, R, 1)
+    shift_generator(I, R, 1),
+    state_count_renderer_process(human$name, c(S$name, I$name, R$name))
   )
 
   render <- simulate(human, processes, 5)
-  true_render <- data.frame(
+  expected <- data.frame(
     timestep = c(1, 2, 3, 4, 5),
     human_S_count = c(4, 2, 0, 0, 0),
     human_I_count = c(0, 2, 3, 2, 1),
     human_R_count = c(0, 0, 1, 2, 3)
   )
   expect_mapequal(
-    true_render,
-    render
+    render,
+    expected
   )
 })
 
@@ -87,7 +80,8 @@ test_that("deterministic state model works w parameters", {
 
   processes <- list(
     shift_generator(S, I),
-    shift_generator(I, R)
+    shift_generator(I, R),
+    state_count_renderer_process(human$name, c(S$name, I$name, R$name))
   )
 
   render <- simulate(human, processes, 5, parameters=list(rate = 2))
@@ -139,7 +133,8 @@ test_that("deterministic state model w events works", {
 
   processes <- list(
     delayed_shift_generator(S, I, infection, infection_delay, 2),
-    delayed_shift_generator(I, R, recovery, recovery_delay, 1)
+    delayed_shift_generator(I, R, recovery, recovery_delay, 1),
+    state_count_renderer_process(human$name, c(S$name, I$name, R$name))
   )
 
   render <- simulate(human, processes, 6, events=list(infection, recovery))
@@ -178,7 +173,9 @@ test_that("deterministic state model works w 2 individuals", {
     shift_generator(human, S, I, 2),
     shift_generator(human, I, R, 1),
     shift_generator(alien, S, I, 1),
-    shift_generator(alien, I, R, 2)
+    shift_generator(alien, I, R, 2),
+    state_count_renderer_process(human$name, c(S$name, I$name, R$name)),
+    state_count_renderer_process(alien$name, c(S$name, I$name, R$name))
   )
 
   render <- simulate(list(human, alien), processes, 5)
@@ -228,24 +225,19 @@ test_that("deterministic state & variable model works", {
   processes <- list(
     shift_generator(S, I, 2),
     shift_generator(I, R, 1),
-    doubler
+    doubler,
+    state_count_renderer_process(human$name, c(S$name, I$name, R$name)),
+    variable_mean_renderer_process(human$name, value$name)
   )
 
-  render <- simulate(
-    human,
-    processes,
-    5,
-    custom_renderers=list(function(simulation) {
-      list(value_mean=mean(simulation$get_variable(human, value)))
-    })
-  )
+  render <- simulate(human, processes, 5)
 
   true_render <- data.frame(
     timestep = c(1, 2, 3, 4, 5),
     human_S_count = c(4, 2, 0, 0, 0),
     human_I_count = c(0, 2, 3, 2, 1),
     human_R_count = c(0, 0, 1, 2, 3),
-    value_mean = c(1, 2, 4, 8, 16)
+    human_value_mean = c(1, 2, 4, 8, 16)
   )
 
   expect_mapequal(true_render, render)

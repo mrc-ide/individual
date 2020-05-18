@@ -60,8 +60,9 @@ void state_apply_updates(Rcpp::XPtr<State> state) {
 Rcpp::XPtr<ProcessAPI> create_process_api(
     Rcpp::XPtr<State> state,
     Rcpp::Environment scheduler,
-    Rcpp::List params) {
-    auto api = new ProcessAPI(state, scheduler, params);
+    Rcpp::List params,
+    Rcpp::Environment renderer) {
+    auto api = new ProcessAPI(state, scheduler, params, renderer);
     return Rcpp::XPtr<ProcessAPI>(api, true);
 }
 
@@ -143,6 +144,26 @@ Rcpp::XPtr<process_t> fixed_probability_state_change_process(
     double rate
     ) {
     auto process = fixed_probability_state_change(individual, state_from, state_to, rate);
+    return Rcpp::XPtr<process_t>(new process_t(process), true);
+}
+
+//' @export
+//[[Rcpp::export]]
+Rcpp::XPtr<process_t> state_count_renderer_process(
+    const std::string individual,
+    const std::vector<std::string> states
+    ) {
+    auto process = state_count_renderer(individual, states);
+    return Rcpp::XPtr<process_t>(new process_t(process), true);
+}
+
+//' @export
+//[[Rcpp::export]]
+Rcpp::XPtr<process_t> variable_mean_renderer_process(
+    const std::string individual,
+    const std::vector<std::string> variables
+    ) {
+    auto process = variable_mean_renderer(individual, variables);
     return Rcpp::XPtr<process_t>(new process_t(process), true);
 }
 

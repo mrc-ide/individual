@@ -9,8 +9,8 @@ state_apply_updates <- function(state) {
     invisible(.Call(`_individual_state_apply_updates`, state))
 }
 
-create_process_api <- function(state, scheduler, params) {
-    .Call(`_individual_create_process_api`, state, scheduler, params)
+create_process_api <- function(state, scheduler, params, renderer) {
+    .Call(`_individual_create_process_api`, state, scheduler, params, renderer)
 }
 
 process_get_state <- function(api, individual, states) {
@@ -40,6 +40,16 @@ execute_listener <- function(listener, api, target) {
 #' @export
 fixed_probability_state_change_process <- function(individual, state_from, state_to, rate) {
     .Call(`_individual_fixed_probability_state_change_process`, individual, state_from, state_to, rate)
+}
+
+#' @export
+state_count_renderer_process <- function(individual, states) {
+    .Call(`_individual_state_count_renderer_process`, individual, states)
+}
+
+#' @export
+variable_mean_renderer_process <- function(individual, variables) {
+    .Call(`_individual_variable_mean_renderer_process`, individual, variables)
 }
 
 #' @export

@@ -17,14 +17,17 @@ class ProcessAPI {
 private:
     Rcpp::XPtr<State> state;
     Rcpp::Environment scheduler;
+    Rcpp::Environment renderer;
     params_t params;
 public:
-    ProcessAPI(Rcpp::XPtr<State>, Rcpp::Environment, Rcpp::List);
+    ProcessAPI(Rcpp::XPtr<State>, Rcpp::Environment, Rcpp::List, Rcpp::Environment);
     const individual_index_t& get_state(const std::string, std::string) const;
     const variable_vector_t& get_variable(const std::string, const std::string) const;
     void schedule(const std::string, const individual_index_t&, double);
     individual_index_t get_scheduled(const std::string) const;
     void clear_schedule(const std::string, const individual_index_t&);
+    void render(const std::string, double, size_t);
+    void render(const std::string, double);
     size_t get_timestep() const;
     const params_t& get_parameters() const;
     void queue_state_update(
@@ -46,8 +49,13 @@ inline Rcpp::Environment make_handle(std::string name) {
     return env;
 }
 
-inline ProcessAPI::ProcessAPI(Rcpp::XPtr<State> state, Rcpp::Environment scheduler, Rcpp::List r_params)
+inline ProcessAPI::ProcessAPI(
+    Rcpp::XPtr<State> state,
+    Rcpp::Environment scheduler,
+    Rcpp::List r_params,
+    Rcpp::Environment renderer)
     :state(state),
+     renderer(renderer),
      scheduler(scheduler) {
     if (r_params.size() > 0) {
         const auto& names = Rcpp::as<std::vector<std::string>>(r_params.names());
@@ -85,6 +93,15 @@ inline void ProcessAPI::clear_schedule(const std::string event, const individual
     Rcpp::Function f = scheduler["clear_scheduled"];
     const auto index_vector = std::vector<size_t>(std::cbegin(index), std::cend(index));
     f(make_handle(event), index_vector);
+}
+
+inline void ProcessAPI::render(const std::string name, double value, size_t timestep) {
+    Rcpp::Function f = renderer["add"];
+    f(name, value, timestep);
+}
+
+inline void ProcessAPI::render(const std::string name, double value) {
+    render(name, value, get_timestep());
 }
 
 inline size_t ProcessAPI::get_timestep() const {

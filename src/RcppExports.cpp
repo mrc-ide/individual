@@ -77,22 +77,23 @@ RcppExport SEXP _individual_state_apply_updates(SEXP stateSEXP) {
     return rcpp_result_gen;
 }
 // create_process_api
-Rcpp::XPtr<ProcessAPI> create_process_api(Rcpp::XPtr<State> state, Rcpp::Environment scheduler, Rcpp::List params);
-static SEXP _individual_create_process_api_try(SEXP stateSEXP, SEXP schedulerSEXP, SEXP paramsSEXP) {
+Rcpp::XPtr<ProcessAPI> create_process_api(Rcpp::XPtr<State> state, Rcpp::Environment scheduler, Rcpp::List params, Rcpp::Environment renderer);
+static SEXP _individual_create_process_api_try(SEXP stateSEXP, SEXP schedulerSEXP, SEXP paramsSEXP, SEXP rendererSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
     Rcpp::traits::input_parameter< Rcpp::Environment >::type scheduler(schedulerSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type params(paramsSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_process_api(state, scheduler, params));
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type renderer(rendererSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_process_api(state, scheduler, params, renderer));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _individual_create_process_api(SEXP stateSEXP, SEXP schedulerSEXP, SEXP paramsSEXP) {
+RcppExport SEXP _individual_create_process_api(SEXP stateSEXP, SEXP schedulerSEXP, SEXP paramsSEXP, SEXP rendererSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_create_process_api_try(stateSEXP, schedulerSEXP, paramsSEXP));
+        rcpp_result_gen = PROTECT(_individual_create_process_api_try(stateSEXP, schedulerSEXP, paramsSEXP, rendererSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -363,6 +364,76 @@ RcppExport SEXP _individual_fixed_probability_state_change_process(SEXP individu
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// state_count_renderer_process
+Rcpp::XPtr<process_t> state_count_renderer_process(const std::string individual, const std::vector<std::string> states);
+static SEXP _individual_state_count_renderer_process_try(SEXP individualSEXP, SEXP statesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string> >::type states(statesSEXP);
+    rcpp_result_gen = Rcpp::wrap(state_count_renderer_process(individual, states));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _individual_state_count_renderer_process(SEXP individualSEXP, SEXP statesSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_individual_state_count_renderer_process_try(individualSEXP, statesSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// variable_mean_renderer_process
+Rcpp::XPtr<process_t> variable_mean_renderer_process(const std::string individual, const std::vector<std::string> variables);
+static SEXP _individual_variable_mean_renderer_process_try(SEXP individualSEXP, SEXP variablesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string> >::type variables(variablesSEXP);
+    rcpp_result_gen = Rcpp::wrap(variable_mean_renderer_process(individual, variables));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _individual_variable_mean_renderer_process(SEXP individualSEXP, SEXP variablesSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_individual_variable_mean_renderer_process_try(individualSEXP, variablesSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // update_state_listener
 Rcpp::XPtr<listener_t> update_state_listener(const std::string individual, const std::string state);
 static SEXP _individual_update_state_listener_try(SEXP individualSEXP, SEXP stateSEXP) {
@@ -440,7 +511,7 @@ static int _individual_RcppExport_validate(const char* sig) {
     if (signatures.empty()) {
         signatures.insert("Rcpp::XPtr<State>(*create_state)(const Rcpp::List)");
         signatures.insert("void(*state_apply_updates)(Rcpp::XPtr<State>)");
-        signatures.insert("Rcpp::XPtr<ProcessAPI>(*create_process_api)(Rcpp::XPtr<State>,Rcpp::Environment,Rcpp::List)");
+        signatures.insert("Rcpp::XPtr<ProcessAPI>(*create_process_api)(Rcpp::XPtr<State>,Rcpp::Environment,Rcpp::List,Rcpp::Environment)");
         signatures.insert("std::vector<size_t>(*process_get_state)(Rcpp::XPtr<ProcessAPI>,const std::string,const std::vector<std::string>)");
         signatures.insert("std::vector<double>(*process_get_variable)(Rcpp::XPtr<ProcessAPI>,const std::string,const std::string)");
         signatures.insert("void(*process_queue_state_update)(Rcpp::XPtr<ProcessAPI>,const std::string,const std::string,const std::vector<size_t>)");
@@ -448,6 +519,8 @@ static int _individual_RcppExport_validate(const char* sig) {
         signatures.insert("void(*execute_process)(Rcpp::XPtr<process_t>,Rcpp::XPtr<ProcessAPI>)");
         signatures.insert("void(*execute_listener)(Rcpp::XPtr<listener_t>,Rcpp::XPtr<ProcessAPI>,std::vector<size_t>)");
         signatures.insert("Rcpp::XPtr<process_t>(*fixed_probability_state_change_process)(const std::string,const std::string,const std::string,double)");
+        signatures.insert("Rcpp::XPtr<process_t>(*state_count_renderer_process)(const std::string,const std::vector<std::string>)");
+        signatures.insert("Rcpp::XPtr<process_t>(*variable_mean_renderer_process)(const std::string,const std::vector<std::string>)");
         signatures.insert("Rcpp::XPtr<listener_t>(*update_state_listener)(const std::string,const std::string)");
         signatures.insert("Rcpp::XPtr<listener_t>(*reschedule_listener)(const std::string,double)");
     }
@@ -466,6 +539,8 @@ RcppExport SEXP _individual_RcppExport_registerCCallable() {
     R_RegisterCCallable("individual", "_individual_execute_process", (DL_FUNC)_individual_execute_process_try);
     R_RegisterCCallable("individual", "_individual_execute_listener", (DL_FUNC)_individual_execute_listener_try);
     R_RegisterCCallable("individual", "_individual_fixed_probability_state_change_process", (DL_FUNC)_individual_fixed_probability_state_change_process_try);
+    R_RegisterCCallable("individual", "_individual_state_count_renderer_process", (DL_FUNC)_individual_state_count_renderer_process_try);
+    R_RegisterCCallable("individual", "_individual_variable_mean_renderer_process", (DL_FUNC)_individual_variable_mean_renderer_process_try);
     R_RegisterCCallable("individual", "_individual_update_state_listener", (DL_FUNC)_individual_update_state_listener_try);
     R_RegisterCCallable("individual", "_individual_reschedule_listener", (DL_FUNC)_individual_reschedule_listener_try);
     R_RegisterCCallable("individual", "_individual_RcppExport_validate", (DL_FUNC)_individual_RcppExport_validate);
@@ -475,7 +550,7 @@ RcppExport SEXP _individual_RcppExport_registerCCallable() {
 static const R_CallMethodDef CallEntries[] = {
     {"_individual_create_state", (DL_FUNC) &_individual_create_state, 1},
     {"_individual_state_apply_updates", (DL_FUNC) &_individual_state_apply_updates, 1},
-    {"_individual_create_process_api", (DL_FUNC) &_individual_create_process_api, 3},
+    {"_individual_create_process_api", (DL_FUNC) &_individual_create_process_api, 4},
     {"_individual_process_get_state", (DL_FUNC) &_individual_process_get_state, 3},
     {"_individual_process_get_variable", (DL_FUNC) &_individual_process_get_variable, 3},
     {"_individual_process_queue_state_update", (DL_FUNC) &_individual_process_queue_state_update, 4},
@@ -483,6 +558,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_execute_listener", (DL_FUNC) &_individual_execute_listener, 3},
     {"_individual_fixed_probability_state_change_process", (DL_FUNC) &_individual_fixed_probability_state_change_process, 4},
+    {"_individual_state_count_renderer_process", (DL_FUNC) &_individual_state_count_renderer_process, 2},
+    {"_individual_variable_mean_renderer_process", (DL_FUNC) &_individual_variable_mean_renderer_process, 2},
     {"_individual_update_state_listener", (DL_FUNC) &_individual_update_state_listener, 2},
     {"_individual_reschedule_listener", (DL_FUNC) &_individual_reschedule_listener, 2},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},

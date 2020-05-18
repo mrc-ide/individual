@@ -45,3 +45,35 @@ process_t fixed_probability_state_change(
         api.queue_state_update(individual, to_state, target_individuals);
     };
 }
+
+process_t state_count_renderer(
+    const std::string individual,
+    const std::vector<std::string> states
+    ) {
+    return [=] (ProcessAPI& api) {
+        for (const auto& state : states) {
+            const auto& state_index = api.get_state(individual, state);
+            std::stringstream name;
+            name << individual << '_' << state << "_count";
+            api.render(name.str(), state_index.size());
+        }
+    };
+}
+
+process_t variable_mean_renderer(
+    const std::string individual,
+    const std::vector<std::string> variables
+    ) {
+    return [=] (ProcessAPI& api) {
+        for (const auto& variable : variables) {
+            const auto& values = api.get_variable(individual, variable);
+            std::stringstream name;
+            name << individual << '_' << variable << "_mean";
+            auto mean = 0.;
+            for (auto value : values) {
+                mean += value;
+            }
+            api.render(name.str(), mean / values.size());
+        }
+    };
+}

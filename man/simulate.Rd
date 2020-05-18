@@ -8,7 +8,6 @@ simulate(
   individuals,
   processes,
   end_timestep,
-  custom_renderers = list(),
   parameters = list(),
   events = list()
 )
@@ -20,9 +19,9 @@ simulate(
 
 \item{end_timestep}{the number of timesteps to simulate}
 
-\item{custom_renderers}{a list of renderers to pass to Render$initialize}
-
 \item{parameters}{a list of named parameters to pass to the process functions}
+
+\item{custom_renderers}{a list of renderers to pass to Render$initialize}
 }
 \description{
 Main simulation loop

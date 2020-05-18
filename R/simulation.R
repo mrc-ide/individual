@@ -35,7 +35,6 @@ simulate <- function(
   individuals,
   processes,
   end_timestep,
-  custom_renderers=list(),
   parameters=list(),
   events=list()
   ) {
@@ -45,13 +44,12 @@ simulate <- function(
   if (! is.list(individuals)) {
     individuals <- list(individuals)
   }
-  render <- Render$new(individuals, end_timestep, custom_renderers)
+  render <- Render$new(end_timestep)
   scheduler <- Scheduler$new(events, end_timestep)
   state <- create_state(individuals)
-  cpp_api <- create_process_api(state, scheduler, parameters)
-  api <- SimAPI$new(cpp_api, scheduler, parameters)
-  render$update(api, 1)
-  for (timestep in seq_len(end_timestep - 1) + 1) {
+  cpp_api <- create_process_api(state, scheduler, parameters, render)
+  api <- SimAPI$new(cpp_api, scheduler, parameters, render)
+  for (t in seq_len(end_timestep)) {
     for (process in processes) {
       if (inherits(process, "externalptr")) {
         execute_process(process, cpp_api)
@@ -61,7 +59,6 @@ simulate <- function(
     }
     scheduler$process_events(api, cpp_api)
     state_apply_updates(state)
-    render$update(api, timestep)
     scheduler$tick()
   }
   render$to_dataframe()

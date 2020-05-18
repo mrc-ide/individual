@@ -66,17 +66,17 @@ namespace individual {
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
     }
 
-    inline Rcpp::XPtr<ProcessAPI> create_process_api(Rcpp::XPtr<State> state, Rcpp::Environment scheduler, Rcpp::List params) {
-        typedef SEXP(*Ptr_create_process_api)(SEXP,SEXP,SEXP);
+    inline Rcpp::XPtr<ProcessAPI> create_process_api(Rcpp::XPtr<State> state, Rcpp::Environment scheduler, Rcpp::List params, Rcpp::Environment renderer) {
+        typedef SEXP(*Ptr_create_process_api)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_create_process_api p_create_process_api = NULL;
         if (p_create_process_api == NULL) {
-            validateSignature("Rcpp::XPtr<ProcessAPI>(*create_process_api)(Rcpp::XPtr<State>,Rcpp::Environment,Rcpp::List)");
+            validateSignature("Rcpp::XPtr<ProcessAPI>(*create_process_api)(Rcpp::XPtr<State>,Rcpp::Environment,Rcpp::List,Rcpp::Environment)");
             p_create_process_api = (Ptr_create_process_api)R_GetCCallable("individual", "_individual_create_process_api");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_create_process_api(Shield<SEXP>(Rcpp::wrap(state)), Shield<SEXP>(Rcpp::wrap(scheduler)), Shield<SEXP>(Rcpp::wrap(params)));
+            rcpp_result_gen = p_create_process_api(Shield<SEXP>(Rcpp::wrap(state)), Shield<SEXP>(Rcpp::wrap(scheduler)), Shield<SEXP>(Rcpp::wrap(params)), Shield<SEXP>(Rcpp::wrap(renderer)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -220,6 +220,48 @@ namespace individual {
         {
             RNGScope RCPP_rngScope_gen;
             rcpp_result_gen = p_fixed_probability_state_change_process(Shield<SEXP>(Rcpp::wrap(individual)), Shield<SEXP>(Rcpp::wrap(state_from)), Shield<SEXP>(Rcpp::wrap(state_to)), Shield<SEXP>(Rcpp::wrap(rate)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::XPtr<process_t> >(rcpp_result_gen);
+    }
+
+    inline Rcpp::XPtr<process_t> state_count_renderer_process(const std::string individual, const std::vector<std::string> states) {
+        typedef SEXP(*Ptr_state_count_renderer_process)(SEXP,SEXP);
+        static Ptr_state_count_renderer_process p_state_count_renderer_process = NULL;
+        if (p_state_count_renderer_process == NULL) {
+            validateSignature("Rcpp::XPtr<process_t>(*state_count_renderer_process)(const std::string,const std::vector<std::string>)");
+            p_state_count_renderer_process = (Ptr_state_count_renderer_process)R_GetCCallable("individual", "_individual_state_count_renderer_process");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_state_count_renderer_process(Shield<SEXP>(Rcpp::wrap(individual)), Shield<SEXP>(Rcpp::wrap(states)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::XPtr<process_t> >(rcpp_result_gen);
+    }
+
+    inline Rcpp::XPtr<process_t> variable_mean_renderer_process(const std::string individual, const std::vector<std::string> variables) {
+        typedef SEXP(*Ptr_variable_mean_renderer_process)(SEXP,SEXP);
+        static Ptr_variable_mean_renderer_process p_variable_mean_renderer_process = NULL;
+        if (p_variable_mean_renderer_process == NULL) {
+            validateSignature("Rcpp::XPtr<process_t>(*variable_mean_renderer_process)(const std::string,const std::vector<std::string>)");
+            p_variable_mean_renderer_process = (Ptr_variable_mean_renderer_process)R_GetCCallable("individual", "_individual_variable_mean_renderer_process");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_variable_mean_renderer_process(Shield<SEXP>(Rcpp::wrap(individual)), Shield<SEXP>(Rcpp::wrap(variables)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

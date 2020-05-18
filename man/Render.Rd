@@ -15,7 +15,7 @@ Class to render output for the simulation
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Render$new()}}
-\item \href{#method-update}{\code{Render$update()}}
+\item \href{#method-add}{\code{Render$add()}}
 \item \href{#method-to_dataframe}{\code{Render$to_dataframe()}}
 \item \href{#method-clone}{\code{Render$clone()}}
 }
@@ -26,15 +26,15 @@ Class to render output for the simulation
 Initialise a renderer for the simulation, creates the default state
 renderers
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Render$new(individuals, timesteps, renderers = list())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Render$new(timesteps)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{individuals}}{to render states for}
-
 \item{\code{timesteps}}{number of timesteps in the simulation}
+
+\item{\code{individuals}}{to render states for}
 
 \item{\code{renderers}}{additional renderers to execute. Renderers are functions
 which take a SimFrame as an argument and return a list of
@@ -44,19 +44,21 @@ scalar outputs to store to the final render}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-update"></a>}}
-\subsection{Method \code{update()}}{
+\if{html}{\out{<a id="method-add"></a>}}
+\subsection{Method \code{add()}}{
 Update the render with new simulation data
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Render$update(frame, timestep)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Render$add(name, value, timestep)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{frame}}{the new SimFrame}
+\item{\code{name}}{the variable to render}
 
-\item{\code{timestep}}{the timestep of the frame}
+\item{\code{value}}{the value to store for the variable}
+
+\item{\code{timestep}}{the timestep of the data point}
 }
 \if{html}{\out{</div>}}
 }

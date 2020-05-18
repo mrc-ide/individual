@@ -4,8 +4,9 @@ test_that("updating variables works", {
   human <- Individual$new('test', list(S), variables=list(sequence))
   state <- create_state(list(human))
   scheduler <- new.env()
-  cpp_api <- create_process_api(state, scheduler, list())
-  api <- SimAPI$new(cpp_api, scheduler, list())
+  render <- new.env()
+  cpp_api <- create_process_api(state, scheduler, list(), render)
+  api <- SimAPI$new(cpp_api, scheduler, list(), render)
 
   first <- api$get_variable(human, sequence)
   queue_updates(
@@ -33,8 +34,9 @@ test_that("updating variables at the boundaries works", {
 
   state <- create_state(list(human))
   scheduler <- new.env()
-  cpp_api <- create_process_api(state, scheduler, list())
-  api <- SimAPI$new(cpp_api, scheduler, list())
+  render <- new.env()
+  cpp_api <- create_process_api(state, scheduler, list(), render)
+  api <- SimAPI$new(cpp_api, scheduler, list(), render)
 
   before <- api$get_variable(human, sequence)
   queue_updates(
@@ -55,8 +57,9 @@ test_that("updating variables with an empty index results in a fill", {
 
   state <- create_state(list(human))
   scheduler <- new.env()
-  cpp_api <- create_process_api(state, scheduler, list())
-  api <- SimAPI$new(cpp_api, scheduler, list())
+  render <- new.env()
+  cpp_api <- create_process_api(state, scheduler, list(), render)
+  api <- SimAPI$new(cpp_api, scheduler, list(), render)
 
   before <- api$get_variable(human, sequence)
   queue_updates(
@@ -77,8 +80,9 @@ test_that("updating variables with silly indecies errors gracefully", {
 
   state <- create_state(list(human))
   scheduler <- new.env()
-  cpp_api <- create_process_api(state, scheduler, list())
-  api <- SimAPI$new(cpp_api, scheduler, list())
+  render <- new.env()
+  cpp_api <- create_process_api(state, scheduler, list(), render)
+  api <- SimAPI$new(cpp_api, scheduler, list(), render)
 
   expect_error(
     queue_updates(
@@ -112,8 +116,9 @@ test_that("updating the complete variable vector works", {
 
   state <- create_state(list(human))
   scheduler <- new.env()
-  cpp_api <- create_process_api(state, scheduler, list())
-  api <- SimAPI$new(cpp_api, scheduler, list())
+  render <- new.env()
+  cpp_api <- create_process_api(state, scheduler, list(), render)
+  api <- SimAPI$new(cpp_api, scheduler, list(), render)
 
   before <- api$get_variable(human, sequence)
 
@@ -136,8 +141,9 @@ test_that("Vector fill variable updates work", {
 
   state <- create_state(list(human))
   scheduler <- new.env()
-  cpp_api <- create_process_api(state, scheduler, list())
-  api <- SimAPI$new(cpp_api, scheduler, list())
+  render <- new.env()
+  cpp_api <- create_process_api(state, scheduler, list(), render)
+  api <- SimAPI$new(cpp_api, scheduler, list(), render)
 
   before <- api$get_variable(human, sequence)
   queue_updates(
@@ -157,8 +163,9 @@ test_that("Simulation state updates work", {
   human <- Individual$new('test', list(S, I))
   state <- create_state(list(human))
   scheduler <- new.env()
-  cpp_api <- create_process_api(state, scheduler, list())
-  api <- SimAPI$new(cpp_api, scheduler, list())
+  render <- new.env()
+  cpp_api <- create_process_api(state, scheduler, list(), render)
+  api <- SimAPI$new(cpp_api, scheduler, list(), render)
   queue_updates(api, list(StateUpdate$new(human, I, c(1, 3))))
   state_apply_updates(state)
   expect_setequal(api$get_state(human, list(I)), c(1, 3))
@@ -171,8 +178,9 @@ test_that("Simulation state updates work after null updates", {
   human <- Individual$new('test', list(S, I))
   state <- create_state(list(human))
   scheduler <- new.env()
-  cpp_api <- create_process_api(state, scheduler, list())
-  api <- SimAPI$new(cpp_api, scheduler, list())
+  render <- new.env()
+  cpp_api <- create_process_api(state, scheduler, list(), render)
+  api <- SimAPI$new(cpp_api, scheduler, list(), render)
   queue_updates(api, list(StateUpdate$new(human, I, numeric(0))))
   state_apply_updates(state)
   expect_setequal(api$get_state(human, list(I)), numeric(0))
@@ -190,8 +198,9 @@ test_that("Simulation state updates work with duplicate elements", {
   human <- Individual$new('test', list(S, I))
   state <- create_state(list(human))
   scheduler <- new.env()
-  cpp_api <- create_process_api(state, scheduler, list())
-  api <- SimAPI$new(cpp_api, scheduler, list())
+  render <- new.env()
+  cpp_api <- create_process_api(state, scheduler, list(), render)
+  api <- SimAPI$new(cpp_api, scheduler, list(), render)
   queue_updates(api, list(StateUpdate$new(human, I, c(1, 1, 3, 3))))
   state_apply_updates(state)
   expect_setequal(api$get_state(human, list(I)), c(1, 3))
