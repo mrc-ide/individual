@@ -111,13 +111,17 @@ Queue a variable update for the end of the timestep
 \subsection{Method \code{schedule()}}{
 Schedule an event to occur in the future
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimAPI$schedule(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$schedule(event, target, delay)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{..., }}{forwarded to Scheduler$schedule}
+\item{\code{event, }}{the event to schedule}
+
+\item{\code{target, }}{the individuals to pass to the listener}
+
+\item{\code{delay, }}{the number of timesteps to wait before triggering the event}
 }
 \if{html}{\out{</div>}}
 }
@@ -127,13 +131,13 @@ Schedule an event to occur in the future
 \subsection{Method \code{get_scheduled()}}{
 Get the individuals who are scheduled for a particular event
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimAPI$get_scheduled(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$get_scheduled(event)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{..., }}{forwarded to Scheduler$get_schedule}
+\item{\code{event, }}{the event of interest}
 }
 \if{html}{\out{</div>}}
 }
@@ -143,13 +147,15 @@ Get the individuals who are scheduled for a particular event
 \subsection{Method \code{clear_schedule()}}{
 Stop a future event from triggering for a subset of individuals
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimAPI$clear_schedule(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$clear_schedule(event, target)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{..., }}{forwarded to Scheduler$clear_schedule}
+\item{\code{event, }}{the event to stop}
+
+\item{\code{target, }}{the individuals to clear}
 }
 \if{html}{\out{</div>}}
 }
@@ -186,7 +192,7 @@ Get the parameters of the simulation
 \subsection{Method \code{new()}}{
 Create an R wrapper for the API
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimAPI$new(cpp_api, scheduler, parameters, renderer)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$new(cpp_api, parameters, renderer)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -194,9 +200,9 @@ Create an R wrapper for the API
 \describe{
 \item{\code{cpp_api, }}{the cpp implementation of the simulation api}
 
-\item{\code{scheduler, }}{the implementation of the scheduler interface}
-
 \item{\code{parameters, }}{model parameters}
+
+\item{\code{renderer, }}{renderer to store model outputs to}
 }
 \if{html}{\out{</div>}}
 }

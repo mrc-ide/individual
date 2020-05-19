@@ -41,14 +41,14 @@ simulate <- function(
   if (end_timestep <= 0) {
     stop('End timestep must be > 0')
   }
-  if (! is.list(individuals)) {
+  if (!is.list(individuals)) {
     individuals <- list(individuals)
   }
   render <- Render$new(end_timestep)
-  scheduler <- Scheduler$new(events, end_timestep)
+  scheduler <- create_scheduler(events)
   state <- create_state(individuals)
   cpp_api <- create_process_api(state, scheduler, parameters, render)
-  api <- SimAPI$new(cpp_api, scheduler, parameters, render)
+  api <- SimAPI$new(cpp_api, parameters, render)
   for (t in seq_len(end_timestep)) {
     for (process in processes) {
       if (inherits(process, "externalptr")) {
@@ -57,9 +57,9 @@ simulate <- function(
         queue_updates(api, process(api))
       }
     }
-    scheduler$process_events(api, cpp_api)
+    scheduler_process_events(scheduler, cpp_api, api)
     state_apply_updates(state)
-    scheduler$tick()
+    scheduler_tick(scheduler)
   }
   render$to_dataframe()
 }

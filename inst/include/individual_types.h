@@ -11,8 +11,7 @@
 #include <Rcpp.h>
 #include "State.h"
 #include "Process.h"
-
-using listener_t = std::function<void (ProcessAPI&, individual_index_t&)>;
-using process_t = std::function<void (ProcessAPI&)>;
+#include "Scheduler.h"
+#include "process_types.h"
 
 #endif /* INDIVIDUAL_TYPES_H_ */

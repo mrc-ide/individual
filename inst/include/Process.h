@@ -8,19 +8,19 @@
 #ifndef INST_INCLUDE_PROCESS_H_
 #define INST_INCLUDE_PROCESS_H_
 
-#include "individual_types.h"
 #include "State.h"
+#include "Scheduler.h"
 
 using params_t = named_array_t<std::vector<double>>;
 
 class ProcessAPI {
 private:
     Rcpp::XPtr<State> state;
-    Rcpp::Environment scheduler;
+    Rcpp::XPtr<Scheduler> scheduler;
     Rcpp::Environment renderer;
     params_t params;
 public:
-    ProcessAPI(Rcpp::XPtr<State>, Rcpp::Environment, Rcpp::List, Rcpp::Environment);
+    ProcessAPI(Rcpp::XPtr<State>, Rcpp::XPtr<Scheduler>, Rcpp::List, Rcpp::Environment);
     const individual_index_t& get_state(const std::string, std::string) const;
     const variable_vector_t& get_variable(const std::string, const std::string) const;
     void schedule(const std::string, const individual_index_t&, double);
@@ -43,15 +43,9 @@ public:
     );
 };
 
-inline Rcpp::Environment make_handle(std::string name) {
-    Rcpp::Environment env = Rcpp::new_env(1);
-    env.assign("name", name);
-    return env;
-}
-
 inline ProcessAPI::ProcessAPI(
     Rcpp::XPtr<State> state,
-    Rcpp::Environment scheduler,
+    Rcpp::XPtr<Scheduler> scheduler,
     Rcpp::List r_params,
     Rcpp::Environment renderer)
     :state(state),
@@ -77,22 +71,21 @@ inline const variable_vector_t& ProcessAPI::get_variable(
     return state->get_variable(individual, variable);
 }
 
-inline void ProcessAPI::schedule(const std::string event, const individual_index_t& index, double delay) {
-    Rcpp::Function schedule = scheduler["schedule"];
-    const auto index_vector = std::vector<size_t>(std::cbegin(index), std::cend(index));
-    schedule(make_handle(event), index_vector, delay);
+inline void ProcessAPI::schedule(
+    const std::string event,
+    const individual_index_t& index,
+    double delay) {
+    scheduler->schedule(event, index, delay);
 }
 
 inline individual_index_t ProcessAPI::get_scheduled(const std::string event) const {
-    Rcpp::Function f = scheduler["get_scheduled"];
-    Rcpp::IntegerVector result_vector = f(make_handle(event));
-    return individual_index_t(std::cbegin(result_vector), std::cend(result_vector));
+    return scheduler->get_scheduled(event);
 }
 
-inline void ProcessAPI::clear_schedule(const std::string event, const individual_index_t& index) {
-    Rcpp::Function f = scheduler["clear_scheduled"];
-    const auto index_vector = std::vector<size_t>(std::cbegin(index), std::cend(index));
-    f(make_handle(event), index_vector);
+inline void ProcessAPI::clear_schedule(
+    const std::string event,
+    const individual_index_t& index) {
+    scheduler->clear_schedule(event, index);
 }
 
 inline void ProcessAPI::render(const std::string name, double value, size_t timestep) {
@@ -105,8 +98,7 @@ inline void ProcessAPI::render(const std::string name, double value) {
 }
 
 inline size_t ProcessAPI::get_timestep() const {
-    Rcpp::Function f = scheduler["get_timestep"];
-    return Rcpp::as<size_t>(f());
+    return scheduler->get_timestep();
 }
 
 inline const params_t& ProcessAPI::get_parameters() const {

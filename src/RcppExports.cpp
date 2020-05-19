@@ -9,412 +9,19 @@
 
 using namespace Rcpp;
 
-// create_state
-Rcpp::XPtr<State> create_state(const Rcpp::List individuals);
-static SEXP _individual_create_state_try(SEXP individualsSEXP) {
+// dummy
+void dummy();
+static SEXP _individual_dummy_try() {
 BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List >::type individuals(individualsSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_state(individuals));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _individual_create_state(SEXP individualsSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_create_state_try(individualsSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// state_apply_updates
-void state_apply_updates(Rcpp::XPtr<State> state);
-static SEXP _individual_state_apply_updates_try(SEXP stateSEXP) {
-BEGIN_RCPP
-    Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
-    state_apply_updates(state);
+    dummy();
     return R_NilValue;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _individual_state_apply_updates(SEXP stateSEXP) {
+RcppExport SEXP _individual_dummy() {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_state_apply_updates_try(stateSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// create_process_api
-Rcpp::XPtr<ProcessAPI> create_process_api(Rcpp::XPtr<State> state, Rcpp::Environment scheduler, Rcpp::List params, Rcpp::Environment renderer);
-static SEXP _individual_create_process_api_try(SEXP stateSEXP, SEXP schedulerSEXP, SEXP paramsSEXP, SEXP rendererSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type scheduler(schedulerSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type params(paramsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type renderer(rendererSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_process_api(state, scheduler, params, renderer));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _individual_create_process_api(SEXP stateSEXP, SEXP schedulerSEXP, SEXP paramsSEXP, SEXP rendererSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_create_process_api_try(stateSEXP, schedulerSEXP, paramsSEXP, rendererSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// process_get_state
-std::vector<size_t> process_get_state(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::vector<std::string> states);
-static SEXP _individual_process_get_state_try(SEXP apiSEXP, SEXP individualSEXP, SEXP statesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string> >::type states(statesSEXP);
-    rcpp_result_gen = Rcpp::wrap(process_get_state(api, individual, states));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _individual_process_get_state(SEXP apiSEXP, SEXP individualSEXP, SEXP statesSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_process_get_state_try(apiSEXP, individualSEXP, statesSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// process_get_variable
-std::vector<double> process_get_variable(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable);
-static SEXP _individual_process_get_variable_try(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type variable(variableSEXP);
-    rcpp_result_gen = Rcpp::wrap(process_get_variable(api, individual, variable));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _individual_process_get_variable(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_process_get_variable_try(apiSEXP, individualSEXP, variableSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// process_queue_state_update
-void process_queue_state_update(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string state, const std::vector<size_t> index_vector);
-static SEXP _individual_process_queue_state_update_try(SEXP apiSEXP, SEXP individualSEXP, SEXP stateSEXP, SEXP index_vectorSEXP) {
-BEGIN_RCPP
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type state(stateSEXP);
-    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index_vector(index_vectorSEXP);
-    process_queue_state_update(api, individual, state, index_vector);
-    return R_NilValue;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _individual_process_queue_state_update(SEXP apiSEXP, SEXP individualSEXP, SEXP stateSEXP, SEXP index_vectorSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_process_queue_state_update_try(apiSEXP, individualSEXP, stateSEXP, index_vectorSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// process_queue_variable_update
-void process_queue_variable_update(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable, const std::vector<size_t> index, const std::vector<double> values);
-static SEXP _individual_process_queue_variable_update_try(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP, SEXP indexSEXP, SEXP valuesSEXP) {
-BEGIN_RCPP
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index(indexSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double> >::type values(valuesSEXP);
-    process_queue_variable_update(api, individual, variable, index, values);
-    return R_NilValue;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _individual_process_queue_variable_update(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP, SEXP indexSEXP, SEXP valuesSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_process_queue_variable_update_try(apiSEXP, individualSEXP, variableSEXP, indexSEXP, valuesSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// execute_process
-void execute_process(Rcpp::XPtr<process_t> process, Rcpp::XPtr<ProcessAPI> api);
-static SEXP _individual_execute_process_try(SEXP processSEXP, SEXP apiSEXP) {
-BEGIN_RCPP
-    Rcpp::traits::input_parameter< Rcpp::XPtr<process_t> >::type process(processSEXP);
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    execute_process(process, api);
-    return R_NilValue;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _individual_execute_process(SEXP processSEXP, SEXP apiSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_execute_process_try(processSEXP, apiSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// execute_listener
-void execute_listener(Rcpp::XPtr<listener_t> listener, Rcpp::XPtr<ProcessAPI> api, std::vector<size_t> target);
-static SEXP _individual_execute_listener_try(SEXP listenerSEXP, SEXP apiSEXP, SEXP targetSEXP) {
-BEGIN_RCPP
-    Rcpp::traits::input_parameter< Rcpp::XPtr<listener_t> >::type listener(listenerSEXP);
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< std::vector<size_t> >::type target(targetSEXP);
-    execute_listener(listener, api, target);
-    return R_NilValue;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _individual_execute_listener(SEXP listenerSEXP, SEXP apiSEXP, SEXP targetSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_execute_listener_try(listenerSEXP, apiSEXP, targetSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// fixed_probability_state_change_process
-Rcpp::XPtr<process_t> fixed_probability_state_change_process(const std::string individual, const std::string state_from, const std::string state_to, double rate);
-static SEXP _individual_fixed_probability_state_change_process_try(SEXP individualSEXP, SEXP state_fromSEXP, SEXP state_toSEXP, SEXP rateSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type state_from(state_fromSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type state_to(state_toSEXP);
-    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
-    rcpp_result_gen = Rcpp::wrap(fixed_probability_state_change_process(individual, state_from, state_to, rate));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _individual_fixed_probability_state_change_process(SEXP individualSEXP, SEXP state_fromSEXP, SEXP state_toSEXP, SEXP rateSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_fixed_probability_state_change_process_try(individualSEXP, state_fromSEXP, state_toSEXP, rateSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// state_count_renderer_process
-Rcpp::XPtr<process_t> state_count_renderer_process(const std::string individual, const std::vector<std::string> states);
-static SEXP _individual_state_count_renderer_process_try(SEXP individualSEXP, SEXP statesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string> >::type states(statesSEXP);
-    rcpp_result_gen = Rcpp::wrap(state_count_renderer_process(individual, states));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _individual_state_count_renderer_process(SEXP individualSEXP, SEXP statesSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_state_count_renderer_process_try(individualSEXP, statesSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// variable_mean_renderer_process
-Rcpp::XPtr<process_t> variable_mean_renderer_process(const std::string individual, const std::vector<std::string> variables);
-static SEXP _individual_variable_mean_renderer_process_try(SEXP individualSEXP, SEXP variablesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string> >::type variables(variablesSEXP);
-    rcpp_result_gen = Rcpp::wrap(variable_mean_renderer_process(individual, variables));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _individual_variable_mean_renderer_process(SEXP individualSEXP, SEXP variablesSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_variable_mean_renderer_process_try(individualSEXP, variablesSEXP));
+        rcpp_result_gen = PROTECT(_individual_dummy_try());
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -436,132 +43,285 @@ RcppExport SEXP _individual_variable_mean_renderer_process(SEXP individualSEXP, 
 }
 // update_state_listener
 Rcpp::XPtr<listener_t> update_state_listener(const std::string individual, const std::string state);
-static SEXP _individual_update_state_listener_try(SEXP individualSEXP, SEXP stateSEXP) {
+RcppExport SEXP _individual_update_state_listener(SEXP individualSEXP, SEXP stateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
     Rcpp::traits::input_parameter< const std::string >::type state(stateSEXP);
     rcpp_result_gen = Rcpp::wrap(update_state_listener(individual, state));
     return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _individual_update_state_listener(SEXP individualSEXP, SEXP stateSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_update_state_listener_try(individualSEXP, stateSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
+END_RCPP
 }
 // reschedule_listener
 Rcpp::XPtr<listener_t> reschedule_listener(const std::string event, double delay);
-static SEXP _individual_reschedule_listener_try(SEXP eventSEXP, SEXP delaySEXP) {
+RcppExport SEXP _individual_reschedule_listener(SEXP eventSEXP, SEXP delaySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
     Rcpp::traits::input_parameter< double >::type delay(delaySEXP);
     rcpp_result_gen = Rcpp::wrap(reschedule_listener(event, delay));
     return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
+END_RCPP
 }
-RcppExport SEXP _individual_reschedule_listener(SEXP eventSEXP, SEXP delaySEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_individual_reschedule_listener_try(eventSEXP, delaySEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
+// fixed_probability_state_change_process
+Rcpp::XPtr<process_t> fixed_probability_state_change_process(const std::string individual, const std::string from_state, const std::string to_state, double rate);
+RcppExport SEXP _individual_fixed_probability_state_change_process(SEXP individualSEXP, SEXP from_stateSEXP, SEXP to_stateSEXP, SEXP rateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type from_state(from_stateSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type to_state(to_stateSEXP);
+    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
+    rcpp_result_gen = Rcpp::wrap(fixed_probability_state_change_process(individual, from_state, to_state, rate));
     return rcpp_result_gen;
+END_RCPP
+}
+// state_count_renderer_process
+Rcpp::XPtr<process_t> state_count_renderer_process(const std::string individual, const std::vector<std::string> states);
+RcppExport SEXP _individual_state_count_renderer_process(SEXP individualSEXP, SEXP statesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string> >::type states(statesSEXP);
+    rcpp_result_gen = Rcpp::wrap(state_count_renderer_process(individual, states));
+    return rcpp_result_gen;
+END_RCPP
+}
+// variable_mean_renderer_process
+Rcpp::XPtr<process_t> variable_mean_renderer_process(const std::string individual, const std::vector<std::string> variables);
+RcppExport SEXP _individual_variable_mean_renderer_process(SEXP individualSEXP, SEXP variablesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string> >::type variables(variablesSEXP);
+    rcpp_result_gen = Rcpp::wrap(variable_mean_renderer_process(individual, variables));
+    return rcpp_result_gen;
+END_RCPP
+}
+// execute_process
+void execute_process(Rcpp::XPtr<process_t> process, Rcpp::XPtr<ProcessAPI> api);
+RcppExport SEXP _individual_execute_process(SEXP processSEXP, SEXP apiSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<process_t> >::type process(processSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    execute_process(process, api);
+    return R_NilValue;
+END_RCPP
+}
+// create_process_api
+Rcpp::XPtr<ProcessAPI> create_process_api(Rcpp::XPtr<State> state, Rcpp::XPtr<Scheduler> scheduler, Rcpp::List params, Rcpp::Environment renderer);
+RcppExport SEXP _individual_create_process_api(SEXP stateSEXP, SEXP schedulerSEXP, SEXP paramsSEXP, SEXP rendererSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<Scheduler> >::type scheduler(schedulerSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type params(paramsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Environment >::type renderer(rendererSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_process_api(state, scheduler, params, renderer));
+    return rcpp_result_gen;
+END_RCPP
+}
+// process_get_state
+std::vector<size_t> process_get_state(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::vector<std::string> states);
+RcppExport SEXP _individual_process_get_state(SEXP apiSEXP, SEXP individualSEXP, SEXP statesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string> >::type states(statesSEXP);
+    rcpp_result_gen = Rcpp::wrap(process_get_state(api, individual, states));
+    return rcpp_result_gen;
+END_RCPP
+}
+// process_get_variable
+std::vector<double> process_get_variable(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable);
+RcppExport SEXP _individual_process_get_variable(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(process_get_variable(api, individual, variable));
+    return rcpp_result_gen;
+END_RCPP
+}
+// process_queue_state_update
+void process_queue_state_update(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string state, const std::vector<size_t> index_vector);
+RcppExport SEXP _individual_process_queue_state_update(SEXP apiSEXP, SEXP individualSEXP, SEXP stateSEXP, SEXP index_vectorSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type state(stateSEXP);
+    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index_vector(index_vectorSEXP);
+    process_queue_state_update(api, individual, state, index_vector);
+    return R_NilValue;
+END_RCPP
+}
+// process_queue_variable_update
+void process_queue_variable_update(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable, const std::vector<size_t> index, const std::vector<double> values);
+RcppExport SEXP _individual_process_queue_variable_update(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP, SEXP indexSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index(indexSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type values(valuesSEXP);
+    process_queue_variable_update(api, individual, variable, index, values);
+    return R_NilValue;
+END_RCPP
+}
+// process_schedule
+void process_schedule(Rcpp::XPtr<ProcessAPI> api, const std::string event, const std::vector<size_t> index_vector, double delay);
+RcppExport SEXP _individual_process_schedule(SEXP apiSEXP, SEXP eventSEXP, SEXP index_vectorSEXP, SEXP delaySEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index_vector(index_vectorSEXP);
+    Rcpp::traits::input_parameter< double >::type delay(delaySEXP);
+    process_schedule(api, event, index_vector, delay);
+    return R_NilValue;
+END_RCPP
+}
+// process_get_scheduled
+std::vector<size_t> process_get_scheduled(Rcpp::XPtr<ProcessAPI> api, const std::string event);
+RcppExport SEXP _individual_process_get_scheduled(SEXP apiSEXP, SEXP eventSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
+    rcpp_result_gen = Rcpp::wrap(process_get_scheduled(api, event));
+    return rcpp_result_gen;
+END_RCPP
+}
+// process_clear_schedule
+void process_clear_schedule(Rcpp::XPtr<ProcessAPI> api, const std::string event, const std::vector<size_t> index_vector);
+RcppExport SEXP _individual_process_clear_schedule(SEXP apiSEXP, SEXP eventSEXP, SEXP index_vectorSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index_vector(index_vectorSEXP);
+    process_clear_schedule(api, event, index_vector);
+    return R_NilValue;
+END_RCPP
+}
+// process_get_timestep
+size_t process_get_timestep(Rcpp::XPtr<ProcessAPI> api);
+RcppExport SEXP _individual_process_get_timestep(SEXP apiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    rcpp_result_gen = Rcpp::wrap(process_get_timestep(api));
+    return rcpp_result_gen;
+END_RCPP
+}
+// create_scheduler
+Rcpp::XPtr<Scheduler> create_scheduler(const Rcpp::List events);
+RcppExport SEXP _individual_create_scheduler(SEXP eventsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type events(eventsSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_scheduler(events));
+    return rcpp_result_gen;
+END_RCPP
+}
+// scheduler_tick
+void scheduler_tick(const Rcpp::XPtr<Scheduler> scheduler);
+RcppExport SEXP _individual_scheduler_tick(SEXP schedulerSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<Scheduler> >::type scheduler(schedulerSEXP);
+    scheduler_tick(scheduler);
+    return R_NilValue;
+END_RCPP
+}
+// scheduler_process_events
+void scheduler_process_events(const Rcpp::XPtr<Scheduler> scheduler, const Rcpp::XPtr<ProcessAPI> cpp_api, const Rcpp::Environment r_api);
+RcppExport SEXP _individual_scheduler_process_events(SEXP schedulerSEXP, SEXP cpp_apiSEXP, SEXP r_apiSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<Scheduler> >::type scheduler(schedulerSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<ProcessAPI> >::type cpp_api(cpp_apiSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::Environment >::type r_api(r_apiSEXP);
+    scheduler_process_events(scheduler, cpp_api, r_api);
+    return R_NilValue;
+END_RCPP
+}
+// create_state
+Rcpp::XPtr<State> create_state(const Rcpp::List individuals);
+RcppExport SEXP _individual_create_state(SEXP individualsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type individuals(individualsSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_state(individuals));
+    return rcpp_result_gen;
+END_RCPP
+}
+// state_apply_updates
+void state_apply_updates(Rcpp::XPtr<State> state);
+RcppExport SEXP _individual_state_apply_updates(SEXP stateSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
+    state_apply_updates(state);
+    return R_NilValue;
+END_RCPP
 }
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _individual_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("Rcpp::XPtr<State>(*create_state)(const Rcpp::List)");
-        signatures.insert("void(*state_apply_updates)(Rcpp::XPtr<State>)");
-        signatures.insert("Rcpp::XPtr<ProcessAPI>(*create_process_api)(Rcpp::XPtr<State>,Rcpp::Environment,Rcpp::List,Rcpp::Environment)");
-        signatures.insert("std::vector<size_t>(*process_get_state)(Rcpp::XPtr<ProcessAPI>,const std::string,const std::vector<std::string>)");
-        signatures.insert("std::vector<double>(*process_get_variable)(Rcpp::XPtr<ProcessAPI>,const std::string,const std::string)");
-        signatures.insert("void(*process_queue_state_update)(Rcpp::XPtr<ProcessAPI>,const std::string,const std::string,const std::vector<size_t>)");
-        signatures.insert("void(*process_queue_variable_update)(Rcpp::XPtr<ProcessAPI>,const std::string,const std::string,const std::vector<size_t>,const std::vector<double>)");
-        signatures.insert("void(*execute_process)(Rcpp::XPtr<process_t>,Rcpp::XPtr<ProcessAPI>)");
-        signatures.insert("void(*execute_listener)(Rcpp::XPtr<listener_t>,Rcpp::XPtr<ProcessAPI>,std::vector<size_t>)");
-        signatures.insert("Rcpp::XPtr<process_t>(*fixed_probability_state_change_process)(const std::string,const std::string,const std::string,double)");
-        signatures.insert("Rcpp::XPtr<process_t>(*state_count_renderer_process)(const std::string,const std::vector<std::string>)");
-        signatures.insert("Rcpp::XPtr<process_t>(*variable_mean_renderer_process)(const std::string,const std::vector<std::string>)");
-        signatures.insert("Rcpp::XPtr<listener_t>(*update_state_listener)(const std::string,const std::string)");
-        signatures.insert("Rcpp::XPtr<listener_t>(*reschedule_listener)(const std::string,double)");
+        signatures.insert("void(*dummy)()");
     }
     return signatures.find(sig) != signatures.end();
 }
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP _individual_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("individual", "_individual_create_state", (DL_FUNC)_individual_create_state_try);
-    R_RegisterCCallable("individual", "_individual_state_apply_updates", (DL_FUNC)_individual_state_apply_updates_try);
-    R_RegisterCCallable("individual", "_individual_create_process_api", (DL_FUNC)_individual_create_process_api_try);
-    R_RegisterCCallable("individual", "_individual_process_get_state", (DL_FUNC)_individual_process_get_state_try);
-    R_RegisterCCallable("individual", "_individual_process_get_variable", (DL_FUNC)_individual_process_get_variable_try);
-    R_RegisterCCallable("individual", "_individual_process_queue_state_update", (DL_FUNC)_individual_process_queue_state_update_try);
-    R_RegisterCCallable("individual", "_individual_process_queue_variable_update", (DL_FUNC)_individual_process_queue_variable_update_try);
-    R_RegisterCCallable("individual", "_individual_execute_process", (DL_FUNC)_individual_execute_process_try);
-    R_RegisterCCallable("individual", "_individual_execute_listener", (DL_FUNC)_individual_execute_listener_try);
-    R_RegisterCCallable("individual", "_individual_fixed_probability_state_change_process", (DL_FUNC)_individual_fixed_probability_state_change_process_try);
-    R_RegisterCCallable("individual", "_individual_state_count_renderer_process", (DL_FUNC)_individual_state_count_renderer_process_try);
-    R_RegisterCCallable("individual", "_individual_variable_mean_renderer_process", (DL_FUNC)_individual_variable_mean_renderer_process_try);
-    R_RegisterCCallable("individual", "_individual_update_state_listener", (DL_FUNC)_individual_update_state_listener_try);
-    R_RegisterCCallable("individual", "_individual_reschedule_listener", (DL_FUNC)_individual_reschedule_listener_try);
+    R_RegisterCCallable("individual", "_individual_dummy", (DL_FUNC)_individual_dummy_try);
     R_RegisterCCallable("individual", "_individual_RcppExport_validate", (DL_FUNC)_individual_RcppExport_validate);
     return R_NilValue;
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_individual_create_state", (DL_FUNC) &_individual_create_state, 1},
-    {"_individual_state_apply_updates", (DL_FUNC) &_individual_state_apply_updates, 1},
+    {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
+    {"_individual_update_state_listener", (DL_FUNC) &_individual_update_state_listener, 2},
+    {"_individual_reschedule_listener", (DL_FUNC) &_individual_reschedule_listener, 2},
+    {"_individual_fixed_probability_state_change_process", (DL_FUNC) &_individual_fixed_probability_state_change_process, 4},
+    {"_individual_state_count_renderer_process", (DL_FUNC) &_individual_state_count_renderer_process, 2},
+    {"_individual_variable_mean_renderer_process", (DL_FUNC) &_individual_variable_mean_renderer_process, 2},
+    {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_create_process_api", (DL_FUNC) &_individual_create_process_api, 4},
     {"_individual_process_get_state", (DL_FUNC) &_individual_process_get_state, 3},
     {"_individual_process_get_variable", (DL_FUNC) &_individual_process_get_variable, 3},
     {"_individual_process_queue_state_update", (DL_FUNC) &_individual_process_queue_state_update, 4},
     {"_individual_process_queue_variable_update", (DL_FUNC) &_individual_process_queue_variable_update, 5},
-    {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
-    {"_individual_execute_listener", (DL_FUNC) &_individual_execute_listener, 3},
-    {"_individual_fixed_probability_state_change_process", (DL_FUNC) &_individual_fixed_probability_state_change_process, 4},
-    {"_individual_state_count_renderer_process", (DL_FUNC) &_individual_state_count_renderer_process, 2},
-    {"_individual_variable_mean_renderer_process", (DL_FUNC) &_individual_variable_mean_renderer_process, 2},
-    {"_individual_update_state_listener", (DL_FUNC) &_individual_update_state_listener, 2},
-    {"_individual_reschedule_listener", (DL_FUNC) &_individual_reschedule_listener, 2},
+    {"_individual_process_schedule", (DL_FUNC) &_individual_process_schedule, 4},
+    {"_individual_process_get_scheduled", (DL_FUNC) &_individual_process_get_scheduled, 2},
+    {"_individual_process_clear_schedule", (DL_FUNC) &_individual_process_clear_schedule, 3},
+    {"_individual_process_get_timestep", (DL_FUNC) &_individual_process_get_timestep, 1},
+    {"_individual_create_scheduler", (DL_FUNC) &_individual_create_scheduler, 1},
+    {"_individual_scheduler_tick", (DL_FUNC) &_individual_scheduler_tick, 1},
+    {"_individual_scheduler_process_events", (DL_FUNC) &_individual_scheduler_process_events, 3},
+    {"_individual_create_state", (DL_FUNC) &_individual_create_state, 1},
+    {"_individual_state_apply_updates", (DL_FUNC) &_individual_state_apply_updates, 1},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

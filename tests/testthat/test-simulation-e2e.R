@@ -113,11 +113,11 @@ test_that("deterministic state model w events works", {
   )
 
   infection$add_listener(function(simulation, target) {
-    StateUpdate$new(human, I, target)
+    simulation$queue_state_update(human, I, target)
   })
 
   recovery$add_listener(function(simulation, target) {
-    StateUpdate$new(human, R, target)
+    simulation$queue_state_update(human, R, target)
   })
 
   delayed_shift_generator <- function(from, to, event, delay, rate) {
@@ -127,7 +127,6 @@ test_that("deterministic state model w events works", {
       from_state <- setdiff(from_state, simulation$get_scheduled(event))
       target <- from_state[seq_len(min(rate,length(from_state)))]
       simulation$schedule(event, target, delay);
-      return()
     })
   }
 
@@ -145,8 +144,8 @@ test_that("deterministic state model w events works", {
     human_R_count = c(0, 0, 0, 0, 0, 1)
   )
   expect_mapequal(
-    expected_render,
-    render
+    render,
+    expected_render
   )
 })
 

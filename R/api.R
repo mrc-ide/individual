@@ -58,29 +58,32 @@ SimAPI <- R6::R6Class(
 
     #' @description
     #' Schedule an event to occur in the future
-    #' @param ..., forwarded to Scheduler$schedule
-    schedule = function(...) {
-      private$.scheduler$schedule(...)
+    #' @param event, the event to schedule
+    #' @param target, the individuals to pass to the listener
+    #' @param delay, the number of timesteps to wait before triggering the event
+    schedule = function(event, target, delay) {
+      process_schedule(private$.api, event$name, target, delay)
     },
 
     #' @description
     #' Get the individuals who are scheduled for a particular event
-    #' @param ..., forwarded to Scheduler$get_schedule
-    get_scheduled = function(...) {
-      private$.scheduler$get_scheduled(...)
+    #' @param event, the event of interest
+    get_scheduled = function(event) {
+      process_get_scheduled(private$.api, event$name)
     },
 
     #' @description
     #' Stop a future event from triggering for a subset of individuals
-    #' @param ..., forwarded to Scheduler$clear_schedule
-    clear_schedule = function(...) {
-      private$.scheduler$clear_schedule(...)
+    #' @param event, the event to stop
+    #' @param target, the individuals to clear
+    clear_schedule = function(event, target) {
+      process_clear_schedule(private$.api, event$name, target)
     },
 
     #' @description
     #' Get the current timestep of the simulation
     get_timestep = function() {
-      private$.scheduler$get_timestep()
+      process_get_timestep(private$.api)
     },
 
     #' @description
@@ -101,11 +104,10 @@ SimAPI <- R6::R6Class(
     #' @description
     #' Create an R wrapper for the API
     #' @param cpp_api, the cpp implementation of the simulation api
-    #' @param scheduler, the implementation of the scheduler interface
     #' @param parameters, model parameters
-    initialize = function(cpp_api, scheduler, parameters, renderer) {
+    #' @param renderer, renderer to store model outputs to
+    initialize = function(cpp_api, parameters, renderer) {
       private$.api <- cpp_api
-      private$.scheduler <- scheduler
       private$.parameters <- parameters
       private$.renderer <- renderer
     }

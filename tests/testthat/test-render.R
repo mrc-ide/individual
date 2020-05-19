@@ -24,24 +24,21 @@ test_that("Prefab state counts work correctly", {
   R <- State$new('R', 0)
   human <- Individual$new('human', list(S, I, R))
 
-  state <- create_state(list(human))
-  scheduler <- Scheduler$new(list(), 2)
   render <- Render$new(2)
-  cpp_api <- create_process_api(state, scheduler, list(), render)
-  r_api <- SimAPI$new(cpp_api, scheduler, list(), render)
+  sim <- setup_simulation(list(human), renderer = render)
 
   render_states <- state_count_renderer_process(
     human$name,
     c(S$name, I$name, R$name)
   )
 
-  execute_process(render_states, cpp_api)
+  execute_process(render_states, sim$cpp_api)
 
-  r_api$queue_state_update(human, I, c(3, 6))
-  state_apply_updates(state)
-  scheduler$tick()
+  sim$r_api$queue_state_update(human, I, c(3, 6))
+  state_apply_updates(sim$state)
+  scheduler_tick(sim$scheduler)
 
-  execute_process(render_states, cpp_api)
+  execute_process(render_states, sim$cpp_api)
 
   rendered <- render$to_dataframe()
   expected <- data.frame(
@@ -61,23 +58,20 @@ test_that("Prefab variable summaries work correctly", {
   sequence_2 <- Variable$new('sequence_2', function(size) seq_len(size) * 10)
   human <- Individual$new('human', list(S, I, R), list(sequence, sequence_2))
   render <- Render$new(2)
-  state <- create_state(list(human))
-  scheduler <- Scheduler$new(list(), 2)
-  cpp_api <- create_process_api(state, scheduler, list(), render)
-  r_api <- SimAPI$new(cpp_api, scheduler, list(), render)
+  sim <- setup_simulation(list(human), renderer = render)
 
   render_variables <- variable_mean_renderer_process(
     human$name,
     c(sequence$name, sequence_2$name)
   )
 
-  execute_process(render_variables, cpp_api)
+  execute_process(render_variables, sim$cpp_api)
 
-  r_api$queue_variable_update(human, sequence, c((1:50) * 2, 51:110))
-  state_apply_updates(state)
-  scheduler$tick()
+  sim$r_api$queue_variable_update(human, sequence, c((1:50) * 2, 51:110))
+  state_apply_updates(sim$state)
+  scheduler_tick(sim$scheduler)
 
-  execute_process(render_variables, cpp_api)
+  execute_process(render_variables, sim$cpp_api)
 
   rendered <- render$to_dataframe()
   expected <- data.frame(
