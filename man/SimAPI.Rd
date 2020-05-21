@@ -87,7 +87,19 @@ Queue a state update for the end of the timestep
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-queue_variable_update"></a>}}
 \subsection{Method \code{queue_variable_update()}}{
-Queue a variable update for the end of the timestep
+Queue an update for a variable. There are 4 types of variable
+update:
+
+1. Subset update. The index vector represents a subset of the variable to
+update. The value vector, of the same size, represents the new values for
+that subset
+2. Subset fill. The index vector represents a subset of the variable to
+update. The value vector, of size 1, will fill the specified subset
+3. Variable reset. The index vector is set to `NULL` and the value vector
+replaces all of the current values in the simulation. The value vector is
+should match the size of the population.
+4. Variable fill. The index vector is set to `NULL` and the value vector,
+of size 1, is used to fill all of the variable values in the population.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimAPI$queue_variable_update(individual, variable, values, index = numeric(0))}\if{html}{\out{</div>}}
 }
@@ -95,13 +107,14 @@ Queue a variable update for the end of the timestep
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{individual}}{the individual of interest}
+\item{\code{individual}}{is the type of individual to update}
 
-\item{\code{variable}}{the variable to update}
+\item{\code{variable}}{a Variable object representing the variable to change}
 
-\item{\code{values}}{the values to apply at index}
+\item{\code{index}}{is the index at which to apply the change, use NULL for the
+fill options}
 
-\item{\code{index}}{the index of individuals to update}
+\item{\code{value}}{a vector or scalar of values to assign at the index}
 }
 \if{html}{\out{</div>}}
 }

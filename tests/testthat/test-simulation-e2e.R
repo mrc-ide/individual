@@ -32,7 +32,7 @@ test_that("deterministic state model works", {
   shift_generator <- function(from, to, rate) {
     return(function(simulation) {
       from_state <- simulation$get_state(human, from)
-      StateUpdate$new(
+      simulation$queue_state_update(
         human,
         to,
         from_state[seq_len(min(rate,length(from_state)))]
@@ -70,7 +70,7 @@ test_that("deterministic state model works w parameters", {
     return(function(simulation) {
       from_state <- simulation$get_state(human, from)
       rate <- simulation$get_parameters()$rate
-      StateUpdate$new(
+      simulation$queue_state_update(
         human,
         to,
         from_state[seq_len(min(rate,length(from_state)))]
@@ -160,7 +160,7 @@ test_that("deterministic state model works w 2 individuals", {
   shift_generator <- function(individual, from, to, rate) {
     return(function(simulation) {
       from_state <- simulation$get_state(individual, from)
-      StateUpdate$new(
+      simulation$queue_state_update(
         individual,
         to,
         from_state[seq_len(min(rate,length(from_state)))]
@@ -205,7 +205,7 @@ test_that("deterministic state & variable model works", {
   shift_generator <- function(from, to, rate) {
     return(function(simulation) {
       from_state <- simulation$get_state(human, from)
-      StateUpdate$new(
+      simulation$queue_state_update(
         human,
         to,
         from_state[seq_len(min(rate,length(from_state)))]
@@ -214,7 +214,7 @@ test_that("deterministic state & variable model works", {
   }
 
   doubler <- function(simulation) {
-    VariableUpdate$new(
+    simulation$queue_variable_update(
       human,
       value,
       simulation$get_variable(human, value) * 2

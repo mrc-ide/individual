@@ -5,16 +5,10 @@ test_that("updating variables works", {
   sim <- setup_simulation(list(human))
 
   first <- sim$r_api$get_variable(human, sequence)
-  queue_updates(
-    sim$r_api,
-    list(VariableUpdate$new(human, sequence, (1:5) * 2, 1:5))
-  )
+  sim$r_api$queue_variable_update(human, sequence, (1:5) * 2, 1:5)
   state_apply_updates(sim$state)
   middle <- sim$r_api$get_variable(human, sequence)
-  queue_updates(
-    sim$r_api,
-    list(VariableUpdate$new(human, sequence, 11, 2:6))
-  )
+  sim$r_api$queue_variable_update(human, sequence, 11, 2:6)
   state_apply_updates(sim$state)
   last <- sim$r_api$get_variable(human, sequence)
 
@@ -31,10 +25,7 @@ test_that("updating variables at the boundaries works", {
   sim <- setup_simulation(list(human))
 
   before <- sim$r_api$get_variable(human, sequence)
-  queue_updates(
-    sim$r_api,
-    list(VariableUpdate$new(human, sequence, 2, 10))
-  )
+  sim$r_api$queue_variable_update(human, sequence, 2, 10)
   state_apply_updates(sim$state)
   after <- sim$r_api$get_variable(human, sequence)
 
@@ -50,10 +41,7 @@ test_that("updating variables with an empty index results in a fill", {
   sim <- setup_simulation(list(human))
 
   before <- sim$r_api$get_variable(human, sequence)
-  queue_updates(
-    sim$r_api,
-    list(VariableUpdate$new(human, sequence, 11, numeric(0)))
-  )
+  sim$r_api$queue_variable_update(human, sequence, 11, numeric(0))
   state_apply_updates(sim$state)
   after <- sim$r_api$get_variable(human, sequence)
 
@@ -69,26 +57,17 @@ test_that("updating variables with silly indecies errors gracefully", {
   sim <- setup_simulation(list(human))
 
   expect_error(
-    queue_updates(
-      sim$r_api,
-      list(VariableUpdate$new(human, sequence, c(1.0, 2.0), 1:5))
-    ),
+    sim$r_api$queue_variable_update(human, sequence, c(1.0, 2.0), 1:5),
     '*'
   )
 
   expect_error(
-    queue_updates(
-      sim$r_api,
-      list(VariableUpdate$new(human, sequence, 11, -1:3))
-    ),
+    sim$r_api$queue_variable_update(human, sequence, 11, -1:3),
     '*'
   )
 
   expect_error(
-    queue_updates(
-      sim$r_api,
-      list(VariableUpdate$new(human, sequence, 11, 9:15))
-    ),
+    sim$r_api$queue_variable_update(human, sequence, 11, 9:15),
     '*'
   )
 })
@@ -102,10 +81,7 @@ test_that("updating the complete variable vector works", {
 
   before <- sim$r_api$get_variable(human, sequence)
 
-  queue_updates(
-    sim$r_api,
-    list(VariableUpdate$new(human, sequence, 11:20))
-  )
+  sim$r_api$queue_variable_update(human, sequence, 11:20)
   state_apply_updates(sim$state)
 
   after <- sim$r_api$get_variable(human, sequence)
@@ -122,10 +98,7 @@ test_that("Vector fill variable updates work", {
   sim <- setup_simulation(list(human))
 
   before <- sim$r_api$get_variable(human, sequence)
-  queue_updates(
-    sim$r_api,
-    list(VariableUpdate$new(human, sequence, 14))
-  )
+  sim$r_api$queue_variable_update(human, sequence, 14)
   state_apply_updates(sim$state)
   after <- sim$r_api$get_variable(human, sequence)
 
@@ -138,7 +111,7 @@ test_that("Simulation state updates work", {
   I <- State$new('I', 0)
   human <- Individual$new('test', list(S, I))
   sim <- setup_simulation(list(human))
-  queue_updates(sim$r_api, list(StateUpdate$new(human, I, c(1, 3))))
+  sim$r_api$queue_state_update(human, I, c(1, 3))
   state_apply_updates(sim$state)
   expect_setequal(sim$r_api$get_state(human, list(I)), c(1, 3))
   expect_setequal(sim$r_api$get_state(human, list(S)), c(2, 4:10))
@@ -149,11 +122,11 @@ test_that("Simulation state updates work after null updates", {
   I <- State$new('I', 0)
   human <- Individual$new('test', list(S, I))
   sim <- setup_simulation(list(human))
-  queue_updates(sim$r_api, list(StateUpdate$new(human, I, numeric(0))))
+  sim$r_api$queue_state_update(human, I, numeric(0))
   state_apply_updates(sim$state)
   expect_setequal(sim$r_api$get_state(human, list(I)), numeric(0))
   expect_setequal(sim$r_api$get_state(human, list(S)), c(1:10))
-  queue_updates(sim$r_api, list(StateUpdate$new(human, I, c(1, 3))))
+  sim$r_api$queue_state_update(human, I, c(1, 3))
   state_apply_updates(sim$state)
   expect_setequal(sim$r_api$get_state(human, list(I)), c(1, 3))
   expect_setequal(sim$r_api$get_state(human, list(S)), c(2, 4:10))
@@ -165,7 +138,7 @@ test_that("Simulation state updates work with duplicate elements", {
   I <- State$new('I', 0)
   human <- Individual$new('test', list(S, I))
   sim <- setup_simulation(list(human))
-  queue_updates(sim$r_api, list(StateUpdate$new(human, I, c(1, 1, 3, 3))))
+  sim$r_api$queue_state_update(human, I, c(1, 1, 3, 3))
   state_apply_updates(sim$state)
   expect_setequal(sim$r_api$get_state(human, list(I)), c(1, 3))
   expect_setequal(sim$r_api$get_state(human, list(S)), c(2, 4:10))

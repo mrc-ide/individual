@@ -54,7 +54,7 @@ simulate <- function(
       if (inherits(process, "externalptr")) {
         execute_process(process, cpp_api)
       } else {
-        queue_updates(api, process(api))
+        process(api)
       }
     }
     scheduler_process_events(scheduler, cpp_api, api)

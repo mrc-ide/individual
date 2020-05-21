@@ -51,11 +51,24 @@ SimAPI <- R6::R6Class(
     },
 
     #' @description
-    #' Queue a variable update for the end of the timestep
-    #' @param individual the individual of interest
-    #' @param variable the variable to update
-    #' @param index the index of individuals to update
-    #' @param values the values to apply at index
+    #' Queue an update for a variable. There are 4 types of variable
+    #' update:
+    #'
+    #' 1. Subset update. The index vector represents a subset of the variable to
+    #' update. The value vector, of the same size, represents the new values for
+    #' that subset
+    #' 2. Subset fill. The index vector represents a subset of the variable to
+    #' update. The value vector, of size 1, will fill the specified subset
+    #' 3. Variable reset. The index vector is set to `NULL` and the value vector
+    #' replaces all of the current values in the simulation. The value vector is
+    #' should match the size of the population.
+    #' 4. Variable fill. The index vector is set to `NULL` and the value vector,
+    #' of size 1, is used to fill all of the variable values in the population.
+    #' @param individual is the type of individual to update
+    #' @param variable a Variable object representing the variable to change
+    #' @param value a vector or scalar of values to assign at the index
+    #' @param index is the index at which to apply the change, use NULL for the
+    #' fill options
     queue_variable_update = function(individual, variable, values, index=numeric(0)) {
       process_queue_variable_update(
         private$.api,
@@ -123,27 +136,3 @@ SimAPI <- R6::R6Class(
     }
   )
 )
-
-#' @description
-#' A utility function to queue updates that are returned from processes
-#' @param api, the interface to the simulation state
-#' @param updates, the list of updates to enqueue
-queue_updates <- function(api, updates) {
-  if (!is.null(updates)) {
-    if(!is.vector(updates)) {
-      updates <- list(updates)
-    }
-    for (update in updates) {
-      if (update$type == 'state') {
-        api$queue_state_update(update$individual, update$state, update$index)
-      } else if (update$type == 'variable') {
-        api$queue_variable_update(
-          update$individual,
-          update$variable,
-          update$value,
-          update$index
-        )
-      }
-    }
-  }
-}
