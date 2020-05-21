@@ -51,7 +51,7 @@ Get the index of individuals with a particular state
 \subsection{Method \code{get_variable()}}{
 Get a variable vector for an individual
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimAPI$get_variable(individual, variable)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$get_variable(individual, variable, index = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

@@ -46,3 +46,16 @@ test_that("getting variables works", {
   expect_equal(sim$r_api$get_variable(human, sequence), 1:10)
   expect_equal(sim$r_api$get_variable(human, sequence_2), (1:10) + 10)
 })
+
+test_that("getting variables at an index works", {
+  S <- State$new('S', 10)
+  sequence <- Variable$new('sequence', function(size) seq_len(size))
+  sequence_2 <- Variable$new('sequence 2', function(size) seq_len(size) + 10)
+  human <- Individual$new('test', list(S), variables=list(sequence, sequence_2))
+
+  sim <- setup_simulation(list(human))
+
+  expect_equal(sim$r_api$get_variable(human, sequence, NULL), 1:10)
+  expect_error(sim$r_api$get_variable(human, sequence_2, 5:15), '*')
+  expect_equal(sim$r_api$get_variable(human, sequence_2, 5:10), 15:20)
+})

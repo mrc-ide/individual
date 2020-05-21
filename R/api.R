@@ -22,8 +22,18 @@ SimAPI <- R6::R6Class(
     #' Get a variable vector for an individual
     #' @param individual the individual of interest
     #' @param variable the variable of interest
-    get_variable = function(individual, variable) {
-      process_get_variable(private$.api, individual$name, variable$name)
+    get_variable = function(individual, variable, index=NULL) {
+      if (is.null(index)) {
+        return(
+          process_get_variable(private$.api, individual$name, variable$name)
+        )
+      }
+      process_get_variable_at_index(
+        private$.api,
+        individual$name,
+        variable$name,
+        index - 1
+      )
     },
 
     #' @description

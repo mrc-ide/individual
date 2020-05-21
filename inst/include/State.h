@@ -41,10 +41,16 @@ class State {
 public:
     State(const sim_state_spec_t&);
     void apply_updates();
-    const individual_index_t& get_state(const std::string, const std::string) const;
-    const variable_vector_t& get_variable(const std::string, const std::string) const;
-    void queue_state_update(const std::string, const std::string, const individual_index_t&);
-    void queue_variable_update(const std::string, const std::string, const std::vector<size_t>&, const variable_vector_t&);
+    const individual_index_t& get_state(const std::string&, const std::string&) const;
+    const variable_vector_t& get_variable(const std::string&, const std::string&) const;
+    void get_variable(
+        const std::string&,
+        const std::string&,
+        const std::vector<size_t>&,
+        std::vector<double>&
+        ) const;
+    void queue_state_update(const std::string&, const std::string&, const individual_index_t&);
+    void queue_variable_update(const std::string&, const std::string&, const std::vector<size_t>&, const variable_vector_t&);
 };
 
 inline State::State(const sim_state_spec_t& spec) {
@@ -159,8 +165,8 @@ inline void State::apply_variable_update(const variable_update_t& update) {
 }
 
 inline const individual_index_t& State::get_state(
-    std::string individual,
-    std::string state_name) const {
+    const std::string& individual,
+    const std::string& state_name) const {
     const auto& individual_states = states.at(individual);
     if (individual_states.find(state_name) == individual_states.end()) {
         Rcpp::stop("Unknown state");
@@ -169,8 +175,8 @@ inline const individual_index_t& State::get_state(
 }
 
 inline const variable_vector_t& State::get_variable(
-    std::string individual,
-    std::string variable) const {
+    const std::string& individual,
+    const std::string& variable) const {
     auto& individual_variables = variables.at(individual);
     if (individual_variables.find(variable) == individual_variables.end()) {
         Rcpp::stop("Unknown variable");
@@ -178,12 +184,32 @@ inline const variable_vector_t& State::get_variable(
     return individual_variables.at(variable);
 }
 
-inline void State::queue_state_update(const std::string individual, const std::string state,
+inline void State::get_variable(
+    const std::string& individual,
+    const std::string& variable,
+    const std::vector<size_t>& index,
+    std::vector<double>& result) const {
+    auto& individual_variables = variables.at(individual);
+    if (individual_variables.find(variable) == individual_variables.end()) {
+        Rcpp::stop("Unknown variable");
+    }
+    const auto& v = individual_variables.at(variable);
+    result.resize(index.size());
+    for (auto i = 0u; i < index.size(); ++i) {
+        if (index[i] < v.size()) {
+            result[i] = v[index[i]];
+        } else {
+            Rcpp::stop("Invalid index for variable");
+        }
+    }
+}
+
+inline void State::queue_state_update(const std::string& individual, const std::string& state,
     const individual_index_t& index) {
     state_update_queue.push({individual, state, index});
 }
 
-inline void State::queue_variable_update(const std::string individual, const std::string variable,
+inline void State::queue_variable_update(const std::string& individual, const std::string& variable,
     const std::vector<size_t>& index, const variable_vector_t& values) {
     auto vector_replacement = (index.size() == 0);
     auto value_fill = (values.size() == 1);

@@ -42,6 +42,10 @@ process_get_variable <- function(api, individual, variable) {
     .Call(`_individual_process_get_variable`, api, individual, variable)
 }
 
+process_get_variable_at_index <- function(api, individual, variable, index) {
+    .Call(`_individual_process_get_variable_at_index`, api, individual, variable, index)
+}
+
 process_queue_state_update <- function(api, individual, state, index_vector) {
     invisible(.Call(`_individual_process_queue_state_update`, api, individual, state, index_vector))
 }

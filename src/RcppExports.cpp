@@ -154,6 +154,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// process_get_variable_at_index
+std::vector<double> process_get_variable_at_index(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable, const std::vector<size_t> index);
+RcppExport SEXP _individual_process_get_variable_at_index(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(process_get_variable_at_index(api, individual, variable, index));
+    return rcpp_result_gen;
+END_RCPP
+}
 // process_queue_state_update
 void process_queue_state_update(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string state, const std::vector<size_t> index_vector);
 RcppExport SEXP _individual_process_queue_state_update(SEXP apiSEXP, SEXP individualSEXP, SEXP stateSEXP, SEXP index_vectorSEXP) {
@@ -311,6 +325,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_create_process_api", (DL_FUNC) &_individual_create_process_api, 4},
     {"_individual_process_get_state", (DL_FUNC) &_individual_process_get_state, 3},
     {"_individual_process_get_variable", (DL_FUNC) &_individual_process_get_variable, 3},
+    {"_individual_process_get_variable_at_index", (DL_FUNC) &_individual_process_get_variable_at_index, 4},
     {"_individual_process_queue_state_update", (DL_FUNC) &_individual_process_queue_state_update, 4},
     {"_individual_process_queue_variable_update", (DL_FUNC) &_individual_process_queue_variable_update, 5},
     {"_individual_process_schedule", (DL_FUNC) &_individual_process_schedule, 4},

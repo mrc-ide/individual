@@ -23,9 +23,9 @@ public:
     size_t get_timestep() const;
     void tick();
     void process_events(Rcpp::XPtr<ProcessAPI>, Rcpp::Environment api);
-    void clear_schedule(const std::string, const individual_index_t&);
-    individual_index_t get_scheduled(const std::string) const;
-    void schedule(const std::string, const individual_index_t&, double);
+    void clear_schedule(const std::string&, const individual_index_t&);
+    void get_scheduled(const std::string&, individual_index_t&) const;
+    void schedule(const std::string&, const individual_index_t&, double);
 };
 
 inline Scheduler::Scheduler(const std::vector<event_t>& events)
@@ -68,7 +68,7 @@ inline void Scheduler::process_events(
 }
 
 inline void Scheduler::clear_schedule(
-    const std::string event,
+    const std::string& event,
     const individual_index_t& to_remove) {
     auto& timeline = schedule_map.at(event);
     auto it = timeline.begin();
@@ -84,17 +84,17 @@ inline void Scheduler::clear_schedule(
     }
 }
 
-inline individual_index_t Scheduler::get_scheduled(const std::string event) const {
-    auto scheduled = individual_index_t();
+inline void Scheduler::get_scheduled(
+    const std::string& event,
+    individual_index_t& scheduled) const {
     const auto& timeline = schedule_map.at(event);
     for (auto& index : timeline) {
         scheduled.insert(std::cbegin(index.second), std::cend(index.second));
     }
-    return scheduled;
 }
 
 inline void Scheduler::schedule(
-    const std::string event,
+    const std::string& event,
     const individual_index_t& target,
     double delay) {
     auto d = static_cast<size_t>(round(delay));

@@ -35,10 +35,19 @@ std::vector<double> process_get_variable(
     Rcpp::XPtr<ProcessAPI> api,
     const std::string individual,
     const std::string variable) {
-    const auto& result = api->get_variable(individual, variable);
-    auto result_vector = std::vector<double>();
-    result_vector.insert(end(result_vector), cbegin(result), cend(result));
-    return result_vector;
+    return api->get_variable(individual, variable);
+}
+
+//[[Rcpp::export]]
+std::vector<double> process_get_variable_at_index(
+    Rcpp::XPtr<ProcessAPI> api,
+    const std::string individual,
+    const std::string variable,
+    const std::vector<size_t> index
+    ) {
+    auto result = std::vector<double>();
+    api->get_variable(individual, variable, index, result);
+    return result;
 }
 
 //[[Rcpp::export]]
@@ -79,7 +88,8 @@ std::vector<size_t> process_get_scheduled(
     Rcpp::XPtr<ProcessAPI> api,
     const std::string event
 ) {
-    auto result = api->get_scheduled(event);
+    auto result = individual_index_t();
+    api->get_scheduled(event, result);
     return std::vector<size_t>(result.begin(), result.end());
 }
 
