@@ -221,14 +221,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // process_clear_schedule
-void process_clear_schedule(Rcpp::XPtr<ProcessAPI> api, const std::string event, const std::vector<size_t> index_vector);
-RcppExport SEXP _individual_process_clear_schedule(SEXP apiSEXP, SEXP eventSEXP, SEXP index_vectorSEXP) {
+void process_clear_schedule(Rcpp::XPtr<ProcessAPI> api, const std::string event, const std::vector<size_t> index);
+RcppExport SEXP _individual_process_clear_schedule(SEXP apiSEXP, SEXP eventSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
     Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
-    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index_vector(index_vectorSEXP);
-    process_clear_schedule(api, event, index_vector);
+    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index(indexSEXP);
+    process_clear_schedule(api, event, index);
     return R_NilValue;
 END_RCPP
 }

@@ -31,6 +31,7 @@ public:
     void schedule(const std::string&, const individual_index_t&, double);
     void get_scheduled(const std::string&, individual_index_t&) const;
     void clear_schedule(const std::string&, const individual_index_t&);
+    void clear_schedule(const std::string&, const std::vector<size_t>&);
     void render(const std::string&, double, size_t);
     void render(const std::string&, double);
     size_t get_timestep() const;
@@ -101,6 +102,12 @@ inline void ProcessAPI::get_scheduled(
 inline void ProcessAPI::clear_schedule(
     const std::string& event,
     const individual_index_t& index) {
+    scheduler->clear_schedule(event, index);
+}
+
+inline void ProcessAPI::clear_schedule(
+    const std::string& event,
+    const std::vector<size_t>& index) {
     scheduler->clear_schedule(event, index);
 }
 

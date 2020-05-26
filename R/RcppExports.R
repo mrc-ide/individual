@@ -62,8 +62,8 @@ process_get_scheduled <- function(api, event) {
     .Call(`_individual_process_get_scheduled`, api, event)
 }
 
-process_clear_schedule <- function(api, event, index_vector) {
-    invisible(.Call(`_individual_process_clear_schedule`, api, event, index_vector))
+process_clear_schedule <- function(api, event, index) {
+    invisible(.Call(`_individual_process_clear_schedule`, api, event, index))
 }
 
 process_get_timestep <- function(api) {

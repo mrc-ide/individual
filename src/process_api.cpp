@@ -97,9 +97,8 @@ std::vector<size_t> process_get_scheduled(
 void process_clear_schedule(
     Rcpp::XPtr<ProcessAPI> api,
     const std::string event,
-    const std::vector<size_t> index_vector
+    const std::vector<size_t> index
 ) {
-    const auto index = individual_index_t(index_vector.begin(), index_vector.end());
     api->clear_schedule(event, index);
 }
 

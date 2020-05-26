@@ -24,6 +24,7 @@ public:
     void tick();
     void process_events(Rcpp::XPtr<ProcessAPI>, Rcpp::Environment api);
     void clear_schedule(const std::string&, const individual_index_t&);
+    void clear_schedule(const std::string&, const std::vector<size_t>&);
     void get_scheduled(const std::string&, individual_index_t&) const;
     void schedule(const std::string&, const individual_index_t&, double);
 };
@@ -70,6 +71,23 @@ inline void Scheduler::process_events(
 inline void Scheduler::clear_schedule(
     const std::string& event,
     const individual_index_t& to_remove) {
+    auto& timeline = schedule_map.at(event);
+    auto it = timeline.begin();
+    while(it != timeline.end()) {
+        for (auto r : to_remove) {
+            (*it).second.erase(r);
+        }
+        if ((*it).second.size() == 0) {
+            it = timeline.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+inline void Scheduler::clear_schedule(
+    const std::string& event,
+    const std::vector<size_t>& to_remove) {
     auto& timeline = schedule_map.at(event);
     auto it = timeline.begin();
     while(it != timeline.end()) {
