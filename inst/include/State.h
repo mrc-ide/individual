@@ -114,7 +114,7 @@ inline void State::apply_state_update(const state_update_t& update) {
     const auto& individual_name = std::get<0>(update);
     const auto& state_name = std::get<1>(update);
     Log(log_level::debug).get() << "updating state: " << individual_name << ":" << state_name << std::endl;
-    const auto index = std::get<2>(update);
+    const auto& index = std::get<2>(update);
     for (auto& pair : states.at(individual_name)) {
         for (auto i : index) {
             pair.second.erase(i);
