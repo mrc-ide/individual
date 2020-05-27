@@ -9,6 +9,9 @@
 #include "../inst/include/process_types.h"
 #include "../inst/include/Process.h"
 
+//'@title create a listener to update the state of the target population
+//'@param individual the name of the individual type
+//'@param state the state to transition to
 //'@export
 //[[Rcpp::export]]
 Rcpp::XPtr<listener_t> update_state_listener(
@@ -26,6 +29,9 @@ Rcpp::XPtr<listener_t> update_state_listener(
     );
 }
 
+//'@title create a listener to schedule a target population for a new event
+//'@param event the name of the event to schedule
+//'@param delay the delay for the new event
 //'@export
 //[[Rcpp::export]]
 Rcpp::XPtr<listener_t> reschedule_listener(const std::string event, double delay) {
@@ -40,6 +46,11 @@ Rcpp::XPtr<listener_t> reschedule_listener(const std::string event, double delay
     );
 }
 
+//'@title create a process to transition individuals between states at a constant rate
+//'@param individual the name of an individual
+//'@param from_state the name of the source state
+//'@param to_state the name of the target state
+//'@param rate the rate at which state transitions occur
 //'@export
 //[[Rcpp::export]]
 Rcpp::XPtr<process_t> fixed_probability_state_change_process(
@@ -67,6 +78,9 @@ Rcpp::XPtr<process_t> fixed_probability_state_change_process(
     );
 }
 
+//'@title create a process to render the number of individuals in the specified states
+//'@param individual the name of an individual
+//'@param states a vector of state names
 //'@export
 //[[Rcpp::export]]
 Rcpp::XPtr<process_t> state_count_renderer_process(
@@ -87,6 +101,9 @@ Rcpp::XPtr<process_t> state_count_renderer_process(
     );
 }
 
+//'@title create a process to render the mean value of the specified variables
+//'@param individual the name of an individual
+//'@param variables a vector of variable names
 //'@export
 //[[Rcpp::export]]
 Rcpp::XPtr<process_t> variable_mean_renderer_process(

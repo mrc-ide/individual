@@ -14,19 +14,9 @@ Describes an event in the simulation
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{name, }}{the unique name of the event}
+\item{\code{name}}{the unique name of the event}
 
-\item{\code{listeners, }}{the listener functions to be executed when the event is
-triggered}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{name, }}{the unique name of the event}
-
-\item{\code{listeners, }}{the listener functions to be executed when the event is
+\item{\code{listeners}}{the listener functions to be executed when the event is
 triggered}
 }
 \if{html}{\out{</div>}}
@@ -66,7 +56,7 @@ Add an event listener
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{listener, }}{the function to be executed on the event. This function
+\item{\code{listener}}{the function to be executed on the event. This function
 should take the simulation api and target individuals as arguments}
 }
 \if{html}{\out{</div>}}

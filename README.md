@@ -43,25 +43,38 @@ Or if you would like devtools and documentation tools you can run
 docker build . -f docker/Dockerfile.dev -t [your image name]
 ```
 
+## The Basics
+
+### Execution loop
+
+### API
+
+#### Simulation state
+
+#### Scheduling
+
+#### Rendering
+
 ## Usage
 
-Please refer to the "Modelling" vignette for a tutorial on how to create a basic
-SIR model.
+Please refer to the "Modelling" vignette for a tutorial on how to start making
+SIR models
 
 ## Code organisation
 
-*frame.R* - Defines the SimFrame class. This is the interface for process
-functions to access the simulation state.
+*R/simulation.R* - Contains the main entry point and configuration for models.
 
-*individual.R* - Defines classes for individuals, states, variables and constants.
+*R/individual.R* - Defines classes for individuals, states, variables and constants.
 
-*updates.R* - Defines Update classes for states and variables. This is the
-interface for process functions to update the simulation state.
+*R/api.R* - Defines the R api for processes and listeners
 
-*simulation.R* - Defines the simulation output class and the main simulation
-loop.
+*src/* - The C++ side of the R interface
 
-*tests* - are divided into unit and integration tests. Integration tests are
+*inst/include/State.h* - The simulation state code
+*inst/include/Scheduler.h* - The scheduler code
+*inst/include/Process.h* - The C++ api for user processes and listeners
+
+*tests/* - are divided into unit and integration tests. Integration tests are
 strongly recommended for large process functions and unit tests for model
 calculations.
 

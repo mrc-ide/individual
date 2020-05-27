@@ -60,6 +60,8 @@ Get a variable vector for an individual
 \item{\code{individual}}{the individual of interest}
 
 \item{\code{variable}}{the variable of interest}
+
+\item{\code{index}}{optionally return a subset of the variable vector}
 }
 \if{html}{\out{</div>}}
 }
@@ -87,8 +89,7 @@ Queue a state update for the end of the timestep
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-queue_variable_update"></a>}}
 \subsection{Method \code{queue_variable_update()}}{
-Queue an update for a variable. There are 4 types of variable
-update:
+Queue an update for a variable. There are 4 types of variable update:
 
 1. Subset update. The index vector represents a subset of the variable to
 update. The value vector, of the same size, represents the new values for
@@ -111,10 +112,10 @@ of size 1, is used to fill all of the variable values in the population.
 
 \item{\code{variable}}{a Variable object representing the variable to change}
 
+\item{\code{values}}{a vector or scalar of values to assign at the index}
+
 \item{\code{index}}{is the index at which to apply the change, use NULL for the
 fill options}
-
-\item{\code{value}}{a vector or scalar of values to assign at the index}
 }
 \if{html}{\out{</div>}}
 }
@@ -130,11 +131,11 @@ Schedule an event to occur in the future
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{event, }}{the event to schedule}
+\item{\code{event}}{the event to schedule}
 
-\item{\code{target, }}{the individuals to pass to the listener}
+\item{\code{target}}{the individuals to pass to the listener}
 
-\item{\code{delay, }}{the number of timesteps to wait before triggering the event}
+\item{\code{delay}}{the number of timesteps to wait before triggering the event}
 }
 \if{html}{\out{</div>}}
 }
@@ -166,9 +167,9 @@ Stop a future event from triggering for a subset of individuals
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{event, }}{the event to stop}
+\item{\code{event}}{the event to stop}
 
-\item{\code{target, }}{the individuals to clear}
+\item{\code{target}}{the individuals to clear}
 }
 \if{html}{\out{</div>}}
 }
@@ -194,11 +195,22 @@ Get the parameters of the simulation
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-render"></a>}}
 \subsection{Method \code{render()}}{
-Get the parameters of the simulation
+Add a value for the simulation output
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimAPI$render(name, value, timestep = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{name}}{the column name}
+
+\item{\code{value}}{the value to assign}
+
+\item{\code{timestep}}{optionally add the value to a specific timestep}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
@@ -211,11 +223,11 @@ Create an R wrapper for the API
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{cpp_api, }}{the cpp implementation of the simulation api}
+\item{\code{cpp_api}}{the cpp implementation of the simulation api}
 
-\item{\code{parameters, }}{model parameters}
+\item{\code{parameters}}{model parameters}
 
-\item{\code{renderer, }}{renderer to store model outputs to}
+\item{\code{renderer}}{renderer to store model outputs to}
 }
 \if{html}{\out{</div>}}
 }

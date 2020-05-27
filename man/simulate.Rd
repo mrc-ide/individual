@@ -21,7 +21,7 @@ simulate(
 
 \item{parameters}{a list of named parameters to pass to the process functions}
 
-\item{custom_renderers}{a list of renderers to pass to Render$initialize}
+\item{events}{a list of events to register with the scheduler}
 }
 \description{
 Main simulation loop
@@ -36,7 +36,7 @@ human <- Individual$new('human', list(S, I, R))
 transition <- function(from, to, rate) {
   return(function(api) {
     from_state <- api$get_state(human, from)
-    StateUpdate$new(
+    api$queue_state_update(
       human,
       to,
       from_state[runif(length(from_state), 0, 1) < rate]

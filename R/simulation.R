@@ -1,10 +1,10 @@
-#' Main simulation loop
+#' @title Main simulation loop
 #'
 #' @param individuals a list of Individual to simulate
 #' @param processes a list of processes to execute on each timestep
 #' @param end_timestep the number of timesteps to simulate
-#' @param custom_renderers a list of renderers to pass to Render$initialize
 #' @param parameters a list of named parameters to pass to the process functions
+#' @param events a list of events to register with the scheduler
 #' @examples
 #' population <- 4
 #' S <- State$new('S', population)
@@ -15,7 +15,7 @@
 #' transition <- function(from, to, rate) {
 #'   return(function(api) {
 #'     from_state <- api$get_state(human, from)
-#'     StateUpdate$new(
+#'     api$queue_state_update(
 #'       human,
 #'       to,
 #'       from_state[runif(length(from_state), 0, 1) < rate]
