@@ -8,12 +8,15 @@
 #ifndef INST_INCLUDE_SCHEDULER_H_
 #define INST_INCLUDE_SCHEDULER_H_
 
-#include "process_types.h"
 #include "common_types.h"
 
 using event_t = std::pair<std::string, std::vector<SEXP>>;
 using timeline_t = std::unordered_map<size_t, individual_index_t>;
 
+template<class TProcessAPI>
+using listener_template_t = std::function<void (TProcessAPI&, individual_index_t&)>;
+
+template<class TProcessAPI>
 class Scheduler {
     std::vector<event_t> events;
     size_t current_timestep;
@@ -22,38 +25,44 @@ public:
     Scheduler(const std::vector<event_t>&);
     size_t get_timestep() const;
     void tick();
-    void process_events(Rcpp::XPtr<ProcessAPI>, Rcpp::Environment api);
+    void process_events(Rcpp::XPtr<TProcessAPI>, Rcpp::Environment api);
     void clear_schedule(const std::string&, const individual_index_t&);
     void clear_schedule(const std::string&, const std::vector<size_t>&);
     void get_scheduled(const std::string&, individual_index_t&) const;
     void schedule(const std::string&, const individual_index_t&, double);
 };
 
-inline Scheduler::Scheduler(const std::vector<event_t>& events)
+template<class TProcessAPI>
+inline Scheduler<TProcessAPI>::Scheduler(const std::vector<event_t>& events)
     : events(events), current_timestep(1u) {
     for (const auto& event : events) {
         schedule_map[event.first] = timeline_t();
     }
 }
 
-inline size_t Scheduler::get_timestep() const { return current_timestep; }
+template<class TProcessAPI>
+inline size_t Scheduler<TProcessAPI>::get_timestep() const { return current_timestep; }
 
-inline void Scheduler::tick() {
+template<class TProcessAPI>
+inline void Scheduler<TProcessAPI>::tick() {
     for (const auto& event : events) {
         schedule_map.at(event.first).erase(current_timestep);
     }
     ++current_timestep;
 }
 
-inline void Scheduler::process_events(
-    Rcpp::XPtr<ProcessAPI> cpp_api,
+template<class TProcessAPI>
+inline void Scheduler<TProcessAPI>::process_events(
+    Rcpp::XPtr<TProcessAPI> cpp_api,
     Rcpp::Environment r_api) {
     for (const auto& event : events) {
         auto& timeline = schedule_map.at(event.first);
         if (timeline.find(current_timestep) != timeline.end()) {
             for (const auto& listener : event.second) {
                 if (TYPEOF(listener) == EXTPTRSXP) {
-                    auto cpp_listener = Rcpp::as<Rcpp::XPtr<listener_t>>(listener);
+                    auto cpp_listener = Rcpp::as<Rcpp::XPtr<
+                        listener_template_t<TProcessAPI>
+                    >>(listener);
                     (*cpp_listener)(*cpp_api, timeline.at(current_timestep));
                 } else {
                     Rcpp::Function r_listener = listener;
@@ -68,7 +77,8 @@ inline void Scheduler::process_events(
     }
 }
 
-inline void Scheduler::clear_schedule(
+template<class TProcessAPI>
+inline void Scheduler<TProcessAPI>::clear_schedule(
     const std::string& event,
     const individual_index_t& to_remove) {
     auto& timeline = schedule_map.at(event);
@@ -85,7 +95,8 @@ inline void Scheduler::clear_schedule(
     }
 }
 
-inline void Scheduler::clear_schedule(
+template<class TProcessAPI>
+inline void Scheduler<TProcessAPI>::clear_schedule(
     const std::string& event,
     const std::vector<size_t>& to_remove) {
     auto& timeline = schedule_map.at(event);
@@ -102,7 +113,8 @@ inline void Scheduler::clear_schedule(
     }
 }
 
-inline void Scheduler::get_scheduled(
+template<class TProcessAPI>
+inline void Scheduler<TProcessAPI>::get_scheduled(
     const std::string& event,
     individual_index_t& scheduled) const {
     const auto& timeline = schedule_map.at(event);
@@ -111,7 +123,8 @@ inline void Scheduler::get_scheduled(
     }
 }
 
-inline void Scheduler::schedule(
+template<class TProcessAPI>
+inline void Scheduler<TProcessAPI>::schedule(
     const std::string& event,
     const individual_index_t& target,
     double delay) {

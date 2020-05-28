@@ -115,13 +115,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // create_process_api
-Rcpp::XPtr<ProcessAPI> create_process_api(Rcpp::XPtr<State> state, Rcpp::XPtr<Scheduler> scheduler, Rcpp::List params, Rcpp::Environment renderer);
+Rcpp::XPtr<ProcessAPI> create_process_api(Rcpp::XPtr<State> state, Rcpp::XPtr<scheduler_t> scheduler, Rcpp::List params, Rcpp::Environment renderer);
 RcppExport SEXP _individual_create_process_api(SEXP stateSEXP, SEXP schedulerSEXP, SEXP paramsSEXP, SEXP rendererSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
-    Rcpp::traits::input_parameter< Rcpp::XPtr<Scheduler> >::type scheduler(schedulerSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<scheduler_t> >::type scheduler(schedulerSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type params(paramsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Environment >::type renderer(rendererSEXP);
     rcpp_result_gen = Rcpp::wrap(create_process_api(state, scheduler, params, renderer));
@@ -244,7 +244,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // create_scheduler
-Rcpp::XPtr<Scheduler> create_scheduler(const Rcpp::List events);
+Rcpp::XPtr<scheduler_t> create_scheduler(const Rcpp::List events);
 RcppExport SEXP _individual_create_scheduler(SEXP eventsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -255,21 +255,21 @@ BEGIN_RCPP
 END_RCPP
 }
 // scheduler_tick
-void scheduler_tick(const Rcpp::XPtr<Scheduler> scheduler);
+void scheduler_tick(const Rcpp::XPtr<scheduler_t> scheduler);
 RcppExport SEXP _individual_scheduler_tick(SEXP schedulerSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::XPtr<Scheduler> >::type scheduler(schedulerSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<scheduler_t> >::type scheduler(schedulerSEXP);
     scheduler_tick(scheduler);
     return R_NilValue;
 END_RCPP
 }
 // scheduler_process_events
-void scheduler_process_events(const Rcpp::XPtr<Scheduler> scheduler, const Rcpp::XPtr<ProcessAPI> cpp_api, const Rcpp::Environment r_api);
+void scheduler_process_events(const Rcpp::XPtr<scheduler_t> scheduler, const Rcpp::XPtr<ProcessAPI> cpp_api, const Rcpp::Environment r_api);
 RcppExport SEXP _individual_scheduler_process_events(SEXP schedulerSEXP, SEXP cpp_apiSEXP, SEXP r_apiSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::XPtr<Scheduler> >::type scheduler(schedulerSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<scheduler_t> >::type scheduler(schedulerSEXP);
     Rcpp::traits::input_parameter< const Rcpp::XPtr<ProcessAPI> >::type cpp_api(cpp_apiSEXP);
     Rcpp::traits::input_parameter< const Rcpp::Environment >::type r_api(r_apiSEXP);
     scheduler_process_events(scheduler, cpp_api, r_api);

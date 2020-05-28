@@ -5,22 +5,28 @@
  *      Author: gc1610
  */
 
-#ifndef INST_INCLUDE_PROCESS_H_
-#define INST_INCLUDE_PROCESS_H_
+#ifndef INST_INCLUDE_PROCESSAPI_H_
+#define INST_INCLUDE_PROCESSAPI_H_
 
 #include "State.h"
 #include "Scheduler.h"
 
 using params_t = named_array_t<std::vector<double>>;
 
+class ProcessAPI;
+
+using scheduler_t = Scheduler<ProcessAPI>;
+using process_t = std::function<void (ProcessAPI&)>;
+using listener_t = std::function<void (ProcessAPI&, individual_index_t&)>;
+
 class ProcessAPI {
 private:
     Rcpp::XPtr<State> state;
-    Rcpp::XPtr<Scheduler> scheduler;
+    Rcpp::XPtr<scheduler_t> scheduler;
     Rcpp::Environment renderer;
     params_t params;
 public:
-    ProcessAPI(Rcpp::XPtr<State>, Rcpp::XPtr<Scheduler>, Rcpp::List, Rcpp::Environment);
+    ProcessAPI(Rcpp::XPtr<State>, Rcpp::XPtr<scheduler_t>, Rcpp::List, Rcpp::Environment);
     const individual_index_t& get_state(const std::string&, const std::string&) const;
     const variable_vector_t& get_variable(const std::string&, const std::string&) const;
     void get_variable(
@@ -51,7 +57,7 @@ public:
 
 inline ProcessAPI::ProcessAPI(
     Rcpp::XPtr<State> state,
-    Rcpp::XPtr<Scheduler> scheduler,
+    Rcpp::XPtr<scheduler_t> scheduler,
     Rcpp::List r_params,
     Rcpp::Environment renderer)
     :state(state),
@@ -143,4 +149,4 @@ inline void ProcessAPI::queue_variable_update(
     this->state->queue_variable_update(individual, state, index, values);
 }
 
-#endif /* INST_INCLUDE_PROCESS_H_ */
+#endif /* INST_INCLUDE_PROCESSAPI_H_ */

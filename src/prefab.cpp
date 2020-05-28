@@ -6,8 +6,7 @@
  */
 
 #include <Rcpp.h>
-#include "../inst/include/process_types.h"
-#include "../inst/include/Process.h"
+#include "../inst/include/ProcessAPI.h"
 
 //'@title create a listener to update the state of the target population
 //'@param individual the name of the individual type

@@ -5,12 +5,12 @@
  *      Author: gc1610
  */
 
-#include "../inst/include/Process.h"
+#include "../inst/include/ProcessAPI.h"
 
 //[[Rcpp::export]]
 Rcpp::XPtr<ProcessAPI> create_process_api(
     Rcpp::XPtr<State> state,
-    Rcpp::XPtr<Scheduler> scheduler,
+    Rcpp::XPtr<scheduler_t> scheduler,
     Rcpp::List params,
     Rcpp::Environment renderer) {
     auto api = new ProcessAPI(state, scheduler, params, renderer);

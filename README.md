@@ -190,7 +190,7 @@ epi models
 
 *inst/include/State.h* - The simulation state code
 *inst/include/Scheduler.h* - The scheduler code
-*inst/include/Process.h* - The C++ api for user processes and listeners
+*inst/include/ProcessAPI.h* - The C++ api for user processes and listeners
 
 *tests/* - are divided into unit and integration tests. Integration tests are
 strongly recommended for large process functions and unit tests for model
