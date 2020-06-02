@@ -17,7 +17,7 @@ class ProcessAPI;
 
 using scheduler_t = Scheduler<ProcessAPI>;
 using process_t = std::function<void (ProcessAPI&)>;
-using listener_t = std::function<void (ProcessAPI&, individual_index_t&)>;
+using listener_t = std::function<void (ProcessAPI&, const individual_index_t&)>;
 
 class ProcessAPI {
 private:
@@ -34,10 +34,11 @@ public:
         const std::string&,
         const std::vector<size_t>&,
         std::vector<double>&) const;
-    void schedule(const std::string&, const individual_index_t&, double);
-    void get_scheduled(const std::string&, individual_index_t&) const;
-    void clear_schedule(const std::string&, const individual_index_t&);
-    void clear_schedule(const std::string&, const std::vector<size_t>&);
+    template<class TIndex>
+    void schedule(const std::string&, const TIndex&, double);
+    individual_index_t get_scheduled(const std::string&) const;
+    template<class TIndex>
+    void clear_schedule(const std::string&, const TIndex&);
     void render(const std::string&, double, size_t);
     void render(const std::string&, double);
     size_t get_timestep() const;
@@ -46,6 +47,11 @@ public:
         const std::string&,
         const std::string&,
         const individual_index_t&
+    );
+    void queue_state_update(
+        const std::string&,
+        const std::string&,
+        const std::vector<size_t>&
     );
     void queue_variable_update(
         const std::string&,
@@ -92,28 +98,22 @@ inline void ProcessAPI::get_variable(
     state->get_variable(individual, variable, index, result);
 }
 
+template<class TIndex>
 inline void ProcessAPI::schedule(
     const std::string& event,
-    const individual_index_t& index,
+    const TIndex& index,
     double delay) {
     scheduler->schedule(event, index, delay);
 }
 
-inline void ProcessAPI::get_scheduled(
-    const std::string& event,
-    individual_index_t& result) const {
-    scheduler->get_scheduled(event, result);
+inline individual_index_t ProcessAPI::get_scheduled(const std::string& event) const {
+    return scheduler->get_scheduled(event);
 }
 
+template<class TIndex>
 inline void ProcessAPI::clear_schedule(
     const std::string& event,
-    const individual_index_t& index) {
-    scheduler->clear_schedule(event, index);
-}
-
-inline void ProcessAPI::clear_schedule(
-    const std::string& event,
-    const std::vector<size_t>& index) {
+    const TIndex& index) {
     scheduler->clear_schedule(event, index);
 }
 
@@ -138,6 +138,13 @@ inline void ProcessAPI::queue_state_update(
     const std::string& individual,
     const std::string& state,
     const individual_index_t& index) {
+    this->state->queue_state_update(individual, state, index);
+}
+
+inline void ProcessAPI::queue_state_update(
+    const std::string& individual,
+    const std::string& state,
+    const std::vector<size_t>& index) {
     this->state->queue_state_update(individual, state, index);
 }
 

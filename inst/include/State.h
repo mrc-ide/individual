@@ -8,19 +8,18 @@
 #ifndef INST_INCLUDE_STATE_H_
 #define INST_INCLUDE_STATE_H_
 
-#include <unordered_set>
 #include <tuple>
 #include <queue>
 #include "common_types.h"
+#include "IndividualIndex.h"
 #include "Log.h"
 
-using individual_index_t = std::unordered_set<size_t>;
 using variable_vector_t = std::vector<double>;
 using state_vector_t = named_array_t<individual_index_t>;
 
 using states_t = named_array_t<state_vector_t>;
 using variables_t = named_array_t<named_array_t<variable_vector_t>>;
-using state_update_t = std::tuple<std::string, std::string, individual_index_t>;
+using state_update_t = std::tuple<std::string, std::string, std::vector<size_t>>;
 using variable_update_t = std::tuple<std::string, std::string, std::vector<size_t>, variable_vector_t>;
 
 using variable_spec_t = std::pair<std::string, std::vector<double>>;
@@ -50,6 +49,7 @@ public:
         std::vector<double>&
         ) const;
     void queue_state_update(const std::string&, const std::string&, const individual_index_t&);
+    void queue_state_update(const std::string&, const std::string&, const std::vector<size_t>&);
     void queue_variable_update(const std::string&, const std::string&, const std::vector<size_t>&, const variable_vector_t&);
 };
 
@@ -70,23 +70,19 @@ inline State::State(const sim_state_spec_t& spec) {
         population_sizes[individual_name] = population_size;
         Log(log_level::debug).get() << "initialising " << individual_name << " x " << population_size << std::endl;
 
-        // Initialise the initial state
-        auto initial_state = state_vector_t(state_descriptors.size());
-        auto start = 1;
+        // Initialise the state
+        states.insert({individual_name, state_vector_t()});
+        auto start = 0u;
         for (const auto& state : state_descriptors) {
             auto size = state.second;
             auto state_name = state.first;
-            auto state_set = individual_index_t();
+            states.at(individual_name).insert({state_name, individual_index_t(population_size)});
+            auto& state_set = states.at(individual_name).at(state_name);
             for (auto i = start; i < start + size; ++i) {
                 state_set.insert(i);
             }
-            initial_state[state_name] = state_set;
             start += size;
         }
-
-        Log(log_level::debug).get() << "initialising state container" << std::endl;
-        // Initialise the state container
-        states[individual_name] = move(initial_state);
 
         Log(log_level::debug).get() << "initialising variable container" << std::endl;
         // Initialise the variable container
@@ -99,7 +95,7 @@ inline State::State(const sim_state_spec_t& spec) {
     }
 }
 
-inline void State::apply_updates() {
+inline void __attribute__ ((noinline)) State::apply_updates() {
     while(state_update_queue.size() > 0) {
         apply_state_update(state_update_queue.front());
         state_update_queue.pop();
@@ -110,7 +106,7 @@ inline void State::apply_updates() {
     }
 }
 
-inline void State::apply_state_update(const state_update_t& update) {
+inline void __attribute__ ((noinline)) State::apply_state_update(const state_update_t& update) {
     const auto& individual_name = std::get<0>(update);
     const auto& state_name = std::get<1>(update);
     Log(log_level::debug).get() << "updating state: " << individual_name << ":" << state_name << std::endl;
@@ -120,10 +116,10 @@ inline void State::apply_state_update(const state_update_t& update) {
             pair.second.erase(i);
         }
     }
-    states.at(individual_name).at(state_name).insert(std::cbegin(index), std::cend(index));
+    states.at(individual_name).at(state_name).insert(index.cbegin(), index.cend());
 }
 
-inline void State::apply_variable_update(const variable_update_t& update) {
+inline void __attribute__ ((noinline)) State::apply_variable_update(const variable_update_t& update) {
     const auto& individual_name = std::get<0>(update);
     const auto& variable_name = std::get<1>(update);
     Log(log_level::debug).get() << "updating variable: " << individual_name << ":" << variable_name << std::endl;
@@ -147,18 +143,18 @@ inline void State::apply_variable_update(const variable_update_t& update) {
         if (value_fill) {
             to_update = variable_vector_t(vector_size, values[0]);
         } else {
-            to_update = move(values);
+            to_update = values;
         }
     } else {
         if (value_fill) {
             // For a fill update
             for (auto i : index) {
-              to_update[i - 1] = values[0];
+              to_update[i] = values[0];
             }
         } else {
             // Subset assignment
             for (auto i = 0; i < index.size(); ++i) {
-              to_update[index[i] - 1] = values[i];
+              to_update[index[i]] = values[i];
             }
         }
     }
@@ -206,6 +202,15 @@ inline void State::get_variable(
 
 inline void State::queue_state_update(const std::string& individual, const std::string& state,
     const individual_index_t& index) {
+    state_update_queue.push({
+        individual,
+        state,
+        std::vector<size_t>(index.begin(), index.end())
+    });
+}
+
+inline void State::queue_state_update(const std::string& individual, const std::string& state,
+    const std::vector<size_t>& index) {
     state_update_queue.push({individual, state, index});
 }
 

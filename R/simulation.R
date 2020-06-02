@@ -45,7 +45,7 @@ simulate <- function(
     individuals <- list(individuals)
   }
   render <- Render$new(end_timestep)
-  scheduler <- create_scheduler(events)
+  scheduler <- create_scheduler(individuals)
   state <- create_state(individuals)
   cpp_api <- create_process_api(state, scheduler, parameters, render)
   api <- SimAPI$new(cpp_api, parameters, render)

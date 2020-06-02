@@ -155,7 +155,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // process_get_variable_at_index
-std::vector<double> process_get_variable_at_index(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable, const std::vector<size_t> index);
+std::vector<double> process_get_variable_at_index(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable, std::vector<size_t> index);
 RcppExport SEXP _individual_process_get_variable_at_index(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -163,46 +163,46 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
     Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
     Rcpp::traits::input_parameter< const std::string >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index(indexSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
     rcpp_result_gen = Rcpp::wrap(process_get_variable_at_index(api, individual, variable, index));
     return rcpp_result_gen;
 END_RCPP
 }
 // process_queue_state_update
-void process_queue_state_update(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string state, const std::vector<size_t> index_vector);
+void process_queue_state_update(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string state, std::vector<size_t> index_vector);
 RcppExport SEXP _individual_process_queue_state_update(SEXP apiSEXP, SEXP individualSEXP, SEXP stateSEXP, SEXP index_vectorSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
     Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
     Rcpp::traits::input_parameter< const std::string >::type state(stateSEXP);
-    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index_vector(index_vectorSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index_vector(index_vectorSEXP);
     process_queue_state_update(api, individual, state, index_vector);
     return R_NilValue;
 END_RCPP
 }
 // process_queue_variable_update
-void process_queue_variable_update(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable, const std::vector<size_t> index, const std::vector<double> values);
+void process_queue_variable_update(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable, std::vector<size_t> index, const std::vector<double> values);
 RcppExport SEXP _individual_process_queue_variable_update(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP, SEXP indexSEXP, SEXP valuesSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
     Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
     Rcpp::traits::input_parameter< const std::string >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index(indexSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
     Rcpp::traits::input_parameter< const std::vector<double> >::type values(valuesSEXP);
     process_queue_variable_update(api, individual, variable, index, values);
     return R_NilValue;
 END_RCPP
 }
 // process_schedule
-void process_schedule(Rcpp::XPtr<ProcessAPI> api, const std::string event, const std::vector<size_t> index_vector, double delay);
+void process_schedule(Rcpp::XPtr<ProcessAPI> api, const std::string event, std::vector<size_t> index_vector, double delay);
 RcppExport SEXP _individual_process_schedule(SEXP apiSEXP, SEXP eventSEXP, SEXP index_vectorSEXP, SEXP delaySEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
     Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
-    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index_vector(index_vectorSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index_vector(index_vectorSEXP);
     Rcpp::traits::input_parameter< double >::type delay(delaySEXP);
     process_schedule(api, event, index_vector, delay);
     return R_NilValue;
@@ -221,13 +221,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // process_clear_schedule
-void process_clear_schedule(Rcpp::XPtr<ProcessAPI> api, const std::string event, const std::vector<size_t> index);
+void process_clear_schedule(Rcpp::XPtr<ProcessAPI> api, const std::string event, std::vector<size_t> index);
 RcppExport SEXP _individual_process_clear_schedule(SEXP apiSEXP, SEXP eventSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
     Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
-    Rcpp::traits::input_parameter< const std::vector<size_t> >::type index(indexSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
     process_clear_schedule(api, event, index);
     return R_NilValue;
 END_RCPP
@@ -244,13 +244,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // create_scheduler
-Rcpp::XPtr<scheduler_t> create_scheduler(const Rcpp::List events);
-RcppExport SEXP _individual_create_scheduler(SEXP eventsSEXP) {
+Rcpp::XPtr<scheduler_t> create_scheduler(const Rcpp::List individuals);
+RcppExport SEXP _individual_create_scheduler(SEXP individualsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List >::type events(eventsSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_scheduler(events));
+    Rcpp::traits::input_parameter< const Rcpp::List >::type individuals(individualsSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_scheduler(individuals));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -314,6 +314,8 @@ RcppExport SEXP _individual_RcppExport_registerCCallable() {
     return R_NilValue;
 }
 
+RcppExport SEXP run_testthat_tests();
+
 static const R_CallMethodDef CallEntries[] = {
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
     {"_individual_update_state_listener", (DL_FUNC) &_individual_update_state_listener, 2},
@@ -338,6 +340,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_create_state", (DL_FUNC) &_individual_create_state, 1},
     {"_individual_state_apply_updates", (DL_FUNC) &_individual_state_apply_updates, 1},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
+    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
     {NULL, NULL, 0}
 };
 

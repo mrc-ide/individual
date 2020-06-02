@@ -10,15 +10,16 @@
 
 #include "common_types.h"
 
-using event_t = std::pair<std::string, std::vector<SEXP>>;
+using event_t = std::tuple<std::string, size_t, std::vector<SEXP>>;
 using timeline_t = std::unordered_map<size_t, individual_index_t>;
 
 template<class TProcessAPI>
-using listener_template_t = std::function<void (TProcessAPI&, individual_index_t&)>;
+using listener_template_t = std::function<void (TProcessAPI&, const individual_index_t&)>;
 
 template<class TProcessAPI>
 class Scheduler {
     std::vector<event_t> events;
+    named_array_t<size_t> size_map;
     size_t current_timestep;
     named_array_t<timeline_t> schedule_map;
 public:
@@ -26,17 +27,20 @@ public:
     size_t get_timestep() const;
     void tick();
     void process_events(Rcpp::XPtr<TProcessAPI>, Rcpp::Environment api);
-    void clear_schedule(const std::string&, const individual_index_t&);
-    void clear_schedule(const std::string&, const std::vector<size_t>&);
-    void get_scheduled(const std::string&, individual_index_t&) const;
-    void schedule(const std::string&, const individual_index_t&, double);
+    template<class TIndex>
+    void clear_schedule(const std::string&, const TIndex&);
+    individual_index_t get_scheduled(const std::string&) const;
+    template<class TIndex>
+    void schedule(const std::string&, const TIndex&, double);
 };
 
 template<class TProcessAPI>
 inline Scheduler<TProcessAPI>::Scheduler(const std::vector<event_t>& events)
     : events(events), current_timestep(1u) {
-    for (const auto& event : events) {
-        schedule_map[event.first] = timeline_t();
+    for (auto i = 0u; i < events.size(); ++i) {
+        const auto& event = events[i];
+        schedule_map[std::get<0>(event)] = timeline_t();
+        size_map[std::get<0>(event)] = std::get<1>(event);
     }
 }
 
@@ -46,7 +50,7 @@ inline size_t Scheduler<TProcessAPI>::get_timestep() const { return current_time
 template<class TProcessAPI>
 inline void Scheduler<TProcessAPI>::tick() {
     for (const auto& event : events) {
-        schedule_map.at(event.first).erase(current_timestep);
+        schedule_map.at(std::get<0>(event)).erase(current_timestep);
     }
     ++current_timestep;
 }
@@ -56,21 +60,24 @@ inline void Scheduler<TProcessAPI>::process_events(
     Rcpp::XPtr<TProcessAPI> cpp_api,
     Rcpp::Environment r_api) {
     for (const auto& event : events) {
-        auto& timeline = schedule_map.at(event.first);
+        auto& timeline = schedule_map.at(std::get<0>(event));
         if (timeline.find(current_timestep) != timeline.end()) {
-            for (const auto& listener : event.second) {
+            const auto& target = timeline.at(current_timestep);
+            for (const auto& listener : std::get<2>(event)) {
                 if (TYPEOF(listener) == EXTPTRSXP) {
                     auto cpp_listener = Rcpp::as<Rcpp::XPtr<
                         listener_template_t<TProcessAPI>
                     >>(listener);
-                    (*cpp_listener)(*cpp_api, timeline.at(current_timestep));
+                    (*cpp_listener)(*cpp_api, target);
                 } else {
                     Rcpp::Function r_listener = listener;
-                    const auto& target = timeline.at(current_timestep);
-                    r_listener(
-                        r_api,
-                        std::vector<size_t>(std::cbegin(target), std::cend(target))
-                    );
+                    auto r_target = std::vector<size_t>(target.size());
+                    auto i = 0;
+                    for (auto t : timeline.at(current_timestep)) {
+                        r_target[i] = t + 1;
+                        ++i;
+                    }
+                    r_listener(r_api, r_target);
                 }
             }
         }
@@ -78,9 +85,10 @@ inline void Scheduler<TProcessAPI>::process_events(
 }
 
 template<class TProcessAPI>
+template<class TIndex>
 inline void Scheduler<TProcessAPI>::clear_schedule(
     const std::string& event,
-    const individual_index_t& to_remove) {
+    const TIndex& to_remove) {
     auto& timeline = schedule_map.at(event);
     auto it = timeline.begin();
     while(it != timeline.end()) {
@@ -96,37 +104,21 @@ inline void Scheduler<TProcessAPI>::clear_schedule(
 }
 
 template<class TProcessAPI>
-inline void Scheduler<TProcessAPI>::clear_schedule(
-    const std::string& event,
-    const std::vector<size_t>& to_remove) {
-    auto& timeline = schedule_map.at(event);
-    auto it = timeline.begin();
-    while(it != timeline.end()) {
-        for (auto r : to_remove) {
-            (*it).second.erase(r);
-        }
-        if ((*it).second.size() == 0) {
-            it = timeline.erase(it);
-        } else {
-            ++it;
-        }
-    }
-}
-
-template<class TProcessAPI>
-inline void Scheduler<TProcessAPI>::get_scheduled(
-    const std::string& event,
-    individual_index_t& scheduled) const {
+inline individual_index_t Scheduler<TProcessAPI>::get_scheduled(
+    const std::string& event) const {
     const auto& timeline = schedule_map.at(event);
+    auto scheduled = individual_index_t(size_map.at(event));
     for (auto& index : timeline) {
-        scheduled.insert(std::cbegin(index.second), std::cend(index.second));
+        scheduled.insert(index.second.cbegin(), index.second.cend());
     }
+    return scheduled;
 }
 
 template<class TProcessAPI>
+template<class TIndex>
 inline void Scheduler<TProcessAPI>::schedule(
     const std::string& event,
-    const individual_index_t& target,
+    const TIndex& target,
     double delay) {
     auto d = static_cast<size_t>(round(delay));
 
@@ -141,9 +133,9 @@ inline void Scheduler<TProcessAPI>::schedule(
     auto target_timestep = current_timestep + d;
     auto& timeline = schedule_map.at(event);
     if (timeline.find(target_timestep) == timeline.end()) {
-        timeline[target_timestep] = individual_index_t();
+        timeline.insert({target_timestep, individual_index_t(size_map.at(event))});
     }
-    timeline.at(target_timestep).insert(std::cbegin(target), std::cend(target));
+    timeline.at(target_timestep).insert(target.cbegin(), target.cend());
 }
 
 #endif /* INST_INCLUDE_SCHEDULER_H_ */
