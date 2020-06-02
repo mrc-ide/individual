@@ -4,7 +4,7 @@
 
 # Individual
 
-An R package for specifying and simulating individial based models.
+An R package for specifying and simulating individual based models.
 
 This package is designed to:
 
@@ -18,7 +18,7 @@ The package can be installed from github using the "remotes" library
 
 ```R
 library('remotes')
-install_github('mrc-ide/vivax')
+install_github('mrc-ide/individual')
 ```
 
 For development it is most convenient to run the code from source. You can
