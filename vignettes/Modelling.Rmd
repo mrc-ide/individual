@@ -17,24 +17,24 @@ knitr::opts_chunk$set(
 ```{r setup, message = FALSE}
 library(individual)
 library(ggplot2)
+library(reshape2)
 ```
 
-#Creating an epidemiological models
+# Creating an epidemiological model
 
 This article will walk you through the steps to create a basic SIR model, the
-hello world of epidemiology. In doing so you will learn how to define, simulate,
-analyse and make changes to your model.
+hello world of epidemiology.
 
-###Defining the model structure
+This tutorial assumes that you've read the "Basics" section on the homepage.
 
-This part allows researchers to get a basic idea of what you are modelling. You
-clearly define the states you are interested in modelling and initialise the
-numbers of individuals beginning in each state.
+###1. Defining the model structure
 
-Specifying your model also allows the “individual” package to build the data
+This part allows others to get a basic idea of what you are modelling. You
+clearly define the types of individual you are interested in,
+their possible states, and the initial population size.
+
+Specifying your model also allows the package to build efficient data
 structures to handle your simulation.
-
-###Defining the processes
 
 ```{r}
 population <- 1000
@@ -44,28 +44,57 @@ R <- State$new('R', 0)
 human <- Individual$new('human', list(S, I, R))
 ```
 
-###Defining the processes
+###2. Printing model outputs
 
-Now let's specify how individuals move between states.
+Let's run the simulation for 10 timesteps:
 
-In "individual", we can do that with "processes". They run every timestep and
-specify model updates based on the current state of the model.
+```{r}
+simulate(human, list(), 10)
+```
 
-Process functions take 3 arguments:
+Great!
 
-* frame, a [SimFrame](/reference/SimFrame.html') which exposes the current 
-model state
-* timestep, an integer representing the current timestep
-* parameters, a list of user specified model parameters
+But an empty output is not very useful. Let's add a process to store the size of each state.
 
-Some of these processes can be repetitive, so it is often a good idea to
-generate these functions, as demonstrated below:
+```{r}
+render_state_sizes <- function(api) {
+  api$render('susceptable_counts', length(api$get_state(human, S)))
+  api$render('infected_counts', length(api$get_state(human, I)))
+  api$render('recovered_counts', length(api$get_state(human, R)))
+}
+output <- simulate(human, list(render_state_sizes), 10)
+output
+```
+
+That's better.
+
+For the rest of this tutorial, we'll plot these outputs as graphs because they're easier to interpret.
+
+```{r}
+plot_states <- function(output) {
+  ggplot(
+    melt(output, 'timestep'),
+    aes(x = timestep, y = value, group = variable)
+  ) + geom_line(aes(color = variable))
+}
+
+plot_states(output)
+```
+
+###3. Changing states
+
+Now let's model a disease and move these individuals between states!
+
+We could model these state transitions simply by randomly chosing individuals from the `S` state and moving them to the `I` state with rate `rate`. And the same for `I` to `R` and `R` to `S`
+
+These processes can be repetitive to write by hand, so it is often a good idea to
+generate these functions, as below:
 
 ```{r}
 random_transition_generator <- function(from, to, rate) {
-  function(frame, timestep, parameters) {
-    from_state <- frame$get_state(human, from)
-    StateUpdate$new(
+  function(api) {
+    from_state <- api$get_state(human, from)
+    api$queue_state_update(
       human,
       to,
       from_state[runif(length(from_state)) < rate]
@@ -76,47 +105,17 @@ random_transition_generator <- function(from, to, rate) {
 processes <- list(
   random_transition_generator(S, I, .3),
   random_transition_generator(I, R, .5),
-  random_transition_generator(R, S, .1)
+  random_transition_generator(R, S, .1),
+  render_state_sizes
 )
+
+output <- simulate(human, processes, 100)
+plot_states(output)
 ```
 
-Running the simulation
+###4. Adding Variables
 
-To see the model output, you simply run simulate. It will return a
-[Simulation]('/reference/Simulation.html') object, which you can analyse
-however you want.
-
-```{r}
-simulation <- simulate(human, processes, 100)
-
-plot_states <- function(output) {
-  # group the state counts into one column 
-  cols <- colnames(output)[colnames(output) != 'timestep']
-  reshaped <- reshape(
-    output,
-    varying = cols,
-    idvar = 'timestep',
-    timevar = 'state',
-    direction = 'long',
-    v.names = c('counts')
-  )
-
-  # make the state column more readable
-  reshaped$state <- vapply(reshaped$state, function(i) cols[[i]], character(1))
-
-  ggplot(
-    reshaped,
-    aes(x = timestep, y = counts, group = state)
-  ) + geom_line(aes(color = state))
-}
-
-plot_states(simulation)
-```
-
-###Adding Variables
-
-Quite often you will want to model continuous variables. These variables are
-affected by the environment and can in turn affect state changes.
+Quite often you will want to include continuous variables in your model. What if you want to model Immunity? or Age? or Location?
 
 Let’s take immunity for example. We could decide that it should be acquired when
 individuals individuals recover from infection and should reduce the chances of
@@ -133,58 +132,47 @@ human <- Individual$new(
   variables = list(immunity)
 )
 ```
-We can then start to describe how this affects our processes...
+
+We can then define a more complicated infection and recovery process that takes into account immunity...
 
 ```{r}
-infection <- function(frame, timestep, parameters) {
-  from_state <- frame$get_state(human, S)
+infection <- function(api) {
+  from_state <- api$get_state(human, S)
   # Get the immunity for susceptable humans and use the complement to modify the
   # infection rate
-  rate_modifier <- 1 - frame$get_variable(human, immunity)[from_state]
+  rate_modifier <- 1 - api$get_variable(human, immunity, from_state)
   rate <- .3
-  StateUpdate$new(
+  api$queue_state_update(
     human,
     I,
     from_state[runif(length(from_state)) < (rate * rate_modifier)]
   )
 }
 
-recovery <- function(frame, timestep, parameters) {
-  from_state <- frame$get_state(human, I)
+recovered_to_susceptable <- function(api) {
+  from_state <- api$get_state(human, I)
   rate <- .2
   recovered <- from_state[runif(length(from_state)) < rate]
-  list(
-    StateUpdate$new(
-      human,
-      R,
-      recovered
-    ),
-    VariableUpdate$new(
-      human,
-      immunity,
-      parameters$immunity_level,
-      recovered
-    )
+  api$queue_state_update(
+    human,
+    R,
+    recovered
+  )
+  api$queue_variable_update(
+    human,
+    immunity,
+    api$get_parameters()$immunity_level,
+    recovered
   )
 }
 
 processes_with_immunity <- list(
   infection,
   random_transition_generator(I, R, .5),
-  recovery
+  recovered_to_susceptable,
+  render_state_sizes
 )
-```
 
-There are two new features in this example that have not yet been mentioned:
-
- 1. Notice how the recovery process returns a list of updates. This allows it to
-    boost immunity as well as change the same individuals’ states.
- 2. We have used the parameters, object to specify the immunity level to set.
-    This can be specified when we decide to run the simulation. 
-
-You can see how this affects our outputs by re-simulating the model.
-
-```{r}
 simulation <- simulate(
   human,
   processes_with_immunity,
@@ -194,21 +182,18 @@ simulation <- simulate(
 plot_states(simulation)
 ```
 
-You could also analyse the variables in your population.
-
-Let’s say you wanted to see the average immunity in your population:
+Let’s also have a look at the average immunity in our population:
 
 ```{r}
+render_immunity <- function(api) {
+  api$render('mean_immunity', mean(api$get_variable(human, immunity)))
+}
+
 simulation <- simulate(
   human,
-  processes_with_immunity,
+  c(processes_with_immunity, render_immunity),
   100,
-  parameters = list(immunity_level = .6),
-  custom_renderers = list(
-    function(frame) {
-      list(mean_immunity=mean(frame$get_variable(human, immunity)))
-    }
-  )
+  parameters = list(immunity_level = .6)
 )
 
 ggplot(
@@ -217,5 +202,4 @@ ggplot(
 ) + geom_line()
 ```
 
-And there you have it! We have created an SIR model with immunity and analysed
-its outputs.
+And there you have it! We have created a simple SIR model with immunity and experimented with some outputs.

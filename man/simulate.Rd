@@ -8,8 +8,8 @@ simulate(
   individuals,
   processes,
   end_timestep,
-  custom_renderers = list(),
-  parameters = list()
+  parameters = list(),
+  events = list()
 )
 }
 \arguments{
@@ -19,9 +19,9 @@ simulate(
 
 \item{end_timestep}{the number of timesteps to simulate}
 
-\item{custom_renderers}{a list of renderers to pass to Render$initialize}
-
 \item{parameters}{a list of named parameters to pass to the process functions}
+
+\item{events}{a list of events to register with the scheduler}
 }
 \description{
 Main simulation loop
@@ -34,9 +34,9 @@ R <- State$new('R', 0)
 human <- Individual$new('human', list(S, I, R))
 
 transition <- function(from, to, rate) {
-  return(function(frame, timestep, parameters) {
-    from_state <- frame$get_state(human, from)
-    StateUpdate$new(
+  return(function(api) {
+    from_state <- api$get_state(human, from)
+    api$queue_state_update(
       human,
       to,
       from_state[runif(length(from_state), 0, 1) < rate]

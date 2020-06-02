@@ -1,0 +1,151 @@
+---
+title: "Performance"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Performance}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message = FALSE}
+library(individual)
+```
+
+## Running big models
+
+"individual" is designed for running big individual-based models. But if you find your model taking too long or consuming all of your memory, here are a few performance considerations:
+
+###1. Use prefabs
+
+Every time your processes ask for the state or a variable, there is an overhead associated with copying simulation data into R land. Imagine you have the model below:
+
+```{r}
+# Our model
+population <- 100000
+timesteps <- 100
+S <- State$new('S', population/2)
+I <- State$new('I', population/2)
+R <- State$new('R', 0)
+immunity <- Variable$new('immunity', function(size) runif(size, 0, 1))
+human <- Individual$new('human', list(S, I, R), variables = list(immunity))
+
+infection <- function(api) {
+  from_state <- api$get_state(human, S)
+  # Get the immunity for susceptable humans and use the complement to modify the
+  # infection rate
+  rate_modifier <- 1 - api$get_variable(human, immunity)[from_state]
+  rate <- .3
+  api$queue_state_update(
+    human,
+    I,
+    from_state[runif(length(from_state)) < (rate * rate_modifier)]
+  )
+}
+
+random_transition_generator <- function(from, to, rate) {
+  function(api) {
+    from_state <- api$get_state(human, from)
+    api$queue_state_update(
+      human,
+      to,
+      from_state[runif(length(from_state)) < rate]
+    )
+  }
+}
+
+render_state_sizes <- function(api) {
+  api$render('infected_counts', length(api$get_state(human, I)))
+  api$render('susceptable_counts', length(api$get_state(human, S)))
+  api$render('recovered_counts', length(api$get_state(human, R)))
+}
+
+processes <- list(
+  infection,
+  random_transition_generator(I, R, .5),
+  random_transition_generator(R, S, .1),
+  render_state_sizes
+)
+
+system.time(simulate(human, processes, timesteps))
+```
+
+A lot of epidemiology models are quite similar. We've included some optimised, reusable processes and event listeners that provide significant speed improvements with very little effort:
+
+```{r}
+processes <- list(
+  infection,
+  individual::fixed_probability_state_change_process(human$name, I$name, R$name, .5),
+  individual::fixed_probability_state_change_process(human$name, R$name, S$name, .1),
+  individual::state_count_renderer_process(human$name, c(S$name, I$name, R$name))
+)
+
+system.time(simulate(human, processes, timesteps))
+```
+
+###2. Write your processes in C++
+
+Unfortunately, we don't have a prefab for every situation. Please feel free to write one of your own!
+
+These are the basic steps to add C++ processes to your R package:
+
+1. Run `use_rcpp` to set your package up for C++ development
+2. Add `individual` to the `LinkingTo` section of your package DESCRIPTION
+3. Write your process
+
+Processes in C++ are of type `Rcpp::XPtr<process_t>`. Once you've passed your process to R land, you can configure it as usual.
+
+C++ processes program against the `ProcessAPI` class, which mirrors the R API (but is much more efficient). Below is an example of how you could translate the `infection` process:
+
+```
+#include <individual.h>
+#include <Rcpp.h>
+
+//[[Rcpp::export]]
+Rcpp::XPtr<process_t> infection_cpp(
+    const std::string human,
+    const std::string S,
+    const std::string I,
+    const std::string immunity
+    double rate
+    ) {
+    return Rcpp::XPtr<process_t>(
+        new process_t([=] (ProcessAPI& api) {
+              const auto& susceptable = api.get_state(human, S);
+              const auto& immunity_values = api.get_variable(human, immunity);
+              const auto uniform = Rcpp::runif();
+              auto target = individual_index_t();
+              for (auto s : susceptable) {
+                if (uniform < ((1 - immunity_values[s]) * rate)) {
+                  target.insert(s);
+                }
+              }
+              api.queue_state_update(human, I, target);
+        }),
+        true
+    );
+}
+```
+
+The infection function is only a few extra lines and is likely to have a large speed improvement. Calls to `ProcessAPI` avoid copying any data by returning `const&` to simulation data structures.
+
+You can pull your process into R land and configure your process like so:
+
+```
+processes <- list(
+  infection_cpp(human$name, S$name, I$name, immunity$name, .3),
+  random_transition_generator(I, R, .5),
+  random_transition_generator(R, S, .1),
+  render_state_sizes
+)
+
+simulate(human, processes, timesteps)
+```
+
+That's everything you need to scale your models up to millions of individuals!

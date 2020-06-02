@@ -14,22 +14,11 @@ Represents an individual in our simulation
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{name, }}{the string label for this individual}
+\item{\code{name}}{the string label for this individual}
 
-\item{\code{states, }}{a list of state objects which apply to this individual}
+\item{\code{states}}{a list of state objects which apply to this individual}
 
-\item{\code{variables, }}{a list of variable objects which apply to this individual}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{name, }}{the string label for this individual}
-
-\item{\code{states, }}{a list of state objects which apply to this individual}
-
-\item{\code{variables, }}{a list of variable objects which apply to this individual}
+\item{\code{variables}}{a list of variable objects which apply to this individual}
 }
 \if{html}{\out{</div>}}
 }
@@ -51,10 +40,11 @@ Create a new Individual
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{name}}{is a unique idetifier which is used in the output
-$param states a list of State objects
-$param variables a list of Variable objects
-$param constants a list of Constant objects}
+\item{\code{name}}{is a unique idetifier which is used in the output}
+
+\item{\code{states}}{a list of State objects}
+
+\item{\code{variables}}{a list of Variable objects}
 }
 \if{html}{\out{</div>}}
 }

@@ -14,18 +14,9 @@ Represents a variable for an individual in our simulation
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{name, }}{the string label for this variable}
+\item{\code{name}}{the string label for this variable}
 
-\item{\code{initialiser, }}{the function to initialise the values for this variable}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{name, }}{the string label for this variable}
-
-\item{\code{initialiser, }}{the function to initialise the values for this variable}
+\item{\code{initialiser}}{the function to initialise the values for this variable}
 }
 \if{html}{\out{</div>}}
 }
