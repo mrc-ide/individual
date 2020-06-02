@@ -4,7 +4,7 @@
 
 # Individual
 
-An R package for specifying and simulating individial based models.
+An R package for specifying and simulating individual based models.
 
 This package is designed to:
 
