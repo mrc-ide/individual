@@ -1,6 +1,8 @@
 #include <testthat.h>
 #include "../inst/include/IndividualIndex.h"
 
+using individual_index_t = IndividualIndex;
+
 context("Individual index") {
 
   test_that("Iterator construction works") {
@@ -60,6 +62,22 @@ context("Individual index") {
       expect_true(std::find(iterated.begin(), iterated.end(), 3) != iterated.end());
       expect_true(std::find(iterated.begin(), iterated.end(), 6) != iterated.end());
       expect_true(std::find(iterated.begin(), iterated.end(), 9) == iterated.end());
+  }
+
+  test_that("Multi word sets work") {
+      std::vector<size_t> x = {1, 3, 6, 64, 73};
+      auto index = individual_index_t(100, std::cbegin(x), std::cend(x));
+      const auto iterated = std::vector<size_t>(std::cbegin(index), std::cend(index));
+      expect_true(std::find(iterated.begin(), iterated.end(), 0) == iterated.end());
+      expect_true(std::find(iterated.begin(), iterated.end(), 1) != iterated.end());
+      expect_true(std::find(iterated.begin(), iterated.end(), 3) != iterated.end());
+      expect_true(std::find(iterated.begin(), iterated.end(), 6) != iterated.end());
+      expect_true(std::find(iterated.begin(), iterated.end(), 9) == iterated.end());
+      expect_true(std::find(iterated.begin(), iterated.end(), 64) != iterated.end());
+      expect_true(std::find(iterated.begin(), iterated.end(), 73) != iterated.end());
+      expect_true(std::find(iterated.begin(), iterated.end(), 72) == iterated.end());
+      expect_true(index.find(72) == index.end());
+      expect_true(index.find(73) != index.end());
   }
 
 }

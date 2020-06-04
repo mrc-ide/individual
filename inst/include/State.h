@@ -14,6 +14,7 @@
 #include "IndividualIndex.h"
 #include "Log.h"
 
+using individual_index_t = IndividualIndex;
 using variable_vector_t = std::vector<double>;
 using state_vector_t = named_array_t<individual_index_t>;
 
