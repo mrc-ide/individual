@@ -90,7 +90,7 @@ inline IndividualIndex::const_iterator::const_iterator(
 
 inline bool IndividualIndex::const_iterator::operator ==(
     const const_iterator& other) const {
-    return index.bitmap == other.index.bitmap && p == other.p;
+    return p == other.p;
 }
 
 inline bool IndividualIndex::const_iterator::operator !=(
@@ -103,7 +103,7 @@ inline IndividualIndex::const_iterator& IndividualIndex::const_iterator::operato
     uint64_t bitset;
 
     while(p < index.max_n) {
-        bitset = index.bitmap.at(p/index.num_bits) >> (p%index.num_bits);
+        bitset = index.bitmap[p/index.num_bits] >> (p%index.num_bits);
         if (bitset > 0) {
             break;
         }

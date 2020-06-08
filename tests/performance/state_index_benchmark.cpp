@@ -9,8 +9,8 @@
 #include "../../inst/include/IndividualIndex.h"
 #include <unordered_set>
 
-using individual_index_t = IndividualIndex;
-//using individual_index_t = std::unordered_set<size_t>;
+//using individual_index_t = IndividualIndex;
+using individual_index_t = std::unordered_set<size_t>;
 
 std::vector<size_t>create_random_data(size_t size, size_t limit) {
     std::vector<size_t> data(size);
@@ -49,7 +49,7 @@ static void BM_IndexIterate(benchmark::State& state) {
 }
 
 BENCHMARK(BM_IndexIterate)
-    ->Ranges({{1<<10, 8<<10}, {1<<10, 8<<12}});
+    ->Ranges({{1<<5, 8<<10}, {1<<10, 8<<12}});
 
 static void BM_IndexErase(benchmark::State& state) {
     individual_index_t index(state.range(1));
