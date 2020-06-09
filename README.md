@@ -192,9 +192,20 @@ epi models
 *inst/include/Scheduler.h* - The scheduler code
 *inst/include/ProcessAPI.h* - The C++ api for user processes and listeners
 
-*tests/* - are divided into unit and integration tests. Integration tests are
+*tests/* - are divided into unit, integration and performance tests. Integration tests are
 strongly recommended for large process functions and unit tests for model
 calculations.
+
+## Microbenchmarks
+
+We use [google benchmark](https://github.com/google/benchmark) for our
+microbenchmarks. You can compile and run the benchmarks like this:
+
+```
+cd tests/performance
+g++ *_benchmark.cpp -std=c++14 -lbenchmark -lpthread -o benchmark.out
+./benchmark.out
+```
 
 ## Contributing
 

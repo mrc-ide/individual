@@ -8,9 +8,7 @@
 #ifndef INST_INCLUDE_INDIVIDUALINDEX_H_
 #define INST_INCLUDE_INDIVIDUALINDEX_H_
 
-//#include <Rcpp.h>
 #include <cmath>
-#include <iostream>
 
 class IndividualIndex;
 
@@ -89,7 +87,7 @@ inline size_t next_position(const std::vector<uint64_t>& bitmap, size_t num_bits
     }
 
     auto lsb = bitset & -bitset;
-    auto r = __builtin_ctzl(lsb);
+    auto r = __builtin_ctzll(lsb);
     return std::min(bucket * num_bits + excess + r, max_n);
 }
 
@@ -215,7 +213,7 @@ inline IndividualIndex::size_type IndividualIndex::size() const {
 }
 
 inline IndividualIndex::size_type IndividualIndex::max_size() const {
-    return bitmap.size() * num_bits;
+    return max_n;
 }
 
 inline bool IndividualIndex::empty() const {
