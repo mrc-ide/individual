@@ -1,83 +1,142 @@
 #include <testthat.h>
+#include <unordered_set>
 #include "../inst/include/IndividualIndex.h"
 
 using individual_index_t = IndividualIndex;
 
 context("Individual index") {
 
-  test_that("Iterator construction works") {
-      std::vector<size_t> x = {1, 3, 6};
-      auto index = individual_index_t(10, std::cbegin(x), std::cend(x));
-      auto exists = index.find(1) != index.end();
-      expect_true(index.find(1) != index.end());
-      expect_true(index.find(3) != index.end());
-      expect_true(index.find(6) != index.end());
-      expect_true(index.find(9) == index.end());
-  }
+    test_that("Iterator construction works") {
+        std::vector<size_t> x = {1, 3, 6};
+        auto index = individual_index_t(10, std::cbegin(x), std::cend(x));
+        auto exists = index.find(1) != index.end();
+        expect_true(index.find(1) != index.end());
+        expect_true(index.find(3) != index.end());
+        expect_true(index.find(6) != index.end());
+        expect_true(index.find(9) == index.end());
+    }
 
-  test_that("Insertions work") {
-      auto index = individual_index_t(10);
-      expect_true(index.find(1) == index.end());
-      expect_true(index.find(6) == index.end());
-      index.insert(1);
-      expect_true(index.find(1) != index.end());
-      expect_true(index.find(6) == index.end());
-      index.insert(6);
-      expect_true(index.find(1) != index.end());
-      expect_true(index.find(6) != index.end());
-  }
+    test_that("Insertions work") {
+        auto index = individual_index_t(10);
+        expect_true(index.find(1) == index.end());
+        expect_true(index.find(6) == index.end());
+        index.insert(1);
+        expect_true(index.find(1) != index.end());
+        expect_true(index.find(6) == index.end());
+        index.insert(6);
+        expect_true(index.find(1) != index.end());
+        expect_true(index.find(6) != index.end());
+    }
 
-  test_that("Insertions by iteration works") {
-      std::vector<size_t> x = {1, 3, 6};
-      auto index = individual_index_t(10);
-      index.insert(std::cbegin(x), std::cend(x));
-      expect_true(index.find(1) != index.end());
-      expect_true(index.find(3) != index.end());
-      expect_true(index.find(6) != index.end());
-      expect_true(index.find(0) == index.end());
-      expect_true(index.find(9) == index.end());
-  }
+    test_that("Insertions by iteration works") {
+        std::vector<size_t> x = {1, 3, 6};
+        auto index = individual_index_t(10);
+        index.insert(std::cbegin(x), std::cend(x));
+        expect_true(index.find(1) != index.end());
+        expect_true(index.find(3) != index.end());
+        expect_true(index.find(6) != index.end());
+        expect_true(index.find(0) == index.end());
+        expect_true(index.find(9) == index.end());
+    }
 
-  test_that("Erasures work") {
-      std::vector<size_t> x = {1, 3, 6};
-      auto index = individual_index_t(10, std::cbegin(x), std::cend(x));
-      index.erase(1);
-      expect_true(index.find(1) == index.end());
-      expect_true(index.find(3) != index.end());
-      expect_true(index.find(6) != index.end());
-      expect_true(index.find(9) == index.end());
-      index.erase(6);
-      expect_true(index.find(1) == index.end());
-      expect_true(index.find(3) != index.end());
-      expect_true(index.find(6) == index.end());
-      expect_true(index.find(9) == index.end());
-  }
+    test_that("Erasures work") {
+        std::vector<size_t> x = {1, 3, 6};
+        auto index = individual_index_t(10, std::cbegin(x), std::cend(x));
+        index.erase(1);
+        expect_true(index.find(1) == index.end());
+        expect_true(index.find(3) != index.end());
+        expect_true(index.find(6) != index.end());
+        expect_true(index.find(9) == index.end());
+        index.erase(6);
+        expect_true(index.find(1) == index.end());
+        expect_true(index.find(3) != index.end());
+        expect_true(index.find(6) == index.end());
+        expect_true(index.find(9) == index.end());
+    }
 
-  test_that("Iteration works") {
-      std::vector<size_t> x = {1, 3, 6};
-      auto index = individual_index_t(10, std::cbegin(x), std::cend(x));
-      const auto iterated = std::vector<size_t>(std::cbegin(index), std::cend(index));
-      expect_true(std::find(iterated.begin(), iterated.end(), 0) == iterated.end());
-      expect_true(std::find(iterated.begin(), iterated.end(), 1) != iterated.end());
-      expect_true(std::find(iterated.begin(), iterated.end(), 3) != iterated.end());
-      expect_true(std::find(iterated.begin(), iterated.end(), 6) != iterated.end());
-      expect_true(std::find(iterated.begin(), iterated.end(), 9) == iterated.end());
-  }
+    test_that("Iteration works") {
+        std::vector<size_t> x = {1, 3, 6};
+        auto index = individual_index_t(10, std::cbegin(x), std::cend(x));
+        auto iterated = std::vector<size_t>(std::cbegin(index), std::cend(index));
+        expect_true(std::find(iterated.begin(), iterated.end(), 0) == iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 1) != iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 3) != iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 6) != iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 9) == iterated.end());
 
-  test_that("Multi word sets work") {
-      std::vector<size_t> x = {1, 3, 6, 64, 73};
-      auto index = individual_index_t(100, std::cbegin(x), std::cend(x));
-      const auto iterated = std::vector<size_t>(std::cbegin(index), std::cend(index));
-      expect_true(std::find(iterated.begin(), iterated.end(), 0) == iterated.end());
-      expect_true(std::find(iterated.begin(), iterated.end(), 1) != iterated.end());
-      expect_true(std::find(iterated.begin(), iterated.end(), 3) != iterated.end());
-      expect_true(std::find(iterated.begin(), iterated.end(), 6) != iterated.end());
-      expect_true(std::find(iterated.begin(), iterated.end(), 9) == iterated.end());
-      expect_true(std::find(iterated.begin(), iterated.end(), 64) != iterated.end());
-      expect_true(std::find(iterated.begin(), iterated.end(), 73) != iterated.end());
-      expect_true(std::find(iterated.begin(), iterated.end(), 72) == iterated.end());
-      expect_true(index.find(72) == index.end());
-      expect_true(index.find(73) != index.end());
-  }
+        index.insert(2);
+        iterated = std::vector<size_t>(std::cbegin(index), std::cend(index));
+        expect_true(std::find(iterated.begin(), iterated.end(), 1) != iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 2) != iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 3) != iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 6) != iterated.end());
+    }
 
+    test_that("Multi word sets work") {
+        std::vector<size_t> x = {1, 3, 6, 64, 73};
+        auto index = individual_index_t(100, std::cbegin(x), std::cend(x));
+        const auto iterated = std::vector<size_t>(std::cbegin(index), std::cend(index));
+        expect_true(std::find(iterated.begin(), iterated.end(), 0) == iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 1) != iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 3) != iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 6) != iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 9) == iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 64) != iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 73) != iterated.end());
+        expect_true(std::find(iterated.begin(), iterated.end(), 72) == iterated.end());
+    }
+}
+
+context("Individual index stochastic") {
+
+    test_that("Insertion and erasure") {
+        auto container_size = 1 << 8;
+        auto data_size = 1 << 4;
+        for (auto _ = 0; _ < 10; ++_) {
+            auto index = individual_index_t(container_size);
+            auto standard = std::unordered_set<size_t>(container_size);
+            auto excluded = std::vector<size_t>(data_size / 2);
+
+            //test insertion and erasure
+            for (auto i = 0; i < data_size; ++i) {
+                auto point = rand() % container_size;
+                if (i < data_size / 2) {
+                    index.insert(point);
+                    standard.insert(point);
+                } else {
+                    index.erase(point);
+                    standard.erase(point);
+                    excluded[i - data_size / 2] = point;
+                }
+            }
+
+            for (auto point : standard) {
+                expect_true(index.find(point) != index.end());
+            }
+            for (auto point : excluded) {
+                expect_true(index.find(point) == index.end());
+            }
+        }
+    }
+
+    test_that("Stochastic test for iteration") {
+        auto container_size = 1 << 15;
+        auto data_size = 1 << 8;
+        for (auto _ = 0; _ < 10; ++_) {
+            auto index = individual_index_t(container_size);
+            auto standard = std::vector<size_t>(data_size);
+
+            for (auto i = 0; i < data_size; ++i) {
+                auto point = rand() % container_size;
+                index.insert(point);
+                standard[i] = point;
+            }
+
+            auto iterated = std::unordered_set<size_t>(index.begin(), index.end());
+
+            for (auto point : standard) {
+                expect_true(iterated.find(point) != iterated.end());
+            }
+        }
+    }
 }

@@ -16,7 +16,6 @@ class IndividualIndex;
 
 class IndividualIndex {
 private:
-    std::vector<uint64_t> bitmap;
     size_t n;
     size_t max_n;
     const size_t num_bits = 64;
@@ -24,6 +23,7 @@ private:
     void set(size_t);
     void unset(size_t);
 public:
+    std::vector<uint64_t> bitmap;
     using allocator_type = std::allocator<size_t>;
     using value_type = allocator_type::value_type;
     using reference = allocator_type::reference;
@@ -36,7 +36,6 @@ public:
     private:
         const IndividualIndex& index;
         size_t p;
-        bool kickoff = false;
     public:
         using difference_type = allocator_type::difference_type;
         using value_type = allocator_type::value_type;
@@ -44,7 +43,7 @@ public:
         using pointer = const allocator_type::pointer;
         using iterator_category = std::forward_iterator_tag;
 
-        const_iterator(const IndividualIndex&, size_t, size_t);
+        const_iterator(const IndividualIndex&, size_t);
         const_iterator(const IndividualIndex&);
 
         bool operator==(const const_iterator&) const;
@@ -78,13 +77,30 @@ public:
     bool empty() const;
 };
 
+inline size_t next_position(const std::vector<uint64_t>& bitmap, size_t num_bits, size_t max_n, size_t p) {
+    ++p;
+    auto bucket = p / num_bits;
+    auto excess = p % num_bits;
+    uint64_t bitset = bitmap.at(bucket) >> excess;
+
+    while(bitset == 0 && bucket + 1 < bitmap.size()) {
+        bitset = bitmap.at(++bucket);
+        excess = 0;
+    }
+
+    auto lsb = bitset & -bitset;
+    auto r = __builtin_ctzl(lsb);
+    return std::min(bucket * num_bits + excess + r, max_n);
+}
+
+
 inline IndividualIndex::const_iterator::const_iterator(
-    const IndividualIndex& index,
-    size_t k, size_t p) : index(index), p(p) {
+    const IndividualIndex& index, size_t p) : index(index), p(p) {
 }
 
 inline IndividualIndex::const_iterator::const_iterator(
     const IndividualIndex& index) : index(index), p(static_cast<size_t>(-1)) {
+    p = next_position(index.bitmap, index.num_bits, index.max_n, p);
 }
 
 
@@ -99,24 +115,7 @@ inline bool IndividualIndex::const_iterator::operator !=(
 }
 
 inline IndividualIndex::const_iterator& IndividualIndex::const_iterator::operator ++() {
-    ++p;
-    uint64_t bitset;
-
-    while(p < index.max_n) {
-        bitset = index.bitmap[p/index.num_bits] >> (p%index.num_bits);
-        if (bitset > 0) {
-            break;
-        }
-        p = std::min((p/index.num_bits + 1) * index.num_bits, index.max_n);
-    }
-
-    if (p == index.max_n) {
-        return *this;
-    }
-
-    auto lsb = bitset & -bitset;
-    auto r = __builtin_ctzl(lsb);
-    p = std::min(p + r, index.max_n);
+    p = next_position(index.bitmap, index.num_bits, index.max_n, p);
     return *this;
 }
 
@@ -137,14 +136,12 @@ inline IndividualIndex::IndividualIndex(size_t size, InputIterator begin, InputI
     insert(begin, end);
 }
 
-inline bool IndividualIndex::operator ==(const IndividualIndex&) const {
-    //Rcpp::stop("== Not implemented");
-    return false;
+inline bool IndividualIndex::operator ==(const IndividualIndex& other) const {
+    return bitmap == other.bitmap;
 }
 
-inline bool IndividualIndex::operator !=(const IndividualIndex&) const {
-    //Rcpp::stop("!= Not implemented");
-    return false;
+inline bool IndividualIndex::operator !=(const IndividualIndex& other) const {
+    return !(*this == other);
 }
 
 inline IndividualIndex::iterator IndividualIndex::begin() {
@@ -160,19 +157,19 @@ inline IndividualIndex::const_iterator IndividualIndex::cbegin() const {
 }
 
 inline IndividualIndex::iterator IndividualIndex::end() {
-    return IndividualIndex::iterator(*this, bitmap.size() - 1, max_n);
+    return IndividualIndex::iterator(*this, max_n);
 }
 
 inline IndividualIndex::const_iterator IndividualIndex::end() const {
-    return IndividualIndex::const_iterator(*this, bitmap.size() - 1, max_n);
+    return IndividualIndex::const_iterator(*this, max_n);
 }
 
 inline IndividualIndex::const_iterator IndividualIndex::cend() const {
-    return IndividualIndex::const_iterator(*this, bitmap.size() - 1, max_n);
+    return IndividualIndex::const_iterator(*this, max_n);
 }
 
 inline bool IndividualIndex::exists(size_t v) {
-    return (bitmap.at(v/num_bits) & (1 << (v % num_bits))) > 0;
+    return (bitmap.at(v/num_bits) & (0x1ULL << (v % num_bits))) > 0;
 }
 
 inline void IndividualIndex::set(size_t v) {
@@ -192,7 +189,7 @@ inline void IndividualIndex::erase(size_t v) {
 
 inline IndividualIndex::iterator IndividualIndex::find(size_t v) {
     if(exists(v)) {
-        return IndividualIndex::iterator(*this, floor(v / num_bits), v % num_bits);
+        return IndividualIndex::iterator(*this, v);
     }
     return end();
 }
@@ -218,7 +215,7 @@ inline IndividualIndex::size_type IndividualIndex::size() const {
 }
 
 inline IndividualIndex::size_type IndividualIndex::max_size() const {
-    return bitmap.size() * 64;
+    return bitmap.size() * num_bits;
 }
 
 inline bool IndividualIndex::empty() const {

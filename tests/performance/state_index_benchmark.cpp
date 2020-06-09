@@ -9,8 +9,8 @@
 #include "../../inst/include/IndividualIndex.h"
 #include <unordered_set>
 
-//using individual_index_t = IndividualIndex;
-using individual_index_t = std::unordered_set<size_t>;
+using individual_index_t = IndividualIndex;
+//using individual_index_t = std::unordered_set<size_t>;
 
 std::vector<size_t>create_random_data(size_t size, size_t limit) {
     std::vector<size_t> data(size);
