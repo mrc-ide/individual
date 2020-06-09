@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 #include <testthat.h>
 #include <unordered_set>
 #include "../inst/include/IndividualIndex.h"
@@ -99,7 +100,7 @@ context("Individual index stochastic") {
 
             //test insertion and erasure
             for (auto i = 0; i < data_size; ++i) {
-                auto point = rand() % container_size;
+                auto point = static_cast<size_t>(R::runif(0, container_size));
                 if (i < data_size / 2) {
                     index.insert(point);
                     standard.insert(point);
@@ -127,7 +128,7 @@ context("Individual index stochastic") {
             auto standard = std::vector<size_t>(data_size);
 
             for (auto i = 0; i < data_size; ++i) {
-                auto point = rand() % container_size;
+                auto point = static_cast<size_t>(R::runif(0, container_size));
                 index.insert(point);
                 standard[i] = point;
             }

@@ -67,8 +67,8 @@ inline ProcessAPI::ProcessAPI(
     Rcpp::List r_params,
     Rcpp::Environment renderer)
     :state(state),
-     renderer(renderer),
-     scheduler(scheduler) {
+     scheduler(scheduler),
+     renderer(renderer) {
     if (r_params.size() > 0) {
         const auto& names = Rcpp::as<std::vector<std::string>>(r_params.names());
         for (const auto& name : names) {

@@ -47,6 +47,8 @@ Create a new Individual
 \item{\code{states}}{a list of State objects}
 
 \item{\code{variables}}{a list of Variable objects}
+
+\item{\code{events}}{a list of Event objects}
 }
 \if{html}{\out{</div>}}
 }

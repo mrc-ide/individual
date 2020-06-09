@@ -21,6 +21,7 @@ Individual <- R6::R6Class(
     #' @param name is a unique idetifier which is used in the output
     #' @param states a list of State objects
     #' @param variables a list of Variable objects
+    #' @param events a list of Event objects
     initialize = function(name, states, variables = list(), events = list()) {
       if (any(duplicated(vcapply(states, function (state) state$name)))) {
         stop('No duplicate state names allowed')
