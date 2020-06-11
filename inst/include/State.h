@@ -154,7 +154,7 @@ inline void __attribute__ ((noinline)) State::apply_variable_update(const variab
             }
         } else {
             // Subset assignment
-            for (auto i = 0; i < index.size(); ++i) {
+            for (auto i = 0u; i < index.size(); ++i) {
               to_update[index[i]] = values[i];
             }
         }

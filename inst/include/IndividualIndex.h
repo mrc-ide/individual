@@ -20,8 +20,8 @@ private:
     bool exists(size_t);
     void set(size_t);
     void unset(size_t);
-public:
     std::vector<uint64_t> bitmap;
+public:
     using allocator_type = std::allocator<size_t>;
     using value_type = allocator_type::value_type;
     using reference = allocator_type::reference;
