@@ -6,10 +6,10 @@
  */
 
 #include <benchmark/benchmark.h>
-#include "../../inst/include/IndividualIndex.h"
 #include <unordered_set>
+#include "../../inst/include/IterableBitset.h"
 
-using individual_index_t = IndividualIndex;
+using individual_index_t = IterableBitset<uint64_t>;
 //using individual_index_t = std::unordered_set<size_t>;
 
 std::vector<size_t>create_random_data(size_t size, size_t limit) {

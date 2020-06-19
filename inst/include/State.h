@@ -11,10 +11,10 @@
 #include <tuple>
 #include <queue>
 #include "common_types.h"
-#include "IndividualIndex.h"
+#include "IterableBitset.h"
 #include "Log.h"
 
-using individual_index_t = IndividualIndex;
+using individual_index_t = IterableBitset<uint64_t>;
 using variable_vector_t = std::vector<double>;
 using state_vector_t = named_array_t<individual_index_t>;
 
@@ -107,7 +107,7 @@ inline void __attribute__ ((noinline)) State::apply_updates() {
     }
 }
 
-inline void __attribute__ ((noinline)) State::apply_state_update(const state_update_t& update) {
+inline void State::apply_state_update(const state_update_t& update) {
     const auto& individual_name = std::get<0>(update);
     const auto& state_name = std::get<1>(update);
     Log(log_level::debug).get() << "updating state: " << individual_name << ":" << state_name << std::endl;
@@ -120,7 +120,7 @@ inline void __attribute__ ((noinline)) State::apply_state_update(const state_upd
     states.at(individual_name).at(state_name).insert(index.cbegin(), index.cend());
 }
 
-inline void __attribute__ ((noinline)) State::apply_variable_update(const variable_update_t& update) {
+inline void State::apply_variable_update(const variable_update_t& update) {
     const auto& individual_name = std::get<0>(update);
     const auto& variable_name = std::get<1>(update);
     Log(log_level::debug).get() << "updating variable: " << individual_name << ":" << variable_name << std::endl;

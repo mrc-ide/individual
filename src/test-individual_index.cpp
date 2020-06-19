@@ -1,9 +1,10 @@
 #include <Rcpp.h>
 #include <testthat.h>
 #include <unordered_set>
-#include "../inst/include/IndividualIndex.h"
 
-using individual_index_t = IndividualIndex;
+#include "../inst/include/IterableBitset.h"
+
+using individual_index_t = IterableBitset<uint64_t>;
 
 context("Individual index") {
 

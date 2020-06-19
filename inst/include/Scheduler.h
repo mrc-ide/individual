@@ -10,7 +10,17 @@
 
 #include "common_types.h"
 
+//'@title event type
+//'@description a description of an event
+//'There are three components:
+//'
+//' 1. The name of the event, e.g. 'infection'
+//' 2. The max size of the target population, e.g. 60,000 humans.
+//' 3. A vector of listeners to execute when the event is triggered.
 using event_t = std::tuple<std::string, size_t, std::vector<SEXP>>;
+
+//'@title timeline type
+//'@description a map from timesteps to target individuals
 using timeline_t = std::unordered_map<size_t, individual_index_t>;
 
 template<class TProcessAPI>

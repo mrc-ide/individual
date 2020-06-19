@@ -1,6 +1,6 @@
 Package: individual
 Title: A package for specifying and simulating individial based models
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: c(
   person(
     given = "Giovanni",
