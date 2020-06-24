@@ -20,7 +20,7 @@ Rcpp::XPtr<listener_t> update_state_listener(
     return Rcpp::XPtr<listener_t>(
         new listener_t([=] (
                 ProcessAPI& api,
-                individual_index_t& target
+                const individual_index_t& target
             ) {
             api.queue_state_update(individual, state, target);
         }),
@@ -37,7 +37,7 @@ Rcpp::XPtr<listener_t> reschedule_listener(const std::string event, double delay
     return Rcpp::XPtr<listener_t>(
         new listener_t([=] (
                 ProcessAPI& api,
-                individual_index_t& target
+                const individual_index_t& target
             ) {
             api.schedule(event, target, delay);
         }),
@@ -61,13 +61,12 @@ Rcpp::XPtr<process_t> fixed_probability_state_change_process(
     return Rcpp::XPtr<process_t>(
         new process_t([=] (
             ProcessAPI& api) {
-            const auto& source_individuals = api.get_state(individual, from_state);
-            const auto& random = Rcpp::runif(source_individuals.size());
-            auto target_individuals = individual_index_t();
+            auto target_individuals = api.get_state(individual, from_state);
+            const auto& random = Rcpp::runif(target_individuals.size());
             auto random_index = 0;
-            for (const auto individual : source_individuals) {
-                if (random[random_index] < rate) {
-                    target_individuals.insert(individual);
+            for (const auto individual : target_individuals) {
+                if (random[random_index] > rate) {
+                    target_individuals.erase(individual);
                 }
                 ++random_index;
             }

@@ -31,7 +31,7 @@ SimAPI <- R6::R6Class(
         private$.api,
         individual$name,
         variable$name,
-        index - 1
+        index
       )
     },
 

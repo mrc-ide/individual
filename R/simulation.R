@@ -4,7 +4,6 @@
 #' @param processes a list of processes to execute on each timestep
 #' @param end_timestep the number of timesteps to simulate
 #' @param parameters a list of named parameters to pass to the process functions
-#' @param events a list of events to register with the scheduler
 #' @examples
 #' population <- 4
 #' S <- State$new('S', population)
@@ -35,8 +34,7 @@ simulate <- function(
   individuals,
   processes,
   end_timestep,
-  parameters=list(),
-  events=list()
+  parameters=list()
   ) {
   if (end_timestep <= 0) {
     stop('End timestep must be > 0')
@@ -45,7 +43,7 @@ simulate <- function(
     individuals <- list(individuals)
   }
   render <- Render$new(end_timestep)
-  scheduler <- create_scheduler(events)
+  scheduler <- create_scheduler(individuals)
   state <- create_state(individuals)
   cpp_api <- create_process_api(state, scheduler, parameters, render)
   api <- SimAPI$new(cpp_api, parameters, render)

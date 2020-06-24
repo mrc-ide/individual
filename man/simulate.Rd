@@ -4,13 +4,7 @@
 \alias{simulate}
 \title{Main simulation loop}
 \usage{
-simulate(
-  individuals,
-  processes,
-  end_timestep,
-  parameters = list(),
-  events = list()
-)
+simulate(individuals, processes, end_timestep, parameters = list())
 }
 \arguments{
 \item{individuals}{a list of Individual to simulate}
@@ -20,8 +14,6 @@ simulate(
 \item{end_timestep}{the number of timesteps to simulate}
 
 \item{parameters}{a list of named parameters to pass to the process functions}
-
-\item{events}{a list of events to register with the scheduler}
 }
 \description{
 Main simulation loop

@@ -87,8 +87,8 @@ process_get_timestep <- function(api) {
     .Call(`_individual_process_get_timestep`, api)
 }
 
-create_scheduler <- function(events) {
-    .Call(`_individual_create_scheduler`, events)
+create_scheduler <- function(individuals) {
+    .Call(`_individual_create_scheduler`, individuals)
 }
 
 scheduler_tick <- function(scheduler) {
