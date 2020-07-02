@@ -97,7 +97,8 @@ SimAPI <- R6::R6Class(
     #' @description Schedule an event to occur in the future
     #' @param event the event to schedule
     #' @param target the individuals to pass to the listener
-    #' @param delay the number of timesteps to wait before triggering the event
+    #' @param delay the number of timesteps to wait before triggering the event,
+    #' can be a scalar or an array of values for each target individual
     schedule = function(event, target, delay) {
       process_schedule(private$.api, event$name, target, delay)
     },

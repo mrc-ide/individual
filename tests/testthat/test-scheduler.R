@@ -60,6 +60,37 @@ test_that("events can be scheduled for for a Real time", {
   mockery::expect_args(listener, 1, api = sim$r_api, target = c(2, 4))
 })
 
+test_that("you can schedule different times for a target population", {
+  event <- Event$new('event')
+  listener <- mockery::mock()
+  event$add_listener(listener)
+  human <- Individual$new('test', list(State$new('S', 10)), events=list(event))
+  sim <- setup_simulation(list(human))
+  scheduler <- sim$scheduler
+  #time = 0
+  sim$r_api$schedule(event, c(1, 2, 4, 8, 3), c(1, 3, 1, 2, 2))
+
+  #time = 1
+  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  mockery::expect_called(listener, 0)
+  scheduler_tick(sim$scheduler)
+
+  #time = 2
+  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  mockery::expect_called(listener, 0)
+  scheduler_tick(sim$scheduler)
+
+  #time = 3
+  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  mockery::expect_called(listener, 1)
+  scheduler_tick(sim$scheduler)
+
+  #time = 4
+  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  mockery::expect_called(listener, 1)
+  mockery::expect_args(listener, 1, api = sim$r_api, target = c(2, 4))
+})
+
 test_that("you can see which individuals are scheduled for an event", {
   event <- Event$new('event')
   listener <- mockery::mock()
