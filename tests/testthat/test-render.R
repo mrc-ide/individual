@@ -18,6 +18,23 @@ test_that("Premature render works", {
   expect_mapequal(true_render, rendered)
 })
 
+test_that("Vector renders work", {
+  human <- Individual$new('human', states=list())
+
+  render <- Render$new(2)
+  sim <- setup_simulation(list(human), renderer = render)
+
+  sim$r_api$render('counts', c(10, 100, 0), 1)
+  sim$r_api$render('counts', c(9, 101, 0), 2)
+
+  rendered <- render$to_dataframe()
+  expected <- data.frame(
+    timestep = c(1, 2),
+    counts = I(list(c(10, 100, 0), c(9, 101, 0)))
+  )
+  expect_equivalent(rendered, expected)
+})
+
 test_that("Prefab state counts work correctly", {
   S <- State$new('S', 10)
   I <- State$new('I', 100)

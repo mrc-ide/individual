@@ -17,7 +17,6 @@ Render <- R6::R6Class(
     #' scalar outputs to store to the final render
     initialize = function(timesteps) {
       private$.timesteps = timesteps
-      private$.vectors[['timestep']] <- seq_len(timesteps)
     },
 
     #' @description
@@ -30,7 +29,11 @@ Render <- R6::R6Class(
         stop("Please don't name your variable 'timestep'")
       }
       if (!(name %in% names(private$.vectors))) {
-        private$.vectors[[name]] = rep(NA, private$.timesteps)
+        if (length(value) == 1) {
+          private$.vectors[[name]] = rep(NA, private$.timesteps)
+        } else {
+          private$.vectors[[name]] = as.list(rep(NA, private$.timesteps))
+        }
       }
       private$.vectors[[name]][[timestep]] = value
     },
@@ -38,7 +41,11 @@ Render <- R6::R6Class(
     #' @description
     #' Make a dataframe for the render
     to_dataframe = function() {
-      data.frame(private$.vectors)
+      df <- data.frame(timestep = seq_len(private$.timesteps))
+      for (k in names(private$.vectors)) {
+        df[[k]] <- private$.vectors[[k]]
+      }
+      df
     }
   )
 )
