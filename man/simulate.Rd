@@ -4,7 +4,13 @@
 \alias{simulate}
 \title{Main simulation loop}
 \usage{
-simulate(individuals, processes, end_timestep, parameters = list())
+simulate(
+  individuals,
+  processes,
+  end_timestep,
+  parameters = list(),
+  initialisation = NULL
+)
 }
 \arguments{
 \item{individuals}{a list of Individual to simulate}
@@ -14,6 +20,9 @@ simulate(individuals, processes, end_timestep, parameters = list())
 \item{end_timestep}{the number of timesteps to simulate}
 
 \item{parameters}{a list of named parameters to pass to the process functions}
+
+\item{initialisation}{an optional function to initialise the model. This
+function is passed the API, which allows you to schedule initial events}
 }
 \description{
 Main simulation loop
