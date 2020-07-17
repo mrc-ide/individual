@@ -72,7 +72,11 @@ inline ProcessAPI::ProcessAPI(
     if (r_params.size() > 0) {
         const auto& names = Rcpp::as<std::vector<std::string>>(r_params.names());
         for (const auto& name : names) {
-            params.insert({ name, Rcpp::as<std::vector<double>>(r_params[name]) });
+            if (Rf_isNull(r_params[name])) {
+                params.insert({ name, std::vector<double>() });
+            } else {
+                params.insert({ name, Rcpp::as<std::vector<double>>(r_params[name]) });
+            }
         }
     }
 }
