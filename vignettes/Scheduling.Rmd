@@ -106,12 +106,14 @@ processes <- list(
   render_state_sizes
 )
 
+# add the event to the human individual
+human <- Individual$new('human', list(S, I, R), events = list(recovery_event))
+
 # run the simulation
 output <- simulate(
   human,
   processes,
-  100,
-  events = list(recovery_event)
+  100
 )
 
 # plot the output

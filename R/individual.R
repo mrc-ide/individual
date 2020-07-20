@@ -14,11 +14,15 @@ Individual <- R6::R6Class(
     #' @field variables a list of variable objects which apply to this individual
     variables = list(),
 
+    #' @field events a list of event objects which apply to this individual
+    events = list(),
+
     #' @description Create a new Individual
     #' @param name is a unique idetifier which is used in the output
     #' @param states a list of State objects
     #' @param variables a list of Variable objects
-    initialize = function(name, states, variables = list()) {
+    #' @param events a list of Event objects
+    initialize = function(name, states, variables = list(), events = list()) {
       if (any(duplicated(vcapply(states, function (state) state$name)))) {
         stop('No duplicate state names allowed')
       }
@@ -27,9 +31,14 @@ Individual <- R6::R6Class(
         stop('No duplicate variable names allowed')
       }
 
+      if (any(duplicated(vcapply(events, function (e) e$name)))) {
+        stop('No duplicate event names allowed')
+      }
+
       self$name <- name
       self$states <- states
       self$variables <- variables
+      self$events <- events
     }
   )
 )

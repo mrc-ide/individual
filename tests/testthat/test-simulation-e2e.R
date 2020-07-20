@@ -109,7 +109,8 @@ test_that("deterministic state model w events works", {
 
   human <- Individual$new(
     'human',
-    list(S, I, R)
+    list(S, I, R),
+    events=list(infection, recovery)
   )
 
   infection$add_listener(function(simulation, target) {
@@ -136,7 +137,7 @@ test_that("deterministic state model w events works", {
     state_count_renderer_process(human$name, c(S$name, I$name, R$name))
   )
 
-  render <- simulate(human, processes, 6, events=list(infection, recovery))
+  render <- simulate(human, processes, 6)
   expected_render <- data.frame(
     timestep = c(1, 2, 3, 4, 5, 6),
     human_S_count = c(4, 4, 2, 0, 0, 0),

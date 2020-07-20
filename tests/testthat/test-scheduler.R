@@ -1,9 +1,10 @@
 test_that("events can be scheduled for the future", {
   event <- Event$new('event')
+  human <- Individual$new('test', list(State$new('S', 10)), events=list(event))
   listener <- mockery::mock()
   event$add_listener(listener)
-  scheduler <- create_scheduler(list(event))
-  sim <- setup_simulation(scheduler = scheduler)
+  sim <- setup_simulation(list(human))
+  scheduler <- sim$scheduler
   #time = 0
   sim$r_api$schedule(event, c(2, 4), 2)
 
@@ -32,8 +33,9 @@ test_that("events can be scheduled for for a Real time", {
   event <- Event$new('event')
   listener <- mockery::mock()
   event$add_listener(listener)
-  scheduler <- create_scheduler(list(event))
-  sim <- setup_simulation(scheduler = scheduler)
+  human <- Individual$new('test', list(State$new('S', 10)), events=list(event))
+  sim <- setup_simulation(list(human))
+  scheduler <- sim$scheduler
   #time = 0
   sim$r_api$schedule(event, c(2, 4), 1.9)
 
@@ -63,8 +65,9 @@ test_that("you can see which individuals are scheduled for an event", {
   listener <- mockery::mock()
   event$add_listener(listener)
 
-  scheduler <- create_scheduler(list(event))
-  sim <- setup_simulation(scheduler = scheduler)
+  human <- Individual$new('test', list(State$new('S', 10)), events=list(event))
+  sim <- setup_simulation(list(human))
+  scheduler <- sim$scheduler
 
   #time = 0
   expect_length(sim$r_api$get_scheduled(event), 0)
@@ -99,8 +102,10 @@ test_that("multiple events can be scheduled", {
   event1$add_listener(listener1)
   event2$add_listener(listener2)
 
-  scheduler <- create_scheduler(list(event1, event2))
-  sim <- setup_simulation(scheduler = scheduler)
+  human <- Individual$new('test', list(State$new('S', 10)), events=list(event1, event2))
+
+  sim <- setup_simulation(list(human))
+  scheduler <- sim$scheduler
 
   #time = 0
   expect_length(sim$r_api$get_scheduled(event1), 0)
@@ -127,8 +132,9 @@ test_that("events can be cleared for an individual", {
   event <- Event$new('event')
   listener <- mockery::mock()
   event$add_listener(listener)
-  scheduler <- create_scheduler(list(event))
-  sim <- setup_simulation(scheduler = scheduler)
+  human <- Individual$new('test', list(State$new('S', 10)), events=list(event))
+  sim <- setup_simulation(list(human))
+  scheduler <- sim$scheduler
 
   #time = 0
   expect_length(sim$r_api$get_scheduled(event), 0)

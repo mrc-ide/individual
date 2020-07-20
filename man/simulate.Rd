@@ -9,7 +9,7 @@ simulate(
   processes,
   end_timestep,
   parameters = list(),
-  events = list()
+  initialisation = NULL
 )
 }
 \arguments{
@@ -21,7 +21,8 @@ simulate(
 
 \item{parameters}{a list of named parameters to pass to the process functions}
 
-\item{events}{a list of events to register with the scheduler}
+\item{initialisation}{an optional function to initialise the model. This
+function is passed the API, which allows you to schedule initial events}
 }
 \description{
 Main simulation loop

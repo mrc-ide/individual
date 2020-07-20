@@ -4,7 +4,8 @@
 #' @param processes a list of processes to execute on each timestep
 #' @param end_timestep the number of timesteps to simulate
 #' @param parameters a list of named parameters to pass to the process functions
-#' @param events a list of events to register with the scheduler
+#' @param initialisation an optional function to initialise the model. This
+#' function is passed the API, which allows you to schedule initial events
 #' @examples
 #' population <- 4
 #' S <- State$new('S', population)
@@ -35,8 +36,8 @@ simulate <- function(
   individuals,
   processes,
   end_timestep,
-  parameters=list(),
-  events=list()
+  parameters = list(),
+  initialisation = NULL
   ) {
   if (end_timestep <= 0) {
     stop('End timestep must be > 0')
@@ -45,21 +46,32 @@ simulate <- function(
     individuals <- list(individuals)
   }
   render <- Render$new(end_timestep)
-  scheduler <- create_scheduler(events)
+  scheduler <- create_scheduler(individuals)
   state <- create_state(individuals)
   cpp_api <- create_process_api(state, scheduler, parameters, render)
   api <- SimAPI$new(cpp_api, parameters, render)
+  if (!is.null(initialisation)) {
+    execute_any_process(initialisation, api, cpp_api)
+  }
   for (t in seq_len(end_timestep)) {
     for (process in processes) {
-      if (inherits(process, "externalptr")) {
-        execute_process(process, cpp_api)
-      } else {
-        process(api)
-      }
+      execute_any_process(process, api, cpp_api)
     }
     scheduler_process_events(scheduler, cpp_api, api)
     state_apply_updates(state)
     scheduler_tick(scheduler)
   }
   render$to_dataframe()
+}
+
+#' @title Execute a cpp or R process in the simulation
+#' @param p the process to execute
+#' @param api the R api
+#' @param cpp_api the C++ api
+execute_any_process <- function(p, api, cpp_api) {
+  if (inherits(p, "externalptr")) {
+    execute_process(p, cpp_api)
+  } else {
+    p(api)
+  }
 }
