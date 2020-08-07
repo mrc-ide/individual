@@ -34,11 +34,11 @@ public:
         const std::string&,
         const std::vector<size_t>&,
         std::vector<double>&) const;
-    template<class TIndex>
-    void schedule(const std::string&, const TIndex&, double);
-    individual_index_t get_scheduled(const std::string&) const;
-    template<class TIndex>
-    void clear_schedule(const std::string&, const TIndex&);
+    virtual void schedule(const std::string&, const individual_index_t&, double);
+    virtual void schedule(const std::string&, const std::vector<size_t>&, double);
+    virtual individual_index_t get_scheduled(const std::string&) const;
+    virtual void clear_schedule(const std::string&, const individual_index_t&);
+    virtual void clear_schedule(const std::string&, const std::vector<size_t>&);
     virtual void render(const std::string&, double, size_t);
     virtual void render(const std::string&, double);
     virtual size_t get_timestep() const;
@@ -113,10 +113,16 @@ inline void ProcessAPI::get_variable(
     state->get_variable(individual, variable, index, result);
 }
 
-template<class TIndex>
 inline void ProcessAPI::schedule(
     const std::string& event,
-    const TIndex& index,
+    const individual_index_t& index,
+    double delay) {
+    scheduler->schedule(event, index, delay);
+}
+
+inline void ProcessAPI::schedule(
+    const std::string& event,
+    const std::vector<size_t>& index,
     double delay) {
     scheduler->schedule(event, index, delay);
 }
@@ -125,10 +131,15 @@ inline individual_index_t ProcessAPI::get_scheduled(const std::string& event) co
     return scheduler->get_scheduled(event);
 }
 
-template<class TIndex>
 inline void ProcessAPI::clear_schedule(
     const std::string& event,
-    const TIndex& index) {
+    const individual_index_t& index) {
+    scheduler->clear_schedule(event, index);
+}
+
+inline void ProcessAPI::clear_schedule(
+    const std::string& event,
+    const std::vector<size_t>& index) {
     scheduler->clear_schedule(event, index);
 }
 
