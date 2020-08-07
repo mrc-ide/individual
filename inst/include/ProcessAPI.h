@@ -27,38 +27,49 @@ private:
     params_t params;
 public:
     ProcessAPI(Rcpp::XPtr<State>, Rcpp::XPtr<scheduler_t>, Rcpp::List, Rcpp::Environment);
-    const individual_index_t& get_state(const std::string&, const std::string&) const;
-    const variable_vector_t& get_variable(const std::string&, const std::string&) const;
-    void get_variable(
+    virtual const individual_index_t& get_state(const std::string&, const std::string&) const;
+    virtual const variable_vector_t& get_variable(const std::string&, const std::string&) const;
+    virtual void get_variable(
         const std::string&,
         const std::string&,
         const std::vector<size_t>&,
         std::vector<double>&) const;
-    template<class TIndex>
-    void schedule(const std::string&, const TIndex&, double);
-    individual_index_t get_scheduled(const std::string&) const;
-    template<class TIndex>
-    void clear_schedule(const std::string&, const TIndex&);
-    void render(const std::string&, double, size_t);
-    void render(const std::string&, double);
-    size_t get_timestep() const;
-    const params_t& get_parameters() const;
-    void queue_state_update(
+    virtual void schedule(const std::string&, const individual_index_t&, double);
+    virtual void schedule(const std::string&, const std::vector<size_t>&, double);
+    virtual individual_index_t get_scheduled(const std::string&) const;
+    virtual void clear_schedule(const std::string&, const individual_index_t&);
+    virtual void clear_schedule(const std::string&, const std::vector<size_t>&);
+    virtual void render(const std::string&, double, size_t);
+    virtual void render(const std::string&, double);
+    virtual size_t get_timestep() const;
+    virtual const params_t& get_parameters() const;
+    virtual void queue_state_update(
         const std::string&,
         const std::string&,
         const individual_index_t&
     );
-    void queue_state_update(
+    virtual void queue_state_update(
         const std::string&,
         const std::string&,
         const std::vector<size_t>&
     );
-    void queue_variable_update(
+    virtual void queue_variable_update(
         const std::string&,
         const std::string&,
         const std::vector<size_t>&,
         const variable_vector_t&
     );
+
+    //virtual dtor
+    virtual ~ProcessAPI() = default;
+
+    //moving is still supported
+    ProcessAPI(ProcessAPI&&) = default;
+    ProcessAPI& operator=(ProcessAPI&&) = default;
+
+    //copying is still supported
+    ProcessAPI(ProcessAPI&) = default;
+    ProcessAPI& operator=(ProcessAPI&) = default;
 };
 
 inline ProcessAPI::ProcessAPI(
@@ -102,10 +113,16 @@ inline void ProcessAPI::get_variable(
     state->get_variable(individual, variable, index, result);
 }
 
-template<class TIndex>
 inline void ProcessAPI::schedule(
     const std::string& event,
-    const TIndex& index,
+    const individual_index_t& index,
+    double delay) {
+    scheduler->schedule(event, index, delay);
+}
+
+inline void ProcessAPI::schedule(
+    const std::string& event,
+    const std::vector<size_t>& index,
     double delay) {
     scheduler->schedule(event, index, delay);
 }
@@ -114,10 +131,15 @@ inline individual_index_t ProcessAPI::get_scheduled(const std::string& event) co
     return scheduler->get_scheduled(event);
 }
 
-template<class TIndex>
 inline void ProcessAPI::clear_schedule(
     const std::string& event,
-    const TIndex& index) {
+    const individual_index_t& index) {
+    scheduler->clear_schedule(event, index);
+}
+
+inline void ProcessAPI::clear_schedule(
+    const std::string& event,
+    const std::vector<size_t>& index) {
     scheduler->clear_schedule(event, index);
 }
 
