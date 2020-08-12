@@ -26,7 +26,7 @@ private:
     size_t n;
     size_t max_n;
     size_t num_bits;
-    bool exists(size_t);
+    bool exists(size_t) const;
     void set(size_t);
     void unset(size_t);
     std::vector<A> bitmap;
@@ -75,7 +75,7 @@ public:
     const_iterator end() const;
     const_iterator cend() const;
     void erase(size_t);
-    const iterator find(size_t);
+    const_iterator find(size_t) const;
     template<class InputIterator>
     void insert(InputIterator, InputIterator);
     void insert(size_t);
@@ -214,7 +214,7 @@ inline typename IterableBitset<A>::const_iterator IterableBitset<A>::cend() cons
 //' @title check existence of an element
 //' @description check if the bit at position `v` is set
 template<class A>
-inline bool IterableBitset<A>::exists(size_t v) {
+inline bool IterableBitset<A>::exists(size_t v) const {
     return (bitmap.at(v/num_bits) & (0x1ULL << (v % num_bits))) > 0;
 }
 
@@ -239,11 +239,11 @@ inline void IterableBitset<A>::erase(size_t v) {
 //' @title find an element in the bitset
 //' @description checks if the bit for `v` is set
 template<class A>
-const inline typename IterableBitset<A>::iterator IterableBitset<A>::find(size_t v) {
+inline typename IterableBitset<A>::const_iterator IterableBitset<A>::find(size_t v) const {
     if(exists(v)) {
-        return IterableBitset<A>::iterator(*this, v);
+        return IterableBitset<A>::const_iterator(*this, v);
     }
-    return end();
+    return cend();
 }
 
 //' @title insert many
