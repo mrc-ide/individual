@@ -75,7 +75,7 @@ public:
     const_iterator end() const;
     const_iterator cend() const;
     void erase(size_t);
-    iterator find(size_t);
+    const iterator find(size_t);
     template<class InputIterator>
     void insert(InputIterator, InputIterator);
     void insert(size_t);
@@ -239,7 +239,7 @@ inline void IterableBitset<A>::erase(size_t v) {
 //' @title find an element in the bitset
 //' @description checks if the bit for `v` is set
 template<class A>
-inline typename IterableBitset<A>::iterator IterableBitset<A>::find(size_t v) {
+const inline typename IterableBitset<A>::iterator IterableBitset<A>::find(size_t v) {
     if(exists(v)) {
         return IterableBitset<A>::iterator(*this, v);
     }
