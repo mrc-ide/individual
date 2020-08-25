@@ -1,14 +1,11 @@
-dist: bionic
-sudo: require
-language: r
+language: minimal
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-6
+services:
+  - docker
 
 before_install:
-  - sudo ln -s /usr/bin/g++-6 /usr/local/bin/g++
-  - g++ -v
+  - docker build . -t mrcide/individual:ci -f docker/Dockerfile.ci
+
+script:
+  - docker run --rm -v $(pwd):/opt -w /opt mrcide/individual:ci R CMD build --no-build-vignettes .
+  - docker run --rm -v $(pwd):/opt -w /opt -e _R_CHECK_FORCE_SUGGESTS_=0 mrcide/individual:ci R CMD check --no-manual --ignore-vignettes --no-manual $(ls individual_*.tar.gz)

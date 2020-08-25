@@ -1,0 +1,9 @@
+# Dockerfile with development tools for:
+# easy testing, documentation generation and benchmarking
+FROM rocker/r-ver:4.0.2
+
+RUN R -e "install.packages(c('remotes'))"
+
+COPY DESCRIPTION /home/docker/individual/
+
+RUN R -e "remotes::install_deps('/home/docker/individual', dependencies=TRUE)"
