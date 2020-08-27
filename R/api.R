@@ -84,66 +84,66 @@ SimAPI <- R6::R6Class(
           )
         }
       } else if(length(index) != 0) {
-          process_queue_variable_update(
-            private$.api,
-            individual$name,
-            variable$name,
-            index,
-            values
+        process_queue_variable_update(
+          private$.api,
+          individual$name,
+          variable$name,
+          index,
+          values
         )
       }
     },
-      
-      #' @description Schedule an event to occur in the future
-      #' @param event the event to schedule
-      #' @param target the individuals to pass to the listener
-      #' @param delay the number of timesteps to wait before triggering the event
-      schedule = function(event, target, delay) {
-        process_schedule(private$.api, event$name, target, delay)
-      },
-      
-      #' @description Get the individuals who are scheduled for a particular event
-      #' @param event, the event of interest
-      get_scheduled = function(event) {
-        process_get_scheduled(private$.api, event$name)
-      },
-      
-      #' @description Stop a future event from triggering for a subset of individuals
-      #' @param event the event to stop
-      #' @param target the individuals to clear
-      clear_schedule = function(event, target) {
-        process_clear_schedule(private$.api, event$name, target)
-      },
-      
-      #' @description Get the current timestep of the simulation
-      get_timestep = function() {
-        process_get_timestep(private$.api)
-      },
-      
-      #' @description Get the parameters of the simulation
-      get_parameters = function() {
-        private$.parameters
-      },
-      
-      #' @description Add a value for the simulation output
-      #' @param name the column name
-      #' @param value the value to assign
-      #' @param timestep optionally add the value to a specific timestep
-      render = function(name, value, timestep=NULL) {
-        if (is.null(timestep)) {
-          timestep <- self$get_timestep()
-        }
-        private$.renderer$add(name, value, timestep)
-      },
-      
-      #' @description Create an R wrapper for the API
-      #' @param cpp_api the cpp implementation of the simulation api
-      #' @param parameters model parameters
-      #' @param renderer renderer to store model outputs to
-      initialize = function(cpp_api, parameters, renderer) {
-        private$.api <- cpp_api
-        private$.parameters <- parameters
-        private$.renderer <- renderer
+    
+    #' @description Schedule an event to occur in the future
+    #' @param event the event to schedule
+    #' @param target the individuals to pass to the listener
+    #' @param delay the number of timesteps to wait before triggering the event
+    schedule = function(event, target, delay) {
+      process_schedule(private$.api, event$name, target, delay)
+    },
+    
+    #' @description Get the individuals who are scheduled for a particular event
+    #' @param event, the event of interest
+    get_scheduled = function(event) {
+      process_get_scheduled(private$.api, event$name)
+    },
+    
+    #' @description Stop a future event from triggering for a subset of individuals
+    #' @param event the event to stop
+    #' @param target the individuals to clear
+    clear_schedule = function(event, target) {
+      process_clear_schedule(private$.api, event$name, target)
+    },
+    
+    #' @description Get the current timestep of the simulation
+    get_timestep = function() {
+      process_get_timestep(private$.api)
+    },
+    
+    #' @description Get the parameters of the simulation
+    get_parameters = function() {
+      private$.parameters
+    },
+    
+    #' @description Add a value for the simulation output
+    #' @param name the column name
+    #' @param value the value to assign
+    #' @param timestep optionally add the value to a specific timestep
+    render = function(name, value, timestep=NULL) {
+      if (is.null(timestep)) {
+        timestep <- self$get_timestep()
       }
+      private$.renderer$add(name, value, timestep)
+    },
+    
+    #' @description Create an R wrapper for the API
+    #' @param cpp_api the cpp implementation of the simulation api
+    #' @param parameters model parameters
+    #' @param renderer renderer to store model outputs to
+    initialize = function(cpp_api, parameters, renderer) {
+      private$.api <- cpp_api
+      private$.parameters <- parameters
+      private$.renderer <- renderer
+    }
   )
 )
