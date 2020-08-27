@@ -33,7 +33,7 @@ test_that("updating variables at the boundaries works", {
   expect_equal(after, c(1:9, 2))
 })
 
-test_that("updating variables with an empty index results in a fill", {
+test_that("updating variables with an empty index is ignored", {
   S <- State$new('S', 10)
   sequence <- Variable$new('sequence', function(size) seq_len(size))
   human <- Individual$new('test', list(S), variables=list(sequence))
@@ -46,7 +46,7 @@ test_that("updating variables with an empty index results in a fill", {
   after <- sim$r_api$get_variable(human, sequence)
 
   expect_equal(before, 1:10)
-  expect_equal(after, rep(11, 10))
+  expect_equal(after, 1:10)
 })
 
 test_that("updating variables with silly indecies errors gracefully", {

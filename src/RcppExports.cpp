@@ -195,6 +195,19 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// process_queue_variable_fill
+void process_queue_variable_fill(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable, const double value);
+RcppExport SEXP _individual_process_queue_variable_fill(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const double >::type value(valueSEXP);
+    process_queue_variable_fill(api, individual, variable, value);
+    return R_NilValue;
+END_RCPP
+}
 // process_schedule
 void process_schedule(Rcpp::XPtr<ProcessAPI> api, const std::string event, std::vector<size_t> index_vector, double delay);
 RcppExport SEXP _individual_process_schedule(SEXP apiSEXP, SEXP eventSEXP, SEXP index_vectorSEXP, SEXP delaySEXP) {
@@ -330,6 +343,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_process_get_variable_at_index", (DL_FUNC) &_individual_process_get_variable_at_index, 4},
     {"_individual_process_queue_state_update", (DL_FUNC) &_individual_process_queue_state_update, 4},
     {"_individual_process_queue_variable_update", (DL_FUNC) &_individual_process_queue_variable_update, 5},
+    {"_individual_process_queue_variable_fill", (DL_FUNC) &_individual_process_queue_variable_fill, 4},
     {"_individual_process_schedule", (DL_FUNC) &_individual_process_schedule, 4},
     {"_individual_process_get_scheduled", (DL_FUNC) &_individual_process_get_scheduled, 2},
     {"_individual_process_clear_schedule", (DL_FUNC) &_individual_process_clear_schedule, 3},
