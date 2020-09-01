@@ -71,6 +71,10 @@ process_queue_variable_update <- function(api, individual, variable, index, valu
     invisible(.Call(`_individual_process_queue_variable_update`, api, individual, variable, index, values))
 }
 
+process_queue_variable_fill <- function(api, individual, variable, value) {
+    invisible(.Call(`_individual_process_queue_variable_fill`, api, individual, variable, value))
+}
+
 process_schedule <- function(api, event, index_vector, delay) {
     invisible(.Call(`_individual_process_schedule`, api, event, index_vector, delay))
 }

@@ -85,6 +85,16 @@ void process_queue_variable_update(
 }
 
 //[[Rcpp::export]]
+void process_queue_variable_fill(
+        Rcpp::XPtr<ProcessAPI> api,
+        const std::string individual,
+        const std::string variable,
+        const double value
+) {
+    api->queue_variable_fill(individual, variable, value);
+}
+
+//[[Rcpp::export]]
 void process_schedule(
     Rcpp::XPtr<ProcessAPI> api,
     const std::string event,

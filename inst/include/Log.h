@@ -46,7 +46,6 @@ public:
         return LOGCFG.output;
     }
 private:
-    bool opened = false;
     log_level msglevel = log_level::debug;
     std::string get_label(log_level level) {
         std::string label;

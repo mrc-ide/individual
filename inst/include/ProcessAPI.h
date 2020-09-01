@@ -59,6 +59,11 @@ public:
         const std::vector<size_t>&,
         const variable_vector_t&
     );
+    virtual void queue_variable_fill(
+            const std::string&,
+            const std::string&,
+            const double
+    );
 
     //virtual dtor
     virtual ~ProcessAPI() = default;
@@ -180,6 +185,13 @@ inline void ProcessAPI::queue_variable_update(
     const std::vector<size_t>& index,
     const variable_vector_t& values) {
     this->state->queue_variable_update(individual, state, index, values);
+}
+
+inline void ProcessAPI::queue_variable_fill(
+        const std::string& individual,
+        const std::string& state,
+        const double value) {
+    this->state->queue_variable_update(individual, state, std::vector<size_t>(), std::vector<double>(1, value));
 }
 
 #endif /* INST_INCLUDE_PROCESSAPI_H_ */
