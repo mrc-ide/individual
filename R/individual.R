@@ -17,6 +17,9 @@ Individual <- R6::R6Class(
     #' @field events a list of event objects which apply to this individual
     events = list(),
 
+    #' @field the number of these individuals in the simulation
+    population_size = 0,
+
     #' @description Create a new Individual
     #' @param name is a unique idetifier which is used in the output
     #' @param states a list of State objects
@@ -35,8 +38,16 @@ Individual <- R6::R6Class(
         stop('No duplicate event names allowed')
       }
 
+      population_size <- sum(vnapply(states, function(s) s$initial_size))
+
+      variable_sizes <- vnapply(variables, function(v) length(v$initial_values))
+      if (any(variable_sizes != population_size)) {
+        stop("variable initial values must match the population size")
+      }
+
       self$name <- name
       self$states <- states
+      self$population_size <- population_size
       self$variables <- variables
       self$events <- events
     }
@@ -79,19 +90,18 @@ Variable <- R6::R6Class(
     #' @field name the string label for this variable
     name = '',
 
-    #' @field initialiser the function to initialise the values for this variable
-    initialiser = NULL,
+    #' @field initial values for this variable
+    initial_values = NULL,
 
     #' @description Create a new Variable. Variables represent a numerical value for each
     #' individual. Variables are updated during a simulation when a process
     #' returns a VariableUpdate object.
     #' @param name is a unique identifier which is used in the output
-    #' @param initialiser a function used to initialise the variable at the start
-    #' of the simulation. The initialiser function takes the population size as
-    #' its only argument
-    initialize = function(name, initialiser) {
+    #' @param initial_values the values for this variable at the start of the
+    #' simulation
+    initialize = function(name, initial_values) {
       self$name <- name
-      self$initialiser <- initialiser
+      self$initial_values <- initial_values
     }
   )
 )

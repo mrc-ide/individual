@@ -33,7 +33,7 @@ timesteps <- 100
 S <- State$new('S', population/2)
 I <- State$new('I', population/2)
 R <- State$new('R', 0)
-immunity <- Variable$new('immunity', function(size) runif(size, 0, 1))
+immunity <- Variable$new('immunity', runif(population, 0, 1))
 human <- Individual$new('human', list(S, I, R), variables = list(immunity))
 
 infection <- function(api) {

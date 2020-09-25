@@ -1,6 +1,7 @@
 test_that("updating variables works", {
-  S <- State$new('S', 10)
-  sequence <- Variable$new('sequence', function(size) seq_len(size))
+  size <- 10
+  S <- State$new('S', size)
+  sequence <- Variable$new('sequence', seq_len(size))
   human <- Individual$new('test', list(S), variables=list(sequence))
   sim <- setup_simulation(list(human))
 
@@ -18,8 +19,9 @@ test_that("updating variables works", {
 })
 
 test_that("updating variables at the boundaries works", {
-  S <- State$new('S', 10)
-  sequence <- Variable$new('sequence', function(size) seq_len(size))
+  size <- 10
+  S <- State$new('S', size)
+  sequence <- Variable$new('sequence', seq_len(size))
   human <- Individual$new('test', list(S), variables=list(sequence))
 
   sim <- setup_simulation(list(human))
@@ -34,8 +36,9 @@ test_that("updating variables at the boundaries works", {
 })
 
 test_that("updating variables with an empty index is ignored", {
-  S <- State$new('S', 10)
-  sequence <- Variable$new('sequence', function(size) seq_len(size))
+  size <- 10
+  S <- State$new('S', size)
+  sequence <- Variable$new('sequence', seq_len(size))
   human <- Individual$new('test', list(S), variables=list(sequence))
 
   sim <- setup_simulation(list(human))
@@ -50,8 +53,9 @@ test_that("updating variables with an empty index is ignored", {
 })
 
 test_that("updating variables with silly indecies errors gracefully", {
-  S <- State$new('S', 10)
-  sequence <- Variable$new('sequence', function(size) seq_len(size))
+  size <- 10
+  S <- State$new('S', size)
+  sequence <- Variable$new('sequence', seq_len(size))
   human <- Individual$new('test', list(S), variables=list(sequence))
 
   sim <- setup_simulation(list(human))
@@ -73,8 +77,9 @@ test_that("updating variables with silly indecies errors gracefully", {
 })
 
 test_that("updating the complete variable vector works", {
-  S <- State$new('S', 10)
-  sequence <- Variable$new('sequence', function(size) seq_len(size))
+  size <- 10
+  S <- State$new('S', size)
+  sequence <- Variable$new('sequence', seq_len(size))
   human <- Individual$new('test', list(S), variables=list(sequence))
 
   sim <- setup_simulation(list(human))
@@ -91,8 +96,9 @@ test_that("updating the complete variable vector works", {
 })
 
 test_that("Vector fill variable updates work", {
-  S <- State$new('S', 10)
-  sequence <- Variable$new('sequence', function(size) seq_len(size))
+  size <- 10
+  S <- State$new('S', size)
+  sequence <- Variable$new('sequence', seq_len(size))
   human <- Individual$new('test', list(S), variables=list(sequence))
 
   sim <- setup_simulation(list(human))
