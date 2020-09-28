@@ -40,9 +40,14 @@ Individual <- R6::R6Class(
 
       population_size <- sum(vnapply(states, function(s) s$initial_size))
 
-      variable_sizes <- vnapply(variables, function(v) length(v$initial_values))
-      if (any(variable_sizes != population_size)) {
-        stop("variable initial values must match the population size")
+      for (variable in variables) {
+        if (length(variable$initial_values) != population_size) {
+          stop(paste0(
+            "the '",
+            variable$name,
+            "' variable's initial values must match the population size"
+          ))
+        }
       }
 
       self$name <- name

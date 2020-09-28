@@ -28,11 +28,12 @@ test_that("updating variables at the boundaries works", {
 
   before <- sim$r_api$get_variable(human, sequence)
   sim$r_api$queue_variable_update(human, sequence, 2, 10)
+  sim$r_api$queue_variable_update(human, sequence, 2, 1)
   state_apply_updates(sim$state)
   after <- sim$r_api$get_variable(human, sequence)
 
   expect_equal(before, 1:10)
-  expect_equal(after, c(1:9, 2))
+  expect_equal(after, c(2, 2:9, 2))
 })
 
 test_that("updating variables with an empty index is ignored", {
@@ -52,7 +53,7 @@ test_that("updating variables with an empty index is ignored", {
   expect_equal(after, 1:10)
 })
 
-test_that("updating variables with silly indecies errors gracefully", {
+test_that("updating variables with silly indices errors gracefully", {
   size <- 10
   S <- State$new('S', size)
   sequence <- Variable$new('sequence', seq_len(size))
@@ -63,6 +64,11 @@ test_that("updating variables with silly indecies errors gracefully", {
   expect_error(
     sim$r_api$queue_variable_update(human, sequence, c(1.0, 2.0), 1:5),
     '*'
+  )
+
+  expect_error(
+    sim$r_api$queue_variable_update(human, sequence, "A", 10),
+    class = "Rcpp::not_compatible"
   )
 
   expect_error(
