@@ -75,3 +75,20 @@ execute_any_process <- function(p, api, cpp_api) {
     p(api)
   }
 }
+
+#' @title Create a simulation state
+#' @param individuals a list of individual objects
+create_state <- function(individuals) {
+  individual_names <- vcapply(individuals, function(i) i$name)
+  individual_sizes <- vnapply(individuals, function (i) i$population_size)
+  state <- create_cpp_state(individual_names, individual_sizes)
+  for (i in individuals) {
+    state_names <- vcapply(i$states, function(s) s$name)
+    state_sizes <- vnapply(i$states, function(s) s$initial_size)
+    state_add_states(state, i$name, state_names, state_sizes)
+    for (v in i$variables) {
+      state_add_variable(state, i$name, v$name, v$initial_values)
+    }
+  }
+  state
+}

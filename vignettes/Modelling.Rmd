@@ -125,7 +125,7 @@ We would first want to update our model structure…
 
 ```{r}
 # We can randomly assign immunity values between 0 and .2
-immunity <- Variable$new('immunity', function(size) runif(size, 0, .2))
+immunity <- Variable$new('immunity', runif(population, 0, .2))
 human <- Individual$new(
   'human',
   list(S, I, R),

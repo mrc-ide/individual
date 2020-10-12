@@ -36,9 +36,10 @@ test_that("getting a non registered state index fails", {
 })
 
 test_that("getting variables works", {
-  S <- State$new('S', 10)
-  sequence <- Variable$new('sequence', function(size) seq_len(size))
-  sequence_2 <- Variable$new('sequence 2', function(size) seq_len(size) + 10)
+  size <- 10
+  S <- State$new('S', size)
+  sequence <- Variable$new('sequence', seq_len(size))
+  sequence_2 <- Variable$new('sequence 2', seq_len(size) + 10)
   human <- Individual$new('test', list(S), variables=list(sequence, sequence_2))
 
   sim <- setup_simulation(list(human))
@@ -48,9 +49,10 @@ test_that("getting variables works", {
 })
 
 test_that("getting variables at an index works", {
-  S <- State$new('S', 10)
-  sequence <- Variable$new('sequence', function(size) seq_len(size))
-  sequence_2 <- Variable$new('sequence 2', function(size) seq_len(size) + 10)
+  size <- 10
+  S <- State$new('S', size)
+  sequence <- Variable$new('sequence', seq_len(size))
+  sequence_2 <- Variable$new('sequence 2', seq_len(size) + 10)
   human <- Individual$new('test', list(S), variables=list(sequence, sequence_2))
 
   sim <- setup_simulation(list(human))

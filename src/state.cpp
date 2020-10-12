@@ -9,36 +9,31 @@
 #include "../inst/include/State.h"
 
 //[[Rcpp::export]]
-Rcpp::XPtr<State> create_state(const Rcpp::List individuals) {
-    auto sim_state_spec = sim_state_spec_t();
-    for (const Rcpp::Environment& individual : individuals) {
-        auto individual_name = Rcpp::as<std::string>(individual["name"]);
-        auto state_spec = std::vector<state_spec_t>();
-        auto pop_size = 0u;
-        Rcpp::List state_descriptors(individual["states"]);
-        for (Rcpp::Environment state : state_descriptors) {
-            auto state_size = Rcpp::as<size_t>(state["initial_size"]);
-            pop_size += state_size;
-            state_spec.push_back({
-                Rcpp::as<std::string>(state["name"]),
-                state_size
-            });
-        }
+Rcpp::XPtr<State> create_cpp_state(
+    const std::vector<std::string>& individuals,
+    const std::vector<size_t>& population_sizes
+    ) {
+    return Rcpp::XPtr<State>(new State(individuals, population_sizes), true);
+}
 
-        auto variable_spec = std::vector<variable_spec_t>();
-        Rcpp::List variable_descriptors(individual["variables"]);
-        for (Rcpp::Environment variable : variable_descriptors) {
-            Rcpp::Function initialiser(variable["initialiser"]);
-            auto initial_values = Rcpp::as<variable_vector_t>(initialiser(pop_size));
-            variable_spec.push_back({
-                Rcpp::as<std::string>(variable["name"]),
-                initial_values
-            });
-        }
-        sim_state_spec.push_back({individual_name, state_spec, variable_spec});
-    }
-    auto state = new State(sim_state_spec);
-    return Rcpp::XPtr<State>(state, true);
+//[[Rcpp::export]]
+void state_add_states(
+    Rcpp::XPtr<State> state,
+    const std::string& individual,
+    const std::vector<std::string>& state_names,
+    const std::vector<size_t>& initial_sizes
+    ) {
+    state->add_states(individual, state_names, initial_sizes);
+}
+
+//[[Rcpp::export]]
+void state_add_variable(
+    Rcpp::XPtr<State> state,
+    const std::string& individual,
+    const std::string& variable,
+    const variable_vector_t& initial
+    ) {
+    state->add_variable(individual, variable, initial);
 }
 
 //[[Rcpp::export]]
