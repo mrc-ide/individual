@@ -103,8 +103,16 @@ scheduler_process_events <- function(scheduler, cpp_api, r_api) {
     invisible(.Call(`_individual_scheduler_process_events`, scheduler, cpp_api, r_api))
 }
 
-create_state <- function(individuals) {
-    .Call(`_individual_create_state`, individuals)
+create_cpp_state <- function(individuals, population_sizes) {
+    .Call(`_individual_create_cpp_state`, individuals, population_sizes)
+}
+
+state_add_states <- function(state, individual, state_names, initial_sizes) {
+    invisible(.Call(`_individual_state_add_states`, state, individual, state_names, initial_sizes))
+}
+
+state_add_variable <- function(state, individual, variable, initial) {
+    invisible(.Call(`_individual_state_add_variable`, state, individual, variable, initial))
 }
 
 state_apply_updates <- function(state) {

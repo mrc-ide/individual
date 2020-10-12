@@ -200,7 +200,7 @@ test_that("deterministic state & variable model works", {
   S <- State$new('S', population)
   I <- State$new('I', 0)
   R <- State$new('R', 0)
-  value <- Variable$new('value', function(size) rep(1, size))
+  value <- Variable$new('value', rep(1, population))
   human <- Individual$new('human', list(S, I, R), list(value))
 
   shift_generator <- function(from, to, rate) {

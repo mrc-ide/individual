@@ -23,24 +23,25 @@ using variables_t = named_array_t<named_array_t<variable_vector_t>>;
 using state_update_t = std::tuple<std::string, std::string, std::vector<size_t>>;
 using variable_update_t = std::tuple<std::string, std::string, std::vector<size_t>, variable_vector_t>;
 
-using variable_spec_t = std::pair<std::string, std::vector<double>>;
-using state_spec_t = std::pair<std::string, size_t>;
-using individual_spec_t = std::tuple<std::string, std::vector<state_spec_t>, std::vector<variable_spec_t>>;
-using sim_state_spec_t = std::vector<individual_spec_t>;
-
 class State {
     states_t states;
     variables_t variables;
     std::vector<std::string> individual_names;
-    named_array_t<std::vector<std::string>> variable_names;
     named_array_t<size_t> population_sizes;
     std::queue<state_update_t> state_update_queue;
     std::queue<variable_update_t> variable_update_queue;
     void apply_state_update(const state_update_t&);
     void apply_variable_update(const variable_update_t&);
 public:
-    State(const sim_state_spec_t&);
-    void apply_updates();
+    /*
+     * Initialisation
+     */
+    State(const std::vector<std::string>&, const std::vector<size_t>&);
+    void add_states(const std::string&, const std::vector<std::string>&, const std::vector<size_t>&);
+    void add_variable(const std::string&, const std::string&, const variable_vector_t&);
+    /*
+     * Reading the state
+     */
     const individual_index_t& get_state(const std::string&, const std::string&) const;
     const variable_vector_t& get_variable(const std::string&, const std::string&) const;
     void get_variable(
@@ -49,51 +50,55 @@ public:
         const std::vector<size_t>&,
         std::vector<double>&
         ) const;
+    /*
+     * Updating the state
+     */
     void queue_state_update(const std::string&, const std::string&, const individual_index_t&);
     void queue_state_update(const std::string&, const std::string&, const std::vector<size_t>&);
     void queue_variable_update(const std::string&, const std::string&, const std::vector<size_t>&, const variable_vector_t&);
+    void apply_updates();
 };
 
-inline State::State(const sim_state_spec_t& spec) {
+inline State::State(
+    const std::vector<std::string>& individuals,
+    const std::vector<size_t>& population_sizes
+    ) {
     states = states_t();
     variables = variables_t();
 
-    for (const auto& individual : spec) {
-        auto individual_name = std::get<0>(individual);
-        individual_names.push_back(individual_name);
-
-        // Get the population size
-        auto state_descriptors = std::get<1>(individual);
-        auto population_size = 0;
-        for (const auto& state : state_descriptors) {
-            population_size += state.second;
-        }
-        population_sizes[individual_name] = population_size;
-        Log(log_level::debug).get() << "initialising " << individual_name << " x " << population_size << std::endl;
-
-        // Initialise the state
-        states.insert({individual_name, state_vector_t()});
-        auto start = 0u;
-        for (const auto& state : state_descriptors) {
-            auto size = state.second;
-            auto state_name = state.first;
-            states.at(individual_name).insert({state_name, individual_index_t(population_size)});
-            auto& state_set = states.at(individual_name).at(state_name);
-            for (auto i = start; i < start + size; ++i) {
-                state_set.insert(i);
-            }
-            start += size;
-        }
-
-        Log(log_level::debug).get() << "initialising variable container" << std::endl;
-        // Initialise the variable container
-        const auto& variable_descriptors = std::get<2>(individual);
-        for (const auto& variable : variable_descriptors) {
-            auto variable_name = variable.first;
-            variable_names[individual_name].push_back(variable_name);
-            variables[individual_name][variable_name] = variable.second;
-        }
+    for (auto i = 0u; i < individuals.size(); ++i) {
+        individual_names.push_back(individuals[i]);
+        this->population_sizes[individuals[i]] = population_sizes[i];
     }
+}
+
+inline void State::add_states(
+    const std::string& individual,
+    const std::vector<std::string>& state_names,
+    const std::vector<size_t>& initial_sizes
+    ) {
+    const auto& state_vector_insertion = states.insert({individual, state_vector_t()});
+    auto start = 0u;
+    for (auto i = 0u; i < state_names.size(); ++i) {
+        auto size = initial_sizes[i];
+        const auto& state_name = state_names[i];
+        const auto& state_insertion = state_vector_insertion.first->second.insert({
+            state_name,
+            individual_index_t(population_sizes[individual])
+        });
+        for (auto i = start; i < start + size; ++i) {
+            state_insertion.first->second.insert(i);
+        }
+        start += size;
+    }
+}
+
+inline void State::add_variable(
+    const std::string& individual,
+    const std::string& variable,
+    const variable_vector_t& initial
+    ) {
+    variables[individual][variable] = initial;
 }
 
 inline void __attribute__ ((noinline)) State::apply_updates() {

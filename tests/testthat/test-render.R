@@ -51,11 +51,12 @@ test_that("Prefab state counts work correctly", {
 })
 
 test_that("Prefab variable summaries work correctly", {
+  size <- 110
   S <- State$new('S', 10)
   I <- State$new('I', 100)
   R <- State$new('R', 0)
-  sequence <- Variable$new('sequence', function(size) seq_len(size))
-  sequence_2 <- Variable$new('sequence_2', function(size) seq_len(size) * 10)
+  sequence <- Variable$new('sequence', seq_len(size))
+  sequence_2 <- Variable$new('sequence_2', seq_len(size) * 10)
   human <- Individual$new('human', list(S, I, R), list(sequence, sequence_2))
   render <- Render$new(2)
   sim <- setup_simulation(list(human), renderer = render)

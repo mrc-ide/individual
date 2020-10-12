@@ -289,15 +289,42 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// create_state
-Rcpp::XPtr<State> create_state(const Rcpp::List individuals);
-RcppExport SEXP _individual_create_state(SEXP individualsSEXP) {
+// create_cpp_state
+Rcpp::XPtr<State> create_cpp_state(const std::vector<std::string>& individuals, const std::vector<size_t>& population_sizes);
+RcppExport SEXP _individual_create_cpp_state(SEXP individualsSEXP, SEXP population_sizesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List >::type individuals(individualsSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_state(individuals));
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type individuals(individualsSEXP);
+    Rcpp::traits::input_parameter< const std::vector<size_t>& >::type population_sizes(population_sizesSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_cpp_state(individuals, population_sizes));
     return rcpp_result_gen;
+END_RCPP
+}
+// state_add_states
+void state_add_states(Rcpp::XPtr<State> state, const std::string& individual, const std::vector<std::string>& state_names, const std::vector<size_t>& initial_sizes);
+RcppExport SEXP _individual_state_add_states(SEXP stateSEXP, SEXP individualSEXP, SEXP state_namesSEXP, SEXP initial_sizesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type state_names(state_namesSEXP);
+    Rcpp::traits::input_parameter< const std::vector<size_t>& >::type initial_sizes(initial_sizesSEXP);
+    state_add_states(state, individual, state_names, initial_sizes);
+    return R_NilValue;
+END_RCPP
+}
+// state_add_variable
+void state_add_variable(Rcpp::XPtr<State> state, const std::string& individual, const std::string& variable, const variable_vector_t& initial);
+RcppExport SEXP _individual_state_add_variable(SEXP stateSEXP, SEXP individualSEXP, SEXP variableSEXP, SEXP initialSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const variable_vector_t& >::type initial(initialSEXP);
+    state_add_variable(state, individual, variable, initial);
+    return R_NilValue;
 END_RCPP
 }
 // state_apply_updates
@@ -351,7 +378,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_create_scheduler", (DL_FUNC) &_individual_create_scheduler, 1},
     {"_individual_scheduler_tick", (DL_FUNC) &_individual_scheduler_tick, 1},
     {"_individual_scheduler_process_events", (DL_FUNC) &_individual_scheduler_process_events, 3},
-    {"_individual_create_state", (DL_FUNC) &_individual_create_state, 1},
+    {"_individual_create_cpp_state", (DL_FUNC) &_individual_create_cpp_state, 2},
+    {"_individual_state_add_states", (DL_FUNC) &_individual_state_add_states, 4},
+    {"_individual_state_add_variable", (DL_FUNC) &_individual_state_add_variable, 4},
     {"_individual_state_apply_updates", (DL_FUNC) &_individual_state_apply_updates, 1},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
