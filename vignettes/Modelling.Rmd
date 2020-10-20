@@ -58,7 +58,7 @@ But an empty output is not very useful. Let's add a process to store the size of
 
 ```{r}
 render_state_sizes <- function(api) {
-  api$render('susceptable_counts', length(api$get_state(human, S)))
+  api$render('susceptible_counts', length(api$get_state(human, S)))
   api$render('infected_counts', length(api$get_state(human, I)))
   api$render('recovered_counts', length(api$get_state(human, R)))
 }
@@ -138,7 +138,7 @@ We can then define a more complicated infection and recovery process that takes 
 ```{r}
 infection <- function(api) {
   from_state <- api$get_state(human, S)
-  # Get the immunity for susceptable humans and use the complement to modify the
+  # Get the immunity for susceptible humans and use the complement to modify the
   # infection rate
   rate_modifier <- 1 - api$get_variable(human, immunity, from_state)
   rate <- .3
@@ -149,7 +149,7 @@ infection <- function(api) {
   )
 }
 
-recovered_to_susceptable <- function(api) {
+recovered_to_susceptible <- function(api) {
   from_state <- api$get_state(human, I)
   rate <- .2
   recovered <- from_state[runif(length(from_state)) < rate]
@@ -169,7 +169,7 @@ recovered_to_susceptable <- function(api) {
 processes_with_immunity <- list(
   infection,
   random_transition_generator(I, R, .5),
-  recovered_to_susceptable,
+  recovered_to_susceptible,
   render_state_sizes
 )
 

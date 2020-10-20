@@ -38,7 +38,7 @@ human <- Individual$new('human', list(S, I, R), variables = list(immunity))
 
 infection <- function(api) {
   from_state <- api$get_state(human, S)
-  # Get the immunity for susceptable humans and use the complement to modify the
+  # Get the immunity for susceptible humans and use the complement to modify the
   # infection rate
   rate_modifier <- 1 - api$get_variable(human, immunity)[from_state]
   rate <- .3
@@ -62,7 +62,7 @@ random_transition_generator <- function(from, to, rate) {
 
 render_state_sizes <- function(api) {
   api$render('infected_counts', length(api$get_state(human, I)))
-  api$render('susceptable_counts', length(api$get_state(human, S)))
+  api$render('susceptible_counts', length(api$get_state(human, S)))
   api$render('recovered_counts', length(api$get_state(human, R)))
 }
 
@@ -117,11 +117,11 @@ Rcpp::XPtr<process_t> infection_cpp(
     ) {
     return Rcpp::XPtr<process_t>(
         new process_t([=] (ProcessAPI& api) {
-              const auto& susceptable = api.get_state(human, S);
+              const auto& susceptible = api.get_state(human, S);
               const auto& immunity_values = api.get_variable(human, immunity);
               const auto uniform = Rcpp::runif();
               auto target = individual_index_t();
-              for (auto s : susceptable) {
+              for (auto s : susceptible) {
                 if (uniform < ((1 - immunity_values[s]) * rate)) {
                   target.insert(s);
                 }

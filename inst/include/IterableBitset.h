@@ -66,6 +66,7 @@ public:
     IterableBitset(size_t);
     template<class InputIterator>
     IterableBitset(size_t, InputIterator, InputIterator);
+    IterableBitset(size_t, const std::vector<size_t>);
     bool operator==(const IterableBitset&) const;
     bool operator!=(const IterableBitset&) const;
     iterator begin();
@@ -169,6 +170,14 @@ inline IterableBitset<A>::IterableBitset(size_t size, InputIterator begin, Input
     bitmap = std::vector<A>(size/num_bits + 1, 0);
     n = 0;
     insert(begin, end);
+}
+
+template<class A>
+inline IterableBitset<A>::IterableBitset(size_t size, const std::vector<size_t>to_set) : max_n(size){
+    num_bits = sizeof(A) * 8;
+    bitmap = std::vector<A>(size/num_bits + 1, 0);
+    n = 0;
+    insert(std::cbegin(to_set), std::cend(to_set));
 }
 
 template<class A>
