@@ -22,6 +22,7 @@ Class to render output for the simulation
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Initialise a renderer for the simulation, creates the default state
 renderers
@@ -45,6 +46,7 @@ scalar outputs to store to the final render}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add"></a>}}
+\if{latex}{\out{\hypertarget{method-add}{}}}
 \subsection{Method \code{add()}}{
 Update the render with new simulation data
 \subsection{Usage}{
@@ -65,6 +67,7 @@ Update the render with new simulation data
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-to_dataframe"></a>}}
+\if{latex}{\out{\hypertarget{method-to_dataframe}{}}}
 \subsection{Method \code{to_dataframe()}}{
 Make a dataframe for the render
 \subsection{Usage}{
@@ -74,6 +77,7 @@ Make a dataframe for the render
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

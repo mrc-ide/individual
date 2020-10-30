@@ -30,6 +30,7 @@ The entry point for models to inspect and manipulate the simulation
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_state"></a>}}
+\if{latex}{\out{\hypertarget{method-get_state}{}}}
 \subsection{Method \code{get_state()}}{
 Get the index of individuals with a particular state
 \subsection{Usage}{
@@ -48,6 +49,7 @@ Get the index of individuals with a particular state
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_variable"></a>}}
+\if{latex}{\out{\hypertarget{method-get_variable}{}}}
 \subsection{Method \code{get_variable()}}{
 Get a variable vector for an individual
 \subsection{Usage}{
@@ -68,6 +70,7 @@ Get a variable vector for an individual
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-queue_state_update"></a>}}
+\if{latex}{\out{\hypertarget{method-queue_state_update}{}}}
 \subsection{Method \code{queue_state_update()}}{
 Queue a state update for the end of the timestep
 \subsection{Usage}{
@@ -88,6 +91,7 @@ Queue a state update for the end of the timestep
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-queue_variable_update"></a>}}
+\if{latex}{\out{\hypertarget{method-queue_variable_update}{}}}
 \subsection{Method \code{queue_variable_update()}}{
 Queue an update for a variable. There are 4 types of variable update:
 
@@ -102,7 +106,7 @@ should match the size of the population.
 4. Variable fill. The index vector is set to `NULL` and the value vector,
 of size 1, is used to fill all of the variable values in the population.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimAPI$queue_variable_update(individual, variable, values, index = numeric(0))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$queue_variable_update(individual, variable, values, index = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -122,6 +126,7 @@ fill options}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-schedule"></a>}}
+\if{latex}{\out{\hypertarget{method-schedule}{}}}
 \subsection{Method \code{schedule()}}{
 Schedule an event to occur in the future
 \subsection{Usage}{
@@ -135,13 +140,15 @@ Schedule an event to occur in the future
 
 \item{\code{target}}{the individuals to pass to the listener}
 
-\item{\code{delay}}{the number of timesteps to wait before triggering the event}
+\item{\code{delay}}{the number of timesteps to wait before triggering the event,
+can be a scalar or an array of values for each target individual}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_scheduled"></a>}}
+\if{latex}{\out{\hypertarget{method-get_scheduled}{}}}
 \subsection{Method \code{get_scheduled()}}{
 Get the individuals who are scheduled for a particular event
 \subsection{Usage}{
@@ -158,6 +165,7 @@ Get the individuals who are scheduled for a particular event
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clear_schedule"></a>}}
+\if{latex}{\out{\hypertarget{method-clear_schedule}{}}}
 \subsection{Method \code{clear_schedule()}}{
 Stop a future event from triggering for a subset of individuals
 \subsection{Usage}{
@@ -176,6 +184,7 @@ Stop a future event from triggering for a subset of individuals
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_timestep"></a>}}
+\if{latex}{\out{\hypertarget{method-get_timestep}{}}}
 \subsection{Method \code{get_timestep()}}{
 Get the current timestep of the simulation
 \subsection{Usage}{
@@ -185,6 +194,7 @@ Get the current timestep of the simulation
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_parameters"></a>}}
+\if{latex}{\out{\hypertarget{method-get_parameters}{}}}
 \subsection{Method \code{get_parameters()}}{
 Get the parameters of the simulation
 \subsection{Usage}{
@@ -194,6 +204,7 @@ Get the parameters of the simulation
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-render"></a>}}
+\if{latex}{\out{\hypertarget{method-render}{}}}
 \subsection{Method \code{render()}}{
 Add a value for the simulation output
 \subsection{Usage}{
@@ -214,6 +225,7 @@ Add a value for the simulation output
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create an R wrapper for the API
 \subsection{Usage}{
@@ -234,6 +246,7 @@ Create an R wrapper for the API
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -16,7 +16,7 @@ Represents a variable for an individual in our simulation
 \describe{
 \item{\code{name}}{the string label for this variable}
 
-\item{\code{initialiser}}{the function to initialise the values for this variable}
+\item{\code{initial_values}}{initial values for this variable}
 }
 \if{html}{\out{</div>}}
 }
@@ -29,12 +29,13 @@ Represents a variable for an individual in our simulation
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new Variable. Variables represent a numerical value for each
 individual. Variables are updated during a simulation when a process
 returns a VariableUpdate object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Variable$new(name, initialiser)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Variable$new(name, initial_values)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -42,15 +43,15 @@ returns a VariableUpdate object.
 \describe{
 \item{\code{name}}{is a unique identifier which is used in the output}
 
-\item{\code{initialiser}}{a function used to initialise the variable at the start
-of the simulation. The initialiser function takes the population size as
-its only argument}
+\item{\code{initial_values}}{the values for this variable at the start of the
+simulation}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

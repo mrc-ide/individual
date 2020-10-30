@@ -100,7 +100,17 @@ SimAPI <- R6::R6Class(
     #' @param delay the number of timesteps to wait before triggering the event,
     #' can be a scalar or an array of values for each target individual
     schedule = function(event, target, delay) {
-      process_schedule(private$.api, event$name, target, delay)
+      if (length(delay) == 1) {
+        process_schedule(private$.api, event$name, target, delay)
+      } else {
+        if (length(target) != length(delay)) {
+          stop(paste0(
+            event$name,
+            ' scheduled with a target which is a different size to delay'
+          ))
+        }
+        process_schedule_multi_delay(private$.api, event$name, target, delay)
+      }
     },
     
     #' @description Get the individuals who are scheduled for a particular event

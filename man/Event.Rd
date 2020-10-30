@@ -31,6 +31,7 @@ triggered}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Initialise an Event
 \subsection{Usage}{
@@ -47,6 +48,7 @@ Initialise an Event
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_listener"></a>}}
+\if{latex}{\out{\hypertarget{method-add_listener}{}}}
 \subsection{Method \code{add_listener()}}{
 Add an event listener
 \subsection{Usage}{
@@ -64,6 +66,7 @@ should take the simulation api and target individuals as arguments}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

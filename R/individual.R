@@ -17,7 +17,7 @@ Individual <- R6::R6Class(
     #' @field events a list of event objects which apply to this individual
     events = list(),
 
-    #' @field the number of these individuals in the simulation
+    #' @field population_size the number of these individuals in the simulation
     population_size = 0,
 
     #' @description Create a new Individual
@@ -95,7 +95,7 @@ Variable <- R6::R6Class(
     #' @field name the string label for this variable
     name = '',
 
-    #' @field initial values for this variable
+    #' @field initial_values initial values for this variable
     initial_values = NULL,
 
     #' @description Create a new Variable. Variables represent a numerical value for each
