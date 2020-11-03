@@ -21,6 +21,8 @@ Represents an individual in our simulation
 \item{\code{variables}}{a list of variable objects which apply to this individual}
 
 \item{\code{events}}{a list of event objects which apply to this individual}
+
+\item{\code{population_size}}{the number of these individuals in the simulation}
 }
 \if{html}{\out{</div>}}
 }
@@ -33,6 +35,7 @@ Represents an individual in our simulation
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new Individual
 \subsection{Usage}{
@@ -55,6 +58,7 @@ Create a new Individual
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

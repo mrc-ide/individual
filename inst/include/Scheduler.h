@@ -9,6 +9,7 @@
 #define INST_INCLUDE_SCHEDULER_H_
 
 #include "common_types.h"
+#include <unordered_set>
 
 //'@title event type
 //'@description a description of an event
@@ -32,6 +33,7 @@ class Scheduler {
     named_array_t<size_t> size_map;
     size_t current_timestep;
     named_array_t<timeline_t> schedule_map;
+    void schedule(const std::string&, const individual_index_t&, size_t);
 public:
     Scheduler(const std::vector<event_t>&);
     size_t get_timestep() const;
@@ -40,8 +42,10 @@ public:
     template<class TIndex>
     void clear_schedule(const std::string&, const TIndex&);
     individual_index_t get_scheduled(const std::string&) const;
-    template<class TIndex>
-    void schedule(const std::string&, const TIndex&, double);
+    void schedule(const std::string&, const individual_index_t&, double);
+    void schedule(const std::string&, const std::vector<size_t>&, const std::vector<double>&);
+    template<class TDelay>
+    void schedule(const std::string&, const std::vector<size_t>&, const TDelay&);
 };
 
 template<class TProcessAPI>
@@ -125,27 +129,88 @@ inline individual_index_t Scheduler<TProcessAPI>::get_scheduled(
 }
 
 template<class TProcessAPI>
-template<class TIndex>
 inline void Scheduler<TProcessAPI>::schedule(
     const std::string& event,
-    const TIndex& target,
+    const individual_index_t& target,
     double delay) {
     auto d = static_cast<size_t>(round(delay));
 
-    if (d < 1) {
-        Rcpp::stop("delay must be >= 1");
+    if (d < 0) {
+        Rcpp::stop("delay must be >= 0");
     }
 
     if (schedule_map.find(event) == schedule_map.end()) {
         Rcpp::stop("Unknown event");
     }
 
-    auto target_timestep = current_timestep + d;
+    schedule(event, target, d);
+}
+
+template<class TProcessAPI>
+template<class TDelay>
+inline void Scheduler<TProcessAPI>::schedule(
+    const std::string& event,
+    const std::vector<size_t>& target_vector,
+    const TDelay& delay) {
+
+    if (schedule_map.find(event) == schedule_map.end()) {
+        Rcpp::stop("Unknown event");
+    }
+
+    auto target = individual_index_t(
+        size_map.at(event),
+        target_vector.cbegin(),
+        target_vector.cend()
+    );
+    schedule(event, target, delay);
+}
+
+template<class TProcessAPI>
+inline void Scheduler<TProcessAPI>::schedule(
+    const std::string& event,
+    const std::vector<size_t>& target_vector,
+    const std::vector<double>& delay) {
+
+    if (schedule_map.find(event) == schedule_map.end()) {
+        Rcpp::stop("Unknown event");
+    }
+
+    //round the delays to find a discrete timestep to trigger each event
+    auto round_delay = std::vector<size_t>(delay.size());
+    for (auto i = 0u; i < delay.size(); ++i) {
+        if (delay[i] < 0) {
+            Rcpp::stop("delay must be >= 0");
+        }
+        round_delay[i] = static_cast<size_t>(round(delay[i]));
+    }
+
+    //get unique timesteps
+    auto delay_values = std::unordered_set<size_t>(round_delay.begin(), round_delay.end());
+
+    for (auto v : delay_values) {
+        auto target = individual_index_t(size_map.at(event));
+        for (auto i = 0u; i < round_delay.size(); ++i) {
+            if (round_delay[i] == v) {
+                target.insert(target_vector[i]);
+            }
+        }
+        schedule(event, target, v);
+    }
+
+}
+
+template<class TProcessAPI>
+inline void Scheduler<TProcessAPI>::schedule(
+    const std::string& event,
+    const individual_index_t& target,
+    size_t delay) {
+
+    auto target_timestep = current_timestep + delay;
     auto& timeline = schedule_map.at(event);
     if (timeline.find(target_timestep) == timeline.end()) {
         timeline.insert({target_timestep, individual_index_t(size_map.at(event))});
     }
-    timeline.at(target_timestep).insert(target.cbegin(), target.cend());
+    timeline.at(target_timestep) |= target;
 }
 
 #endif /* INST_INCLUDE_SCHEDULER_H_ */
