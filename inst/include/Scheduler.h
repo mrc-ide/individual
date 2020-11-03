@@ -165,6 +165,10 @@ inline void Scheduler<TProcessAPI>::schedule(
     schedule(event, target, delay);
 }
 
+//Schedule each individual in `target_vector` to fire an event
+//at a corresponding `delay` timestep in the future.
+//Delays may be continuous but our timeline is discrete.
+//So delays are rounded to the nearest timestep
 template<class TProcessAPI>
 inline void Scheduler<TProcessAPI>::schedule(
     const std::string& event,
