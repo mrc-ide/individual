@@ -17,6 +17,11 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(individual)
 library(mockery)
+
+# Utility function for printing out C++ code
+print_code <- function(filename) {
+  cat(readChar(filename, file.info(filename)$size))
+}
 ```
 
 # Testing your model
@@ -71,101 +76,44 @@ mockery::expect_args(api$render, 3, 'recovered_counts', 2) #then for the R state
 
 Let's say you had a C++ version of the render function:
 
-```
-#include <individual.h>
-#include <Rcpp.h>
-
-//[[Rcpp::export]]
-Rcpp::XPtr<process_t> create_render_process() {
-    return Rcpp::XPtr<process_t>(
-        new process_t([=] (ProcessAPI& api) {
-              api.render(
-                'susceptible_counts',
-                api.get_state('human', 'susceptible').size()
-              )
-              api.render(
-                'infected_counts',
-                api.get_state('human', 'infected').size()
-              )
-              api.render(
-                'recovered_counts',
-                api.get_state('human', 'recovered').size()
-              )
-        }),
-        true
-    );
-}
+```{r}
+print_code(
+  system.file('testcpp/src/code.h', package = 'individual', mustWork = TRUE)
+)
 ```
 
 The [mockcpp](https://github.com/mrc-ide/mockcpp/) package provides a mocking framework which lets you write analogous C++ unit tests:
 
+```{r}
+print_code(
+  system.file('testcpp/src/test-example.cpp', package = 'individual', mustWork = TRUE)
+)
 ```
-#include <individual.h>
-#include <testthat.h>
-#include <mockcpp.h>
-#include "[my rendering function header].h"
 
-/*
- * Derive a mock api class from the ProcessAPI
- * See https://github.com/rollbear/trompeloeil
- */
-class MockAPI : public ProcessAPI {
-public:
-    MockAPI() : ProcessAPI( // Initialise the ProcessAPI using some empty state
-        Rcpp::XPtr<State>(static_cast<State *>(nullptr), false),
-        Rcpp::XPtr<Scheduler<ProcessAPI>>(static_cast<Scheduler<ProcessAPI>*>(nullptr), false),
-        Rcpp::List(),
-        Rcpp::Environment()
-    ) {};
-    MAKE_CONST_MOCK2(get_state, const individual_index_t&(const std::string& individual, const std::string& state), override);
-    MAKE_MOCK2(render, void(const std::string& label, double value), override);
-};
+We can then build our package and run the test to ensure our mocking works:
 
+```{r}
+temp_lib <- tempdir(check = FALSE)
 
-/*
- * Write your testthat/catch tests
- * See https://rdrr.io/cran/testthat/man/use_catch.html
- */
-context("State rendering") {
+# Install test package
+install.packages(
+  system.file('testcpp', package = 'individual', mustWork = TRUE),
+  repos = NULL,
+  type = 'source',
+  lib = temp_lib
+)
 
-    test_that("state rendering returns the correct counts") {
-          MockAPI api;
-          auto population_size = 20;
-          
-          /*
-           * Check the get_state calls
-           */
-          auto S = individual_index_t(
-            population_size,
-            std::vector<size_t>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
-          );
-          auto I = individual_index_t(
-            population_size,
-            std::vector<size_t>{10, 11, 12, 13, 14}
-          );
-          auto R = individual_index_t(
-            population_size,
-            std::vector<size_t>{15, 16}
-          );
-          REQUIRE_CALL(api, get_state("human", "susceptible").RETURN(S);
-          REQUIRE_CALL(api, get_state("human", "infected").RETURN(I);
-          REQUIRE_CALL(api, get_state("human", "recovered").RETURN(R);
-          
-          /*
-           * Check the render calls
-           */
-          REQUIRE_CALL(api, render("susceptible_counts", 10);
-          REQUIRE_CALL(api, render("infected_counts", 5);
-          REQUIRE_CALL(api, render("recovered_counts", 2);
-          
-          /*
-           * Call the render process with our mocked api
-           */
-          auto renderer = create_render_process();
-          (*renderer)(api)
-    }
-    
-}
+# load test package
+library('testcpp', lib.loc = temp_lib)
+
+# run the test
+testthat::test_file(
+  system.file(
+    'testcpp/tests/testthat/test-cpp.R',
+    package = 'individual',
+    mustWork = TRUE
+  )
+)
 ```
 
 And there you go, both R and C++ processes can be unit tested by mocking the simulation API.

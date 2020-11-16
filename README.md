@@ -1,5 +1,5 @@
 <!-- badges: start -->
-[![Build Status](https://travis-ci.org/mrc-ide/individual.svg?branch=master)](https://travis-ci.org/mrc-ide/individual) [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/mrc-ide/individual?branch=master&svg=true)](https://ci.appveyor.com/project/mrc-ide/indiviudal) [![codecov](https://codecov.io/github/mrc-ide/individual/branch/master/graphs/badge.svg)](https://codecov.io/github/mrc-ide/individual)
+[![R build status](https://github.com/mrc-ide/individaul/workflows/R-CMD-check/badge.svg)](https://github.com/mrc-ide/individual/actions)
 <!-- badges: end -->
 
 # Individual
