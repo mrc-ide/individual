@@ -19,22 +19,22 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Remotes:
-  mrc-ide/mockcpp,
+  mrc-ide/mockcpp
 Imports:
-  Rcpp,
-  R6
+  R6,
+  Rcpp
 Suggests:
-  testthat (>= 2.1.0),
-  mockery,
-  knitr,
-  rmarkdown,
   ggplot2,
+  knitr,
+  mockery,
+  mockcpp,
+  rmarkdown,
   reshape2,
-  mockcpp
+  testthat (>= 2.1.0)
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 LinkingTo:
+  mockcpp,
   Rcpp,
-  testthat,
-  mockcpp
+  testthat
 RcppModules: individual_cpp

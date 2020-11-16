@@ -19,9 +19,11 @@ library(individual)
 library(mockery)
 
 # Utility function for printing out C++ code
-print_code <- function(filename) {
-  cat(readChar(filename, file.info(filename)$size))
+lang_output <- function(x, lang) {
+  cat(c(sprintf("```%s", lang), x, "```"), sep = "\n")
 }
+cpp_output <- function(x) lang_output(x, "cpp")
+print_cpp_file <- function(path) cpp_output(readLines(path))
 ```
 
 # Testing your model
@@ -76,16 +78,16 @@ mockery::expect_args(api$render, 3, 'recovered_counts', 2) #then for the R state
 
 Let's say you had a C++ version of the render function:
 
-```{r}
-print_code(
+```{r echo = FALSE, results="asis"}
+print_cpp_file(
   system.file('testcpp/src/code.h', package = 'individual', mustWork = TRUE)
 )
 ```
 
 The [mockcpp](https://github.com/mrc-ide/mockcpp/) package provides a mocking framework which lets you write analogous C++ unit tests:
 
-```{r}
-print_code(
+```{r echo = FALSE, results="asis"}
+print_cpp_file(
   system.file('testcpp/src/test-example.cpp', package = 'individual', mustWork = TRUE)
 )
 ```
