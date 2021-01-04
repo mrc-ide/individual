@@ -106,6 +106,17 @@ void process_schedule(
 }
 
 //[[Rcpp::export]]
+void process_schedule_multi_delay(
+    Rcpp::XPtr<ProcessAPI> api,
+    const std::string event,
+    std::vector<size_t> index_vector,
+    std::vector<double> delay
+) {
+    decrement(index_vector);
+    api->schedule(event, index_vector, delay);
+}
+
+//[[Rcpp::export]]
 std::vector<size_t> process_get_scheduled(
     Rcpp::XPtr<ProcessAPI> api,
     const std::string event

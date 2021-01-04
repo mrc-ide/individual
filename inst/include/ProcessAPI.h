@@ -36,6 +36,7 @@ public:
         std::vector<double>&) const;
     virtual void schedule(const std::string&, const individual_index_t&, double);
     virtual void schedule(const std::string&, const std::vector<size_t>&, double);
+    virtual void schedule(const std::string&, const std::vector<size_t>&, const std::vector<double>&);
     virtual individual_index_t get_scheduled(const std::string&) const;
     virtual void clear_schedule(const std::string&, const individual_index_t&);
     virtual void clear_schedule(const std::string&, const std::vector<size_t>&);
@@ -129,6 +130,13 @@ inline void ProcessAPI::schedule(
     const std::string& event,
     const std::vector<size_t>& index,
     double delay) {
+    scheduler->schedule(event, index, delay);
+}
+
+inline void ProcessAPI::schedule(
+    const std::string& event,
+    const std::vector<size_t>& index,
+    const std::vector<double>& delay) {
     scheduler->schedule(event, index, delay);
 }
 

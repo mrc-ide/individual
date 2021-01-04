@@ -120,6 +120,36 @@ output <- simulate(
 plot_states(output)
 ```
 
+You could also schedule stochastic recovery times with a simple modification:
+
+```{r}
+recovery_process_stochastic <- function(api) {
+  infected <- api$get_state(human, I)
+  already_scheduled <- api$get_scheduled(recovery_event)
+  infected <- setdiff(infected, already_scheduled) 
+  to_recover <- infected[runif(length(infected)) < .5]
+  # sample recovery times that are normally distributed around a mean of 5
+  api$schedule(recovery_event, to_recover, pmax(rnorm(length(to_recover), 5), 0))
+}
+
+processes <- list(
+  random_transition_generator(S, I, .3),
+  recovery_process_stochastic,
+  random_transition_generator(R, S, .1),
+  render_state_sizes
+)
+
+# run the simulation
+output <- simulate(
+  human,
+  processes,
+  100
+)
+
+# plot the output
+plot_states(output)
+```
+
 We have made two changes to this model:
 
 1. We created a process called `recovery_process`. Instead of calling `api$queue_state_change` to perform a state change at the end of the timestep, it calls `api$schedule` to trigger an event in 5 steps time.

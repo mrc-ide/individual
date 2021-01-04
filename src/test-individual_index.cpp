@@ -87,6 +87,65 @@ context("Individual index") {
         expect_true(std::find(iterated.begin(), iterated.end(), 73) != iterated.end());
         expect_true(std::find(iterated.begin(), iterated.end(), 72) == iterated.end());
     }
+
+    test_that("Bitwise ops work as expected") {
+        std::vector<size_t> x = {1, 6, 73};
+        std::vector<size_t> y = {6, 64, 73};
+        auto x_index = individual_index_t(100, std::cbegin(x), std::cend(x));
+        auto y_index = individual_index_t(100, std::cbegin(y), std::cend(y));
+        auto z_index = x_index & y_index;
+        const auto z = std::vector<size_t>(std::cbegin(z_index), std::cend(z_index));
+        expect_true(std::find(z.begin(), z.end(), 0) == z.end());
+        expect_true(std::find(z.begin(), z.end(), 1) == z.end());
+        expect_true(std::find(z.begin(), z.end(), 3) == z.end());
+        expect_true(std::find(z.begin(), z.end(), 6) != z.end());
+        expect_true(std::find(z.begin(), z.end(), 9) == z.end());
+        expect_true(std::find(z.begin(), z.end(), 64) == z.end());
+        expect_true(std::find(z.begin(), z.end(), 73) != z.end());
+        expect_true(std::find(z.begin(), z.end(), 72) == z.end());
+        expect_true(z_index.size() == 2);
+        auto u_index = x_index | y_index;
+        const auto u = std::vector<size_t>(std::cbegin(u_index), std::cend(u_index));
+        expect_true(std::find(u.begin(), u.end(), 0) == u.end());
+        expect_true(std::find(u.begin(), u.end(), 1) != u.end());
+        expect_true(std::find(u.begin(), u.end(), 3) == u.end());
+        expect_true(std::find(u.begin(), u.end(), 6) != u.end());
+        expect_true(std::find(u.begin(), u.end(), 9) == u.end());
+        expect_true(std::find(u.begin(), u.end(), 64) != u.end());
+        expect_true(std::find(u.begin(), u.end(), 73) != u.end());
+        expect_true(std::find(u.begin(), u.end(), 72) == u.end());
+        expect_true(u_index.size() == 4);
+    }
+
+    test_that("Assignment bitwise ops work as expected") {
+        std::vector<size_t> x = {1, 6, 73};
+        std::vector<size_t> y = {6, 64, 73};
+        auto x_index = individual_index_t(100, std::cbegin(x), std::cend(x));
+        auto y_index = individual_index_t(100, std::cbegin(y), std::cend(y));
+        x_index &= y_index;
+        const auto z = std::vector<size_t>(std::cbegin(x_index), std::cend(x_index));
+        expect_true(std::find(z.begin(), z.end(), 0) == z.end());
+        expect_true(std::find(z.begin(), z.end(), 1) == z.end());
+        expect_true(std::find(z.begin(), z.end(), 3) == z.end());
+        expect_true(std::find(z.begin(), z.end(), 6) != z.end());
+        expect_true(std::find(z.begin(), z.end(), 9) == z.end());
+        expect_true(std::find(z.begin(), z.end(), 64) == z.end());
+        expect_true(std::find(z.begin(), z.end(), 73) != z.end());
+        expect_true(std::find(z.begin(), z.end(), 72) == z.end());
+        expect_true(x_index.size() == 2);
+        x_index = individual_index_t(100, std::cbegin(x), std::cend(x));
+        x_index |= y_index;
+        const auto u = std::vector<size_t>(std::cbegin(x_index), std::cend(x_index));
+        expect_true(std::find(u.begin(), u.end(), 0) == u.end());
+        expect_true(std::find(u.begin(), u.end(), 1) != u.end());
+        expect_true(std::find(u.begin(), u.end(), 3) == u.end());
+        expect_true(std::find(u.begin(), u.end(), 6) != u.end());
+        expect_true(std::find(u.begin(), u.end(), 9) == u.end());
+        expect_true(std::find(u.begin(), u.end(), 64) != u.end());
+        expect_true(std::find(u.begin(), u.end(), 73) != u.end());
+        expect_true(std::find(u.begin(), u.end(), 72) == u.end());
+        expect_true(x_index.size() == 4);
+    }
 }
 
 context("Individual index stochastic") {

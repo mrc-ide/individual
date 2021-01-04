@@ -79,6 +79,10 @@ process_schedule <- function(api, event, index_vector, delay) {
     invisible(.Call(`_individual_process_schedule`, api, event, index_vector, delay))
 }
 
+process_schedule_multi_delay <- function(api, event, index_vector, delay) {
+    invisible(.Call(`_individual_process_schedule_multi_delay`, api, event, index_vector, delay))
+}
+
 process_get_scheduled <- function(api, event) {
     .Call(`_individual_process_get_scheduled`, api, event)
 }

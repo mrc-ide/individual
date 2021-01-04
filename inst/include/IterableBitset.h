@@ -23,8 +23,8 @@ class IterableBitset;
 template<class A>
 class IterableBitset {
 private:
-    size_t n;
     size_t max_n;
+    size_t n;
     size_t num_bits;
     bool exists(size_t) const;
     void set(size_t);
@@ -69,6 +69,10 @@ public:
     IterableBitset(size_t, const std::vector<size_t>);
     bool operator==(const IterableBitset&) const;
     bool operator!=(const IterableBitset&) const;
+    IterableBitset operator&(const IterableBitset&) const;
+    IterableBitset operator|(const IterableBitset&) const;
+    IterableBitset& operator&=(const IterableBitset&);
+    IterableBitset& operator|=(const IterableBitset&);
     iterator begin();
     const_iterator begin() const;
     const_iterator cbegin() const;
@@ -94,9 +98,24 @@ inline size_t ctz(uint64_t x) {
     #ifdef __GNUC__
     return __builtin_ctzll(x);
     #else
-    auto r = 0;
+    auto r = 0u;
     while(((x >> r) & 1ULL) == 0ULL)
         ++r;
+    return r;
+    #endif
+}
+
+//' @title count number of set bits in 64bit integer
+inline size_t popcount(uint64_t x) {
+    #ifdef __GNUC__
+    return __builtin_popcountll(x);
+    #else
+    auto r = 0u;
+    while(x != 0ULL) {
+        if((x & 1) == 1)
+            ++r;
+        x >>= 1
+    }
     return r;
     #endif
 }
@@ -188,6 +207,36 @@ inline bool IterableBitset<A>::operator ==(const IterableBitset<A>& other) const
 template<class A>
 inline bool IterableBitset<A>::operator !=(const IterableBitset<A>& other) const {
     return !(*this == other);
+}
+
+template<class A>
+inline IterableBitset<A> IterableBitset<A>::operator &(const IterableBitset<A>& other) const {
+    return IterableBitset<A>(*this) &= other;
+}
+
+template<class A>
+inline IterableBitset<A> IterableBitset<A>::operator |(const IterableBitset<A>& other) const {
+    return IterableBitset<A>(*this) |= other;
+}
+
+template<class A>
+inline IterableBitset<A>& IterableBitset<A>::operator &=(const IterableBitset<A>& other) {
+    n = 0;
+    for (auto i = 0u; i < bitmap.size(); ++i) {
+        bitmap[i] &= other.bitmap[i];
+        n += popcount(bitmap[i]);
+    }
+    return *this;
+}
+
+template<class A>
+inline IterableBitset<A>& IterableBitset<A>::operator |=(const IterableBitset<A>& other) {
+    n = 0;
+    for (auto i = 0u; i < bitmap.size(); ++i) {
+        bitmap[i] |= other.bitmap[i];
+        n += popcount(bitmap[i]);
+    }
+    return *this;
 }
 
 template<class A>

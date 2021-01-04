@@ -1,6 +1,6 @@
 Package: individual
 Title: A package for specifying and simulating individial based models
-Version: 0.0.8
+Version: 0.0.9
 Authors@R: c(
   person(
     given = "Giovanni",
@@ -31,7 +31,7 @@ Suggests:
   rmarkdown,
   reshape2,
   testthat (>= 2.1.0)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 LinkingTo:
   mockcpp,
