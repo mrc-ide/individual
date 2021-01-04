@@ -18,19 +18,22 @@ Description: This package gives you useful primitives for structuring and simula
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Remotes:
+  mrc-ide/mockcpp
 Imports:
-  Rcpp,
-  R6
+  R6,
+  Rcpp
 Suggests:
-  testthat (>= 2.1.0),
-  mockery,
-  knitr,
-  rmarkdown,
   ggplot2,
-  reshape2
+  knitr,
+  mockery,
+  mockcpp,
+  rmarkdown,
+  testthat (>= 2.1.0)
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 LinkingTo:
+  mockcpp,
   Rcpp,
   testthat
 RcppModules: individual_cpp

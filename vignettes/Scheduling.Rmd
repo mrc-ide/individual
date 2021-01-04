@@ -47,7 +47,7 @@ random_transition_generator <- function(from, to, rate) {
 }
 
 render_state_sizes <- function(api) {
-  api$render('susceptable_counts', length(api$get_state(human, S)))
+  api$render('susceptible_counts', length(api$get_state(human, S)))
   api$render('infected_counts', length(api$get_state(human, I)))
   api$render('recovered_counts', length(api$get_state(human, R)))
 }
