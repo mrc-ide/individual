@@ -1,203 +1,182 @@
 test_that("events can be scheduled for the future", {
-  event <- Event$new('event')
-  human <- Individual$new('test', list(State$new('S', 10)), events=list(event))
+  event <- TargetedEvent$new(10)
   listener <- mockery::mock()
   event$add_listener(listener)
-  sim <- setup_simulation(list(human))
-  scheduler <- sim$scheduler
   #time = 0
-  sim$r_api$schedule(event, c(2, 4), 2)
+  event$schedule(c(2, 4), 2)
 
   #time = 1
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$.process()
   mockery::expect_called(listener, 0)
-  scheduler_tick(sim$scheduler)
+  event$.tick()
 
   #time = 2
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$.process()
   mockery::expect_called(listener, 0)
-  scheduler_tick(sim$scheduler)
+  event$.tick()
 
   #time = 3
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$.process()
   mockery::expect_called(listener, 1)
-  scheduler_tick(sim$scheduler)
+  event$.tick()
 
   #time = 4
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$.process()
   mockery::expect_called(listener, 1)
-  mockery::expect_args(listener, 1, api = sim$r_api, target = c(2, 4))
+  mockery::expect_args(listener, 1, t = 4, target = c(2, 4))
 })
 
 test_that("events can be scheduled for for a Real time", {
-  event <- Event$new('event')
+  event <- TargetedEvent$new(10)
   listener <- mockery::mock()
   event$add_listener(listener)
-  human <- Individual$new('test', list(State$new('S', 10)), events=list(event))
-  sim <- setup_simulation(list(human))
-  scheduler <- sim$scheduler
   #time = 0
-  sim$r_api$schedule(event, c(2, 4), 1.9)
+  event$schedule(c(2, 4), 1.9)
 
   #time = 1
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$.process()
   mockery::expect_called(listener, 0)
-  scheduler_tick(sim$scheduler)
+  event$.tick()
 
   #time = 2
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$.process()
   mockery::expect_called(listener, 0)
-  scheduler_tick(sim$scheduler)
+  event$.tick()
 
   #time = 3
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$.process()
   mockery::expect_called(listener, 1)
-  scheduler_tick(sim$scheduler)
+  event$.tick()
 
   #time = 4
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$.process()
   mockery::expect_called(listener, 1)
-  mockery::expect_args(listener, 1, api = sim$r_api, target = c(2, 4))
+  mockery::expect_args(listener, 1, t = 4, target = c(2, 4))
 })
 
 test_that("you can schedule different times for a target population", {
-  event <- Event$new('event')
+  event <- TargetedEvent$new(10)
   listener <- mockery::mock()
   event$add_listener(listener)
-  human <- Individual$new('test', list(State$new('S', 10)), events=list(event))
-  sim <- setup_simulation(list(human))
-  scheduler <- sim$scheduler
   #time = 0
-  sim$r_api$schedule(event, c(1, 2, 4, 8, 3), c(1, 3, 1, 2, 2))
+  event$schedule(c(1, 2, 4, 8, 3), c(1, 3, 1, 2, 2))
 
   #time = 1
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$.process()
   mockery::expect_called(listener, 0)
-  scheduler_tick(sim$scheduler)
+  event$.tick()
 
   #time = 2
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$.process()
   mockery::expect_called(listener, 1)
-  mockery::expect_args(listener, 1, api = sim$r_api, target = c(1, 4))
-  scheduler_tick(sim$scheduler)
+  mockery::expect_args(listener, 1, t = 2, target = c(1, 4))
+  event$.tick()
 
   #time = 3
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$.process()
   mockery::expect_called(listener, 2)
-  mockery::expect_args(listener, 2, api = sim$r_api, target = c(3, 8))
-  scheduler_tick(sim$scheduler)
+  mockery::expect_args(listener, 2, t = 3, target = c(3, 8))
+  event$.tick()
 
   #time = 4
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$.process()
   mockery::expect_called(listener, 3)
-  mockery::expect_args(listener, 3, api = sim$r_api, target = 2)
+  mockery::expect_args(listener, 3, t = 4, target = 2)
 })
 
 test_that("when you can schedule different times invalid times cause an error", {
-  event <- Event$new('event')
+  event <- TargetedEvent$new(10)
   listener <- mockery::mock()
   event$add_listener(listener)
-  human <- Individual$new('test', list(State$new('S', 10)), events=list(event))
-  sim <- setup_simulation(list(human))
   expect_error(
-    sim$r_api$schedule(event, c(1, 2, 4, 8, 3), c(1, 3, 1, 2)),
+    event$schedule(c(1, 2, 4, 8, 3), c(1, 3, 1, 2)),
     '*'
   )
   expect_error(
-    sim$r_api$schedule(event, c(1, 2, 4, 8, 3), c(1, 3, 1, 2, -1)),
+    event$schedule(c(1, 2, 4, 8, 3), c(1, 3, 1, 2, -1)),
     '*'
   )
 })
 
 test_that("you can see which individuals are scheduled for an event", {
-  event <- Event$new('event')
+  event <- TargetedEvent$new(10)
   listener <- mockery::mock()
   event$add_listener(listener)
 
-  human <- Individual$new('test', list(State$new('S', 10)), events=list(event))
-  sim <- setup_simulation(list(human))
-  scheduler <- sim$scheduler
-
   #time = 0
-  expect_length(sim$r_api$get_scheduled(event), 0)
+  expect_length(event$get_scheduled(), 0)
 
   #time = 1
-  sim$r_api$schedule(event, c(2, 4), 2)
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
-  expect_setequal(sim$r_api$get_scheduled(event), c(2, 4))
-  scheduler_tick(sim$scheduler)
+  event$schedule(event, c(2, 4), 2)
+  event$.process()
+  expect_setequal(event$get_scheduled(), c(2, 4))
+  event$.tick()
 
   #time = 2
-  sim$r_api$schedule(event, c(3, 4), 1)
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
-  expect_setequal(sim$r_api$get_scheduled(event), c(2, 3, 4))
-  scheduler_tick(sim$scheduler)
+  event$schedule(event, c(3, 4), 1)
+  event$.process()
+  expect_setequal(event$get_scheduled(), c(2, 3, 4))
+  event$.tick()
 
   #time = 3
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
-  expect_setequal(sim$r_api$get_scheduled(event), c(2, 3, 4))
-  scheduler_tick(sim$scheduler)
+  event$.process()
+  expect_setequal(event$get_scheduled(), c(2, 3, 4))
+  event$.tick()
 
   #time = 4
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
-  expect_length(sim$r_api$get_scheduled(event), 0)
+  event$.process()
+  expect_length(event$get_scheduled(), 0)
 })
 
 test_that("multiple events can be scheduled", {
-  event1 <- Event$new('event1')
-  event2 <- Event$new('event2')
+  event1 <- TargetedEvent$new(10)
+  event2 <- TargetedEvent$new(10)
   listener1 <- mockery::mock()
   listener2 <- mockery::mock()
   event1$add_listener(listener1)
   event2$add_listener(listener2)
 
-  human <- Individual$new('test', list(State$new('S', 10)), events=list(event1, event2))
-
-  sim <- setup_simulation(list(human))
-  scheduler <- sim$scheduler
-
   #time = 0
-  expect_length(sim$r_api$get_scheduled(event1), 0)
-  expect_length(sim$r_api$get_scheduled(event2), 0)
+  expect_length(event1$get_scheduled(), 0)
+  expect_length(event2$get_scheduled(), 0)
 
   #time = 1
-  sim$r_api$schedule(event1, c(2, 4), 2)
-  sim$r_api$schedule(event2, c(1, 3), 2)
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
-  expect_setequal(sim$r_api$get_scheduled(event1), c(2, 4))
-  expect_setequal(sim$r_api$get_scheduled(event2), c(1, 3))
+  event1$schedule(c(2, 4), 2)
+  event2$schedule(c(1, 3), 2)
+  event1$.process()
+  event2$.process()
+  expect_setequal(event1$get_scheduled(event1), c(2, 4))
+  expect_setequal(event2$get_scheduled(event2), c(1, 3))
 
-  scheduler_tick(sim$scheduler)
-  scheduler_tick(sim$scheduler)
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event1$.tick()
+  event2$.tick()
+  event1$.process()
+  event2$.process()
 
   mockery::expect_called(listener1, 1)
   mockery::expect_called(listener2, 1)
-  mockery::expect_args(listener1, 1, api = sim$r_api, target = c(2, 4))
-  mockery::expect_args(listener2, 1, api = sim$r_api, target = c(1, 3))
+  mockery::expect_args(listener1, 1, t = 2, target = c(2, 4))
+  mockery::expect_args(listener2, 1, t = 2, target = c(1, 3))
 })
 
 test_that("events can be cleared for an individual", {
-  event <- Event$new('event')
+  event <- TargetedEvent$new(10)
   listener <- mockery::mock()
   event$add_listener(listener)
-  human <- Individual$new('test', list(State$new('S', 10)), events=list(event))
-  sim <- setup_simulation(list(human))
-  scheduler <- sim$scheduler
 
   #time = 0
-  expect_length(sim$r_api$get_scheduled(event), 0)
+  expect_length(event$get_scheduled(event), 0)
 
   #time = 1
-  sim$r_api$schedule(event, c(2, 3, 4), 1)
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
-  expect_setequal(sim$r_api$get_scheduled(event), c(2, 3, 4))
-  scheduler_tick(sim$scheduler)
+  event$schedule(c(2, 3, 4), 1)
+  event$.process()
+  expect_setequal(event$get_scheduled(event), c(2, 3, 4))
+  event$.tick()
 
   #time = 2
-  sim$r_api$clear_schedule(event, c(3, 4))
-  expect_setequal(sim$r_api$get_scheduled(event), c(2))
-  scheduler_process_events(scheduler, sim$cpp_api, sim$r_api)
+  event$clear_schedule(c(3, 4))
+  expect_setequal(event$get_scheduled(), 2)
+  event$.process()
   mockery::expect_called(listener, 1)
-  mockery::expect_args(listener, 1, api = sim$r_api, target = c(2))
+  mockery::expect_args(listener, 1, t = 2, target = 2)
 })
