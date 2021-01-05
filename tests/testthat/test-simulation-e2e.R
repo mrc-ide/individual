@@ -31,7 +31,7 @@ test_that("deterministic state model works", {
 
   shift_generator <- function(from, to, rate) {
     return(function(simulation) {
-      from_state <- simulation$get_state(human, from)
+      from_state <- simulation$get_state(human, from)$to_vector()
       simulation$queue_state_update(
         human,
         to,
@@ -68,7 +68,7 @@ test_that("deterministic state model works w parameters", {
 
   shift_generator <- function(from, to) {
     return(function(simulation) {
-      from_state <- simulation$get_state(human, from)
+      from_state <- simulation$get_state(human, from)$to_vector()
       rate <- simulation$get_parameters()$rate
       simulation$queue_state_update(
         human,
@@ -123,7 +123,7 @@ test_that("deterministic state model w events works", {
 
   delayed_shift_generator <- function(from, to, event, delay, rate) {
     return(function(simulation) {
-      from_state <- simulation$get_state(human, from)
+      from_state <- simulation$get_state(human, from)$to_vector()
       # remove the already scheduled individuals
       from_state <- setdiff(from_state, simulation$get_scheduled(event))
       target <- from_state[seq_len(min(rate,length(from_state)))]
@@ -160,7 +160,7 @@ test_that("deterministic state model works w 2 individuals", {
 
   shift_generator <- function(individual, from, to, rate) {
     return(function(simulation) {
-      from_state <- simulation$get_state(individual, from)
+      from_state <- simulation$get_state(individual, from)$to_vector()
       simulation$queue_state_update(
         individual,
         to,
@@ -205,7 +205,7 @@ test_that("deterministic state & variable model works", {
 
   shift_generator <- function(from, to, rate) {
     return(function(simulation) {
-      from_state <- simulation$get_state(human, from)
+      from_state <- simulation$get_state(human, from)$to_vector()
       simulation$queue_state_update(
         human,
         to,

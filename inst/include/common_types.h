@@ -11,8 +11,11 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
+#include "IterableBitset.h"
 
 template<class T>
 using named_array_t = std::unordered_map<std::string, T>;
+
+using individual_index_t = IterableBitset<uint64_t>;
 
 #endif /* INST_INCLUDE_COMMON_TYPES_H_ */

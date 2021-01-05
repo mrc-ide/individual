@@ -9,6 +9,116 @@
 
 using namespace Rcpp;
 
+// create_bitset
+Rcpp::XPtr<individual_index_t> create_bitset(size_t size);
+RcppExport SEXP _individual_create_bitset(SEXP sizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< size_t >::type size(sizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_bitset(size));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bitset_copy
+Rcpp::XPtr<individual_index_t> bitset_copy(const Rcpp::XPtr<individual_index_t> b);
+RcppExport SEXP _individual_bitset_copy(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(bitset_copy(b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bitset_insert
+void bitset_insert(const Rcpp::XPtr<individual_index_t> b, std::vector<size_t> v);
+RcppExport SEXP _individual_bitset_insert(SEXP bSEXP, SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type v(vSEXP);
+    bitset_insert(b, v);
+    return R_NilValue;
+END_RCPP
+}
+// bitset_remove
+void bitset_remove(const Rcpp::XPtr<individual_index_t> b, std::vector<size_t> v);
+RcppExport SEXP _individual_bitset_remove(SEXP bSEXP, SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type v(vSEXP);
+    bitset_remove(b, v);
+    return R_NilValue;
+END_RCPP
+}
+// bitset_size
+size_t bitset_size(const Rcpp::XPtr<individual_index_t> b);
+RcppExport SEXP _individual_bitset_size(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(bitset_size(b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bitset_max_size
+size_t bitset_max_size(const Rcpp::XPtr<individual_index_t> b);
+RcppExport SEXP _individual_bitset_max_size(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(bitset_max_size(b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bitset_and
+void bitset_and(const Rcpp::XPtr<individual_index_t> a, const Rcpp::XPtr<individual_index_t> b);
+RcppExport SEXP _individual_bitset_and(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    bitset_and(a, b);
+    return R_NilValue;
+END_RCPP
+}
+// bitset_or
+void bitset_or(const Rcpp::XPtr<individual_index_t> a, const Rcpp::XPtr<individual_index_t> b);
+RcppExport SEXP _individual_bitset_or(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    bitset_or(a, b);
+    return R_NilValue;
+END_RCPP
+}
+// bitset_sample
+void bitset_sample(const Rcpp::XPtr<individual_index_t> b, double rate);
+RcppExport SEXP _individual_bitset_sample(SEXP bSEXP, SEXP rateSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
+    bitset_sample(b, rate);
+    return R_NilValue;
+END_RCPP
+}
+// bitset_to_vector
+std::vector<size_t> bitset_to_vector(const Rcpp::XPtr<individual_index_t> b);
+RcppExport SEXP _individual_bitset_to_vector(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(bitset_to_vector(b));
+    return rcpp_result_gen;
+END_RCPP
+}
 // dummy
 void dummy();
 static SEXP _individual_dummy_try() {
@@ -129,15 +239,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // process_get_state
-std::vector<size_t> process_get_state(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::vector<std::string> states);
-RcppExport SEXP _individual_process_get_state(SEXP apiSEXP, SEXP individualSEXP, SEXP statesSEXP) {
+Rcpp::XPtr<individual_index_t> process_get_state(Rcpp::XPtr<ProcessAPI> api, const std::string individual, size_t size, const std::vector<std::string> states);
+RcppExport SEXP _individual_process_get_state(SEXP apiSEXP, SEXP individualSEXP, SEXP sizeSEXP, SEXP statesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
     Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< size_t >::type size(sizeSEXP);
     Rcpp::traits::input_parameter< const std::vector<std::string> >::type states(statesSEXP);
-    rcpp_result_gen = Rcpp::wrap(process_get_state(api, individual, states));
+    rcpp_result_gen = Rcpp::wrap(process_get_state(api, individual, size, states));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -370,6 +481,16 @@ RcppExport SEXP _individual_RcppExport_registerCCallable() {
 RcppExport SEXP run_testthat_tests();
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_individual_create_bitset", (DL_FUNC) &_individual_create_bitset, 1},
+    {"_individual_bitset_copy", (DL_FUNC) &_individual_bitset_copy, 1},
+    {"_individual_bitset_insert", (DL_FUNC) &_individual_bitset_insert, 2},
+    {"_individual_bitset_remove", (DL_FUNC) &_individual_bitset_remove, 2},
+    {"_individual_bitset_size", (DL_FUNC) &_individual_bitset_size, 1},
+    {"_individual_bitset_max_size", (DL_FUNC) &_individual_bitset_max_size, 1},
+    {"_individual_bitset_and", (DL_FUNC) &_individual_bitset_and, 2},
+    {"_individual_bitset_or", (DL_FUNC) &_individual_bitset_or, 2},
+    {"_individual_bitset_sample", (DL_FUNC) &_individual_bitset_sample, 2},
+    {"_individual_bitset_to_vector", (DL_FUNC) &_individual_bitset_to_vector, 1},
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
     {"_individual_update_state_listener", (DL_FUNC) &_individual_update_state_listener, 2},
     {"_individual_reschedule_listener", (DL_FUNC) &_individual_reschedule_listener, 2},
@@ -378,7 +499,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_variable_mean_renderer_process", (DL_FUNC) &_individual_variable_mean_renderer_process, 2},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_create_process_api", (DL_FUNC) &_individual_create_process_api, 4},
-    {"_individual_process_get_state", (DL_FUNC) &_individual_process_get_state, 3},
+    {"_individual_process_get_state", (DL_FUNC) &_individual_process_get_state, 4},
     {"_individual_process_get_variable", (DL_FUNC) &_individual_process_get_variable, 3},
     {"_individual_process_get_variable_at_index", (DL_FUNC) &_individual_process_get_variable_at_index, 4},
     {"_individual_process_queue_state_update", (DL_FUNC) &_individual_process_queue_state_update, 4},

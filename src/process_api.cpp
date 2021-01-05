@@ -6,12 +6,7 @@
  */
 
 #include "../inst/include/ProcessAPI.h"
-
-inline void decrement(std::vector<size_t>& x) {
-    for (auto i = 0u; i < x.size(); ++i) {
-        --x[i];
-    }
-}
+#include "utils.h"
 
 //[[Rcpp::export]]
 Rcpp::XPtr<ProcessAPI> create_process_api(
@@ -24,20 +19,17 @@ Rcpp::XPtr<ProcessAPI> create_process_api(
 }
 
 //[[Rcpp::export]]
-std::vector<size_t> process_get_state(
+Rcpp::XPtr<individual_index_t> process_get_state(
     Rcpp::XPtr<ProcessAPI> api,
     const std::string individual,
+    size_t size,
     const std::vector<std::string> states) {
-    auto result = std::vector<size_t>();
-    auto i = 0u;
+    auto result = new individual_index_t(size);
     for (const auto& state : states) {
         const auto& index = api->get_state(individual, state);
-        for (auto v : index) {
-            result.push_back(v + 1);
-            ++i;
-        }
+        (*result) |= index;
     }
-    return result;
+    return Rcpp::XPtr<individual_index_t>(result, true);
 }
 
 //[[Rcpp::export]]
