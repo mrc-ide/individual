@@ -14,6 +14,16 @@ SimAPI <- R6::R6Class(
     #' @param ... the states of interest
     get_state = function(individual, ...) {
       state_names <- vcapply(unlist(list(...)), function(s) s$name)
+      bitset_to_vector(process_get_state(
+        private$.api,
+        individual$name,
+        individual$population_size,
+        state_names
+      ))
+    },
+
+    get_state_bitset = function(individual, ...) {
+      state_names <- vcapply(unlist(list(...)), function(s) s$name)
       Bitset$new(
         from = process_get_state(
           private$.api,
