@@ -125,8 +125,8 @@ test_that("Simulation state updates work", {
   sim <- setup_simulation(list(human))
   sim$r_api$queue_state_update(human, I, c(1, 3))
   state_apply_updates(sim$state)
-  expect_setequal(sim$r_api$get_state(human, list(I)), c(1, 3))
-  expect_setequal(sim$r_api$get_state(human, list(S)), c(2, 4:10))
+  expect_setequal(sim$r_api$get_state(human, list(I))$to_vector(), c(1, 3))
+  expect_setequal(sim$r_api$get_state(human, list(S))$to_vector(), c(2, 4:10))
 })
 
 test_that("Simulation state updates work after null updates", {
@@ -136,12 +136,12 @@ test_that("Simulation state updates work after null updates", {
   sim <- setup_simulation(list(human))
   sim$r_api$queue_state_update(human, I, numeric(0))
   state_apply_updates(sim$state)
-  expect_setequal(sim$r_api$get_state(human, list(I)), numeric(0))
-  expect_setequal(sim$r_api$get_state(human, list(S)), c(1:10))
+  expect_setequal(sim$r_api$get_state(human, list(I))$to_vector(), numeric(0))
+  expect_setequal(sim$r_api$get_state(human, list(S))$to_vector(), c(1:10))
   sim$r_api$queue_state_update(human, I, c(1, 3))
   state_apply_updates(sim$state)
-  expect_setequal(sim$r_api$get_state(human, list(I)), c(1, 3))
-  expect_setequal(sim$r_api$get_state(human, list(S)), c(2, 4:10))
+  expect_setequal(sim$r_api$get_state(human, list(I))$to_vector(), c(1, 3))
+  expect_setequal(sim$r_api$get_state(human, list(S))$to_vector(), c(2, 4:10))
 })
 
 
@@ -152,6 +152,6 @@ test_that("Simulation state updates work with duplicate elements", {
   sim <- setup_simulation(list(human))
   sim$r_api$queue_state_update(human, I, c(1, 1, 3, 3))
   state_apply_updates(sim$state)
-  expect_setequal(sim$r_api$get_state(human, list(I)), c(1, 3))
-  expect_setequal(sim$r_api$get_state(human, list(S)), c(2, 4:10))
+  expect_setequal(sim$r_api$get_state(human, list(I))$to_vector(), c(1, 3))
+  expect_setequal(sim$r_api$get_state(human, list(S))$to_vector(), c(2, 4:10))
 })

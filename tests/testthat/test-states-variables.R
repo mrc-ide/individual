@@ -2,13 +2,13 @@ test_that("getting the state works", {
   S <- State$new('S', 10)
   human <- Individual$new('test', list(S))
   sim <- setup_simulation(list(human))
-  expect_setequal(sim$r_api$get_state(human, list(S)), seq(10))
+  expect_setequal(sim$r_api$get_state(human, list(S))$to_vector(), seq(10))
 
   I <- State$new('I', 100)
   human <- Individual$new('test', list(S, I))
   sim <- setup_simulation(list(human))
 
-  expect_setequal(sim$r_api$get_state(human, list(I)), seq(100) + 10)
+  expect_setequal(sim$r_api$get_state(human, list(I))$to_vector(), seq(100) + 10)
 })
 
 test_that("Getting multiple states works", {
@@ -18,7 +18,7 @@ test_that("Getting multiple states works", {
   human <- Individual$new('test', list(S, I, R))
 
   sim <- setup_simulation(list(human))
-  expect_setequal(sim$r_api$get_state(human, list(S, R)), c(seq(10), seq(20) + 110))
+  expect_setequal(sim$r_api$get_state(human, list(S, R))$to_vector(), c(seq(10), seq(20) + 110))
 })
 
 test_that("getting a non registered state index fails", {

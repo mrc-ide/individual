@@ -13,8 +13,8 @@ test_that("fixed_probability_state_change moves a sane number of individuals aro
     sim$cpp_api
   )
   state_apply_updates(sim$state)
-  n_s <- length(sim$r_api$get_state(human, S))
-  n_i <- length(sim$r_api$get_state(human, I))
+  n_s <- length(sim$r_api$get_state(human, S)$to_vector())
+  n_i <- length(sim$r_api$get_state(human, I)$to_vector())
   expect_lte(n_s, 10)
   expect_gte(n_i, 1)
   expect_equal(n_s + n_i, 11)
@@ -81,8 +81,8 @@ test_that("update_state_listener updates the state correctly", {
   scheduler_tick(sim$scheduler)
   scheduler_process_events(sim$scheduler, sim$cpp_api, sim$r_api)
   state_apply_updates(sim$state)
-  expect_setequal(sim$r_api$get_state(human, S), c(1, 3:4, 6:10))
-  expect_setequal(sim$r_api$get_state(human, I), c(11, 2, 5))
+  expect_setequal(sim$r_api$get_state(human, S)$to_vector(), c(1, 3:4, 6:10))
+  expect_setequal(sim$r_api$get_state(human, I)$to_vector(), c(11, 2, 5))
 })
 
 test_that("reschedule_listener schedules the correct update", {

@@ -14,7 +14,14 @@ SimAPI <- R6::R6Class(
     #' @param ... the states of interest
     get_state = function(individual, ...) {
       state_names <- vcapply(unlist(list(...)), function(s) s$name)
-      process_get_state(private$.api, individual$name, state_names)
+      Bitset$new(
+        from = process_get_state(
+          private$.api,
+          individual$name,
+          individual$population_size,
+          state_names
+        )
+      )
     },
 
     #' @description Get the number of individuals with a particular state
