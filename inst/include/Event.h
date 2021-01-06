@@ -17,9 +17,20 @@
 using listener_t = std::function<void (size_t)>;
 using targeted_listener_t = std::function<void (size_t, const individual_index_t&)>;
 
+inline std::vector<size_t> round_delay(const std::vector<double>& delay) {
+    auto rounded = std::vector<size_t>(delay.size());
+    for (auto i = 0u; i < delay.size(); ++i) {
+        if (delay[i] < 0) {
+            Rcpp::stop("delay must be >= 0");
+        }
+        rounded[i] = static_cast<size_t>(round(delay[i]));
+    }
+    return rounded;
+}
+
 struct EventBase {
     std::vector<SEXP> listeners;
-    size_t t;
+    size_t t = 0;
 
     void add_listener(SEXP listener) {
         listeners.push_back(listener);
@@ -30,7 +41,6 @@ struct EventBase {
     }
 
     virtual void process() = 0;
-    virtual void clear_schedule() = 0;
 };
 
 struct Event : public EventBase {
@@ -58,13 +68,13 @@ struct Event : public EventBase {
         EventBase::tick();
     }
 
-    void schedule(std::vector<size_t> times) {
-        for (auto new_t : times) {
-            simple_schedule.insert(new_t);
+    void schedule(std::vector<double> delays) {
+        for (auto delay : round_delay(delays)) {
+            simple_schedule.insert(t + delay);
         }
     }
 
-    virtual void clear_schedule() override {
+    void clear_schedule() {
         simple_schedule.clear();
     }
 };
@@ -114,29 +124,29 @@ struct TargetedEvent : public EventBase {
         const std::vector<double>& delay) {
 
         //round the delays to find a discrete timestep to trigger each event
-        auto round_delay = std::vector<size_t>(delay.size());
-        for (auto i = 0u; i < delay.size(); ++i) {
-            if (delay[i] < 0) {
-                Rcpp::stop("delay must be >= 0");
-            }
-            round_delay[i] = static_cast<size_t>(round(delay[i]));
-        }
+        auto rounded = round_delay(delay);
 
         //get unique timesteps
         auto delay_values = std::unordered_set<size_t>(
-            round_delay.begin(),
-            round_delay.end()
+            rounded.begin(),
+            rounded.end()
         );
 
         for (auto v : delay_values) {
             auto target = individual_index_t(size);
-            for (auto i = 0u; i < round_delay.size(); ++i) {
-                if (round_delay[i] == v) {
+            for (auto i = 0u; i < rounded.size(); ++i) {
+                if (rounded[i] == v) {
                     target.insert(target_vector[i]);
                 }
             }
             schedule(target, v);
         }
+    }
+
+    void schedule(
+        const individual_index_t& target,
+        double delay) {
+        schedule(target, static_cast<size_t>(round(delay)));
     }
 
     void schedule(
@@ -152,8 +162,19 @@ struct TargetedEvent : public EventBase {
         targeted_schedule.at(target_timestep) |= target;
     }
 
-    virtual void clear_schedule() override {
-        targeted_schedule.clear();
+    void clear_schedule(const individual_index_t& target) {
+        auto not_target = ~target;
+        for (auto& entry : targeted_schedule) {
+           entry.second &= not_target;
+        }
+    }
+
+    individual_index_t get_scheduled() const {
+        auto scheduled = individual_index_t(size);
+        for (auto& entry : targeted_schedule) {
+           scheduled |= entry.second;
+        }
+        return scheduled;
     }
 };
 

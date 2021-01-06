@@ -29,6 +29,10 @@ bitset_and <- function(a, b) {
     invisible(.Call(`_individual_bitset_and`, a, b))
 }
 
+bitset_not <- function(b) {
+    .Call(`_individual_bitset_not`, b)
+}
+
 bitset_or <- function(a, b) {
     invisible(.Call(`_individual_bitset_or`, a, b))
 }
@@ -41,65 +45,60 @@ bitset_to_vector <- function(b) {
     .Call(`_individual_bitset_to_vector`, b)
 }
 
-#'@title create a listener to update the state of the target population
-#'@param individual the name of the individual type
-#'@param state the state to transition to
-#'@export
-update_state_listener <- function(individual, state) {
-    .Call(`_individual_update_state_listener`, individual, state)
+create_event <- function() {
+    .Call(`_individual_create_event`)
 }
 
-#'@title create a listener to schedule a target population for a new event
-#'@param event the name of the event to schedule
-#'@param delay the delay for the new event
-#'@export
-reschedule_listener <- function(event, delay) {
-    .Call(`_individual_reschedule_listener`, event, delay)
+create_targeted_event <- function(size) {
+    .Call(`_individual_create_targeted_event`, size)
 }
 
-#'@title create a process to transition individuals between states at a constant rate
-#'@param individual the name of an individual
-#'@param from_state the name of the source state
-#'@param to_state the name of the target state
-#'@param rate the rate at which state transitions occur
-#'@export
-fixed_probability_state_change_process <- function(individual, from_state, to_state, rate) {
-    .Call(`_individual_fixed_probability_state_change_process`, individual, from_state, to_state, rate)
+event_tick <- function(event) {
+    invisible(.Call(`_individual_event_tick`, event))
 }
 
-#'@title create a process to transition individuals from one state to multiple destination states at a constant rate
-#'@param individual the name of an individual
-#'@param source_state the name of the source state
-#'@param destination_states vector of names of destination states
-#'@param rate the rate at which each individual leaves
-#'@param destination_probabilities a vector of probabilities for destination states upon leaving the source state
-#'@export
-fixed_probability_forked_state_change_process <- function(individual, source_state, destination_states, rate, destination_probabilities) {
-    .Call(`_individual_fixed_probability_forked_state_change_process`, individual, source_state, destination_states, rate, destination_probabilities)
+event_process <- function(event) {
+    invisible(.Call(`_individual_event_process`, event))
 }
 
-#'@title create a process to render the number of individuals in the specified states
-#'@param individual the name of an individual
-#'@param states a vector of state names
-#'@export
-state_count_renderer_process <- function(individual, states) {
-    .Call(`_individual_state_count_renderer_process`, individual, states)
+event_add_listener <- function(event, listener) {
+    invisible(.Call(`_individual_event_add_listener`, event, listener))
 }
 
-#'@title create a process to render the mean value of the specified variables
-#'@param individual the name of an individual
-#'@param variables a vector of variable names
-#'@export
-variable_mean_renderer_process <- function(individual, variables) {
-    .Call(`_individual_variable_mean_renderer_process`, individual, variables)
+event_schedule <- function(event, delays) {
+    invisible(.Call(`_individual_event_schedule`, event, delays))
 }
 
-execute_process <- function(process, api) {
-    invisible(.Call(`_individual_execute_process`, process, api))
+event_clear_schedule <- function(event) {
+    invisible(.Call(`_individual_event_clear_schedule`, event))
 }
 
-create_process_api <- function(state, scheduler, params, renderer) {
-    .Call(`_individual_create_process_api`, state, scheduler, params, renderer)
+targeted_event_clear_schedule_vector <- function(event, target) {
+    invisible(.Call(`_individual_targeted_event_clear_schedule_vector`, event, target))
+}
+
+targeted_event_clear_schedule <- function(event, target) {
+    invisible(.Call(`_individual_targeted_event_clear_schedule`, event, target))
+}
+
+event_get_scheduled <- function(event) {
+    .Call(`_individual_event_get_scheduled`, event)
+}
+
+targeted_event_schedule <- function(event, target, delay) {
+    invisible(.Call(`_individual_targeted_event_schedule`, event, target, delay))
+}
+
+targeted_event_schedule_vector <- function(event, target, delay) {
+    invisible(.Call(`_individual_targeted_event_schedule_vector`, event, target, delay))
+}
+
+targeted_event_schedule_multi_delay <- function(event, target, delay) {
+    invisible(.Call(`_individual_targeted_event_schedule_multi_delay`, event, target, delay))
+}
+
+create_process_api <- function(state, params) {
+    .Call(`_individual_create_process_api`, state, params)
 }
 
 process_get_state <- function(api, individual, size, states) {
@@ -128,38 +127,6 @@ process_queue_variable_update <- function(api, individual, variable, index, valu
 
 process_queue_variable_fill <- function(api, individual, variable, value) {
     invisible(.Call(`_individual_process_queue_variable_fill`, api, individual, variable, value))
-}
-
-process_schedule <- function(api, event, index_vector, delay) {
-    invisible(.Call(`_individual_process_schedule`, api, event, index_vector, delay))
-}
-
-process_schedule_multi_delay <- function(api, event, index_vector, delay) {
-    invisible(.Call(`_individual_process_schedule_multi_delay`, api, event, index_vector, delay))
-}
-
-process_get_scheduled <- function(api, event) {
-    .Call(`_individual_process_get_scheduled`, api, event)
-}
-
-process_clear_schedule <- function(api, event, index) {
-    invisible(.Call(`_individual_process_clear_schedule`, api, event, index))
-}
-
-process_get_timestep <- function(api) {
-    .Call(`_individual_process_get_timestep`, api)
-}
-
-create_scheduler <- function(individuals) {
-    .Call(`_individual_create_scheduler`, individuals)
-}
-
-scheduler_tick <- function(scheduler) {
-    invisible(.Call(`_individual_scheduler_tick`, scheduler))
-}
-
-scheduler_process_events <- function(scheduler, cpp_api, r_api) {
-    invisible(.Call(`_individual_scheduler_process_events`, scheduler, cpp_api, r_api))
 }
 
 create_cpp_state <- function(individuals, population_sizes) {

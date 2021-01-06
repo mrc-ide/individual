@@ -10,7 +10,7 @@
 
 #include <Rcpp.h>
 #include "State.h"
-#include "Scheduler.h"
+#include "Event.h"
 #include "ProcessAPI.h"
 
 #endif /* INDIVIDUAL_TYPES_H_ */

@@ -7,10 +7,6 @@ Event <- R6::R6Class(
 
     .event = NULL,
 
-    #' @field listeners the listener functions to be executed when the event is
-    #' triggered
-    listeners = list(),
-
     #' @description Initialise an Event
     #' @param name, the name of the event
     initialize = function() {
@@ -20,7 +16,7 @@ Event <- R6::R6Class(
     #' @description Add an event listener
     #' @param listener the function to be executed on the event
     add_listener = function(listener) {
-      self$listeners <- c(self$listeners, listener)
+      event_add_listener(self$.event, listener)
     },
 
     #' @description schedule this event to occur in the future
@@ -30,19 +26,17 @@ Event <- R6::R6Class(
 
     #' @description Get the individuals who are scheduled
     get_scheduled = function() {
-      event_get_scheduled(self$.event)
+      Bitset$new(from = event_get_scheduled(self$.event))
     },
 
     #' @description Stop a future event from triggering
-    clear_schedule = function(event) {
-      event_clear_schedule(self$.event)
-    },
+    clear_schedule = function(event) event_clear_schedule(self$.event),
 
     #' @noRd
     .tick = function() event_tick(self$.event),
 
     #' @noRd
-    .process = function() event_process(self$listeners)
+    .process = function() event_process(self$.event)
   )
 )
 
@@ -51,7 +45,8 @@ Event <- R6::R6Class(
 #' This is useful for events which are triggered for a sub-population
 #' @export Event
 TargetedEvent <- R6::R6Class(
-  c('TargetedEvent', 'Event'),
+  'TargetedEvent',
+  inherit = Event,
   public = list(
     #' @description Initialise a Triggered event
     #' @param population_size the size of the target population
@@ -65,7 +60,11 @@ TargetedEvent <- R6::R6Class(
     #' can be a scalar or a vector of values for each target individual
     schedule = function(target, delay) {
       if (length(delay) == 1) {
-        targeted_event_schedule(self$.event, target, delay)
+        if (is.numeric(target)) {
+          targeted_event_schedule_vector(self$.event, target, delay)
+        } else {
+          targeted_event_schedule(self$.event, target, delay)
+        }
       } else {
         if (length(target) != length(delay)) {
           stop(paste0(
@@ -75,12 +74,16 @@ TargetedEvent <- R6::R6Class(
         }
         targeted_event_schedule_multi_delay(self$.event, target, delay)
       }
-    }
+    },
 
     #' @description Stop a future event from triggering for a subset of individuals
     #' @param target the individuals to clear
     clear_schedule = function(target) {
-      targeted_event_clear_schedule(self$.event, target)
+      if (is.numeric(target)) {
+        targeted_event_clear_schedule_vector(self$.event, target)
+      } else {
+        targeted_event_clear_schedule(self$.event, target)
+      }
     }
   )
 )

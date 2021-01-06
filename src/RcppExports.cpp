@@ -86,6 +86,17 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// bitset_not
+Rcpp::XPtr<individual_index_t> bitset_not(const Rcpp::XPtr<individual_index_t> b);
+RcppExport SEXP _individual_bitset_not(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(bitset_not(b));
+    return rcpp_result_gen;
+END_RCPP
+}
 // bitset_or
 void bitset_or(const Rcpp::XPtr<individual_index_t> a, const Rcpp::XPtr<individual_index_t> b);
 RcppExport SEXP _individual_bitset_or(SEXP aSEXP, SEXP bSEXP) {
@@ -151,105 +162,157 @@ RcppExport SEXP _individual_dummy() {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// update_state_listener
-Rcpp::XPtr<listener_t> update_state_listener(const std::string individual, const std::string state);
-RcppExport SEXP _individual_update_state_listener(SEXP individualSEXP, SEXP stateSEXP) {
+// create_event
+Rcpp::XPtr<EventBase> create_event();
+RcppExport SEXP _individual_create_event() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type state(stateSEXP);
-    rcpp_result_gen = Rcpp::wrap(update_state_listener(individual, state));
+    rcpp_result_gen = Rcpp::wrap(create_event());
     return rcpp_result_gen;
 END_RCPP
 }
-// reschedule_listener
-Rcpp::XPtr<listener_t> reschedule_listener(const std::string event, double delay);
-RcppExport SEXP _individual_reschedule_listener(SEXP eventSEXP, SEXP delaySEXP) {
+// create_targeted_event
+Rcpp::XPtr<EventBase> create_targeted_event(size_t size);
+RcppExport SEXP _individual_create_targeted_event(SEXP sizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< size_t >::type size(sizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_targeted_event(size));
+    return rcpp_result_gen;
+END_RCPP
+}
+// event_tick
+void event_tick(const Rcpp::XPtr<EventBase> event);
+RcppExport SEXP _individual_event_tick(SEXP eventSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<EventBase> >::type event(eventSEXP);
+    event_tick(event);
+    return R_NilValue;
+END_RCPP
+}
+// event_process
+void event_process(const Rcpp::XPtr<EventBase> event);
+RcppExport SEXP _individual_event_process(SEXP eventSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<EventBase> >::type event(eventSEXP);
+    event_process(event);
+    return R_NilValue;
+END_RCPP
+}
+// event_add_listener
+void event_add_listener(const Rcpp::XPtr<EventBase> event, SEXP listener);
+RcppExport SEXP _individual_event_add_listener(SEXP eventSEXP, SEXP listenerSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<EventBase> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type listener(listenerSEXP);
+    event_add_listener(event, listener);
+    return R_NilValue;
+END_RCPP
+}
+// event_schedule
+void event_schedule(const Rcpp::XPtr<Event> event, std::vector<double> delays);
+RcppExport SEXP _individual_event_schedule(SEXP eventSEXP, SEXP delaysSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<Event> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type delays(delaysSEXP);
+    event_schedule(event, delays);
+    return R_NilValue;
+END_RCPP
+}
+// event_clear_schedule
+void event_clear_schedule(const Rcpp::XPtr<Event> event);
+RcppExport SEXP _individual_event_clear_schedule(SEXP eventSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<Event> >::type event(eventSEXP);
+    event_clear_schedule(event);
+    return R_NilValue;
+END_RCPP
+}
+// targeted_event_clear_schedule_vector
+void targeted_event_clear_schedule_vector(const Rcpp::XPtr<TargetedEvent> event, std::vector<size_t> target);
+RcppExport SEXP _individual_targeted_event_clear_schedule_vector(SEXP eventSEXP, SEXP targetSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type target(targetSEXP);
+    targeted_event_clear_schedule_vector(event, target);
+    return R_NilValue;
+END_RCPP
+}
+// targeted_event_clear_schedule
+void targeted_event_clear_schedule(const Rcpp::XPtr<TargetedEvent> event, const Rcpp::XPtr<individual_index_t> target);
+RcppExport SEXP _individual_targeted_event_clear_schedule(SEXP eventSEXP, SEXP targetSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type target(targetSEXP);
+    targeted_event_clear_schedule(event, target);
+    return R_NilValue;
+END_RCPP
+}
+// event_get_scheduled
+Rcpp::XPtr<individual_index_t> event_get_scheduled(const Rcpp::XPtr<TargetedEvent> event);
+RcppExport SEXP _individual_event_get_scheduled(SEXP eventSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    rcpp_result_gen = Rcpp::wrap(event_get_scheduled(event));
+    return rcpp_result_gen;
+END_RCPP
+}
+// targeted_event_schedule
+void targeted_event_schedule(const Rcpp::XPtr<TargetedEvent> event, const Rcpp::XPtr<individual_index_t> target, double delay);
+RcppExport SEXP _individual_targeted_event_schedule(SEXP eventSEXP, SEXP targetSEXP, SEXP delaySEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type target(targetSEXP);
     Rcpp::traits::input_parameter< double >::type delay(delaySEXP);
-    rcpp_result_gen = Rcpp::wrap(reschedule_listener(event, delay));
-    return rcpp_result_gen;
+    targeted_event_schedule(event, target, delay);
+    return R_NilValue;
 END_RCPP
 }
-// fixed_probability_state_change_process
-Rcpp::XPtr<process_t> fixed_probability_state_change_process(const std::string individual, const std::string from_state, const std::string to_state, double rate);
-RcppExport SEXP _individual_fixed_probability_state_change_process(SEXP individualSEXP, SEXP from_stateSEXP, SEXP to_stateSEXP, SEXP rateSEXP) {
+// targeted_event_schedule_vector
+void targeted_event_schedule_vector(const Rcpp::XPtr<TargetedEvent> event, std::vector<size_t> target, double delay);
+RcppExport SEXP _individual_targeted_event_schedule_vector(SEXP eventSEXP, SEXP targetSEXP, SEXP delaySEXP) {
 BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type from_state(from_stateSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type to_state(to_stateSEXP);
-    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
-    rcpp_result_gen = Rcpp::wrap(fixed_probability_state_change_process(individual, from_state, to_state, rate));
-    return rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type target(targetSEXP);
+    Rcpp::traits::input_parameter< double >::type delay(delaySEXP);
+    targeted_event_schedule_vector(event, target, delay);
+    return R_NilValue;
 END_RCPP
 }
-// fixed_probability_forked_state_change_process
-Rcpp::XPtr<process_t> fixed_probability_forked_state_change_process(const std::string individual, const std::string source_state, const std::vector<std::string> destination_states, double rate, const std::vector<double> destination_probabilities);
-RcppExport SEXP _individual_fixed_probability_forked_state_change_process(SEXP individualSEXP, SEXP source_stateSEXP, SEXP destination_statesSEXP, SEXP rateSEXP, SEXP destination_probabilitiesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type source_state(source_stateSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string> >::type destination_states(destination_statesSEXP);
-    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double> >::type destination_probabilities(destination_probabilitiesSEXP);
-    rcpp_result_gen = Rcpp::wrap(fixed_probability_forked_state_change_process(individual, source_state, destination_states, rate, destination_probabilities));
-    return rcpp_result_gen;
-END_RCPP
-}
-// state_count_renderer_process
-Rcpp::XPtr<process_t> state_count_renderer_process(const std::string individual, const std::vector<std::string> states);
-RcppExport SEXP _individual_state_count_renderer_process(SEXP individualSEXP, SEXP statesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string> >::type states(statesSEXP);
-    rcpp_result_gen = Rcpp::wrap(state_count_renderer_process(individual, states));
-    return rcpp_result_gen;
-END_RCPP
-}
-// variable_mean_renderer_process
-Rcpp::XPtr<process_t> variable_mean_renderer_process(const std::string individual, const std::vector<std::string> variables);
-RcppExport SEXP _individual_variable_mean_renderer_process(SEXP individualSEXP, SEXP variablesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string> >::type variables(variablesSEXP);
-    rcpp_result_gen = Rcpp::wrap(variable_mean_renderer_process(individual, variables));
-    return rcpp_result_gen;
-END_RCPP
-}
-// execute_process
-void execute_process(Rcpp::XPtr<process_t> process, Rcpp::XPtr<ProcessAPI> api);
-RcppExport SEXP _individual_execute_process(SEXP processSEXP, SEXP apiSEXP) {
+// targeted_event_schedule_multi_delay
+void targeted_event_schedule_multi_delay(const Rcpp::XPtr<TargetedEvent> event, std::vector<size_t> target, const std::vector<double> delay);
+RcppExport SEXP _individual_targeted_event_schedule_multi_delay(SEXP eventSEXP, SEXP targetSEXP, SEXP delaySEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<process_t> >::type process(processSEXP);
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    execute_process(process, api);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type target(targetSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type delay(delaySEXP);
+    targeted_event_schedule_multi_delay(event, target, delay);
     return R_NilValue;
 END_RCPP
 }
 // create_process_api
-Rcpp::XPtr<ProcessAPI> create_process_api(Rcpp::XPtr<State> state, Rcpp::XPtr<scheduler_t> scheduler, Rcpp::List params, Rcpp::Environment renderer);
-RcppExport SEXP _individual_create_process_api(SEXP stateSEXP, SEXP schedulerSEXP, SEXP paramsSEXP, SEXP rendererSEXP) {
+Rcpp::XPtr<ProcessAPI> create_process_api(Rcpp::XPtr<State> state, Rcpp::List params);
+RcppExport SEXP _individual_create_process_api(SEXP stateSEXP, SEXP paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
-    Rcpp::traits::input_parameter< Rcpp::XPtr<scheduler_t> >::type scheduler(schedulerSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type params(paramsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Environment >::type renderer(rendererSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_process_api(state, scheduler, params, renderer));
+    rcpp_result_gen = Rcpp::wrap(create_process_api(state, params));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -347,100 +410,6 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// process_schedule
-void process_schedule(Rcpp::XPtr<ProcessAPI> api, const std::string event, std::vector<size_t> index_vector, double delay);
-RcppExport SEXP _individual_process_schedule(SEXP apiSEXP, SEXP eventSEXP, SEXP index_vectorSEXP, SEXP delaySEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
-    Rcpp::traits::input_parameter< std::vector<size_t> >::type index_vector(index_vectorSEXP);
-    Rcpp::traits::input_parameter< double >::type delay(delaySEXP);
-    process_schedule(api, event, index_vector, delay);
-    return R_NilValue;
-END_RCPP
-}
-// process_schedule_multi_delay
-void process_schedule_multi_delay(Rcpp::XPtr<ProcessAPI> api, const std::string event, std::vector<size_t> index_vector, std::vector<double> delay);
-RcppExport SEXP _individual_process_schedule_multi_delay(SEXP apiSEXP, SEXP eventSEXP, SEXP index_vectorSEXP, SEXP delaySEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
-    Rcpp::traits::input_parameter< std::vector<size_t> >::type index_vector(index_vectorSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type delay(delaySEXP);
-    process_schedule_multi_delay(api, event, index_vector, delay);
-    return R_NilValue;
-END_RCPP
-}
-// process_get_scheduled
-std::vector<size_t> process_get_scheduled(Rcpp::XPtr<ProcessAPI> api, const std::string event);
-RcppExport SEXP _individual_process_get_scheduled(SEXP apiSEXP, SEXP eventSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
-    rcpp_result_gen = Rcpp::wrap(process_get_scheduled(api, event));
-    return rcpp_result_gen;
-END_RCPP
-}
-// process_clear_schedule
-void process_clear_schedule(Rcpp::XPtr<ProcessAPI> api, const std::string event, std::vector<size_t> index);
-RcppExport SEXP _individual_process_clear_schedule(SEXP apiSEXP, SEXP eventSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type event(eventSEXP);
-    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
-    process_clear_schedule(api, event, index);
-    return R_NilValue;
-END_RCPP
-}
-// process_get_timestep
-size_t process_get_timestep(Rcpp::XPtr<ProcessAPI> api);
-RcppExport SEXP _individual_process_get_timestep(SEXP apiSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    rcpp_result_gen = Rcpp::wrap(process_get_timestep(api));
-    return rcpp_result_gen;
-END_RCPP
-}
-// create_scheduler
-Rcpp::XPtr<scheduler_t> create_scheduler(const Rcpp::List individuals);
-RcppExport SEXP _individual_create_scheduler(SEXP individualsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List >::type individuals(individualsSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_scheduler(individuals));
-    return rcpp_result_gen;
-END_RCPP
-}
-// scheduler_tick
-void scheduler_tick(const Rcpp::XPtr<scheduler_t> scheduler);
-RcppExport SEXP _individual_scheduler_tick(SEXP schedulerSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::XPtr<scheduler_t> >::type scheduler(schedulerSEXP);
-    scheduler_tick(scheduler);
-    return R_NilValue;
-END_RCPP
-}
-// scheduler_process_events
-void scheduler_process_events(const Rcpp::XPtr<scheduler_t> scheduler, const Rcpp::XPtr<ProcessAPI> cpp_api, const Rcpp::Environment r_api);
-RcppExport SEXP _individual_scheduler_process_events(SEXP schedulerSEXP, SEXP cpp_apiSEXP, SEXP r_apiSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::XPtr<scheduler_t> >::type scheduler(schedulerSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::XPtr<ProcessAPI> >::type cpp_api(cpp_apiSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::Environment >::type r_api(r_apiSEXP);
-    scheduler_process_events(scheduler, cpp_api, r_api);
-    return R_NilValue;
-END_RCPP
-}
 // create_cpp_state
 Rcpp::XPtr<State> create_cpp_state(const std::vector<std::string>& individuals, const std::vector<size_t>& population_sizes);
 RcppExport SEXP _individual_create_cpp_state(SEXP individualsSEXP, SEXP population_sizesSEXP) {
@@ -516,18 +485,25 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_bitset_size", (DL_FUNC) &_individual_bitset_size, 1},
     {"_individual_bitset_max_size", (DL_FUNC) &_individual_bitset_max_size, 1},
     {"_individual_bitset_and", (DL_FUNC) &_individual_bitset_and, 2},
+    {"_individual_bitset_not", (DL_FUNC) &_individual_bitset_not, 1},
     {"_individual_bitset_or", (DL_FUNC) &_individual_bitset_or, 2},
     {"_individual_bitset_sample", (DL_FUNC) &_individual_bitset_sample, 2},
     {"_individual_bitset_to_vector", (DL_FUNC) &_individual_bitset_to_vector, 1},
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
-    {"_individual_update_state_listener", (DL_FUNC) &_individual_update_state_listener, 2},
-    {"_individual_reschedule_listener", (DL_FUNC) &_individual_reschedule_listener, 2},
-    {"_individual_fixed_probability_state_change_process", (DL_FUNC) &_individual_fixed_probability_state_change_process, 4},
-    {"_individual_fixed_probability_forked_state_change_process", (DL_FUNC) &_individual_fixed_probability_forked_state_change_process, 5},
-    {"_individual_state_count_renderer_process", (DL_FUNC) &_individual_state_count_renderer_process, 2},
-    {"_individual_variable_mean_renderer_process", (DL_FUNC) &_individual_variable_mean_renderer_process, 2},
-    {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
-    {"_individual_create_process_api", (DL_FUNC) &_individual_create_process_api, 4},
+    {"_individual_create_event", (DL_FUNC) &_individual_create_event, 0},
+    {"_individual_create_targeted_event", (DL_FUNC) &_individual_create_targeted_event, 1},
+    {"_individual_event_tick", (DL_FUNC) &_individual_event_tick, 1},
+    {"_individual_event_process", (DL_FUNC) &_individual_event_process, 1},
+    {"_individual_event_add_listener", (DL_FUNC) &_individual_event_add_listener, 2},
+    {"_individual_event_schedule", (DL_FUNC) &_individual_event_schedule, 2},
+    {"_individual_event_clear_schedule", (DL_FUNC) &_individual_event_clear_schedule, 1},
+    {"_individual_targeted_event_clear_schedule_vector", (DL_FUNC) &_individual_targeted_event_clear_schedule_vector, 2},
+    {"_individual_targeted_event_clear_schedule", (DL_FUNC) &_individual_targeted_event_clear_schedule, 2},
+    {"_individual_event_get_scheduled", (DL_FUNC) &_individual_event_get_scheduled, 1},
+    {"_individual_targeted_event_schedule", (DL_FUNC) &_individual_targeted_event_schedule, 3},
+    {"_individual_targeted_event_schedule_vector", (DL_FUNC) &_individual_targeted_event_schedule_vector, 3},
+    {"_individual_targeted_event_schedule_multi_delay", (DL_FUNC) &_individual_targeted_event_schedule_multi_delay, 3},
+    {"_individual_create_process_api", (DL_FUNC) &_individual_create_process_api, 2},
     {"_individual_process_get_state", (DL_FUNC) &_individual_process_get_state, 4},
     {"_individual_process_get_state_size", (DL_FUNC) &_individual_process_get_state_size, 3},
     {"_individual_process_get_variable", (DL_FUNC) &_individual_process_get_variable, 3},
@@ -535,14 +511,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_process_queue_state_update", (DL_FUNC) &_individual_process_queue_state_update, 4},
     {"_individual_process_queue_variable_update", (DL_FUNC) &_individual_process_queue_variable_update, 5},
     {"_individual_process_queue_variable_fill", (DL_FUNC) &_individual_process_queue_variable_fill, 4},
-    {"_individual_process_schedule", (DL_FUNC) &_individual_process_schedule, 4},
-    {"_individual_process_schedule_multi_delay", (DL_FUNC) &_individual_process_schedule_multi_delay, 4},
-    {"_individual_process_get_scheduled", (DL_FUNC) &_individual_process_get_scheduled, 2},
-    {"_individual_process_clear_schedule", (DL_FUNC) &_individual_process_clear_schedule, 3},
-    {"_individual_process_get_timestep", (DL_FUNC) &_individual_process_get_timestep, 1},
-    {"_individual_create_scheduler", (DL_FUNC) &_individual_create_scheduler, 1},
-    {"_individual_scheduler_tick", (DL_FUNC) &_individual_scheduler_tick, 1},
-    {"_individual_scheduler_process_events", (DL_FUNC) &_individual_scheduler_process_events, 3},
     {"_individual_create_cpp_state", (DL_FUNC) &_individual_create_cpp_state, 2},
     {"_individual_state_add_states", (DL_FUNC) &_individual_state_add_states, 4},
     {"_individual_state_add_variable", (DL_FUNC) &_individual_state_add_variable, 4},

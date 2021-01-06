@@ -11,10 +11,9 @@
 //[[Rcpp::export]]
 Rcpp::XPtr<ProcessAPI> create_process_api(
     Rcpp::XPtr<State> state,
-    Rcpp::XPtr<scheduler_t> scheduler,
-    Rcpp::List params,
-    Rcpp::Environment renderer) {
-    auto api = new ProcessAPI(state, scheduler, params, renderer);
+    Rcpp::List params
+    ) {
+    auto api = new ProcessAPI(state, params);
     return Rcpp::XPtr<ProcessAPI>(api, true);
 }
 
@@ -97,56 +96,4 @@ void process_queue_variable_fill(
         const double value
 ) {
     api->queue_variable_fill(individual, variable, value);
-}
-
-//[[Rcpp::export]]
-void process_schedule(
-    Rcpp::XPtr<ProcessAPI> api,
-    const std::string event,
-    std::vector<size_t> index_vector,
-    double delay
-) {
-    decrement(index_vector);
-    api->schedule(event, index_vector, delay);
-}
-
-//[[Rcpp::export]]
-void process_schedule_multi_delay(
-    Rcpp::XPtr<ProcessAPI> api,
-    const std::string event,
-    std::vector<size_t> index_vector,
-    std::vector<double> delay
-) {
-    decrement(index_vector);
-    api->schedule(event, index_vector, delay);
-}
-
-//[[Rcpp::export]]
-std::vector<size_t> process_get_scheduled(
-    Rcpp::XPtr<ProcessAPI> api,
-    const std::string event
-) {
-    const auto result = api->get_scheduled(event);
-    auto r_result = std::vector<size_t>(result.size());
-    auto i = 0u;
-    for (auto r : result) {
-        r_result[i] = r + 1;
-        ++i;
-    }
-    return r_result;
-}
-
-//[[Rcpp::export]]
-void process_clear_schedule(
-    Rcpp::XPtr<ProcessAPI> api,
-    const std::string event,
-    std::vector<size_t> index
-) {
-    decrement(index);
-    api->clear_schedule(event, index);
-}
-
-//[[Rcpp::export]]
-size_t process_get_timestep(Rcpp::XPtr<ProcessAPI> api) {
-    return api->get_timestep();
 }

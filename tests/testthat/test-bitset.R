@@ -34,6 +34,13 @@ test_that("bitset or works", {
   expect_equal(a$to_vector(), c(1, 3, 5, 6, 7))
 })
 
+test_that("bitset inverse works", {
+  a <- Bitset$new(10)
+  a$insert(c(1, 5, 6))
+  expect_equal(a$not()$to_vector(), c(2, 3, 4, 7, 8, 9, 10))
+  expect_equal(a$not()$size(), 7)
+})
+
 test_that("bitset sample works at rate = 0", {
   a <- Bitset$new(10)
   a$insert(c(1, 5, 6))
@@ -46,17 +53,4 @@ test_that("bitset sample works at rate = 1", {
   a$insert(c(1, 5, 6))
   a$sample(1)
   expect_equal(a$to_vector(), c(1, 5, 6))
-})
-
-test_that("get_state_bitset works", {
-  S <- State$new('S', 10)
-  I <- State$new('I', 100)
-  R <- State$new('R', 20)
-  human <- Individual$new('test', list(S, I, R))
-
-  sim <- setup_simulation(list(human))
-  expect_equal(
-    sim$r_api$get_state_bitset(human, list(S, R))$to_vector(),
-    c(seq(10), seq(20) + 110)
-  )
 })
