@@ -97,52 +97,24 @@ targeted_event_schedule_multi_delay <- function(event, target, delay) {
     invisible(.Call(`_individual_targeted_event_schedule_multi_delay`, event, target, delay))
 }
 
-create_process_api <- function(state, params) {
-    .Call(`_individual_create_process_api`, state, params)
+create_categorical_variable <- function(categories, values) {
+    .Call(`_individual_create_categorical_variable`, categories, values)
 }
 
-process_get_state <- function(api, individual, size, states) {
-    .Call(`_individual_process_get_state`, api, individual, size, states)
+categorical_variable_queue_update <- function(variable, value, index) {
+    invisible(.Call(`_individual_categorical_variable_queue_update`, variable, value, index))
 }
 
-process_get_state_size <- function(api, individual, states) {
-    .Call(`_individual_process_get_state_size`, api, individual, states)
+categorical_variable_get_index_of <- function(variable, values) {
+    .Call(`_individual_categorical_variable_get_index_of`, variable, values)
 }
 
-process_get_variable <- function(api, individual, variable) {
-    .Call(`_individual_process_get_variable`, api, individual, variable)
+categorical_variable_queue_update_vector <- function(variable, value, index) {
+    invisible(.Call(`_individual_categorical_variable_queue_update_vector`, variable, value, index))
 }
 
-process_get_variable_at_index <- function(api, individual, variable, index) {
-    .Call(`_individual_process_get_variable_at_index`, api, individual, variable, index)
-}
-
-process_queue_state_update <- function(api, individual, state, index_vector) {
-    invisible(.Call(`_individual_process_queue_state_update`, api, individual, state, index_vector))
-}
-
-process_queue_variable_update <- function(api, individual, variable, index, values) {
-    invisible(.Call(`_individual_process_queue_variable_update`, api, individual, variable, index, values))
-}
-
-process_queue_variable_fill <- function(api, individual, variable, value) {
-    invisible(.Call(`_individual_process_queue_variable_fill`, api, individual, variable, value))
-}
-
-create_cpp_state <- function(individuals, population_sizes) {
-    .Call(`_individual_create_cpp_state`, individuals, population_sizes)
-}
-
-state_add_states <- function(state, individual, state_names, initial_sizes) {
-    invisible(.Call(`_individual_state_add_states`, state, individual, state_names, initial_sizes))
-}
-
-state_add_variable <- function(state, individual, variable, initial) {
-    invisible(.Call(`_individual_state_add_variable`, state, individual, variable, initial))
-}
-
-state_apply_updates <- function(state) {
-    invisible(.Call(`_individual_state_apply_updates`, state))
+categorical_variable_update <- function(variable) {
+    invisible(.Call(`_individual_categorical_variable_update`, variable))
 }
 
 # Register entry points for exported C++ functions
