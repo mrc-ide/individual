@@ -71,6 +71,7 @@ public:
     bool operator!=(const IterableBitset&) const;
     IterableBitset operator&(const IterableBitset&) const;
     IterableBitset operator|(const IterableBitset&) const;
+    IterableBitset operator~() const;
     IterableBitset& operator&=(const IterableBitset&);
     IterableBitset& operator|=(const IterableBitset&);
     iterator begin();
@@ -217,6 +218,16 @@ inline IterableBitset<A> IterableBitset<A>::operator &(const IterableBitset<A>& 
 template<class A>
 inline IterableBitset<A> IterableBitset<A>::operator |(const IterableBitset<A>& other) const {
     return IterableBitset<A>(*this) |= other;
+}
+
+template<class A>
+inline IterableBitset<A> IterableBitset<A>::operator ~() const {
+    auto result = IterableBitset<A>(*this);
+    for (auto i = 0u; i < result.bitmap.size(); ++i) {
+        result.bitmap[i] = ~result.bitmap[i];
+    }
+    result.n = result.max_n - result.n;
+    return result;
 }
 
 template<class A>

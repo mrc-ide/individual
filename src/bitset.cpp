@@ -61,6 +61,13 @@ void bitset_and(
 }
 
 //[[Rcpp::export]]
+Rcpp::XPtr<individual_index_t> bitset_not(
+    const Rcpp::XPtr<individual_index_t> b
+    ) {
+    return Rcpp::XPtr<individual_index_t>(new individual_index_t(~(*b)), true);
+}
+
+//[[Rcpp::export]]
 void bitset_or(
     const Rcpp::XPtr<individual_index_t> a,
     const Rcpp::XPtr<individual_index_t> b

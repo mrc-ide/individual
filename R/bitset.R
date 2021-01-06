@@ -25,6 +25,7 @@ Bitset <- R6::R6Class(
     size = function() bitset_size(self$.bitset),
     or = function(other) bitset_or(self$.bitset, other$.bitset),
     and = function(other) bitset_and(self$.bitset, other$.bitset),
+    not = function() Bitset$new(from = bitset_not(self$.bitset)),
     sample = function(rate) bitset_sample(self$.bitset, rate),
     copy = function() Bitset$new(from = bitset_copy(self$.bitset)),
     to_vector = function() bitset_to_vector(self$.bitset)
