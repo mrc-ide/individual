@@ -9,6 +9,7 @@
 #define INST_INCLUDE_ITERABLEBITSET_H_
 
 #include <cmath>
+#include <Rcpp.h>
 
 template<class A>
 class IterableBitset;
@@ -84,7 +85,10 @@ public:
     const_iterator find(size_t) const;
     template<class InputIterator>
     void insert(InputIterator, InputIterator);
+    template<class InputIterator>
+    void insert_safe(InputIterator, InputIterator);
     void insert(size_t);
+    void insert_safe(size_t);
     size_type size() const;
     size_type max_size() const;
     bool empty() const;
@@ -327,6 +331,16 @@ inline void IterableBitset<A>::insert(InputIterator begin, InputIterator end) {
     }
 }
 
+template<class A>
+template<class InputIterator>
+inline void IterableBitset<A>::insert_safe(InputIterator begin, InputIterator end) {
+    auto it = begin;
+    while (it != end) {
+        insert_safe(*it);
+        ++it;
+    }
+}
+
 //' @title insert
 //' @description insert one element into the bitset
 template<class A>
@@ -335,6 +349,14 @@ inline void IterableBitset<A>::insert(size_t v) {
         set(v);
         n++;
     }
+}
+
+template<class A>
+inline void IterableBitset<A>::insert_safe(size_t v) {
+    if (v < 0 || v >= max_n) {
+        Rcpp::stop("Insert out of range");
+    }
+    insert(v);
 }
 
 template<class A>

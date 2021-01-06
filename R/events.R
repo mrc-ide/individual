@@ -63,7 +63,7 @@ TargetedEvent <- R6::R6Class(
         if (is.numeric(target)) {
           targeted_event_schedule_vector(self$.event, target, delay)
         } else {
-          targeted_event_schedule(self$.event, target, delay)
+          targeted_event_schedule(self$.event, target$.bitset, delay)
         }
       } else {
         if (length(target) != length(delay)) {
@@ -82,7 +82,7 @@ TargetedEvent <- R6::R6Class(
       if (is.numeric(target)) {
         targeted_event_clear_schedule_vector(self$.event, target)
       } else {
-        targeted_event_clear_schedule(self$.event, target)
+        targeted_event_clear_schedule(self$.event, target$.bitset)
       }
     }
   )
