@@ -29,7 +29,7 @@ CategoricalVariable <- R6::R6Class(
       if (is.numeric(index)) {
         categorical_variable_queue_update_vector(self$.variable, value, index)
       } else {
-        categorical_variable_queue_update(self$.variable, value, index)
+        categorical_variable_queue_update(self$.variable, value, index$.bitset)
       }
     },
 
@@ -58,11 +58,12 @@ DoubleVariable <- R6::R6Class(
     #' @param index optionally return a subset of the variable vector
     get_values = function(index=NULL) {
       if (is.null(index)) {
-        return(
-          double_variable_get_values(self$.variable)
-        )
+        return(double_variable_get_values(self$.variable))
       }
-      double_variable_get_values_at_index(self$.variable, index)
+      if (is.numeric(index)) {
+        return(double_variable_get_values_at_index_vector(self$.variable, index))
+      }
+      double_variable_get_values_at_index(self$.variable, index$.bitset)
     },
 
     #' @description Queue an update for a variable. There are 4 types of variable update:
@@ -91,15 +92,15 @@ DoubleVariable <- R6::R6Class(
         } else {
           double_variable_queue_update(
             self$.variable,
-            numeric(0),
-            values
+            values,
+            numeric(0)
           )
         }
       } else if(length(index) != 0) {
         double_variable_queue_update(
           self$.variable,
-          index,
-          values
+          values,
+          index
         )
       }
     },

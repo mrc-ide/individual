@@ -56,3 +56,61 @@ void categorical_variable_queue_update_vector(
 void categorical_variable_update(Rcpp::XPtr<CategoricalVariable> variable) {
     variable->update();
 }
+
+//[[Rcpp::export]]
+Rcpp::XPtr<DoubleVariable> create_double_variable(
+    const std::vector<double>& values
+    ) {
+    return Rcpp::XPtr<DoubleVariable>(
+        new DoubleVariable(values),
+        true
+    );
+}
+
+//[[Rcpp::export]]
+std::vector<double> double_variable_get_values(
+    Rcpp::XPtr<DoubleVariable> variable
+    ) {
+    return variable->get_values();
+}
+
+//[[Rcpp::export]]
+std::vector<double> double_variable_get_values_at_index(
+    Rcpp::XPtr<DoubleVariable> variable,
+    Rcpp::XPtr<individual_index_t> index
+    ) {
+    return variable->get_values(*index);
+}
+
+//[[Rcpp::export]]
+std::vector<double> double_variable_get_values_at_index_vector(
+    Rcpp::XPtr<DoubleVariable> variable,
+    std::vector<size_t> index
+    ) {
+    decrement(index);
+    auto bitmap = individual_index_t(variable->size);
+    bitmap.insert_safe(index.begin(), index.end());
+    return variable->get_values(bitmap);
+}
+
+//[[Rcpp::export]]
+void double_variable_queue_variable_fill(
+    Rcpp::XPtr<DoubleVariable> variable,
+    std::vector<double> value
+) {
+    variable->queue_update(value, std::vector<size_t>());
+}
+
+//[[Rcpp::export]]
+void double_variable_queue_variable_update(
+    Rcpp::XPtr<DoubleVariable> variable,
+    std::vector<double> value,
+    std::vector<size_t> index
+) {
+    variable->queue_update(value, index);
+}
+
+//[[Rcpp::export]]
+void double_variable_update(Rcpp::XPtr<DoubleVariable> variable) {
+    variable->update();
+}

@@ -117,6 +117,34 @@ categorical_variable_update <- function(variable) {
     invisible(.Call(`_individual_categorical_variable_update`, variable))
 }
 
+create_double_variable <- function(values) {
+    .Call(`_individual_create_double_variable`, values)
+}
+
+double_variable_get_values <- function(variable) {
+    .Call(`_individual_double_variable_get_values`, variable)
+}
+
+double_variable_get_values_at_index <- function(variable, index) {
+    .Call(`_individual_double_variable_get_values_at_index`, variable, index)
+}
+
+double_variable_get_values_at_index_vector <- function(variable, index) {
+    .Call(`_individual_double_variable_get_values_at_index_vector`, variable, index)
+}
+
+double_variable_queue_variable_fill <- function(variable, value) {
+    invisible(.Call(`_individual_double_variable_queue_variable_fill`, variable, value))
+}
+
+double_variable_queue_variable_update <- function(variable, value, index) {
+    invisible(.Call(`_individual_double_variable_queue_variable_update`, variable, value, index))
+}
+
+double_variable_update <- function(variable) {
+    invisible(.Call(`_individual_double_variable_update`, variable))
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_individual_RcppExport_registerCCallable', PACKAGE = 'individual')
