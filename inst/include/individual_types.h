@@ -9,8 +9,7 @@
 #define INDIVIDUAL_TYPES_H_
 
 #include <Rcpp.h>
-#include "State.h"
+#include "Variable.h"
 #include "Event.h"
-#include "ProcessAPI.h"
 
 #endif /* INDIVIDUAL_TYPES_H_ */

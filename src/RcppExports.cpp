@@ -304,144 +304,61 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// create_process_api
-Rcpp::XPtr<ProcessAPI> create_process_api(Rcpp::XPtr<State> state, Rcpp::List params);
-RcppExport SEXP _individual_create_process_api(SEXP stateSEXP, SEXP paramsSEXP) {
+// create_categorical_variable
+Rcpp::XPtr<CategoricalVariable> create_categorical_variable(const std::vector<std::string>& categories, const std::vector<std::string>& values);
+RcppExport SEXP _individual_create_categorical_variable(SEXP categoriesSEXP, SEXP valuesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type params(paramsSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_process_api(state, params));
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type categories(categoriesSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_categorical_variable(categories, values));
     return rcpp_result_gen;
 END_RCPP
 }
-// process_get_state
-Rcpp::XPtr<individual_index_t> process_get_state(Rcpp::XPtr<ProcessAPI> api, const std::string individual, size_t size, const std::vector<std::string> states);
-RcppExport SEXP _individual_process_get_state(SEXP apiSEXP, SEXP individualSEXP, SEXP sizeSEXP, SEXP statesSEXP) {
+// categorical_variable_queue_update
+void categorical_variable_queue_update(Rcpp::XPtr<CategoricalVariable> variable, const std::string& value, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_categorical_variable_queue_update(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    categorical_variable_queue_update(variable, value, index);
+    return R_NilValue;
+END_RCPP
+}
+// categorical_variable_get_index_of
+Rcpp::XPtr<individual_index_t> categorical_variable_get_index_of(Rcpp::XPtr<CategoricalVariable> variable, const std::vector<std::string>& values);
+RcppExport SEXP _individual_categorical_variable_get_index_of(SEXP variableSEXP, SEXP valuesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< size_t >::type size(sizeSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string> >::type states(statesSEXP);
-    rcpp_result_gen = Rcpp::wrap(process_get_state(api, individual, size, states));
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
+    rcpp_result_gen = Rcpp::wrap(categorical_variable_get_index_of(variable, values));
     return rcpp_result_gen;
 END_RCPP
 }
-// process_get_variable
-std::vector<double> process_get_variable(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable);
-RcppExport SEXP _individual_process_get_variable(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type variable(variableSEXP);
-    rcpp_result_gen = Rcpp::wrap(process_get_variable(api, individual, variable));
-    return rcpp_result_gen;
-END_RCPP
-}
-// process_get_variable_at_index
-std::vector<double> process_get_variable_at_index(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable, std::vector<size_t> index);
-RcppExport SEXP _individual_process_get_variable_at_index(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(process_get_variable_at_index(api, individual, variable, index));
-    return rcpp_result_gen;
-END_RCPP
-}
-// process_queue_state_update
-void process_queue_state_update(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string state, std::vector<size_t> index_vector);
-RcppExport SEXP _individual_process_queue_state_update(SEXP apiSEXP, SEXP individualSEXP, SEXP stateSEXP, SEXP index_vectorSEXP) {
+// categorical_variable_queue_update_vector
+void categorical_variable_queue_update_vector(Rcpp::XPtr<CategoricalVariable> variable, const std::string& value, std::vector<size_t>& index);
+RcppExport SEXP _individual_categorical_variable_queue_update_vector(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type state(stateSEXP);
-    Rcpp::traits::input_parameter< std::vector<size_t> >::type index_vector(index_vectorSEXP);
-    process_queue_state_update(api, individual, state, index_vector);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
+    categorical_variable_queue_update_vector(variable, value, index);
     return R_NilValue;
 END_RCPP
 }
-// process_queue_variable_update
-void process_queue_variable_update(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable, std::vector<size_t> index, const std::vector<double> values);
-RcppExport SEXP _individual_process_queue_variable_update(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP, SEXP indexSEXP, SEXP valuesSEXP) {
+// categorical_variable_update
+void categorical_variable_update(Rcpp::XPtr<CategoricalVariable> variable);
+RcppExport SEXP _individual_categorical_variable_update(SEXP variableSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double> >::type values(valuesSEXP);
-    process_queue_variable_update(api, individual, variable, index, values);
-    return R_NilValue;
-END_RCPP
-}
-// process_queue_variable_fill
-void process_queue_variable_fill(Rcpp::XPtr<ProcessAPI> api, const std::string individual, const std::string variable, const double value);
-RcppExport SEXP _individual_process_queue_variable_fill(SEXP apiSEXP, SEXP individualSEXP, SEXP variableSEXP, SEXP valueSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ProcessAPI> >::type api(apiSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const double >::type value(valueSEXP);
-    process_queue_variable_fill(api, individual, variable, value);
-    return R_NilValue;
-END_RCPP
-}
-// create_cpp_state
-Rcpp::XPtr<State> create_cpp_state(const std::vector<std::string>& individuals, const std::vector<size_t>& population_sizes);
-RcppExport SEXP _individual_create_cpp_state(SEXP individualsSEXP, SEXP population_sizesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type individuals(individualsSEXP);
-    Rcpp::traits::input_parameter< const std::vector<size_t>& >::type population_sizes(population_sizesSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_cpp_state(individuals, population_sizes));
-    return rcpp_result_gen;
-END_RCPP
-}
-// state_add_states
-void state_add_states(Rcpp::XPtr<State> state, const std::string& individual, const std::vector<std::string>& state_names, const std::vector<size_t>& initial_sizes);
-RcppExport SEXP _individual_state_add_states(SEXP stateSEXP, SEXP individualSEXP, SEXP state_namesSEXP, SEXP initial_sizesSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type state_names(state_namesSEXP);
-    Rcpp::traits::input_parameter< const std::vector<size_t>& >::type initial_sizes(initial_sizesSEXP);
-    state_add_states(state, individual, state_names, initial_sizes);
-    return R_NilValue;
-END_RCPP
-}
-// state_add_variable
-void state_add_variable(Rcpp::XPtr<State> state, const std::string& individual, const std::string& variable, const variable_vector_t& initial);
-RcppExport SEXP _individual_state_add_variable(SEXP stateSEXP, SEXP individualSEXP, SEXP variableSEXP, SEXP initialSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type individual(individualSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const variable_vector_t& >::type initial(initialSEXP);
-    state_add_variable(state, individual, variable, initial);
-    return R_NilValue;
-END_RCPP
-}
-// state_apply_updates
-void state_apply_updates(Rcpp::XPtr<State> state);
-RcppExport SEXP _individual_state_apply_updates(SEXP stateSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<State> >::type state(stateSEXP);
-    state_apply_updates(state);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    categorical_variable_update(variable);
     return R_NilValue;
 END_RCPP
 }
@@ -490,17 +407,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_targeted_event_schedule", (DL_FUNC) &_individual_targeted_event_schedule, 3},
     {"_individual_targeted_event_schedule_vector", (DL_FUNC) &_individual_targeted_event_schedule_vector, 3},
     {"_individual_targeted_event_schedule_multi_delay", (DL_FUNC) &_individual_targeted_event_schedule_multi_delay, 3},
-    {"_individual_create_process_api", (DL_FUNC) &_individual_create_process_api, 2},
-    {"_individual_process_get_state", (DL_FUNC) &_individual_process_get_state, 4},
-    {"_individual_process_get_variable", (DL_FUNC) &_individual_process_get_variable, 3},
-    {"_individual_process_get_variable_at_index", (DL_FUNC) &_individual_process_get_variable_at_index, 4},
-    {"_individual_process_queue_state_update", (DL_FUNC) &_individual_process_queue_state_update, 4},
-    {"_individual_process_queue_variable_update", (DL_FUNC) &_individual_process_queue_variable_update, 5},
-    {"_individual_process_queue_variable_fill", (DL_FUNC) &_individual_process_queue_variable_fill, 4},
-    {"_individual_create_cpp_state", (DL_FUNC) &_individual_create_cpp_state, 2},
-    {"_individual_state_add_states", (DL_FUNC) &_individual_state_add_states, 4},
-    {"_individual_state_add_variable", (DL_FUNC) &_individual_state_add_variable, 4},
-    {"_individual_state_apply_updates", (DL_FUNC) &_individual_state_apply_updates, 1},
+    {"_individual_create_categorical_variable", (DL_FUNC) &_individual_create_categorical_variable, 2},
+    {"_individual_categorical_variable_queue_update", (DL_FUNC) &_individual_categorical_variable_queue_update, 3},
+    {"_individual_categorical_variable_get_index_of", (DL_FUNC) &_individual_categorical_variable_get_index_of, 2},
+    {"_individual_categorical_variable_queue_update_vector", (DL_FUNC) &_individual_categorical_variable_queue_update_vector, 3},
+    {"_individual_categorical_variable_update", (DL_FUNC) &_individual_categorical_variable_update, 1},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
     {NULL, NULL, 0}
