@@ -6,7 +6,7 @@ test_that("updating variables works", {
   sequence$queue_update((1:5) * 2, 1:5)
   sequence$.update()
   middle <- sequence$get_values()
-  sequence$queue_variable_update(11, 2:6)
+  sequence$queue_update(11, 2:6)
   sequence$.update()
   last <- sequence$get_values()
 
@@ -48,7 +48,7 @@ test_that("updating variables with silly indices errors gracefully", {
 
   expect_error(
     sequence$queue_update(c(1.0, 2.0), 1:5),
-    '*'
+    '*' # different sized values and index
   )
 
   expect_error(
@@ -58,12 +58,12 @@ test_that("updating variables with silly indices errors gracefully", {
 
   expect_error(
     sequence$queue_update(11, -1:3),
-    '*'
+    '*' # invalid index
   )
 
   expect_error(
     sequence$queue_update(11, 9:15),
-    '*'
+    '*' # out of bounds
   )
 })
 
@@ -96,39 +96,39 @@ test_that("Vector fill variable updates work", {
 })
 
 test_that("catagorical updates work", {
-  state <- CategoricalVariable(
+  state <- CategoricalVariable$new(
     c('S', 'I'),
     rep('S', 10)
   )
   state$queue_update('I', c(1, 3))
   state$.update()
   expect_setequal(state$get_index_of('I')$to_vector(), c(1, 3))
-  expect_setequal(state$get_index_of('S')$to_vector, c(2, 4:10))
+  expect_setequal(state$get_index_of('S')$to_vector(), c(2, 4:10))
 })
 
 test_that("catagorical updates work after null updates", {
-  state <- CategoricalVariable(
+  state <- CategoricalVariable$new(
     c('S', 'I'),
     rep('S', 10)
   )
   state$queue_update('I', numeric(0))
   state$.update()
   expect_setequal(state$get_index_of('I')$to_vector(), numeric(0))
-  expect_setequal(state$get_index_of('S')$to_vector, c(2, 4:10))
+  expect_setequal(state$get_index_of('S')$to_vector(), seq(10))
   state$queue_update('I', c(1, 3))
   state$.update()
   expect_setequal(state$get_index_of('I')$to_vector(), c(1, 3))
-  expect_setequal(state$get_index_of('S')$to_vector, c(2, 4:10))
+  expect_setequal(state$get_index_of('S')$to_vector(), c(2, 4:10))
 })
 
 
 test_that("catagorical updates work with duplicate elements", {
-  state <- CategoricalVariable(
+  state <- CategoricalVariable$new(
     c('S', 'I'),
     rep('S', 10)
   )
   state$queue_update('I', c(1, 1, 3, 3))
   state$.update()
   expect_setequal(state$get_index_of('I')$to_vector(), c(1, 3))
-  expect_setequal(state$get_index_of('S')$to_vector, c(2, 4:10))
+  expect_setequal(state$get_index_of('S')$to_vector(), c(2, 4:10))
 })

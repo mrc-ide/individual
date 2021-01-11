@@ -82,7 +82,7 @@ DoubleVariable <- R6::R6Class(
     #' @param index is the index at which to apply the change, use NULL for the
     #' fill options
 
-    queue_update = function(values, index) {
+    queue_update = function(values, index = NULL) {
       if(is.null(index)){
         if(length(values) == 1){
           double_variable_queue_fill(
@@ -106,6 +106,6 @@ DoubleVariable <- R6::R6Class(
     },
 
     #' @noRd
-    .update = function() double_variable_update()
+    .update = function() double_variable_update(self$.variable)
   )
 )
