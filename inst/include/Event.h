@@ -88,6 +88,9 @@ struct TargetedEvent : public EventBase {
     TargetedEvent(size_t size) : size(size) {};
 
     virtual void process() override {
+        if (targeted_schedule.begin() == targeted_schedule.end()) {
+            return;
+        }
         if (targeted_schedule.begin()->first == t) {
             const auto& target = targeted_schedule.begin()->second;
             for (const auto& listener : listeners) {
