@@ -109,6 +109,14 @@ struct DoubleVariable : public Variable {
         const std::vector<double>& values,
         const std::vector<size_t>& index
     ) {
+        if (values.size() > 1 && values.size() < size && values.size() != index.size()) {
+            Rcpp::stop("Mismatch between value and index length");
+        }
+        for (auto i : index) {
+            if (i < 0 || i >= size) {
+                Rcpp::stop("Index out of bounds");
+            }
+        }
         updates.push({ values, index });
     }
 
@@ -137,12 +145,12 @@ struct DoubleVariable : public Variable {
                 if (value_fill) {
                     // For a fill update
                     for (auto i : index) {
-                      to_update[i] = values[0];
+                        to_update[i] = values[0];
                     }
                 } else {
                     // Subset assignment
                     for (auto i = 0u; i < index.size(); ++i) {
-                      to_update[index[i]] = values[i];
+                        to_update[index[i]] = values[i];
                     }
                 }
             }

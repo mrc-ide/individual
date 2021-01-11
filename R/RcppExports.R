@@ -133,12 +133,12 @@ double_variable_get_values_at_index_vector <- function(variable, index) {
     .Call(`_individual_double_variable_get_values_at_index_vector`, variable, index)
 }
 
-double_variable_queue_variable_fill <- function(variable, value) {
-    invisible(.Call(`_individual_double_variable_queue_variable_fill`, variable, value))
+double_variable_queue_fill <- function(variable, value) {
+    invisible(.Call(`_individual_double_variable_queue_fill`, variable, value))
 }
 
-double_variable_queue_variable_update <- function(variable, value, index) {
-    invisible(.Call(`_individual_double_variable_queue_variable_update`, variable, value, index))
+double_variable_queue_update <- function(variable, value, index) {
+    invisible(.Call(`_individual_double_variable_queue_update`, variable, value, index))
 }
 
 double_variable_update <- function(variable) {

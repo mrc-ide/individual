@@ -94,19 +94,20 @@ std::vector<double> double_variable_get_values_at_index_vector(
 }
 
 //[[Rcpp::export]]
-void double_variable_queue_variable_fill(
+void double_variable_queue_fill(
     Rcpp::XPtr<DoubleVariable> variable,
-    std::vector<double> value
+    const std::vector<double> value
 ) {
     variable->queue_update(value, std::vector<size_t>());
 }
 
 //[[Rcpp::export]]
-void double_variable_queue_variable_update(
+void double_variable_queue_update(
     Rcpp::XPtr<DoubleVariable> variable,
-    std::vector<double> value,
+    const std::vector<double> value,
     std::vector<size_t> index
 ) {
+    decrement(index);
     variable->queue_update(value, index);
 }
 
