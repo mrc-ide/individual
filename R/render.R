@@ -25,7 +25,7 @@ Render <- R6::R6Class(
     #' @param name the variable to render
     #' @param value the value to store for the variable
     #' @param timestep the timestep of the data point
-    add = function(name, value, timestep) {
+    render = function(name, value, timestep) {
       if (name == 'timestep') {
         stop("Please don't name your variable 'timestep'")
       }

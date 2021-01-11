@@ -20,13 +20,28 @@ Bitset <- R6::R6Class(
     },
 
     # methods
-    insert = function(v) bitset_insert(self$.bitset, v),
-    remove = function(v) bitset_remove(self$.bitset, v),
+    insert = function(v) {
+      bitset_insert(self$.bitset, v)
+      self
+    },
+    remove = function(v) {
+      bitset_remove(self$.bitset, v)
+      self
+    },
     size = function() bitset_size(self$.bitset),
-    or = function(other) bitset_or(self$.bitset, other$.bitset),
-    and = function(other) bitset_and(self$.bitset, other$.bitset),
+    or = function(other) {
+      bitset_or(self$.bitset, other$.bitset)
+      self
+    },
+    and = function(other) {
+      bitset_and(self$.bitset, other$.bitset)
+      self
+    },
     not = function() Bitset$new(from = bitset_not(self$.bitset)),
-    sample = function(rate) bitset_sample(self$.bitset, rate),
+    sample = function(rate) {
+      bitset_sample(self$.bitset, rate)
+      self
+    },
     copy = function() Bitset$new(from = bitset_copy(self$.bitset)),
     to_vector = function() bitset_to_vector(self$.bitset)
   )

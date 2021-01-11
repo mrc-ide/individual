@@ -28,9 +28,9 @@
 #' simulation_loop(processes=processes, timesteps=5)
 #' @export
 simulation_loop <- function(
-  variables,
-  events,
-  processes,
+  variables = list(),
+  events = list(),
+  processes = list(),
   timesteps
   ) {
   if (timesteps <= 0) {
