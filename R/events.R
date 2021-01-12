@@ -1,6 +1,6 @@
 #' Class: Event
 #' Describes a general event in the simulation
-#' @export Event
+#' @export
 Event <- R6::R6Class(
   'Event',
   public = list(
@@ -43,7 +43,7 @@ Event <- R6::R6Class(
 #' Class: TargetedEvent
 #' Describes a targeted event in the simulation
 #' This is useful for events which are triggered for a sub-population
-#' @export Event
+#' @export
 TargetedEvent <- R6::R6Class(
   'TargetedEvent',
   inherit = Event,
