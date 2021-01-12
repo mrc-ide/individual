@@ -20,6 +20,7 @@ An R wrapper for IterableBitset
 \item \href{#method-size}{\code{Bitset$size()}}
 \item \href{#method-or}{\code{Bitset$or()}}
 \item \href{#method-and}{\code{Bitset$and()}}
+\item \href{#method-not}{\code{Bitset$not()}}
 \item \href{#method-sample}{\code{Bitset$sample()}}
 \item \href{#method-copy}{\code{Bitset$copy()}}
 \item \href{#method-to_vector}{\code{Bitset$to_vector()}}
@@ -87,6 +88,15 @@ create a bitset
 \subsection{Method \code{and()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$and(other)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-not"></a>}}
+\if{latex}{\out{\hypertarget{method-not}{}}}
+\subsection{Method \code{not()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$not()}\if{html}{\out{</div>}}
 }
 
 }

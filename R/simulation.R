@@ -7,7 +7,9 @@
 #' @param parameters a list of named parameters to pass to the process functions
 #' @examples
 #' population <- 4
+#' timesteps <- 5
 #' state <- CategoricalVariable$new(c('S', 'I', 'R'), rep('S', population))
+#' renderer <- Render$new(timesteps)
 #'
 #' transition <- function(from, to, rate) {
 #'   return(function(api) {
@@ -20,12 +22,14 @@
 #' }
 #'
 #' processes <- list(
-#'   transition(S, I, .2),
-#'   transition(I, R, .1),
-#'   transition(R, S, .05)
+#'   transition('S', 'I', .2),
+#'   transition('I', 'R', .1),
+#'   transition('R', 'S', .05),
+#'   categorical_count_renderer_process(renderer, state, c('S', 'I', 'R'))
 #' )
 #'
-#' simulation_loop(processes=processes, timesteps=5)
+#' simulation_loop(variables=list(state), processes=processes, timesteps=timesteps)
+#' renderer$to_dataframe()
 #' @export
 simulation_loop <- function(
   variables = list(),

@@ -1,5 +1,6 @@
 #' Class: Render
 #' Class to render output for the simulation
+#' @export
 Render <- R6::R6Class(
   'Render',
   private = list(
