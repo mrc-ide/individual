@@ -68,13 +68,13 @@ struct Event : public EventBase {
         EventBase::tick();
     }
 
-    void schedule(std::vector<double> delays) {
+    virtual void schedule(std::vector<double> delays) {
         for (auto delay : round_delay(delays)) {
             simple_schedule.insert(t + delay);
         }
     }
 
-    void clear_schedule() {
+    virtual void clear_schedule() {
         simple_schedule.clear();
     }
 };
@@ -122,7 +122,7 @@ struct TargetedEvent : public EventBase {
     //at a corresponding `delay` timestep in the future.
     //Delays may be continuous but our timeline is discrete.
     //So delays are rounded to the nearest timestep
-    void schedule(
+    virtual void schedule(
         const std::vector<size_t>& target_vector,
         const std::vector<double>& delay) {
 
@@ -146,13 +146,13 @@ struct TargetedEvent : public EventBase {
         }
     }
 
-    void schedule(
+    virtual void schedule(
         const individual_index_t& target,
         double delay) {
         schedule(target, static_cast<size_t>(round(delay)));
     }
 
-    void schedule(
+    virtual void schedule(
         const individual_index_t& target,
         size_t delay) {
 
@@ -165,14 +165,14 @@ struct TargetedEvent : public EventBase {
         targeted_schedule.at(target_timestep) |= target;
     }
 
-    void clear_schedule(const individual_index_t& target) {
+    virtual void clear_schedule(const individual_index_t& target) {
         auto not_target = ~target;
         for (auto& entry : targeted_schedule) {
            entry.second &= not_target;
         }
     }
 
-    individual_index_t get_scheduled() const {
+    virtual individual_index_t get_scheduled() const {
         auto scheduled = individual_index_t(size);
         for (auto& entry : targeted_schedule) {
            scheduled |= entry.second;
