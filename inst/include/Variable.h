@@ -39,7 +39,7 @@ struct CategoricalVariable : public Variable {
         }
     }
 
-    individual_index_t get_index_of(
+    virtual individual_index_t get_index_of(
         const std::vector<std::string> categories
     ) const {
         auto result = individual_index_t(size);
@@ -54,7 +54,7 @@ struct CategoricalVariable : public Variable {
         return result;
     }
 
-    void queue_update(
+    virtual void queue_update(
         const std::string category,
         const individual_index_t& index
     ) {
@@ -91,11 +91,11 @@ struct DoubleVariable : public Variable {
     {}
 
 
-    std::vector<double>& get_values() {
+    virtual std::vector<double>& get_values() {
         return values;
     }
 
-    std::vector<double> get_values(const individual_index_t& index) {
+    virtual std::vector<double> get_values(const individual_index_t& index) {
         auto result = std::vector<double>(index.size());
         auto result_i = 0u;
         for (auto i : index) {
@@ -105,7 +105,7 @@ struct DoubleVariable : public Variable {
         return result;
     }
 
-    void queue_update(
+    virtual void queue_update(
         const std::vector<double>& values,
         const std::vector<size_t>& index
     ) {
