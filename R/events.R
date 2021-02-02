@@ -67,10 +67,7 @@ TargetedEvent <- R6::R6Class(
         }
       } else {
         if (length(target) != length(delay)) {
-          stop(paste0(
-            event$name,
-            ' scheduled with a target which is a different size to delay'
-          ))
+          stop('target and delay must be the same size')
         }
         targeted_event_schedule_multi_delay(self$.event, target, delay)
       }
