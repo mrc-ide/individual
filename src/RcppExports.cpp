@@ -304,6 +304,17 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// execute_process
+void execute_process(Rcpp::XPtr<process_t> process, size_t timestep);
+RcppExport SEXP _individual_execute_process(SEXP processSEXP, SEXP timestepSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<process_t> >::type process(processSEXP);
+    Rcpp::traits::input_parameter< size_t >::type timestep(timestepSEXP);
+    execute_process(process, timestep);
+    return R_NilValue;
+END_RCPP
+}
 // create_categorical_variable
 Rcpp::XPtr<CategoricalVariable> create_categorical_variable(const std::vector<std::string>& categories, const std::vector<std::string>& values);
 RcppExport SEXP _individual_create_categorical_variable(SEXP categoriesSEXP, SEXP valuesSEXP) {
@@ -486,6 +497,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_targeted_event_schedule", (DL_FUNC) &_individual_targeted_event_schedule, 3},
     {"_individual_targeted_event_schedule_vector", (DL_FUNC) &_individual_targeted_event_schedule_vector, 3},
     {"_individual_targeted_event_schedule_multi_delay", (DL_FUNC) &_individual_targeted_event_schedule_multi_delay, 3},
+    {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_create_categorical_variable", (DL_FUNC) &_individual_create_categorical_variable, 2},
     {"_individual_categorical_variable_queue_update", (DL_FUNC) &_individual_categorical_variable_queue_update, 3},
     {"_individual_categorical_variable_get_index_of", (DL_FUNC) &_individual_categorical_variable_get_index_of, 2},

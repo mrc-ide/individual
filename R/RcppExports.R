@@ -97,6 +97,10 @@ targeted_event_schedule_multi_delay <- function(event, target, delay) {
     invisible(.Call(`_individual_targeted_event_schedule_multi_delay`, event, target, delay))
 }
 
+execute_process <- function(process, timestep) {
+    invisible(.Call(`_individual_execute_process`, process, timestep))
+}
+
 create_categorical_variable <- function(categories, values) {
     .Call(`_individual_create_categorical_variable`, categories, values)
 }
