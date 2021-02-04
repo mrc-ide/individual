@@ -15,6 +15,7 @@ The entry point for models to inspect and manipulate the simulation
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-get_state}{\code{SimAPI$get_state()}}
+\item \href{#method-get_state_size}{\code{SimAPI$get_state_size()}}
 \item \href{#method-get_variable}{\code{SimAPI$get_variable()}}
 \item \href{#method-queue_state_update}{\code{SimAPI$queue_state_update()}}
 \item \href{#method-queue_variable_update}{\code{SimAPI$queue_variable_update()}}
@@ -35,6 +36,25 @@ The entry point for models to inspect and manipulate the simulation
 Get the index of individuals with a particular state
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimAPI$get_state(individual, ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{individual}}{of interest}
+
+\item{\code{...}}{the states of interest}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_state_size"></a>}}
+\if{latex}{\out{\hypertarget{method-get_state_size}{}}}
+\subsection{Method \code{get_state_size()}}{
+Get the number of individuals with a particular state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SimAPI$get_state_size(individual, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

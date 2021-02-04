@@ -55,6 +55,10 @@ process_get_state <- function(api, individual, states) {
     .Call(`_individual_process_get_state`, api, individual, states)
 }
 
+process_get_state_size <- function(api, individual, states) {
+    .Call(`_individual_process_get_state_size`, api, individual, states)
+}
+
 process_get_variable <- function(api, individual, variable) {
     .Call(`_individual_process_get_variable`, api, individual, variable)
 }

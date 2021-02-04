@@ -15,3 +15,5 @@ docs/
 *.dll
 /Debug/
 .Rproj.user
+*.Rproj
+.vscode/

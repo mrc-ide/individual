@@ -43,6 +43,7 @@ public:
      * Reading the state
      */
     const individual_index_t& get_state(const std::string&, const std::string&) const;
+    const size_t get_state_size(const std::string&, const std::string&) const;
     const variable_vector_t& get_variable(const std::string&, const std::string&) const;
     void get_variable(
         const std::string&,
@@ -175,6 +176,17 @@ inline const individual_index_t& State::get_state(
     }
     return individual_states.at(state_name);
 }
+
+inline const size_t State::get_state_size(
+    const std::string& individual,
+    const std::string& state_name
+) const {
+    const auto& individual_states = states.at(individual);
+    if (individual_states.find(state_name) == individual_states.end()) {
+        Rcpp::stop("Unknown state");
+    }
+    return individual_states.at(state_name).size();
+};
 
 inline const variable_vector_t& State::get_variable(
     const std::string& individual,

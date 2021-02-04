@@ -28,6 +28,7 @@ private:
 public:
     ProcessAPI(Rcpp::XPtr<State>, Rcpp::XPtr<scheduler_t>, Rcpp::List, Rcpp::Environment);
     virtual const individual_index_t& get_state(const std::string&, const std::string&) const;
+    virtual const size_t get_state_size(const std::string&, const std::string&) const;
     virtual const variable_vector_t& get_variable(const std::string&, const std::string&) const;
     virtual void get_variable(
         const std::string&,
@@ -102,6 +103,12 @@ inline const individual_index_t& ProcessAPI::get_state(
     const std::string& individual,
     const std::string& state_name) const {
     return state->get_state(individual, state_name);
+}
+
+inline const size_t ProcessAPI::get_state_size(
+    const std::string& individual,
+    const std::string& state_name) const {
+    return state->get_state_size(individual, state_name);
 }
 
 inline const variable_vector_t& ProcessAPI::get_variable(
