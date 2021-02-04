@@ -16,6 +16,14 @@ SimAPI <- R6::R6Class(
       state_names <- vcapply(unlist(list(...)), function(s) s$name)
       process_get_state(private$.api, individual$name, state_names)
     },
+
+    #' @description Get the number of individuals with a particular state
+    #' @param individual of interest
+    #' @param ... the states of interest
+    get_state_size = function(individual, ...) {
+      state_names <- vcapply(unlist(list(...)), function(s) s$name)
+      process_get_state_size(private$.api, individual$name, state_names)
+    },
     
     #' @description Get a variable vector for an individual
     #' @param individual the individual of interest

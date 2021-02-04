@@ -40,6 +40,19 @@ std::vector<size_t> process_get_state(
     return result;
 }
 
+// [[Rcpp::export]]
+int process_get_state_size(
+    Rcpp::XPtr<ProcessAPI> api,
+    const std::string individual,
+    const std::vector<std::string> states
+){
+    int result{0};
+    for (const auto& state : states) {
+        result += api->get_state_size(individual, state);
+    }
+    return result;
+}
+
 //[[Rcpp::export]]
 std::vector<double> process_get_variable(
     Rcpp::XPtr<ProcessAPI> api,
