@@ -16,4 +16,4 @@ docs/
 /Debug/
 .Rproj.user
 *.Rproj
-.vscode/
+.vscode

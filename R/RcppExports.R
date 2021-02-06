@@ -27,6 +27,17 @@ fixed_probability_state_change_process <- function(individual, from_state, to_st
     .Call(`_individual_fixed_probability_state_change_process`, individual, from_state, to_state, rate)
 }
 
+#'@title create a process to transition individuals from one state to multiple destination states at a constant rate
+#'@param individual the name of an individual
+#'@param source_state the name of the source state
+#'@param destination_states vector of names of destination states
+#'@param rate the rate at which each individual leaves
+#'@param destination_probabilities a vector of probabilities for destination states upon leaving the source state
+#'@export
+fixed_probability_forked_state_change_process <- function(individual, source_state, destination_states, rate, destination_probabilities) {
+    .Call(`_individual_fixed_probability_forked_state_change_process`, individual, source_state, destination_states, rate, destination_probabilities)
+}
+
 #'@title create a process to render the number of individuals in the specified states
 #'@param individual the name of an individual
 #'@param states a vector of state names

@@ -79,6 +79,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fixed_probability_forked_state_change_process
+Rcpp::XPtr<process_t> fixed_probability_forked_state_change_process(const std::string individual, const std::string source_state, const std::vector<std::string> destination_states, double rate, const std::vector<double> destination_probabilities);
+RcppExport SEXP _individual_fixed_probability_forked_state_change_process(SEXP individualSEXP, SEXP source_stateSEXP, SEXP destination_statesSEXP, SEXP rateSEXP, SEXP destination_probabilitiesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string >::type individual(individualSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type source_state(source_stateSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string> >::type destination_states(destination_statesSEXP);
+    Rcpp::traits::input_parameter< double >::type rate(rateSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type destination_probabilities(destination_probabilitiesSEXP);
+    rcpp_result_gen = Rcpp::wrap(fixed_probability_forked_state_change_process(individual, source_state, destination_states, rate, destination_probabilities));
+    return rcpp_result_gen;
+END_RCPP
+}
 // state_count_renderer_process
 Rcpp::XPtr<process_t> state_count_renderer_process(const std::string individual, const std::vector<std::string> states);
 RcppExport SEXP _individual_state_count_renderer_process(SEXP individualSEXP, SEXP statesSEXP) {
@@ -387,6 +402,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_update_state_listener", (DL_FUNC) &_individual_update_state_listener, 2},
     {"_individual_reschedule_listener", (DL_FUNC) &_individual_reschedule_listener, 2},
     {"_individual_fixed_probability_state_change_process", (DL_FUNC) &_individual_fixed_probability_state_change_process, 4},
+    {"_individual_fixed_probability_forked_state_change_process", (DL_FUNC) &_individual_fixed_probability_forked_state_change_process, 5},
     {"_individual_state_count_renderer_process", (DL_FUNC) &_individual_state_count_renderer_process, 2},
     {"_individual_variable_mean_renderer_process", (DL_FUNC) &_individual_variable_mean_renderer_process, 2},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},

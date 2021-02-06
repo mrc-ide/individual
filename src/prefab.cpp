@@ -76,6 +76,54 @@ Rcpp::XPtr<process_t> fixed_probability_state_change_process(
     );
 }
 
+//'@title create a process to transition individuals from one state to multiple destination states at a constant rate
+//'@param individual the name of an individual
+//'@param source_state the name of the source state
+//'@param destination_states vector of names of destination states
+//'@param rate the rate at which each individual leaves
+//'@param destination_probabilities a vector of probabilities for destination states upon leaving the source state
+//'@export
+//[[Rcpp::export]]
+Rcpp::XPtr<process_t> fixed_probability_forked_state_change_process(
+    const std::string individual,
+    const std::string source_state,
+    const std::vector<std::string> destination_states,
+    double rate,
+    const std::vector<double> destination_probabilities
+) { 
+    // array of cumulative probabilities
+    std::vector<double> probs(destination_probabilities);
+    std::partial_sum(destination_probabilities.begin(),destination_probabilities.end(),probs.begin(),std::plus<double>());
+    // make pointer to lambda function and return XPtr to R
+    return Rcpp::XPtr<process_t>(
+        new process_t([individual,source_state,destination_states,rate,probs](ProcessAPI& api){         
+            auto target_individuals = api.get_state(individual, source_state);
+            const auto& random = Rcpp::runif(target_individuals.size());
+            auto random_index = 0;
+            int n = destination_states.size();
+            std::vector<std::vector<size_t>> individuals_to_dest(n);
+            // sample if each person leaves; if so sample their destination
+            for (const auto individual : target_individuals) {
+                if (random[random_index] < rate) {        
+                    double u = R::runif(0.,1.);           
+                    int k{0};
+                    std::find_if(probs.begin(),probs.end(), [&](const double a) mutable {
+                        k++;
+                        return u < a;
+                    });
+                    individuals_to_dest[k-1].emplace_back(individual);
+                }
+                ++random_index;
+            }
+            // queue state update for each destination state
+            for (int i=0; i<n; i++){
+                api.queue_state_update(individual, destination_states[i], individuals_to_dest[i]);
+            }
+        }),
+        true
+    );
+}
+
 //'@title create a process to render the number of individuals in the specified states
 //'@param individual the name of an individual
 //'@param states a vector of state names

@@ -20,6 +20,56 @@ test_that("fixed_probability_state_change moves a sane number of individuals aro
   expect_equal(n_s + n_i, 11)
 })
 
+test_that("fixed_probability_forked_state_change_process works properly", {
+  n <- 2e5
+  A <- State$new('A', n)
+  B <- State$new('B', 0)
+  C <- State$new('C', 0)
+  D <- State$new('D', 0)
+  E <- State$new('E', 0)
+  F <- State$new('F', 0)
+  human <- Individual$new('human', list(A, B, C, D, E, F))
+  sim <- setup_simulation(list(human))
+
+  rate <- 0.9
+  probs <- c(0.5,0.3,0.1,0.08,0.02)
+
+  execute_process(
+    fixed_probability_forked_state_change_process(
+      'human',
+      'A',
+      c('B','C','D','E','F'),
+      rate,
+      probs
+    ),
+    sim$cpp_api
+  )
+  state_apply_updates(sim$state)
+
+  states <- c(
+    sim$r_api$get_state_size(human, A),
+    sim$r_api$get_state_size(human, B),
+    sim$r_api$get_state_size(human, C),
+    sim$r_api$get_state_size(human, D),
+    sim$r_api$get_state_size(human, E),
+    sim$r_api$get_state_size(human, F)
+  )
+
+  states_expected <- c(
+    n*(1-rate),
+    n*rate*probs[1],
+    n*rate*probs[2],
+    n*rate*probs[3],
+    n*rate*probs[4],
+    n*rate*probs[5]
+  )
+  states_expected <- as.integer(states_expected)
+
+  ks <- ks.test(states,states_expected)
+  expect_gt(ks$p.value,0.98)
+})
+
+
 test_that("update_state_listener updates the state correctly", {
   S <- State$new('S', 10)
   I <- State$new('I', 1)
