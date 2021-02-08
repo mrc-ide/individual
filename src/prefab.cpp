@@ -92,11 +92,11 @@ Rcpp::XPtr<process_t> fixed_probability_forked_state_change_process(
     const std::vector<double> destination_probabilities
 ) { 
     // array of cumulative probabilities
-    std::vector<double> probs(destination_probabilities);
-    std::partial_sum(destination_probabilities.begin(),destination_probabilities.end(),probs.begin(),std::plus<double>());
+    std::vector<double> cdf(destination_probabilities);
+    std::partial_sum(destination_probabilities.begin(),destination_probabilities.end(),cdf.begin(),std::plus<double>());
     // make pointer to lambda function and return XPtr to R
     return Rcpp::XPtr<process_t>(
-        new process_t([individual,source_state,destination_states,rate,probs](ProcessAPI& api){         
+        new process_t([individual,source_state,destination_states,rate,cdf](ProcessAPI& api){         
             auto target_individuals = api.get_state(individual, source_state);
             const auto& random = Rcpp::runif(target_individuals.size());
             auto random_index = 0;
@@ -106,12 +106,9 @@ Rcpp::XPtr<process_t> fixed_probability_forked_state_change_process(
             for (const auto individual : target_individuals) {
                 if (random[random_index] < rate) {        
                     double u = R::runif(0.,1.);           
-                    int k{0};
-                    std::find_if(probs.begin(),probs.end(), [&](const double a) mutable {
-                        k++;
-                        return u < a;
-                    });
-                    individuals_to_dest[k-1].emplace_back(individual);
+                    auto k_it = std::upper_bound(cdf.begin(),cdf.end(),u);
+                    int k = std::distance(cdf.begin(),k_it);
+                    individuals_to_dest[k].emplace_back(individual);
                 }
                 ++random_index;
             }
