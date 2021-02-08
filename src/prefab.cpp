@@ -96,24 +96,30 @@ Rcpp::XPtr<process_t> fixed_probability_forked_state_change_process(
     std::partial_sum(destination_probabilities.begin(),destination_probabilities.end(),cdf.begin(),std::plus<double>());
     // make pointer to lambda function and return XPtr to R
     return Rcpp::XPtr<process_t>(
-        new process_t([individual,source_state,destination_states,rate,cdf](ProcessAPI& api){         
-            auto target_individuals = api.get_state(individual, source_state);
-            const auto& random = Rcpp::runif(target_individuals.size());
+        new process_t([individual,source_state,destination_states,rate,cdf](ProcessAPI& api){                     
+            auto target_individuals = api.get_state(individual, source_state); // people in source state
+            int n_leave = Rcpp::rbinom(1, target_individuals.size(), rate)[0]; // leavers
+            int n_dest = destination_states.size();
+            // get the indices of the leavers by uniform sampling w/out replacement (everyone has equal probability 'rate' to leave) 
+            auto leaving_individuals = Rcpp::sample(
+                target_individuals.size(), 
+                n_leave, 
+                false, // replacement
+                R_NilValue, // probs (uniform)
+                false // one-indexed
+            );
+            // indicies of individuals going to each destination state
+            std::vector<std::vector<size_t>> individuals_to_dest(n_dest);
+            const auto& random = Rcpp::runif(n_leave);
             auto random_index = 0;
-            int n = destination_states.size();
-            std::vector<std::vector<size_t>> individuals_to_dest(n);
-            // sample if each person leaves; if so sample their destination
-            for (const auto individual : target_individuals) {
-                if (random[random_index] < rate) {        
-                    double u = R::runif(0.,1.);           
-                    auto k_it = std::upper_bound(cdf.begin(),cdf.end(),u);
-                    int k = std::distance(cdf.begin(),k_it);
-                    individuals_to_dest[k].emplace_back(individual);
-                }
+            for (const auto individual : leaving_individuals) {
+                auto dest_iter = std::upper_bound(cdf.begin(), cdf.end(), random[random_index]);
+                int dest = std::distance(cdf.begin(), dest_iter);
+                individuals_to_dest[dest].emplace_back(individual);
                 ++random_index;
             }
             // queue state update for each destination state
-            for (int i=0; i<n; i++){
+            for (int i=0; i<n_dest; i++){
                 api.queue_state_update(individual, destination_states[i], individuals_to_dest[i]);
             }
         }),

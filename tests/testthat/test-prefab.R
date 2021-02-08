@@ -22,13 +22,13 @@ test_that("fixed_probability_state_change moves a sane number of individuals aro
 
 test_that("fixed_probability_forked_state_change_process works properly", {
   n <- 2e5
-  A <- State$new('A', n)
-  B <- State$new('B', 0)
-  C <- State$new('C', 0)
-  D <- State$new('D', 0)
-  E <- State$new('E', 0)
-  F <- State$new('F', 0)
-  human <- Individual$new('human', list(A, B, C, D, E, F))
+  Source <- State$new('Source', n)
+  Dest1 <- State$new('Dest1', 0)
+  Dest2 <- State$new('Dest2', 0)
+  Dest3 <- State$new('Dest3', 0)
+  Dest4 <- State$new('Dest4', 0)
+  Dest5 <- State$new('Dest5', 0)
+  human <- Individual$new('human', list(Source, Dest1, Dest2, Dest3, Dest4, Dest5))
   sim <- setup_simulation(list(human))
 
   rate <- 0.9
@@ -37,8 +37,8 @@ test_that("fixed_probability_forked_state_change_process works properly", {
   execute_process(
     fixed_probability_forked_state_change_process(
       'human',
-      'A',
-      c('B','C','D','E','F'),
+      'Source',
+      paste0("Dest",1:5),
       rate,
       probs
     ),
@@ -47,12 +47,12 @@ test_that("fixed_probability_forked_state_change_process works properly", {
   state_apply_updates(sim$state)
 
   states <- c(
-    sim$r_api$get_state_size(human, A),
-    sim$r_api$get_state_size(human, B),
-    sim$r_api$get_state_size(human, C),
-    sim$r_api$get_state_size(human, D),
-    sim$r_api$get_state_size(human, E),
-    sim$r_api$get_state_size(human, F)
+    sim$r_api$get_state_size(human, Source),
+    sim$r_api$get_state_size(human, Dest1),
+    sim$r_api$get_state_size(human, Dest2),
+    sim$r_api$get_state_size(human, Dest3),
+    sim$r_api$get_state_size(human, Dest4),
+    sim$r_api$get_state_size(human, Dest5)
   )
 
   states_expected <- c(
