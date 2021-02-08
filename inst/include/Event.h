@@ -29,38 +29,25 @@ inline std::vector<size_t> round_delay(const std::vector<double>& delay) {
 }
 
 struct EventBase {
-    std::vector<SEXP> listeners;
     size_t t = 0;
-
-    void add_listener(SEXP listener) {
-        listeners.push_back(listener);
-    }
 
     virtual void tick() {
         ++t;
     }
 
-    virtual void process() = 0;
+    virtual bool should_trigger() = 0;
 };
 
 struct Event : public EventBase {
 
     std::set<size_t> simple_schedule;
 
-    virtual void process() override {
-        if (*simple_schedule.begin() == t) {
-            for (const auto& listener : listeners) {
-                if (TYPEOF(listener) == EXTPTRSXP) {
-                    auto cpp_listener = Rcpp::as<Rcpp::XPtr<listener_t>>(
-                        listener
-                    );
-                    (*cpp_listener)(t);
-                } else {
-                    Rcpp::Function r_listener = listener;
-                    r_listener(t);
-                }
-            }
-        }
+    virtual void process(Rcpp::XPtr<listener_t> listener) {
+        (*listener)(t);
+    }
+
+    virtual bool should_trigger() override {
+        return *simple_schedule.begin() == t;
     }
 
     virtual void tick() override {
@@ -87,30 +74,19 @@ struct TargetedEvent : public EventBase {
 
     TargetedEvent(size_t size) : size(size) {};
 
-    virtual void process() override {
+    virtual bool should_trigger() override {
         if (targeted_schedule.begin() == targeted_schedule.end()) {
-            return;
+            return false;
         }
-        if (targeted_schedule.begin()->first == t) {
-            const auto& target = targeted_schedule.begin()->second;
-            for (const auto& listener : listeners) {
-                if (TYPEOF(listener) == EXTPTRSXP) {
-                    auto cpp_listener = Rcpp::as<Rcpp::XPtr<
-                        targeted_listener_t
-                    >>(listener);
-                    (*cpp_listener)(t, target);
-                } else {
-                    Rcpp::Function r_listener = listener;
-                    auto r_target = std::vector<size_t>(target.size());
-                    auto i = 0;
-                    for (auto ti : target) {
-                        r_target[i] = ti + 1;
-                        ++i;
-                    }
-                    r_listener(t, r_target);
-                }
-            }
-        }
+        return targeted_schedule.begin()->first == t;
+    }
+
+    virtual void process(Rcpp::XPtr<targeted_listener_t> listener) {
+        (*listener)(t, current_target());
+    }
+
+    virtual individual_index_t& current_target() {
+        return targeted_schedule.begin()->second;
     }
 
     virtual void tick() override {

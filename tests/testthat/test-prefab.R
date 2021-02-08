@@ -114,6 +114,6 @@ test_that("reschedule_listener schedules the correct update", {
   mockery::expect_called(followup_listener, 1)
   event$.tick()
   followup$.tick()
-  mockery::expect_args(event_listener, 1, 2, target = c(2, 4))
-  mockery::expect_args(followup_listener, 1, 3, target = c(2, 4))
+  expect_targeted_listener(event_listener, 1, 2, target = c(2, 4))
+  expect_targeted_listener(followup_listener, 1, 3, target = c(2, 4))
 })

@@ -57,14 +57,6 @@ event_tick <- function(event) {
     invisible(.Call(`_individual_event_tick`, event))
 }
 
-event_process <- function(event) {
-    invisible(.Call(`_individual_event_process`, event))
-}
-
-event_add_listener <- function(event, listener) {
-    invisible(.Call(`_individual_event_add_listener`, event, listener))
-}
-
 event_schedule <- function(event, delays) {
     invisible(.Call(`_individual_event_schedule`, event, delays))
 }
@@ -95,6 +87,18 @@ targeted_event_schedule_vector <- function(event, target, delay) {
 
 targeted_event_schedule_multi_delay <- function(event, target, delay) {
     invisible(.Call(`_individual_targeted_event_schedule_multi_delay`, event, target, delay))
+}
+
+event_get_timestep <- function(event) {
+    .Call(`_individual_event_get_timestep`, event)
+}
+
+event_should_trigger <- function(event) {
+    .Call(`_individual_event_should_trigger`, event)
+}
+
+event_get_target <- function(event) {
+    .Call(`_individual_event_get_target`, event)
 }
 
 execute_process <- function(process, timestep) {

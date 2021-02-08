@@ -9,7 +9,7 @@ bernoulli_process <- function(variable, from, to, rate) {
 
 #' @export
 update_state_listener <- function(variable, to) {
-  function(t, target) variable$queue_update(to, target)
+  function(t, target) { variable$queue_update(to, target) }
 }
 
 #' @export
