@@ -24,16 +24,6 @@ void event_tick(const Rcpp::XPtr<EventBase> event) {
 }
 
 //[[Rcpp::export]]
-void event_process(const Rcpp::XPtr<EventBase> event) {
-    event->process();
-}
-
-//[[Rcpp::export]]
-void event_add_listener(const Rcpp::XPtr<EventBase> event, SEXP listener) {
-    event->add_listener(listener);
-}
-
-//[[Rcpp::export]]
 void event_schedule(const Rcpp::XPtr<Event> event, std::vector<double> delays) {
     event->schedule(delays);
 }
@@ -98,4 +88,22 @@ void targeted_event_schedule_multi_delay(
     const std::vector<double> delay) {
     decrement(target);
     event->schedule(target, delay);
+}
+
+//[[Rcpp::export]]
+size_t event_get_timestep(const Rcpp::XPtr<EventBase> event) {
+    return event->t;
+}
+
+//[[Rcpp::export]]
+bool event_should_trigger(const Rcpp::XPtr<EventBase> event) {
+    return event->should_trigger();
+}
+
+//[[Rcpp::export]]
+Rcpp::XPtr<individual_index_t> event_get_target(const Rcpp::XPtr<TargetedEvent> event) {
+    return Rcpp::XPtr<individual_index_t>(
+        new individual_index_t(event->current_target()),
+        true
+    );
 }

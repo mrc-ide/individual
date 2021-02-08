@@ -193,27 +193,6 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// event_process
-void event_process(const Rcpp::XPtr<EventBase> event);
-RcppExport SEXP _individual_event_process(SEXP eventSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::XPtr<EventBase> >::type event(eventSEXP);
-    event_process(event);
-    return R_NilValue;
-END_RCPP
-}
-// event_add_listener
-void event_add_listener(const Rcpp::XPtr<EventBase> event, SEXP listener);
-RcppExport SEXP _individual_event_add_listener(SEXP eventSEXP, SEXP listenerSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::XPtr<EventBase> >::type event(eventSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type listener(listenerSEXP);
-    event_add_listener(event, listener);
-    return R_NilValue;
-END_RCPP
-}
 // event_schedule
 void event_schedule(const Rcpp::XPtr<Event> event, std::vector<double> delays);
 RcppExport SEXP _individual_event_schedule(SEXP eventSEXP, SEXP delaysSEXP) {
@@ -302,6 +281,39 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const std::vector<double> >::type delay(delaySEXP);
     targeted_event_schedule_multi_delay(event, target, delay);
     return R_NilValue;
+END_RCPP
+}
+// event_get_timestep
+size_t event_get_timestep(const Rcpp::XPtr<EventBase> event);
+RcppExport SEXP _individual_event_get_timestep(SEXP eventSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<EventBase> >::type event(eventSEXP);
+    rcpp_result_gen = Rcpp::wrap(event_get_timestep(event));
+    return rcpp_result_gen;
+END_RCPP
+}
+// event_should_trigger
+bool event_should_trigger(const Rcpp::XPtr<EventBase> event);
+RcppExport SEXP _individual_event_should_trigger(SEXP eventSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<EventBase> >::type event(eventSEXP);
+    rcpp_result_gen = Rcpp::wrap(event_should_trigger(event));
+    return rcpp_result_gen;
+END_RCPP
+}
+// event_get_target
+Rcpp::XPtr<individual_index_t> event_get_target(const Rcpp::XPtr<TargetedEvent> event);
+RcppExport SEXP _individual_event_get_target(SEXP eventSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    rcpp_result_gen = Rcpp::wrap(event_get_target(event));
+    return rcpp_result_gen;
 END_RCPP
 }
 // execute_process
@@ -487,8 +499,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_create_event", (DL_FUNC) &_individual_create_event, 0},
     {"_individual_create_targeted_event", (DL_FUNC) &_individual_create_targeted_event, 1},
     {"_individual_event_tick", (DL_FUNC) &_individual_event_tick, 1},
-    {"_individual_event_process", (DL_FUNC) &_individual_event_process, 1},
-    {"_individual_event_add_listener", (DL_FUNC) &_individual_event_add_listener, 2},
     {"_individual_event_schedule", (DL_FUNC) &_individual_event_schedule, 2},
     {"_individual_event_clear_schedule", (DL_FUNC) &_individual_event_clear_schedule, 1},
     {"_individual_targeted_event_clear_schedule_vector", (DL_FUNC) &_individual_targeted_event_clear_schedule_vector, 2},
@@ -497,6 +507,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_targeted_event_schedule", (DL_FUNC) &_individual_targeted_event_schedule, 3},
     {"_individual_targeted_event_schedule_vector", (DL_FUNC) &_individual_targeted_event_schedule_vector, 3},
     {"_individual_targeted_event_schedule_multi_delay", (DL_FUNC) &_individual_targeted_event_schedule_multi_delay, 3},
+    {"_individual_event_get_timestep", (DL_FUNC) &_individual_event_get_timestep, 1},
+    {"_individual_event_should_trigger", (DL_FUNC) &_individual_event_should_trigger, 1},
+    {"_individual_event_get_target", (DL_FUNC) &_individual_event_get_target, 1},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_create_categorical_variable", (DL_FUNC) &_individual_create_categorical_variable, 2},
     {"_individual_categorical_variable_queue_update", (DL_FUNC) &_individual_categorical_variable_queue_update, 3},

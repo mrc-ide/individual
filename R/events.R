@@ -6,6 +6,7 @@ Event <- R6::R6Class(
   public = list(
 
     .event = NULL,
+    .listeners = list(),
 
     #' @description Initialise an Event
     #' @param name, the name of the event
@@ -16,7 +17,7 @@ Event <- R6::R6Class(
     #' @description Add an event listener
     #' @param listener the function to be executed on the event
     add_listener = function(listener) {
-      event_add_listener(self$.event, listener)
+      self$.listeners <- c(self$.listeners, listener)
     },
 
     #' @description schedule this event to occur in the future
@@ -36,7 +37,22 @@ Event <- R6::R6Class(
     .tick = function() event_tick(self$.event),
 
     #' @noRd
-    .process = function() event_process(self$.event)
+    .process = function() {
+      for (listener in self$.listeners) {
+        if (event_should_trigger(self$.event)) {
+          if (inherits(listener, "externalptr")) {
+            process_listener(self$.event, listener)
+          } else {
+            self$.process_listener(listener)
+          }
+        }
+      }
+    },
+
+    #' @noRd
+    .process_listener = function(listener) {
+      listener(event_get_timestep(self$.event))
+    }
   )
 )
 
@@ -81,6 +97,14 @@ TargetedEvent <- R6::R6Class(
       } else {
         targeted_event_clear_schedule(self$.event, target$.bitset)
       }
+    },
+
+    #' @noRd
+    .process_listener = function(listener) {
+      listener(
+        event_get_timestep(self$.event),
+        Bitset$new(from=event_get_target(self$.event))
+      )
     }
   )
 )
