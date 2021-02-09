@@ -98,11 +98,12 @@ Rcpp::XPtr<process_t> fixed_probability_forked_state_change_process(
     return Rcpp::XPtr<process_t>(
         new process_t([individual,source_state,destination_states,rate,cdf](ProcessAPI& api){                     
             auto target_individuals = api.get_state(individual, source_state); // people in source state
+            std::vector<size_t> source_individuals(target_individuals.begin(),target_individuals.end());
             int n_leave = Rcpp::rbinom(1, target_individuals.size(), rate)[0]; // leavers
             int n_dest = destination_states.size();
             // get the indices of the leavers by uniform sampling w/out replacement (everyone has equal probability 'rate' to leave) 
             auto leaving_individuals = Rcpp::sample(
-                target_individuals.size(), 
+                source_individuals.size(), 
                 n_leave, 
                 false, // replacement
                 R_NilValue, // probs (uniform)
@@ -115,7 +116,7 @@ Rcpp::XPtr<process_t> fixed_probability_forked_state_change_process(
             for (const auto individual : leaving_individuals) {
                 auto dest_iter = std::upper_bound(cdf.begin(), cdf.end(), random[random_index]);
                 int dest = std::distance(cdf.begin(), dest_iter);
-                individuals_to_dest[dest].emplace_back(individual);
+                individuals_to_dest[dest].emplace_back(source_individuals[individual]);
                 ++random_index;
             }
             // queue state update for each destination state

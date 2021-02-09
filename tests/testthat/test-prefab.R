@@ -21,7 +21,7 @@ test_that("fixed_probability_state_change moves a sane number of individuals aro
 })
 
 test_that("fixed_probability_forked_state_change_process works properly", {
-  n <- 2e5
+  n <- 1e5
   Source <- State$new('Source', n)
   Dest1 <- State$new('Dest1', 0)
   Dest2 <- State$new('Dest2', 0)
