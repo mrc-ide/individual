@@ -2,14 +2,20 @@
 % Please edit documentation in R/bitset.R
 \name{Bitset}
 \alias{Bitset}
-\title{Class: Bitset
-An R wrapper for IterableBitset}
+\title{A Bitset Class}
 \description{
-Class: Bitset
-An R wrapper for IterableBitset
+Allow fast integer set operations in R. WARNING: all operations
+(except `$not`) are in-place so please use `$copy` if you would like to
+perform an operation without destroying your current bitset.
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{.bitset}}{a pointer to the underlying IterableBitset}
 
-Class: Bitset
-An R wrapper for IterableBitset
+\item{\code{max_size}}{the maximum size of the bitset}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -50,24 +56,41 @@ create a bitset
 \if{html}{\out{<a id="method-insert"></a>}}
 \if{latex}{\out{\hypertarget{method-insert}{}}}
 \subsection{Method \code{insert()}}{
+insert into the bitset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$insert(v)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{v}}{an integer vector of elements to insert}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-remove"></a>}}
 \if{latex}{\out{\hypertarget{method-remove}{}}}
 \subsection{Method \code{remove()}}{
+remove from the bitset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$remove(v)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{v}}{an integer vector of elements to remove}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-size"></a>}}
 \if{latex}{\out{\hypertarget{method-size}{}}}
 \subsection{Method \code{size()}}{
+the number of elements in the set
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$size()}\if{html}{\out{</div>}}
 }
@@ -77,24 +100,41 @@ create a bitset
 \if{html}{\out{<a id="method-or"></a>}}
 \if{latex}{\out{\hypertarget{method-or}{}}}
 \subsection{Method \code{or()}}{
+to "bitwise or" or union two Bitsets
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$or(other)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{other}}{the other bitset to combine}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-and"></a>}}
 \if{latex}{\out{\hypertarget{method-and}{}}}
 \subsection{Method \code{and()}}{
+to "bitwise and" or intersect two Bitsets
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$and(other)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{other}}{the other bitset to combine}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-not"></a>}}
 \if{latex}{\out{\hypertarget{method-not}{}}}
 \subsection{Method \code{not()}}{
+to "bitwise not" or complement a Bitset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$not()}\if{html}{\out{</div>}}
 }
@@ -104,15 +144,24 @@ create a bitset
 \if{html}{\out{<a id="method-sample"></a>}}
 \if{latex}{\out{\hypertarget{method-sample}{}}}
 \subsection{Method \code{sample()}}{
+to sample a subset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$sample(rate)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rate}}{the success rate for keeping each element}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-copy"></a>}}
 \if{latex}{\out{\hypertarget{method-copy}{}}}
 \subsection{Method \code{copy()}}{
+returns a copy the bitset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$copy()}\if{html}{\out{</div>}}
 }
@@ -122,6 +171,8 @@ create a bitset
 \if{html}{\out{<a id="method-to_vector"></a>}}
 \if{latex}{\out{\hypertarget{method-to_vector}{}}}
 \subsection{Method \code{to_vector()}}{
+return an integer vector representing the elements
+which are set
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$to_vector()}\if{html}{\out{</div>}}
 }
