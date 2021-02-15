@@ -82,7 +82,7 @@ void bitset_sample(
     ) {
     auto to_remove = Rcpp::sample(
       b->size(),
-      Rcpp::rbinom(1, b->size(), 1 - rate)[0],
+      Rcpp::rbinom(1, b->size(), 1 - std::min(rate, 1.))[0],
       false, // replacement
       R_NilValue, // evenly distributed
       false // one based

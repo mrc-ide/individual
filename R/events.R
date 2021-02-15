@@ -82,6 +82,10 @@ TargetedEvent <- R6::R6Class(
           targeted_event_schedule(self$.event, target$.bitset, delay)
         }
       } else {
+        if (inherits(target, 'Bitset')) {
+          target <- target$to_vector()
+        }
+
         if (length(target) != length(delay)) {
           stop('target and delay must be the same size')
         }

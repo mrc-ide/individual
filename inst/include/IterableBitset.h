@@ -236,6 +236,9 @@ inline IterableBitset<A> IterableBitset<A>::operator ~() const {
 
 template<class A>
 inline IterableBitset<A>& IterableBitset<A>::operator &=(const IterableBitset<A>& other) {
+    if (max_size() != other.max_size()) {
+        Rcpp::stop("Incompatible bitmap sizes");
+    }
     n = 0;
     for (auto i = 0u; i < bitmap.size(); ++i) {
         bitmap[i] &= other.bitmap[i];
@@ -246,6 +249,9 @@ inline IterableBitset<A>& IterableBitset<A>::operator &=(const IterableBitset<A>
 
 template<class A>
 inline IterableBitset<A>& IterableBitset<A>::operator |=(const IterableBitset<A>& other) {
+    if (max_size() != other.max_size()) {
+        Rcpp::stop("Incompatible bitmap sizes");
+    }
     n = 0;
     for (auto i = 0u; i < bitmap.size(); ++i) {
         bitmap[i] |= other.bitmap[i];
