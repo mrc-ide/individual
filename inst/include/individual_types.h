@@ -9,7 +9,8 @@
 #define INDIVIDUAL_TYPES_H_
 
 #include <Rcpp.h>
-#include "Variable.h"
+#include "CategoricalVariable.h"
+#include "DoubleVariable.h"
 #include "Event.h"
 
 #endif /* INDIVIDUAL_TYPES_H_ */
