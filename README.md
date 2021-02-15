@@ -178,44 +178,10 @@ All the API methods are documented in the package reference section.
 Please refer to the vignettes for tutorials on how to start making
 epi models
 
-## Code organisation
-
-*R/simulation.R* - Contains the main entry point and configuration for models.
-
-*R/individual.R* - Defines classes for individuals, states, variables and constants.
-
-*R/api.R* - Defines the R api for processes and listeners
-
-*src/* - The C++ side of the R interface
-
-*inst/include/State.h* - The simulation state code
-*inst/include/Scheduler.h* - The scheduler code
-*inst/include/ProcessAPI.h* - The C++ api for user processes and listeners
-
-*tests/* - are divided into unit, integration and performance tests. Integration tests are
-strongly recommended for large process functions and unit tests for model
-calculations.
-
-## Microbenchmarks
-
-We use [google benchmark](https://github.com/google/benchmark) for our
-microbenchmarks. You can compile and run the benchmarks like this:
-
-```
-cd tests/performance
-g++ *_benchmark.cpp -std=c++14 -lbenchmark -lpthread -o benchmark.out
-./benchmark.out
-```
-
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to
-discuss what you would like to change.
-
-Please make sure to update tests and documentation as appropriate.
-
-Code reviews will be carried out in-line with RESIDE-IC's [review
-process](https://reside-ic.github.io/articles/pull-requests/)
+Thank you! Please refer to the vignette on Contributing for info on how to
+contribute :)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
