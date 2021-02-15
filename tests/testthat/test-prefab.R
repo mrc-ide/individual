@@ -62,7 +62,7 @@ test_that("fixed_probability_forked_state_change_process works properly", {
 test_that("update_state_listener updates the state correctly", {
   state <- CategoricalVariable$new(c('S', 'I'), c(rep('S', 10), 'I'))
   event <- TargetedEvent$new(11)
-  event$add_listener(update_state_listener(state, 'I'))
+  event$add_listener(update_category_listener(state, 'I'))
   event$schedule(c(2, 5), 1)
   event$.tick()
   event$.process()

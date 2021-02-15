@@ -19,8 +19,6 @@ simulation_loop(
 \item{processes}{a list of processes to execute on each timestep}
 
 \item{timesteps}{the number of timesteps to simulate}
-
-\item{parameters}{a list of named parameters to pass to the process functions}
 }
 \description{
 A premade simulation loop

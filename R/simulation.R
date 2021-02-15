@@ -4,7 +4,6 @@
 #' @param events a list of Events
 #' @param processes a list of processes to execute on each timestep
 #' @param timesteps the number of timesteps to simulate
-#' @param parameters a list of named parameters to pass to the process functions
 #' @examples
 #' population <- 4
 #' timesteps <- 5
