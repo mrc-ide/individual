@@ -1,0 +1,12 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 70
+    patch:
+      default:
+        target: 90
+
+ignore:
+  - "inst/testcpp/*"
+  - "inst/testcpp/**/*"
