@@ -130,6 +130,64 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// create_categorical_variable
+Rcpp::XPtr<CategoricalVariable> create_categorical_variable(const std::vector<std::string>& categories, const std::vector<std::string>& values);
+RcppExport SEXP _individual_create_categorical_variable(SEXP categoriesSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type categories(categoriesSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_categorical_variable(categories, values));
+    return rcpp_result_gen;
+END_RCPP
+}
+// categorical_variable_queue_update
+void categorical_variable_queue_update(Rcpp::XPtr<CategoricalVariable> variable, const std::string& value, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_categorical_variable_queue_update(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    categorical_variable_queue_update(variable, value, index);
+    return R_NilValue;
+END_RCPP
+}
+// categorical_variable_get_index_of
+Rcpp::XPtr<individual_index_t> categorical_variable_get_index_of(Rcpp::XPtr<CategoricalVariable> variable, const std::vector<std::string>& values);
+RcppExport SEXP _individual_categorical_variable_get_index_of(SEXP variableSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
+    rcpp_result_gen = Rcpp::wrap(categorical_variable_get_index_of(variable, values));
+    return rcpp_result_gen;
+END_RCPP
+}
+// categorical_variable_queue_update_vector
+void categorical_variable_queue_update_vector(Rcpp::XPtr<CategoricalVariable> variable, const std::string& value, std::vector<size_t>& index);
+RcppExport SEXP _individual_categorical_variable_queue_update_vector(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
+    categorical_variable_queue_update_vector(variable, value, index);
+    return R_NilValue;
+END_RCPP
+}
+// categorical_variable_update
+void categorical_variable_update(Rcpp::XPtr<CategoricalVariable> variable);
+RcppExport SEXP _individual_categorical_variable_update(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    categorical_variable_update(variable);
+    return R_NilValue;
+END_RCPP
+}
 // dummy
 void dummy();
 static SEXP _individual_dummy_try() {
@@ -161,6 +219,85 @@ RcppExport SEXP _individual_dummy() {
     }
     UNPROTECT(1);
     return rcpp_result_gen;
+}
+// create_double_variable
+Rcpp::XPtr<DoubleVariable> create_double_variable(const std::vector<double>& values);
+RcppExport SEXP _individual_create_double_variable(SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type values(valuesSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_double_variable(values));
+    return rcpp_result_gen;
+END_RCPP
+}
+// double_variable_get_values
+std::vector<double> double_variable_get_values(Rcpp::XPtr<DoubleVariable> variable);
+RcppExport SEXP _individual_double_variable_get_values(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(double_variable_get_values(variable));
+    return rcpp_result_gen;
+END_RCPP
+}
+// double_variable_get_values_at_index
+std::vector<double> double_variable_get_values_at_index(Rcpp::XPtr<DoubleVariable> variable, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_double_variable_get_values_at_index(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(double_variable_get_values_at_index(variable, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// double_variable_get_values_at_index_vector
+std::vector<double> double_variable_get_values_at_index_vector(Rcpp::XPtr<DoubleVariable> variable, std::vector<size_t> index);
+RcppExport SEXP _individual_double_variable_get_values_at_index_vector(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(double_variable_get_values_at_index_vector(variable, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// double_variable_queue_fill
+void double_variable_queue_fill(Rcpp::XPtr<DoubleVariable> variable, const std::vector<double> value);
+RcppExport SEXP _individual_double_variable_queue_fill(SEXP variableSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type value(valueSEXP);
+    double_variable_queue_fill(variable, value);
+    return R_NilValue;
+END_RCPP
+}
+// double_variable_queue_update
+void double_variable_queue_update(Rcpp::XPtr<DoubleVariable> variable, const std::vector<double> value, std::vector<size_t> index);
+RcppExport SEXP _individual_double_variable_queue_update(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
+    double_variable_queue_update(variable, value, index);
+    return R_NilValue;
+END_RCPP
+}
+// double_variable_update
+void double_variable_update(Rcpp::XPtr<DoubleVariable> variable);
+RcppExport SEXP _individual_double_variable_update(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    double_variable_update(variable);
+    return R_NilValue;
+END_RCPP
 }
 // create_event
 Rcpp::XPtr<EventBase> create_event();
@@ -327,143 +464,6 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// create_categorical_variable
-Rcpp::XPtr<CategoricalVariable> create_categorical_variable(const std::vector<std::string>& categories, const std::vector<std::string>& values);
-RcppExport SEXP _individual_create_categorical_variable(SEXP categoriesSEXP, SEXP valuesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type categories(categoriesSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_categorical_variable(categories, values));
-    return rcpp_result_gen;
-END_RCPP
-}
-// categorical_variable_queue_update
-void categorical_variable_queue_update(Rcpp::XPtr<CategoricalVariable> variable, const std::string& value, Rcpp::XPtr<individual_index_t> index);
-RcppExport SEXP _individual_categorical_variable_queue_update(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type value(valueSEXP);
-    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
-    categorical_variable_queue_update(variable, value, index);
-    return R_NilValue;
-END_RCPP
-}
-// categorical_variable_get_index_of
-Rcpp::XPtr<individual_index_t> categorical_variable_get_index_of(Rcpp::XPtr<CategoricalVariable> variable, const std::vector<std::string>& values);
-RcppExport SEXP _individual_categorical_variable_get_index_of(SEXP variableSEXP, SEXP valuesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
-    rcpp_result_gen = Rcpp::wrap(categorical_variable_get_index_of(variable, values));
-    return rcpp_result_gen;
-END_RCPP
-}
-// categorical_variable_queue_update_vector
-void categorical_variable_queue_update_vector(Rcpp::XPtr<CategoricalVariable> variable, const std::string& value, std::vector<size_t>& index);
-RcppExport SEXP _individual_categorical_variable_queue_update_vector(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type value(valueSEXP);
-    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
-    categorical_variable_queue_update_vector(variable, value, index);
-    return R_NilValue;
-END_RCPP
-}
-// categorical_variable_update
-void categorical_variable_update(Rcpp::XPtr<CategoricalVariable> variable);
-RcppExport SEXP _individual_categorical_variable_update(SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
-    categorical_variable_update(variable);
-    return R_NilValue;
-END_RCPP
-}
-// create_double_variable
-Rcpp::XPtr<DoubleVariable> create_double_variable(const std::vector<double>& values);
-RcppExport SEXP _individual_create_double_variable(SEXP valuesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::vector<double>& >::type values(valuesSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_double_variable(values));
-    return rcpp_result_gen;
-END_RCPP
-}
-// double_variable_get_values
-std::vector<double> double_variable_get_values(Rcpp::XPtr<DoubleVariable> variable);
-RcppExport SEXP _individual_double_variable_get_values(SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    rcpp_result_gen = Rcpp::wrap(double_variable_get_values(variable));
-    return rcpp_result_gen;
-END_RCPP
-}
-// double_variable_get_values_at_index
-std::vector<double> double_variable_get_values_at_index(Rcpp::XPtr<DoubleVariable> variable, Rcpp::XPtr<individual_index_t> index);
-RcppExport SEXP _individual_double_variable_get_values_at_index(SEXP variableSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(double_variable_get_values_at_index(variable, index));
-    return rcpp_result_gen;
-END_RCPP
-}
-// double_variable_get_values_at_index_vector
-std::vector<double> double_variable_get_values_at_index_vector(Rcpp::XPtr<DoubleVariable> variable, std::vector<size_t> index);
-RcppExport SEXP _individual_double_variable_get_values_at_index_vector(SEXP variableSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(double_variable_get_values_at_index_vector(variable, index));
-    return rcpp_result_gen;
-END_RCPP
-}
-// double_variable_queue_fill
-void double_variable_queue_fill(Rcpp::XPtr<DoubleVariable> variable, const std::vector<double> value);
-RcppExport SEXP _individual_double_variable_queue_fill(SEXP variableSEXP, SEXP valueSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double> >::type value(valueSEXP);
-    double_variable_queue_fill(variable, value);
-    return R_NilValue;
-END_RCPP
-}
-// double_variable_queue_update
-void double_variable_queue_update(Rcpp::XPtr<DoubleVariable> variable, const std::vector<double> value, std::vector<size_t> index);
-RcppExport SEXP _individual_double_variable_queue_update(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double> >::type value(valueSEXP);
-    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
-    double_variable_queue_update(variable, value, index);
-    return R_NilValue;
-END_RCPP
-}
-// double_variable_update
-void double_variable_update(Rcpp::XPtr<DoubleVariable> variable);
-RcppExport SEXP _individual_double_variable_update(SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    double_variable_update(variable);
-    return R_NilValue;
-END_RCPP
-}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _individual_RcppExport_validate(const char* sig) { 
@@ -495,7 +495,19 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_bitset_or", (DL_FUNC) &_individual_bitset_or, 2},
     {"_individual_bitset_sample", (DL_FUNC) &_individual_bitset_sample, 2},
     {"_individual_bitset_to_vector", (DL_FUNC) &_individual_bitset_to_vector, 1},
+    {"_individual_create_categorical_variable", (DL_FUNC) &_individual_create_categorical_variable, 2},
+    {"_individual_categorical_variable_queue_update", (DL_FUNC) &_individual_categorical_variable_queue_update, 3},
+    {"_individual_categorical_variable_get_index_of", (DL_FUNC) &_individual_categorical_variable_get_index_of, 2},
+    {"_individual_categorical_variable_queue_update_vector", (DL_FUNC) &_individual_categorical_variable_queue_update_vector, 3},
+    {"_individual_categorical_variable_update", (DL_FUNC) &_individual_categorical_variable_update, 1},
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
+    {"_individual_create_double_variable", (DL_FUNC) &_individual_create_double_variable, 1},
+    {"_individual_double_variable_get_values", (DL_FUNC) &_individual_double_variable_get_values, 1},
+    {"_individual_double_variable_get_values_at_index", (DL_FUNC) &_individual_double_variable_get_values_at_index, 2},
+    {"_individual_double_variable_get_values_at_index_vector", (DL_FUNC) &_individual_double_variable_get_values_at_index_vector, 2},
+    {"_individual_double_variable_queue_fill", (DL_FUNC) &_individual_double_variable_queue_fill, 2},
+    {"_individual_double_variable_queue_update", (DL_FUNC) &_individual_double_variable_queue_update, 3},
+    {"_individual_double_variable_update", (DL_FUNC) &_individual_double_variable_update, 1},
     {"_individual_create_event", (DL_FUNC) &_individual_create_event, 0},
     {"_individual_create_targeted_event", (DL_FUNC) &_individual_create_targeted_event, 1},
     {"_individual_event_tick", (DL_FUNC) &_individual_event_tick, 1},
@@ -511,18 +523,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_event_should_trigger", (DL_FUNC) &_individual_event_should_trigger, 1},
     {"_individual_event_get_target", (DL_FUNC) &_individual_event_get_target, 1},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
-    {"_individual_create_categorical_variable", (DL_FUNC) &_individual_create_categorical_variable, 2},
-    {"_individual_categorical_variable_queue_update", (DL_FUNC) &_individual_categorical_variable_queue_update, 3},
-    {"_individual_categorical_variable_get_index_of", (DL_FUNC) &_individual_categorical_variable_get_index_of, 2},
-    {"_individual_categorical_variable_queue_update_vector", (DL_FUNC) &_individual_categorical_variable_queue_update_vector, 3},
-    {"_individual_categorical_variable_update", (DL_FUNC) &_individual_categorical_variable_update, 1},
-    {"_individual_create_double_variable", (DL_FUNC) &_individual_create_double_variable, 1},
-    {"_individual_double_variable_get_values", (DL_FUNC) &_individual_double_variable_get_values, 1},
-    {"_individual_double_variable_get_values_at_index", (DL_FUNC) &_individual_double_variable_get_values_at_index, 2},
-    {"_individual_double_variable_get_values_at_index_vector", (DL_FUNC) &_individual_double_variable_get_values_at_index_vector, 2},
-    {"_individual_double_variable_queue_fill", (DL_FUNC) &_individual_double_variable_queue_fill, 2},
-    {"_individual_double_variable_queue_update", (DL_FUNC) &_individual_double_variable_queue_update, 3},
-    {"_individual_double_variable_update", (DL_FUNC) &_individual_double_variable_update, 1},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
     {NULL, NULL, 0}

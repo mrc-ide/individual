@@ -45,6 +45,54 @@ bitset_to_vector <- function(b) {
     .Call(`_individual_bitset_to_vector`, b)
 }
 
+create_categorical_variable <- function(categories, values) {
+    .Call(`_individual_create_categorical_variable`, categories, values)
+}
+
+categorical_variable_queue_update <- function(variable, value, index) {
+    invisible(.Call(`_individual_categorical_variable_queue_update`, variable, value, index))
+}
+
+categorical_variable_get_index_of <- function(variable, values) {
+    .Call(`_individual_categorical_variable_get_index_of`, variable, values)
+}
+
+categorical_variable_queue_update_vector <- function(variable, value, index) {
+    invisible(.Call(`_individual_categorical_variable_queue_update_vector`, variable, value, index))
+}
+
+categorical_variable_update <- function(variable) {
+    invisible(.Call(`_individual_categorical_variable_update`, variable))
+}
+
+create_double_variable <- function(values) {
+    .Call(`_individual_create_double_variable`, values)
+}
+
+double_variable_get_values <- function(variable) {
+    .Call(`_individual_double_variable_get_values`, variable)
+}
+
+double_variable_get_values_at_index <- function(variable, index) {
+    .Call(`_individual_double_variable_get_values_at_index`, variable, index)
+}
+
+double_variable_get_values_at_index_vector <- function(variable, index) {
+    .Call(`_individual_double_variable_get_values_at_index_vector`, variable, index)
+}
+
+double_variable_queue_fill <- function(variable, value) {
+    invisible(.Call(`_individual_double_variable_queue_fill`, variable, value))
+}
+
+double_variable_queue_update <- function(variable, value, index) {
+    invisible(.Call(`_individual_double_variable_queue_update`, variable, value, index))
+}
+
+double_variable_update <- function(variable) {
+    invisible(.Call(`_individual_double_variable_update`, variable))
+}
+
 create_event <- function() {
     .Call(`_individual_create_event`)
 }
@@ -103,54 +151,6 @@ event_get_target <- function(event) {
 
 execute_process <- function(process, timestep) {
     invisible(.Call(`_individual_execute_process`, process, timestep))
-}
-
-create_categorical_variable <- function(categories, values) {
-    .Call(`_individual_create_categorical_variable`, categories, values)
-}
-
-categorical_variable_queue_update <- function(variable, value, index) {
-    invisible(.Call(`_individual_categorical_variable_queue_update`, variable, value, index))
-}
-
-categorical_variable_get_index_of <- function(variable, values) {
-    .Call(`_individual_categorical_variable_get_index_of`, variable, values)
-}
-
-categorical_variable_queue_update_vector <- function(variable, value, index) {
-    invisible(.Call(`_individual_categorical_variable_queue_update_vector`, variable, value, index))
-}
-
-categorical_variable_update <- function(variable) {
-    invisible(.Call(`_individual_categorical_variable_update`, variable))
-}
-
-create_double_variable <- function(values) {
-    .Call(`_individual_create_double_variable`, values)
-}
-
-double_variable_get_values <- function(variable) {
-    .Call(`_individual_double_variable_get_values`, variable)
-}
-
-double_variable_get_values_at_index <- function(variable, index) {
-    .Call(`_individual_double_variable_get_values_at_index`, variable, index)
-}
-
-double_variable_get_values_at_index_vector <- function(variable, index) {
-    .Call(`_individual_double_variable_get_values_at_index_vector`, variable, index)
-}
-
-double_variable_queue_fill <- function(variable, value) {
-    invisible(.Call(`_individual_double_variable_queue_fill`, variable, value))
-}
-
-double_variable_queue_update <- function(variable, value, index) {
-    invisible(.Call(`_individual_double_variable_queue_update`, variable, value, index))
-}
-
-double_variable_update <- function(variable) {
-    invisible(.Call(`_individual_double_variable_update`, variable))
 }
 
 # Register entry points for exported C++ functions
