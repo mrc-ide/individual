@@ -9,6 +9,7 @@
 #define INST_INCLUDE_ITERABLEBITSET_H_
 
 #include <cmath>
+#include <Rcpp.h>
 
 template<class A>
 class IterableBitset;
@@ -71,6 +72,7 @@ public:
     bool operator!=(const IterableBitset&) const;
     IterableBitset operator&(const IterableBitset&) const;
     IterableBitset operator|(const IterableBitset&) const;
+    IterableBitset operator~() const;
     IterableBitset& operator&=(const IterableBitset&);
     IterableBitset& operator|=(const IterableBitset&);
     iterator begin();
@@ -83,7 +85,10 @@ public:
     const_iterator find(size_t) const;
     template<class InputIterator>
     void insert(InputIterator, InputIterator);
+    template<class InputIterator>
+    void insert_safe(InputIterator, InputIterator);
     void insert(size_t);
+    void insert_safe(size_t);
     size_type size() const;
     size_type max_size() const;
     bool empty() const;
@@ -220,7 +225,20 @@ inline IterableBitset<A> IterableBitset<A>::operator |(const IterableBitset<A>& 
 }
 
 template<class A>
+inline IterableBitset<A> IterableBitset<A>::operator ~() const {
+    auto result = IterableBitset<A>(*this);
+    for (auto i = 0u; i < result.bitmap.size(); ++i) {
+        result.bitmap[i] = ~result.bitmap[i];
+    }
+    result.n = result.max_n - result.n;
+    return result;
+}
+
+template<class A>
 inline IterableBitset<A>& IterableBitset<A>::operator &=(const IterableBitset<A>& other) {
+    if (max_size() != other.max_size()) {
+        Rcpp::stop("Incompatible bitmap sizes");
+    }
     n = 0;
     for (auto i = 0u; i < bitmap.size(); ++i) {
         bitmap[i] &= other.bitmap[i];
@@ -231,6 +249,9 @@ inline IterableBitset<A>& IterableBitset<A>::operator &=(const IterableBitset<A>
 
 template<class A>
 inline IterableBitset<A>& IterableBitset<A>::operator |=(const IterableBitset<A>& other) {
+    if (max_size() != other.max_size()) {
+        Rcpp::stop("Incompatible bitmap sizes");
+    }
     n = 0;
     for (auto i = 0u; i < bitmap.size(); ++i) {
         bitmap[i] |= other.bitmap[i];
@@ -316,6 +337,16 @@ inline void IterableBitset<A>::insert(InputIterator begin, InputIterator end) {
     }
 }
 
+template<class A>
+template<class InputIterator>
+inline void IterableBitset<A>::insert_safe(InputIterator begin, InputIterator end) {
+    auto it = begin;
+    while (it != end) {
+        insert_safe(*it);
+        ++it;
+    }
+}
+
 //' @title insert
 //' @description insert one element into the bitset
 template<class A>
@@ -324,6 +355,14 @@ inline void IterableBitset<A>::insert(size_t v) {
         set(v);
         n++;
     }
+}
+
+template<class A>
+inline void IterableBitset<A>::insert_safe(size_t v) {
+    if (v < 0 || v >= max_n) {
+        Rcpp::stop("Insert out of range");
+    }
+    insert(v);
 }
 
 template<class A>

@@ -1,244 +1,140 @@
 test_that("empty simulation exits gracefully", {
-  population <- 4
-  S <- State$new('S', population)
-  I <- State$new('I', 0)
-  R <- State$new('R', 0)
-  human <- Individual$new('human', list(S, I, R))
-  render <- simulate(human, list(), 4)
-  true_render <- data.frame(
-    timestep = c(1, 2, 3, 4)
-  )
-  expect_equal(true_render, render)
-
-  render <- simulate(human, list(), 1)
-
-  true_render <- data.frame(timestep = c(1))
-
-  expect_equal(true_render, render)
-
-  expect_error(
-    simulate(human, list(), 0),
-    '*'
-  )
+  simulation_loop(timesteps = 4)
+  expect_true(TRUE) # no errors
 })
 
 test_that("deterministic state model works", {
   population <- 4
-  S <- State$new('S', population)
-  I <- State$new('I', 0)
-  R <- State$new('R', 0)
-  human <- Individual$new('human', list(S, I, R))
+  timesteps <- 5
+  state <- CategoricalVariable$new(c('S', 'I', 'R'), rep('S', population))
+  render <- Render$new(timesteps)
 
   shift_generator <- function(from, to, rate) {
-    return(function(simulation) {
-      from_state <- simulation$get_state(human, from)
-      simulation$queue_state_update(
-        human,
+    function(t) {
+      from_state <- state$get_index_of(from)$to_vector()
+      state$queue_update(
         to,
         from_state[seq_len(min(rate,length(from_state)))]
       )
-    })
+    }
   }
 
   processes <- list(
-    shift_generator(S, I, 2),
-    shift_generator(I, R, 1),
-    state_count_renderer_process(human$name, c(S$name, I$name, R$name))
+    shift_generator('S', 'I', 2),
+    shift_generator('I', 'R', 1),
+    categorical_count_renderer_process(render, state, c('S', 'I', 'R'))
   )
 
-  render <- simulate(human, processes, 5)
+  simulation_loop(
+    variables = list(state),
+    processes = processes,
+    timesteps = 5
+  )
+
   expected <- data.frame(
     timestep = c(1, 2, 3, 4, 5),
-    human_S_count = c(4, 2, 0, 0, 0),
-    human_I_count = c(0, 2, 3, 2, 1),
-    human_R_count = c(0, 0, 1, 2, 3)
+    S_count = c(4, 2, 0, 0, 0),
+    I_count = c(0, 2, 3, 2, 1),
+    R_count = c(0, 0, 1, 2, 3)
   )
+
   expect_mapequal(
-    render,
+    render$to_dataframe(),
     expected
-  )
-})
-
-test_that("deterministic state model works w parameters", {
-  population <- 4
-  S <- State$new('S', population)
-  I <- State$new('I', 0)
-  R <- State$new('R', 0)
-  human <- Individual$new('human', list(S, I, R))
-
-  shift_generator <- function(from, to) {
-    return(function(simulation) {
-      from_state <- simulation$get_state(human, from)
-      rate <- simulation$get_parameters()$rate
-      simulation$queue_state_update(
-        human,
-        to,
-        from_state[seq_len(min(rate,length(from_state)))]
-      )
-    })
-  }
-
-  processes <- list(
-    shift_generator(S, I),
-    shift_generator(I, R),
-    state_count_renderer_process(human$name, c(S$name, I$name, R$name))
-  )
-
-  render <- simulate(human, processes, 5, parameters=list(rate = 2))
-  true_render <- data.frame(
-    timestep = c(1, 2, 3, 4, 5),
-    human_S_count = c(4, 2, 0, 0, 0),
-    human_I_count = c(0, 2, 2, 0, 0),
-    human_R_count = c(0, 0, 2, 4, 4)
-  )
-  expect_mapequal(
-    true_render,
-    render
   )
 })
 
 test_that("deterministic state model w events works", {
   population <- 4
-  S <- State$new('S', population)
-  I <- State$new('I', 0)
-  R <- State$new('R', 0)
-  infection <- Event$new('infection')
-  recovery <- Event$new('recovery')
+  timesteps <- 6
+  render <- Render$new(timesteps)
+  state <- CategoricalVariable$new(c('S', 'I', 'R'), rep('S', population))
+  infection <- TargetedEvent$new(population)
+  recovery <- TargetedEvent$new(population)
   infection_delay <- 1
   recovery_delay <- 2
 
-  human <- Individual$new(
-    'human',
-    list(S, I, R),
-    events=list(infection, recovery)
-  )
-
   infection$add_listener(function(simulation, target) {
-    simulation$queue_state_update(human, I, target)
+    state$queue_update('I', target)
   })
 
   recovery$add_listener(function(simulation, target) {
-    simulation$queue_state_update(human, R, target)
+    state$queue_update('R', target)
   })
 
   delayed_shift_generator <- function(from, to, event, delay, rate) {
-    return(function(simulation) {
-      from_state <- simulation$get_state(human, from)
+    function(t) {
+      from_state <- state$get_index_of(from)
       # remove the already scheduled individuals
-      from_state <- setdiff(from_state, simulation$get_scheduled(event))
-      target <- from_state[seq_len(min(rate,length(from_state)))]
-      simulation$schedule(event, target, delay);
-    })
+      from_state$and(event$get_scheduled()$not())
+      target <- from_state$to_vector()[seq_len(min(rate,from_state$size()))]
+      event$schedule(target, delay);
+    }
   }
 
   processes <- list(
-    delayed_shift_generator(S, I, infection, infection_delay, 2),
-    delayed_shift_generator(I, R, recovery, recovery_delay, 1),
-    state_count_renderer_process(human$name, c(S$name, I$name, R$name))
+    delayed_shift_generator('S', 'I', infection, infection_delay, 2),
+    delayed_shift_generator('I', 'R', recovery, recovery_delay, 1),
+    categorical_count_renderer_process(render, state, c('S', 'I', 'R'))
   )
 
-  render <- simulate(human, processes, 6)
+  simulation_loop(
+    variables = list(state),
+    events = list(infection, recovery),
+    processes = processes,
+    timesteps = timesteps
+  )
+
   expected_render <- data.frame(
     timestep = c(1, 2, 3, 4, 5, 6),
-    human_S_count = c(4, 4, 2, 0, 0, 0),
-    human_I_count = c(0, 0, 2, 4, 4, 3),
-    human_R_count = c(0, 0, 0, 0, 0, 1)
+    S_count = c(4, 4, 2, 0, 0, 0),
+    I_count = c(0, 0, 2, 4, 4, 3),
+    R_count = c(0, 0, 0, 0, 0, 1)
   )
-  expect_mapequal(
-    render,
-    expected_render
-  )
+
+  expect_mapequal(render$to_dataframe(), expected_render)
 })
-
-test_that("deterministic state model works w 2 individuals", {
-  population <- 4
-  S <- State$new('S', population)
-  I <- State$new('I', 0)
-  R <- State$new('R', 0)
-  human <- Individual$new('human', list(S, I, R))
-  alien <- Individual$new('alien', list(S, I, R))
-
-  shift_generator <- function(individual, from, to, rate) {
-    return(function(simulation) {
-      from_state <- simulation$get_state(individual, from)
-      simulation$queue_state_update(
-        individual,
-        to,
-        from_state[seq_len(min(rate,length(from_state)))]
-      )
-    })
-  }
-
-  processes <- list(
-    shift_generator(human, S, I, 2),
-    shift_generator(human, I, R, 1),
-    shift_generator(alien, S, I, 1),
-    shift_generator(alien, I, R, 2),
-    state_count_renderer_process(human$name, c(S$name, I$name, R$name)),
-    state_count_renderer_process(alien$name, c(S$name, I$name, R$name))
-  )
-
-  render <- simulate(list(human, alien), processes, 5)
-  true_render <- data.frame(
-    timestep = c(1, 2, 3, 4, 5),
-    human_S_count = c(4, 2, 0, 0, 0),
-    human_I_count = c(0, 2, 3, 2, 1),
-    human_R_count = c(0, 0, 1, 2, 3),
-    alien_S_count = c(4, 3, 2, 1, 0),
-    alien_I_count = c(0, 1, 1, 1, 1),
-    alien_R_count = c(0, 0, 1, 2, 3)
-  )
-  expect_mapequal(
-    true_render,
-    render
-  )
-})
-
 
 test_that("deterministic state & variable model works", {
   population <- 4
-  S <- State$new('S', population)
-  I <- State$new('I', 0)
-  R <- State$new('R', 0)
-  value <- Variable$new('value', rep(1, population))
-  human <- Individual$new('human', list(S, I, R), list(value))
+  timesteps <- 5
+  render <- Render$new(timesteps)
+  state <- CategoricalVariable$new(c('S', 'I', 'R'), rep('S', population))
+  value <- DoubleVariable$new(rep(1, population))
 
   shift_generator <- function(from, to, rate) {
-    return(function(simulation) {
-      from_state <- simulation$get_state(human, from)
-      simulation$queue_state_update(
-        human,
+    function(t) {
+      from_state <- state$get_index_of(from)
+      state$queue_update(
         to,
-        from_state[seq_len(min(rate,length(from_state)))]
+        from_state$to_vector()[seq_len(min(rate,from_state$size()))]
       )
-    })
+    }
   }
 
-  doubler <- function(simulation) {
-    simulation$queue_variable_update(
-      human,
-      value,
-      simulation$get_variable(human, value) * 2
-    )
-  }
+  doubler <- function(t) value$queue_update(value$get_values() * 2)
 
   processes <- list(
-    shift_generator(S, I, 2),
-    shift_generator(I, R, 1),
+    shift_generator('S', 'I', 2),
+    shift_generator('I', 'R', 1),
     doubler,
-    state_count_renderer_process(human$name, c(S$name, I$name, R$name)),
-    variable_mean_renderer_process(human$name, value$name)
+    categorical_count_renderer_process(render, state, c('S', 'I', 'R')),
+    function(t) render$render('sequence', mean(value$get_values()), t)
   )
 
-  render <- simulate(human, processes, 5)
+  simulation_loop(
+    variables = list(state, value),
+    processes = processes,
+    timesteps = timesteps
+  )
 
   true_render <- data.frame(
     timestep = c(1, 2, 3, 4, 5),
-    human_S_count = c(4, 2, 0, 0, 0),
-    human_I_count = c(0, 2, 3, 2, 1),
-    human_R_count = c(0, 0, 1, 2, 3),
-    human_value_mean = c(1, 2, 4, 8, 16)
+    S_count = c(4, 2, 0, 0, 0),
+    I_count = c(0, 2, 3, 2, 1),
+    R_count = c(0, 0, 1, 2, 3),
+    sequence= c(1, 2, 4, 8, 16)
   )
 
-  expect_mapequal(true_render, render)
+  expect_mapequal(true_render, render$to_dataframe())
 })

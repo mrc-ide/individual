@@ -15,7 +15,7 @@ Class to render output for the simulation
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Render$new()}}
-\item \href{#method-add}{\code{Render$add()}}
+\item \href{#method-render}{\code{Render$render()}}
 \item \href{#method-to_dataframe}{\code{Render$to_dataframe()}}
 \item \href{#method-clone}{\code{Render$clone()}}
 }
@@ -45,12 +45,12 @@ scalar outputs to store to the final render}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add"></a>}}
-\if{latex}{\out{\hypertarget{method-add}{}}}
-\subsection{Method \code{add()}}{
+\if{html}{\out{<a id="method-render"></a>}}
+\if{latex}{\out{\hypertarget{method-render}{}}}
+\subsection{Method \code{render()}}{
 Update the render with new simulation data
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Render$add(name, value, timestep)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Render$render(name, value, timestep)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

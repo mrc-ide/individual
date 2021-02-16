@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
+      - dev
+      - feat/*
+      - hotfix/*
+      - release/*
 
 name: R-CMD-check
 
