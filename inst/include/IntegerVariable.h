@@ -12,7 +12,6 @@
 #include "common_types.h"
 #include <Rcpp.h>
 #include <queue>
-#include <sstream>
 
 struct IntegerVariable : public Variable {
 
