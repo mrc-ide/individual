@@ -29,7 +29,7 @@ void bitset_insert(
     std::vector<size_t> v
     ) {
     decrement(v);
-    b->insert(v.cbegin(), v.cend());
+    b->insert_safe(v.cbegin(), v.cend());
 }
 
 //[[Rcpp::export]]

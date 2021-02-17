@@ -6,6 +6,14 @@ test_that("bitset insertions and removals work", {
   expect_equal(a$to_vector(), 1)
 })
 
+test_that("out of range inserts don't work", {
+  a <- Bitset$new(10)
+  expect_error(
+    a$insert(9:15),
+    '*'
+  )
+})
+
 test_that("bitset size updates", {
   a <- Bitset$new(10)
   expect_equal(a$max_size, 10)
