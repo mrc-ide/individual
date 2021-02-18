@@ -55,7 +55,10 @@ DoubleVariable <- R6::R6Class(
             numeric(0)
           )
         }
-      } else if(is.numeric(index)) {
+      } else {
+        if (inherits(index, 'Bitset')) {
+          index <- index$to_vector()
+        }
         if (length(index) != 0) {
           double_variable_queue_update(
             self$.variable,
@@ -63,12 +66,6 @@ DoubleVariable <- R6::R6Class(
             index
           )
         }
-      } else if(!is.null(index$.bitset)) {
-        double_variable_queue_update(
-          self$.variable,
-          values,
-          index$to_vector()
-        )
       }
     },
 
