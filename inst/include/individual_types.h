@@ -10,6 +10,7 @@
 
 #include <Rcpp.h>
 #include "CategoricalVariable.h"
+#include "IntegerVariable.h"
 #include "DoubleVariable.h"
 #include "Event.h"
 

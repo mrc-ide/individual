@@ -381,3 +381,4 @@ inline bool IterableBitset<A>::empty() const {
 }
 
 #endif /* INST_INCLUDE_ITERABLEBITSET_H_ */
+
