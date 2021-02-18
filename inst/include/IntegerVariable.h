@@ -49,10 +49,13 @@ struct IntegerVariable : public Variable {
         for(size_t it = 0; it < values.size(); it++){
             auto findit = std::find(values_set.begin(), values_set.end(), values[it]);
             if(findit != values_set.end()){
-                result_ix.emplace_back(it);
+                result_ix.push_back(it);
             }
         }
-        return individual_index_t(result_ix.size(), result_ix);
+        size_t bset_size = *std::max_element(result_ix.begin(), result_ix.end());
+        auto result = individual_index_t(bset_size + 1);
+        result.insert(result_ix.begin(), result_ix.end());
+        return result;
     } 
 
     // get indices of individual's whose value is in some [a,b]
@@ -62,10 +65,13 @@ struct IntegerVariable : public Variable {
         std::vector<size_t> result_ix;
         for(size_t it = 0; it < values.size(); it++) {
             if( !(values[it] < a) && !(b < values[it]) ) {
-                result_ix.emplace_back(it);
+                result_ix.push_back(it);
             }
         }
-        return individual_index_t(result_ix.size(), result_ix);
+        size_t bset_size = *std::max_element(result_ix.begin(), result_ix.end());
+        auto result = individual_index_t(bset_size + 1);
+        result.insert(result_ix.begin(), result_ix.end());
+        return result;
     } 
 
     // queue variable update

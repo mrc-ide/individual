@@ -39,11 +39,11 @@ IntegerVariable <- R6::R6Class(
     #' @param b upper bound
     get_index_of = function(set = NULL, a = NULL, b = NULL) {        
         if(!is.null(set)) {
-            Bitset$new(from = integer_variable_get_index_of_set(self$.variable, set))
+            return(Bitset$new(from = integer_variable_get_index_of_set(self$.variable, set)))
         }
         if(!is.null(a) & !is.null(b)) {
             stopifnot(a < b)
-            Bitset$new(from = integer_variable_get_index_of_range(self$.variable, a, b))
+            return(Bitset$new(from = integer_variable_get_index_of_range(self$.variable, a, b)))            
         }
         stop("please provide a set of values to check, or both bounds of range [a,b]")        
     },
