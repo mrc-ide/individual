@@ -29,7 +29,7 @@ inline std::vector<size_t> round_delay(const std::vector<double>& delay) {
 }
 
 struct EventBase {
-    size_t t = 0;
+    size_t t = 1;
 
     virtual void tick() {
         ++t;
