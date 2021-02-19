@@ -63,6 +63,7 @@ IntegerVariable <- R6::R6Class(
     #' @param values a vector or scalar of values to assign at the index
     #' @param index is the index at which to apply the change, use NULL for the
     #' fill options
+
     queue_update = function(values, index = NULL) {
       if(is.null(index)){
         if(length(values) == 1){
