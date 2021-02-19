@@ -52,26 +52,38 @@ struct IntegerVariable : public Variable {
                 result_ix.push_back(it);
             }
         }
-        size_t bset_size = *std::max_element(result_ix.begin(), result_ix.end());
-        auto result = individual_index_t(bset_size + 1);
-        result.insert(result_ix.begin(), result_ix.end());
-        return result;
+
+        if (!result_ix.empty()) {
+            size_t bset_size = *std::max_element(result_ix.begin(), result_ix.end());
+            auto result = individual_index_t(bset_size + 1);
+            result.insert(result_ix.begin(), result_ix.end());
+            return result;
+        } else {
+            return individual_index_t(0);
+        }
+ 
     } 
 
     // get indices of individual's whose value is in some [a,b]
     virtual individual_index_t get_index_of_range(
         const int a, const int b
     ) const {
+        
         std::vector<size_t> result_ix;
         for(size_t it = 0; it < values.size(); it++) {
             if( !(values[it] < a) && !(b < values[it]) ) {
                 result_ix.push_back(it);
             }
         }
-        size_t bset_size = *std::max_element(result_ix.begin(), result_ix.end());
-        auto result = individual_index_t(bset_size + 1);
-        result.insert(result_ix.begin(), result_ix.end());
-        return result;
+
+        if (!result_ix.empty()) {
+            size_t bset_size = *std::max_element(result_ix.begin(), result_ix.end());
+            auto result = individual_index_t(bset_size + 1);
+            result.insert(result_ix.begin(), result_ix.end());
+            return result;
+        } else {
+            return individual_index_t(0);
+        }
     } 
 
     // queue variable update
