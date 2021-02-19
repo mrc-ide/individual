@@ -46,3 +46,49 @@ test_that("getting variables at an index works", {
   expect_error(sequence_2$get_values(5:15), '*')
   expect_equal(sequence_2$get_values(5:10), 15:20)
 })
+
+test_that("getting a set of indices which exist works", {
+
+  vals <- 5:10
+  intvar <- IntegerVariable$new(vals)
+
+  set <- 6:8
+  indices <- intvar$get_index_of(set = set)  
+
+  expect_equal(indices$to_vector(), 2:4)
+})
+
+test_that("getting a set of indices which do not exist works", {
+
+  vals <- 5:10
+  intvar <- IntegerVariable$new(vals)
+
+  set <- 1e3:1.001e3
+  indices <- intvar$get_index_of(set = set)  
+
+  expect_length(indices$to_vector(), 0)
+})
+
+test_that("getting indices within bounds which exist works", {
+
+  vals <- 5:10
+  intvar <- IntegerVariable$new(vals)
+
+  a <- 6
+  b <- 8
+  indices <- intvar$get_index_of(a = a, b = b)  
+
+  expect_equal(indices$to_vector(), 2:4)
+})
+
+test_that("getting indices within bounds which do not exist works", {
+
+  vals <- 5:10
+  intvar <- IntegerVariable$new(vals)
+
+  a <- 1e3
+  b <- 1.001e3
+  indices <- intvar$get_index_of(a = a, b = b)  
+
+  expect_length(indices$to_vector(), 0)
+})
