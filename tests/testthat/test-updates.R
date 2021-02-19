@@ -230,3 +230,17 @@ test_that("Vector fill IntegerVariable updates work", {
   expect_equal(before, 1:10)
   expect_equal(after, rep(14, 10))
 })
+
+test_that("updating IntegerVariable with an empty bitset is ignored", {
+  size <- 10
+  sequence <- IntegerVariable$new(seq_len(size))
+
+  before <- sequence$get_values()
+  sequence$queue_update(11, Bitset$new(10))
+  sequence$.update()
+  after <- sequence$get_values()
+
+  expect_equal(before, 1:10)
+  expect_equal(after, 1:10)
+})
+

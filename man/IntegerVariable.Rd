@@ -91,7 +91,7 @@ that subset
 2. Subset fill. The index vector represents a subset of the variable to
 update. The value vector, of size 1, will fill the specified subset
 3. Variable reset. The index vector is set to `NULL` and the value vector
-replaces all of the current values in the simulation. The value vector is
+replaces all of the current values in the simulation. The value vector
 should match the size of the population.
 4. Variable fill. The index vector is set to `NULL` and the value vector,
 of size 1, is used to fill all of the variable values in the population.
