@@ -53,14 +53,9 @@ struct IntegerVariable : public Variable {
             }
         }
 
-        if (!result_ix.empty()) {
-            size_t bset_size = *std::max_element(result_ix.begin(), result_ix.end());
-            auto result = individual_index_t(bset_size + 1);
-            result.insert(result_ix.begin(), result_ix.end());
-            return result;
-        } else {
-            return individual_index_t(0);
-        }
+        auto result = individual_index_t(size);
+        result.insert_safe(result_ix.begin(), result_ix.end());
+        return result;
  
     } 
 
@@ -76,14 +71,10 @@ struct IntegerVariable : public Variable {
             }
         }
 
-        if (!result_ix.empty()) {
-            size_t bset_size = *std::max_element(result_ix.begin(), result_ix.end());
-            auto result = individual_index_t(bset_size + 1);
-            result.insert(result_ix.begin(), result_ix.end());
-            return result;
-        } else {
-            return individual_index_t(0);
-        }
+        auto result = individual_index_t(size);
+        result.insert_safe(result_ix.begin(), result_ix.end());
+        return result;
+
     } 
 
     // queue variable update
