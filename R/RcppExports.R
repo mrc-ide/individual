@@ -149,6 +149,42 @@ event_get_target <- function(event) {
     .Call(`_individual_event_get_target`, event)
 }
 
+create_integer_variable <- function(values) {
+    .Call(`_individual_create_integer_variable`, values)
+}
+
+integer_variable_get_values <- function(variable) {
+    .Call(`_individual_integer_variable_get_values`, variable)
+}
+
+integer_variable_get_values_at_index <- function(variable, index) {
+    .Call(`_individual_integer_variable_get_values_at_index`, variable, index)
+}
+
+integer_variable_get_values_at_index_vector <- function(variable, index) {
+    .Call(`_individual_integer_variable_get_values_at_index_vector`, variable, index)
+}
+
+integer_variable_get_index_of_set <- function(variable, values_set) {
+    .Call(`_individual_integer_variable_get_index_of_set`, variable, values_set)
+}
+
+integer_variable_get_index_of_range <- function(variable, a, b) {
+    .Call(`_individual_integer_variable_get_index_of_range`, variable, a, b)
+}
+
+integer_variable_queue_fill <- function(variable, value) {
+    invisible(.Call(`_individual_integer_variable_queue_fill`, variable, value))
+}
+
+integer_variable_queue_update <- function(variable, value, index) {
+    invisible(.Call(`_individual_integer_variable_queue_update`, variable, value, index))
+}
+
+integer_variable_update <- function(variable) {
+    invisible(.Call(`_individual_integer_variable_update`, variable))
+}
+
 execute_process <- function(process, timestep) {
     invisible(.Call(`_individual_execute_process`, process, timestep))
 }

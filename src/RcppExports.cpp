@@ -453,6 +453,110 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// create_integer_variable
+Rcpp::XPtr<IntegerVariable> create_integer_variable(const std::vector<int>& values);
+RcppExport SEXP _individual_create_integer_variable(SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<int>& >::type values(valuesSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_integer_variable(values));
+    return rcpp_result_gen;
+END_RCPP
+}
+// integer_variable_get_values
+std::vector<int> integer_variable_get_values(Rcpp::XPtr<IntegerVariable> variable);
+RcppExport SEXP _individual_integer_variable_get_values(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_values(variable));
+    return rcpp_result_gen;
+END_RCPP
+}
+// integer_variable_get_values_at_index
+std::vector<int> integer_variable_get_values_at_index(Rcpp::XPtr<IntegerVariable> variable, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_integer_variable_get_values_at_index(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_values_at_index(variable, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// integer_variable_get_values_at_index_vector
+std::vector<int> integer_variable_get_values_at_index_vector(Rcpp::XPtr<IntegerVariable> variable, std::vector<size_t> index);
+RcppExport SEXP _individual_integer_variable_get_values_at_index_vector(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_values_at_index_vector(variable, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// integer_variable_get_index_of_set
+Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_set(Rcpp::XPtr<IntegerVariable> variable, std::vector<int> values_set);
+RcppExport SEXP _individual_integer_variable_get_index_of_set(SEXP variableSEXP, SEXP values_setSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type values_set(values_setSEXP);
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_index_of_set(variable, values_set));
+    return rcpp_result_gen;
+END_RCPP
+}
+// integer_variable_get_index_of_range
+Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_range(Rcpp::XPtr<IntegerVariable> variable, const int a, const int b);
+RcppExport SEXP _individual_integer_variable_get_index_of_range(SEXP variableSEXP, SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const int >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const int >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_index_of_range(variable, a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// integer_variable_queue_fill
+void integer_variable_queue_fill(Rcpp::XPtr<IntegerVariable> variable, const std::vector<int> value);
+RcppExport SEXP _individual_integer_variable_queue_fill(SEXP variableSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<int> >::type value(valueSEXP);
+    integer_variable_queue_fill(variable, value);
+    return R_NilValue;
+END_RCPP
+}
+// integer_variable_queue_update
+void integer_variable_queue_update(Rcpp::XPtr<IntegerVariable> variable, const std::vector<int> value, std::vector<size_t> index);
+RcppExport SEXP _individual_integer_variable_queue_update(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<int> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
+    integer_variable_queue_update(variable, value, index);
+    return R_NilValue;
+END_RCPP
+}
+// integer_variable_update
+void integer_variable_update(Rcpp::XPtr<IntegerVariable> variable);
+RcppExport SEXP _individual_integer_variable_update(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    integer_variable_update(variable);
+    return R_NilValue;
+END_RCPP
+}
 // execute_process
 void execute_process(Rcpp::XPtr<process_t> process, size_t timestep);
 RcppExport SEXP _individual_execute_process(SEXP processSEXP, SEXP timestepSEXP) {
@@ -522,6 +626,15 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_event_get_timestep", (DL_FUNC) &_individual_event_get_timestep, 1},
     {"_individual_event_should_trigger", (DL_FUNC) &_individual_event_should_trigger, 1},
     {"_individual_event_get_target", (DL_FUNC) &_individual_event_get_target, 1},
+    {"_individual_create_integer_variable", (DL_FUNC) &_individual_create_integer_variable, 1},
+    {"_individual_integer_variable_get_values", (DL_FUNC) &_individual_integer_variable_get_values, 1},
+    {"_individual_integer_variable_get_values_at_index", (DL_FUNC) &_individual_integer_variable_get_values_at_index, 2},
+    {"_individual_integer_variable_get_values_at_index_vector", (DL_FUNC) &_individual_integer_variable_get_values_at_index_vector, 2},
+    {"_individual_integer_variable_get_index_of_set", (DL_FUNC) &_individual_integer_variable_get_index_of_set, 2},
+    {"_individual_integer_variable_get_index_of_range", (DL_FUNC) &_individual_integer_variable_get_index_of_range, 3},
+    {"_individual_integer_variable_queue_fill", (DL_FUNC) &_individual_integer_variable_queue_fill, 2},
+    {"_individual_integer_variable_queue_update", (DL_FUNC) &_individual_integer_variable_queue_update, 3},
+    {"_individual_integer_variable_update", (DL_FUNC) &_individual_integer_variable_update, 1},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
