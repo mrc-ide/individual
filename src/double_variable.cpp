@@ -45,6 +45,27 @@ std::vector<double> double_variable_get_values_at_index_vector(
     return variable->get_values(bitmap);
 }
 
+// [[Rcpp::export]]
+Rcpp::XPtr<individual_index_t> double_variable_get_index_of_range(
+    Rcpp::XPtr<DoubleVariable> variable,
+    const double a,
+    const double b
+) {
+    return Rcpp::XPtr<individual_index_t>(
+        new individual_index_t(variable->get_index_of_range(a, b)),
+        true
+    );
+}
+
+// [[Rcpp::export]]
+int double_variable_get_size_of_range(
+    Rcpp::XPtr<DoubleVariable> variable,
+    const double a,
+    const double b
+) {
+    return variable->get_size_of_range(a, b);
+}
+
 //[[Rcpp::export]]
 void double_variable_queue_fill(
     Rcpp::XPtr<DoubleVariable> variable,

@@ -48,6 +48,23 @@ IntegerVariable <- R6::R6Class(
         stop("please provide a set of values to check, or both bounds of range [a,b]")        
     },
 
+    #' @description return the number of individuals with some subset of values
+    #' Either search for indices corresponding to values in \code{set}, or
+    #' for indices corresponding to values in range [a,b].
+    #' @param set a vector of values 
+    #' @param a lower bound
+    #' @param b upper bound
+    get_size_of = function(set = NULL, a = NULL, b = NULL) {        
+        if(!is.null(set)) {
+            return(integer_variable_get_size_of_set(self$.variable, set))
+        }
+        if(!is.null(a) & !is.null(b)) {
+            stopifnot(a < b)
+            return(integer_variable_get_size_of_range(self$.variable, a, b))           
+        }
+        stop("please provide a set of values to check, or both bounds of range [a,b]")        
+    },
+
     #' @description Queue an update for a variable. There are 4 types of variable update:
     #'
     #' 1. Subset update. The index vector represents a subset of the variable to

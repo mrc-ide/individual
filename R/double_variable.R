@@ -25,6 +25,24 @@ DoubleVariable <- R6::R6Class(
       double_variable_get_values_at_index(self$.variable, index$.bitset)
     },
 
+    #' @description return a bitset for individuals whose value lies in an interval
+    #' Search for indices corresponding to values in the interval [a,b].
+    #' @param a lower bound
+    #' @param b upper bound
+    get_index_of = function(a, b) {
+      stopifnot(a < b)
+      return(Bitset$new(from = double_variable_get_index_of_range(self$.variable, a, b)))            
+    },
+
+    #' @description return the number of individuals whose value lies in an interval
+    #' Count individuals whose value lies in the interval [a,b].
+    #' @param a lower bound
+    #' @param b upper bound
+    get_size_of = function(a, b) {
+      stopifnot(a < b)
+      double_variable_get_size_of_range(self$.variable, a, b)            
+    },
+
     #' @description Queue an update for a variable. There are 4 types of variable update:
     #'
     #' 1. Subset update. The index vector represents a subset of the variable to

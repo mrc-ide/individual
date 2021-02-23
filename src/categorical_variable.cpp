@@ -41,6 +41,14 @@ Rcpp::XPtr<individual_index_t> categorical_variable_get_index_of(
 }
 
 //[[Rcpp::export]]
+int categorical_variable_get_size_of(
+    Rcpp::XPtr<CategoricalVariable> variable,
+    const std::vector<std::string>& values 
+    ) {
+    return variable->get_size_of(values);
+}
+
+//[[Rcpp::export]]
 void categorical_variable_queue_update_vector(
     Rcpp::XPtr<CategoricalVariable> variable,
     const std::string& value,
