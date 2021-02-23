@@ -148,7 +148,7 @@ context("Bitset") {
     }
 
     test_that("Bitset filtering works as expected") {
-        auto x = individual_index_t(100, {1, 36, 73});
+        const auto x = individual_index_t(100, {1, 36, 73});
         const auto y = std::vector<size_t>{0, 2};
         const auto z = filter_bitset(x, std::cbegin(y), std::cend(y));
         const auto expected = individual_index_t(100, {1, 73});
@@ -156,7 +156,7 @@ context("Bitset") {
     }
 
     test_that("Bitset filtering works out of order") {
-        auto x = individual_index_t(100, {1, 36, 73});
+        const auto x = individual_index_t(100, {1, 36, 73});
         const auto y = std::vector<size_t>{2, 0};
         const auto z = filter_bitset(x, std::cbegin(y), std::cend(y));
         const auto expected = individual_index_t(100, {1, 73});
@@ -164,7 +164,7 @@ context("Bitset") {
     }
 
     test_that("Bitset filtering by out of range throws an error") {
-        auto x = individual_index_t(100, {1, 36, 73});
+        const auto x = individual_index_t(100, {1, 36, 73});
         const auto y = std::vector<size_t>{0, 2, 4};
         expect_error(filter_bitset(x, std::cbegin(y), std::cend(y)));
     }

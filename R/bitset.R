@@ -73,3 +73,19 @@ Bitset <- R6::R6Class(
     to_vector = function() bitset_to_vector(self$.bitset)
   )
 )
+
+#' @title Filter a bitset
+#' @description filter in the i-th values in the set (assuming the bitset values
+#' are in ascending order), for all i in other
+#' @param bitset the bitset to filter
+#' @param other the values of bitset to keep
+#' @export
+filter_bitset = function(bitset, other) {
+  if (is.numeric(other)) {
+    return(Bitset$new(from = filter_bitset_vector(bitset$.bitset, other)))
+  } else if (inherits(other, 'Bitset')) {
+    return(
+      Bitset$new(from = filter_bitset_bitset(bitset$.bitset, other$.bitset))
+    )
+  }
+}

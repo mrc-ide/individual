@@ -111,3 +111,38 @@ std::vector<size_t> bitset_to_vector(const Rcpp::XPtr<individual_index_t> b) {
     }
     return result;
 }
+
+//[[Rcpp::export]]
+Rcpp::XPtr<individual_index_t> filter_bitset_vector(
+    const Rcpp::XPtr<individual_index_t> b,
+    std::vector<size_t> other
+    ) {
+    decrement(other);
+    return Rcpp::XPtr<individual_index_t>(
+        new individual_index_t(
+            filter_bitset(
+                *b,
+                std::cbegin(other),
+                std::cend(other)
+            )
+        ),
+        true
+    );
+}
+
+//[[Rcpp::export]]
+Rcpp::XPtr<individual_index_t> filter_bitset_bitset(
+    const Rcpp::XPtr<individual_index_t> b,
+    const Rcpp::XPtr<individual_index_t> other
+    ) {
+    return Rcpp::XPtr<individual_index_t>(
+        new individual_index_t(
+            filter_bitset(
+                *b,
+                std::cbegin(*other),
+                std::cend(*other)
+            )
+        ),
+        true
+    );
+}
