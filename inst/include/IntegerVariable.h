@@ -41,7 +41,7 @@ struct IntegerVariable : public Variable {
         return result;
     }
 
-    // get indices of individual's whose value is in some set
+    // get indices of individuals whose value is in some set
     virtual individual_index_t get_index_of_set(
         const std::vector<int> values_set
     ) const {
@@ -59,7 +59,7 @@ struct IntegerVariable : public Variable {
  
     } 
 
-    // get indices of individual's whose value is in some [a,b]
+    // get indices of individuals whose value is in some [a,b]
     virtual individual_index_t get_index_of_range(
         const int a, const int b
     ) const {
@@ -75,7 +75,39 @@ struct IntegerVariable : public Variable {
         result.insert_safe(result_ix.begin(), result_ix.end());
         return result;
 
-    } 
+    }
+
+    // get number of individuals whose value is in some set
+    virtual int get_size_of_set(
+        const std::vector<int> values_set
+    ) const {
+        int result{0};
+        for(size_t it = 0; it < values.size(); it++){
+            auto findit = std::find(values_set.begin(), values_set.end(), values[it]);
+            if(findit != values_set.end()){
+                result += 1;
+            }
+        }
+
+        return result;
+ 
+    }
+
+    // get number of individuals whose value is in some [a,b]
+    virtual int get_size_of_range(
+        const int a, const int b
+    ) const {
+        
+        int result{0};
+        for(size_t it = 0; it < values.size(); it++) {
+            if( !(values[it] < a) && !(b < values[it]) ) {
+                result += 1;
+            }
+        }
+
+        return result;
+
+    }
 
     // queue variable update
     virtual void queue_update(

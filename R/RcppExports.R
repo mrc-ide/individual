@@ -57,6 +57,10 @@ categorical_variable_get_index_of <- function(variable, values) {
     .Call(`_individual_categorical_variable_get_index_of`, variable, values)
 }
 
+categorical_variable_get_size_of <- function(variable, values) {
+    .Call(`_individual_categorical_variable_get_size_of`, variable, values)
+}
+
 categorical_variable_queue_update_vector <- function(variable, value, index) {
     invisible(.Call(`_individual_categorical_variable_queue_update_vector`, variable, value, index))
 }
@@ -79,6 +83,14 @@ double_variable_get_values_at_index <- function(variable, index) {
 
 double_variable_get_values_at_index_vector <- function(variable, index) {
     .Call(`_individual_double_variable_get_values_at_index_vector`, variable, index)
+}
+
+double_variable_get_index_of_range <- function(variable, a, b) {
+    .Call(`_individual_double_variable_get_index_of_range`, variable, a, b)
+}
+
+double_variable_get_size_of_range <- function(variable, a, b) {
+    .Call(`_individual_double_variable_get_size_of_range`, variable, a, b)
 }
 
 double_variable_queue_fill <- function(variable, value) {
@@ -171,6 +183,14 @@ integer_variable_get_index_of_set <- function(variable, values_set) {
 
 integer_variable_get_index_of_range <- function(variable, a, b) {
     .Call(`_individual_integer_variable_get_index_of_range`, variable, a, b)
+}
+
+integer_variable_get_size_of_set <- function(variable, values_set) {
+    .Call(`_individual_integer_variable_get_size_of_set`, variable, values_set)
+}
+
+integer_variable_get_size_of_range <- function(variable, a, b) {
+    .Call(`_individual_integer_variable_get_size_of_range`, variable, a, b)
 }
 
 integer_variable_queue_fill <- function(variable, value) {

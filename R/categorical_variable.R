@@ -22,6 +22,12 @@ CategoricalVariable <- R6::R6Class(
       Bitset$new(from = categorical_variable_get_index_of(self$.variable, values))
     },
 
+    #' @description return the number of individuals with the given `values`
+    #' @param values the values to filter
+    get_size_of = function(values) {
+      categorical_variable_get_size_of(self$.variable, values)
+    },
+
     #' @description queue an update for this variable
     #' @param values the values to filter
     queue_update = function(value, index) {

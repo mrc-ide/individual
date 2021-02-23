@@ -12,6 +12,7 @@ Used to quickly find individuals who could be in one of many options
 \itemize{
 \item \href{#method-new}{\code{CategoricalVariable$new()}}
 \item \href{#method-get_index_of}{\code{CategoricalVariable$get_index_of()}}
+\item \href{#method-get_size_of}{\code{CategoricalVariable$get_size_of()}}
 \item \href{#method-queue_update}{\code{CategoricalVariable$queue_update()}}
 \item \href{#method-.update}{\code{CategoricalVariable$.update()}}
 \item \href{#method-clone}{\code{CategoricalVariable$clone()}}
@@ -44,6 +45,23 @@ individual}
 return a bitset for individuals with the given `values`
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$get_index_of(values)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{values}}{the values to filter}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_size_of"></a>}}
+\if{latex}{\out{\hypertarget{method-get_size_of}{}}}
+\subsection{Method \code{get_size_of()}}{
+return the number of individuals with the given `values`
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$get_size_of(values)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

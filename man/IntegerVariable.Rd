@@ -16,6 +16,7 @@ household or age bin.
 \item \href{#method-new}{\code{IntegerVariable$new()}}
 \item \href{#method-get_values}{\code{IntegerVariable$get_values()}}
 \item \href{#method-get_index_of}{\code{IntegerVariable$get_index_of()}}
+\item \href{#method-get_size_of}{\code{IntegerVariable$get_size_of()}}
 \item \href{#method-queue_update}{\code{IntegerVariable$queue_update()}}
 \item \href{#method-.update}{\code{IntegerVariable$.update()}}
 \item \href{#method-clone}{\code{IntegerVariable$clone()}}
@@ -65,6 +66,29 @@ Either search for indices corresponding to values in \code{set}, or
 for indices corresponding to values in range [a,b].
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$get_index_of(set = NULL, a = NULL, b = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{set}}{a vector of values}
+
+\item{\code{a}}{lower bound}
+
+\item{\code{b}}{upper bound}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_size_of"></a>}}
+\if{latex}{\out{\hypertarget{method-get_size_of}{}}}
+\subsection{Method \code{get_size_of()}}{
+return the number of individuals with some subset of values
+Either search for indices corresponding to values in \code{set}, or
+for indices corresponding to values in range [a,b].
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$get_size_of(set = NULL, a = NULL, b = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

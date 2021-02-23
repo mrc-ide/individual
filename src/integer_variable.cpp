@@ -68,6 +68,24 @@ Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_range(
     );
 }
 
+// [[Rcpp::export]]
+int integer_variable_get_size_of_set(
+    Rcpp::XPtr<IntegerVariable> variable,
+    std::vector<int> values_set
+) {
+    return variable->get_size_of_set(values_set);
+}
+
+// [[Rcpp::export]]
+int integer_variable_get_size_of_range(
+    Rcpp::XPtr<IntegerVariable> variable,
+    const int a,
+    const int b
+) {
+    return variable->get_size_of_range(a, b);
+}
+
+
 //[[Rcpp::export]]
 void integer_variable_queue_fill(
     Rcpp::XPtr<IntegerVariable> variable,

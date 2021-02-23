@@ -11,6 +11,8 @@ Represents a double variable for an individual in our simulation
 \itemize{
 \item \href{#method-new}{\code{DoubleVariable$new()}}
 \item \href{#method-get_values}{\code{DoubleVariable$get_values()}}
+\item \href{#method-get_index_of}{\code{DoubleVariable$get_index_of()}}
+\item \href{#method-get_size_of}{\code{DoubleVariable$get_size_of()}}
 \item \href{#method-queue_update}{\code{DoubleVariable$queue_update()}}
 \item \href{#method-.update}{\code{DoubleVariable$.update()}}
 \item \href{#method-clone}{\code{DoubleVariable$clone()}}
@@ -47,6 +49,46 @@ get the variable values
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{index}}{optionally return a subset of the variable vector}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_index_of"></a>}}
+\if{latex}{\out{\hypertarget{method-get_index_of}{}}}
+\subsection{Method \code{get_index_of()}}{
+return a bitset for individuals whose value lies in an interval
+Search for indices corresponding to values in the interval [a,b].
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$get_index_of(a, b)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{a}}{lower bound}
+
+\item{\code{b}}{upper bound}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_size_of"></a>}}
+\if{latex}{\out{\hypertarget{method-get_size_of}{}}}
+\subsection{Method \code{get_size_of()}}{
+return the number of individuals whose value lies in an interval
+Count individuals whose value lies in the interval [a,b].
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$get_size_of(a, b)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{a}}{lower bound}
+
+\item{\code{b}}{upper bound}
 }
 \if{html}{\out{</div>}}
 }
