@@ -383,7 +383,11 @@ inline bool IterableBitset<A>::empty() const {
 //' @title filter the bitset
 //' @description keep only the i-th values of the source bitset for i in this iterator
 template<class A, class InputIterator>
-inline IterableBitset<A> filter_bitset(IterableBitset<A>& source, InputIterator begin, InputIterator end) {
+inline IterableBitset<A> filter_bitset(
+    const IterableBitset<A>& source,
+    InputIterator begin,
+    InputIterator end
+    ) {
     auto result = IterableBitset<A>(source.max_size());
     auto is = std::vector<size_t>(begin, end);
     std::sort(std::begin(is), std::end(is));
