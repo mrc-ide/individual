@@ -380,5 +380,29 @@ inline bool IterableBitset<A>::empty() const {
     return n == 0;
 }
 
+//' @title filter the bitset
+//' @description keep only the i-th values of the source bitset for i in this iterator
+template<class A, class InputIterator>
+inline IterableBitset<A> filter_bitset(IterableBitset<A>& source, InputIterator begin, InputIterator end) {
+    auto result = IterableBitset<A>(source.max_size());
+    auto is = std::vector<size_t>(begin, end);
+    std::sort(std::begin(is), std::end(is));
+    auto diffs = std::vector<size_t>(is.size());
+    std::adjacent_difference(
+        std::begin(is),
+        std::end(is),
+        std::begin(diffs)
+    );
+    auto it = std::begin(source);
+    for (auto d : diffs) {
+        std::advance(it, d);
+        if (it == std::end(source)) {
+            Rcpp::stop("invalid index for filtering");
+        }
+        result.insert(*it);
+    }
+    return result;
+}
+
 #endif /* INST_INCLUDE_ITERABLEBITSET_H_ */
 
