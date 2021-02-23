@@ -166,6 +166,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// categorical_variable_get_size_of
+int categorical_variable_get_size_of(Rcpp::XPtr<CategoricalVariable> variable, const std::vector<std::string>& values);
+RcppExport SEXP _individual_categorical_variable_get_size_of(SEXP variableSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
+    rcpp_result_gen = Rcpp::wrap(categorical_variable_get_size_of(variable, values));
+    return rcpp_result_gen;
+END_RCPP
+}
 // categorical_variable_queue_update_vector
 void categorical_variable_queue_update_vector(Rcpp::XPtr<CategoricalVariable> variable, const std::string& value, std::vector<size_t>& index);
 RcppExport SEXP _individual_categorical_variable_queue_update_vector(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
@@ -263,6 +275,32 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
     Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
     rcpp_result_gen = Rcpp::wrap(double_variable_get_values_at_index_vector(variable, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// double_variable_get_index_of_range
+Rcpp::XPtr<individual_index_t> double_variable_get_index_of_range(Rcpp::XPtr<DoubleVariable> variable, const int a, const int b);
+RcppExport SEXP _individual_double_variable_get_index_of_range(SEXP variableSEXP, SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const int >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const int >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(double_variable_get_index_of_range(variable, a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// double_variable_get_size_of_range
+int double_variable_get_size_of_range(Rcpp::XPtr<DoubleVariable> variable, const int a, const int b);
+RcppExport SEXP _individual_double_variable_get_size_of_range(SEXP variableSEXP, SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const int >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const int >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(double_variable_get_size_of_range(variable, a, b));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -524,6 +562,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// integer_variable_get_size_of_set
+int integer_variable_get_size_of_set(Rcpp::XPtr<IntegerVariable> variable, std::vector<int> values_set);
+RcppExport SEXP _individual_integer_variable_get_size_of_set(SEXP variableSEXP, SEXP values_setSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type values_set(values_setSEXP);
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_size_of_set(variable, values_set));
+    return rcpp_result_gen;
+END_RCPP
+}
+// integer_variable_get_size_of_range
+int integer_variable_get_size_of_range(Rcpp::XPtr<IntegerVariable> variable, const int a, const int b);
+RcppExport SEXP _individual_integer_variable_get_size_of_range(SEXP variableSEXP, SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const int >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const int >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_size_of_range(variable, a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
 // integer_variable_queue_fill
 void integer_variable_queue_fill(Rcpp::XPtr<IntegerVariable> variable, const std::vector<int> value);
 RcppExport SEXP _individual_integer_variable_queue_fill(SEXP variableSEXP, SEXP valueSEXP) {
@@ -602,6 +665,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_create_categorical_variable", (DL_FUNC) &_individual_create_categorical_variable, 2},
     {"_individual_categorical_variable_queue_update", (DL_FUNC) &_individual_categorical_variable_queue_update, 3},
     {"_individual_categorical_variable_get_index_of", (DL_FUNC) &_individual_categorical_variable_get_index_of, 2},
+    {"_individual_categorical_variable_get_size_of", (DL_FUNC) &_individual_categorical_variable_get_size_of, 2},
     {"_individual_categorical_variable_queue_update_vector", (DL_FUNC) &_individual_categorical_variable_queue_update_vector, 3},
     {"_individual_categorical_variable_update", (DL_FUNC) &_individual_categorical_variable_update, 1},
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
@@ -609,6 +673,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_double_variable_get_values", (DL_FUNC) &_individual_double_variable_get_values, 1},
     {"_individual_double_variable_get_values_at_index", (DL_FUNC) &_individual_double_variable_get_values_at_index, 2},
     {"_individual_double_variable_get_values_at_index_vector", (DL_FUNC) &_individual_double_variable_get_values_at_index_vector, 2},
+    {"_individual_double_variable_get_index_of_range", (DL_FUNC) &_individual_double_variable_get_index_of_range, 3},
+    {"_individual_double_variable_get_size_of_range", (DL_FUNC) &_individual_double_variable_get_size_of_range, 3},
     {"_individual_double_variable_queue_fill", (DL_FUNC) &_individual_double_variable_queue_fill, 2},
     {"_individual_double_variable_queue_update", (DL_FUNC) &_individual_double_variable_queue_update, 3},
     {"_individual_double_variable_update", (DL_FUNC) &_individual_double_variable_update, 1},
@@ -632,6 +698,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_get_values_at_index_vector", (DL_FUNC) &_individual_integer_variable_get_values_at_index_vector, 2},
     {"_individual_integer_variable_get_index_of_set", (DL_FUNC) &_individual_integer_variable_get_index_of_set, 2},
     {"_individual_integer_variable_get_index_of_range", (DL_FUNC) &_individual_integer_variable_get_index_of_range, 3},
+    {"_individual_integer_variable_get_size_of_set", (DL_FUNC) &_individual_integer_variable_get_size_of_set, 2},
+    {"_individual_integer_variable_get_size_of_range", (DL_FUNC) &_individual_integer_variable_get_size_of_range, 3},
     {"_individual_integer_variable_queue_fill", (DL_FUNC) &_individual_integer_variable_queue_fill, 2},
     {"_individual_integer_variable_queue_update", (DL_FUNC) &_individual_integer_variable_queue_update, 3},
     {"_individual_integer_variable_update", (DL_FUNC) &_individual_integer_variable_update, 1},

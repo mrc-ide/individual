@@ -50,6 +50,22 @@ struct CategoricalVariable : public Variable {
         return result;
     }
 
+    virtual int get_size_of(
+        const std::vector<std::string> categories        
+    ) const {
+        int result{0};
+        for (const auto& category : categories) {
+            if (indices.find(category) == indices.end()) {
+                std::stringstream message;
+                message << "unknown category: " << category;
+                Rcpp::stop(message.str());
+            } else {
+                result += indices.at(category).size();
+            }            
+        }
+        return result;
+    }
+
     virtual void queue_update(
         const std::string category,
         const individual_index_t& index
