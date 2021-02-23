@@ -48,8 +48,8 @@ std::vector<double> double_variable_get_values_at_index_vector(
 // [[Rcpp::export]]
 Rcpp::XPtr<individual_index_t> double_variable_get_index_of_range(
     Rcpp::XPtr<DoubleVariable> variable,
-    const int a,
-    const int b
+    const double a,
+    const double b
 ) {
     return Rcpp::XPtr<individual_index_t>(
         new individual_index_t(variable->get_index_of_range(a, b)),
@@ -60,8 +60,8 @@ Rcpp::XPtr<individual_index_t> double_variable_get_index_of_range(
 // [[Rcpp::export]]
 int double_variable_get_size_of_range(
     Rcpp::XPtr<DoubleVariable> variable,
-    const int a,
-    const int b
+    const double a,
+    const double b
 ) {
     return variable->get_size_of_range(a, b);
 }

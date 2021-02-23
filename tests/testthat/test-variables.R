@@ -28,6 +28,18 @@ test_that("getting a non registered state index fails", {
   )
 })
 
+test_that("getting the size of CategoricalVariable category works", {
+  population <- 10
+  state <- CategoricalVariable$new(c('S', 'I', 'R'), rep('S', population))
+  expect_equal(state$get_size_of('S'), 10)
+})
+
+test_that("getting the size of CategoricalVariable category which does not exist errors gracefully", {
+  population <- 10
+  state <- CategoricalVariable$new(c('S', 'I', 'R'), rep('S', population))
+  expect_error(state$get_size_of('X'))
+})
+
 test_that("getting variables works", {
   size <- 10
   sequence <- DoubleVariable$new(seq_len(size))
@@ -47,7 +59,31 @@ test_that("getting variables at an index works", {
   expect_equal(sequence_2$get_values(5:10), 15:20)
 })
 
-test_that("getting a set of indices which exist works", {
+test_that("getting indices of DoubleVariable in a range works", {
+  dat <- seq(from=0,to=1,by=0.01)
+  var <- DoubleVariable$new(dat)
+
+  empty <- var$get_index_of(a = 500,b = 600)
+  full <- var$get_index_of(a = 0.65,b = 0.89)
+  match_full <- which(dat>=0.65 & dat<=0.89)
+
+  expect_length(empty$to_vector(), 0)
+  expect_equal(full$to_vector(), match_full)
+})
+
+test_that("getting size of DoubleVariable in a range works", {
+  dat <- seq(from=0,to=1,by=0.01)
+  var <- DoubleVariable$new(dat)
+
+  empty <- var$get_size_of(a = 500,b = 600)
+  full <- var$get_size_of(a = 0.65,b = 0.89)
+  match_full <- sum(dat>=0.65 & dat<=0.89)
+
+  expect_equal(empty, 0)
+  expect_equal(full, match_full)
+})
+
+test_that("getting a set of IntegerVariable indices which exist works", {
 
   vals <- 5:10
   intvar <- IntegerVariable$new(vals)
@@ -58,7 +94,7 @@ test_that("getting a set of indices which exist works", {
   expect_equal(indices$to_vector(), 2:4)
 })
 
-test_that("getting a set of indices which do not exist works", {
+test_that("getting a set of IntegerVariable indices which do not exist works", {
 
   vals <- 5:10
   intvar <- IntegerVariable$new(vals)
@@ -69,7 +105,7 @@ test_that("getting a set of indices which do not exist works", {
   expect_length(indices$to_vector(), 0)
 })
 
-test_that("getting indices within bounds which exist works", {
+test_that("getting indices within bounds of IntegerVariable which exist works", {
 
   vals <- 5:10
   intvar <- IntegerVariable$new(vals)
@@ -81,7 +117,7 @@ test_that("getting indices within bounds which exist works", {
   expect_equal(indices$to_vector(), 2:4)
 })
 
-test_that("getting indices within bounds which do not exist works", {
+test_that("getting indices within bounds of IntegerVariable which do not exist works", {
 
   vals <- 5:10
   intvar <- IntegerVariable$new(vals)
@@ -91,4 +127,17 @@ test_that("getting indices within bounds which do not exist works", {
   indices <- intvar$get_index_of(a = a, b = b)  
 
   expect_length(indices$to_vector(), 0)
+})
+
+test_that("getting size of a set of IntegerVariable values which exist works", {
+  intvar <- IntegerVariable$new(-10:10)
+  set <- c(-2,-1,1,2) 
+  expect_equal(intvar$get_size_of(set = set), 4)
+})
+
+test_that("getting size of a interval of IntegerVariable values which exist works", {
+  intvar <- IntegerVariable$new(-10:10)
+  a <- 5
+  b <- 7
+  expect_equal(intvar$get_size_of(a = a, b = b), 3)
 })
