@@ -279,27 +279,27 @@ BEGIN_RCPP
 END_RCPP
 }
 // double_variable_get_index_of_range
-Rcpp::XPtr<individual_index_t> double_variable_get_index_of_range(Rcpp::XPtr<DoubleVariable> variable, const int a, const int b);
+Rcpp::XPtr<individual_index_t> double_variable_get_index_of_range(Rcpp::XPtr<DoubleVariable> variable, const double a, const double b);
 RcppExport SEXP _individual_double_variable_get_index_of_range(SEXP variableSEXP, SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const int >::type a(aSEXP);
-    Rcpp::traits::input_parameter< const int >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
     rcpp_result_gen = Rcpp::wrap(double_variable_get_index_of_range(variable, a, b));
     return rcpp_result_gen;
 END_RCPP
 }
 // double_variable_get_size_of_range
-int double_variable_get_size_of_range(Rcpp::XPtr<DoubleVariable> variable, const int a, const int b);
+int double_variable_get_size_of_range(Rcpp::XPtr<DoubleVariable> variable, const double a, const double b);
 RcppExport SEXP _individual_double_variable_get_size_of_range(SEXP variableSEXP, SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const int >::type a(aSEXP);
-    Rcpp::traits::input_parameter< const int >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
     rcpp_result_gen = Rcpp::wrap(double_variable_get_size_of_range(variable, a, b));
     return rcpp_result_gen;
 END_RCPP

@@ -42,7 +42,7 @@ struct DoubleVariable : public Variable {
 
     // get indices of individuals whose value is in some [a,b]
     virtual individual_index_t get_index_of_range(
-        const int a, const int b
+        const double a, const double b
     ) const {
         
         std::vector<size_t> result_ix;
@@ -60,10 +60,10 @@ struct DoubleVariable : public Variable {
 
     // get indices of individuals whose value is in some [a,b]
     virtual int get_size_of_range(
-        const int a, const int b
+        const double a, const double b
     ) const {
         
-        int result;
+        int result{0};
         for(size_t it = 0; it < values.size(); it++) {
             if( !(values[it] < a) && !(b < values[it]) ) {
                 result += 1;
