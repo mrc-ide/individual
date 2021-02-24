@@ -67,3 +67,30 @@ test_that("reschedule_listener schedules the correct update", {
   expect_targeted_listener(event_listener, 1, 2, target = c(2, 4))
   expect_targeted_listener(followup_listener, 1, 3, target = c(2, 4))
 })
+
+test_that("Multinomial process samples probabilities correctly", {
+    n <- 1e4
+  state <- CategoricalVariable$new(categories = LETTERS[1:5],initial_values = rep("A",n))
+  l_p <- 0.9
+  d_p <- c(0.5,0.25,0.2,0.05)
+  mult_process <- fixed_probability_multinomial_process(
+    variable = state,
+    source_state = 'A',
+    destination_states = LETTERS[2:5],
+    rate = l_p,
+    destination_probabilities = d_p
+  )
+  individual:::execute_any_process(mult_process,1)
+  state$.update()
+  state_new <- sapply(X = LETTERS[1:5],FUN = function(l){state$get_size_of(l)})
+
+  state_exp <- setNames(object = rep(0,5),nm = LETTERS[1:5])
+  state_exp['A'] <- n*(1-l_p)
+  state_exp['B'] <- n*l_p*d_p[1]
+  state_exp['C'] <- n*l_p*d_p[2]
+  state_exp['D'] <- n*l_p*d_p[3]
+  state_exp['E'] <- n*l_p*d_p[4]
+
+  pval <- ks.test(x = state_new,y = state_exp)$p.value
+  expect_gte(pval,0.985)
+})

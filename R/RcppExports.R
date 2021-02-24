@@ -213,6 +213,21 @@ integer_variable_update <- function(variable) {
     invisible(.Call(`_individual_integer_variable_update`, variable))
 }
 
+#' @title Multinomial process
+#' @description Simulates a two-stage process where all individuals
+#' in a given 'source_state' sample whether to leave or not with probability
+#' 'rate'; those who leave go to one of the 'destination_states' with
+#' probabilities contained in the vector 'destination_probabilities'.
+#' @param variable a \code{\link{CategoricalVariable}} object
+#' @param source_state a string representing the source state
+#' @param destination_state a vector of strings representing the destination states
+#' @param rate probability of individuals in source state to leave
+#' @param destination_probabilities probability vector of destination states
+#' @export
+fixed_probability_multinomial_process <- function(variable, source_state, destination_states, rate, destination_probabilities) {
+    .Call(`_individual_fixed_probability_multinomial_process`, variable, source_state, destination_states, rate, destination_probabilities)
+}
+
 execute_process <- function(process, timestep) {
     invisible(.Call(`_individual_execute_process`, process, timestep))
 }
