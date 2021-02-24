@@ -25,11 +25,6 @@ Event <- R6::R6Class(
     #' can be a scalar or an vector of values for several times in the future
     schedule = function(delay) event_schedule(self$.event, delay),
 
-    #' @description Get the individuals who are scheduled
-    get_scheduled = function() {
-      Bitset$new(from = event_get_scheduled(self$.event))
-    },
-
     #' @description Stop a future event from triggering
     clear_schedule = function(event) event_clear_schedule(self$.event),
 
