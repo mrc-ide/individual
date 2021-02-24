@@ -412,5 +412,35 @@ inline IterableBitset<A> filter_bitset(
     return result;
 }
 
+//' @title sample the bitset
+//' @description retain a subset of values contained in this bitset, 
+//' where each element has probability 'rate' to remain. 
+//' This function modifies the bitset.
+template<class A>
+inline void bitset_sample_internal(
+    IterableBitset<A>& b,
+    const double rate
+){
+    auto to_remove = Rcpp::sample(
+        b.size(),
+        Rcpp::rbinom(1, b.size(), 1 - std::min(rate, 1.))[0],
+        false, // replacement
+        R_NilValue, // evenly distributed
+        false // one based
+    );
+    std::sort(to_remove.begin(), to_remove.end());
+    auto bitset_i = 0u;
+    auto bitset_it = b.cbegin();
+    for (auto i : to_remove) {
+      while(bitset_i != i) {
+        ++bitset_i;
+        ++bitset_it;
+      }
+      b.erase(*bitset_it);
+      ++bitset_i;
+      ++bitset_it;
+    }
+}
+
 #endif /* INST_INCLUDE_ITERABLEBITSET_H_ */
 

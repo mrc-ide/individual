@@ -644,6 +644,21 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// fixed_probability_multinomial_process
+Rcpp::XPtr<process_t> fixed_probability_multinomial_process(const Rcpp::Environment variable, const std::string source_state, const std::vector<std::string> destination_states, const double rate, const std::vector<double> destination_probabilities);
+RcppExport SEXP _individual_fixed_probability_multinomial_process(SEXP variableSEXP, SEXP source_stateSEXP, SEXP destination_statesSEXP, SEXP rateSEXP, SEXP destination_probabilitiesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::Environment >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type source_state(source_stateSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string> >::type destination_states(destination_statesSEXP);
+    Rcpp::traits::input_parameter< const double >::type rate(rateSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type destination_probabilities(destination_probabilitiesSEXP);
+    rcpp_result_gen = Rcpp::wrap(fixed_probability_multinomial_process(variable, source_state, destination_states, rate, destination_probabilities));
+    return rcpp_result_gen;
+END_RCPP
+}
 // execute_process
 void execute_process(Rcpp::XPtr<process_t> process, size_t timestep);
 RcppExport SEXP _individual_execute_process(SEXP processSEXP, SEXP timestepSEXP) {
@@ -729,6 +744,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_queue_fill", (DL_FUNC) &_individual_integer_variable_queue_fill, 2},
     {"_individual_integer_variable_queue_update", (DL_FUNC) &_individual_integer_variable_queue_update, 3},
     {"_individual_integer_variable_update", (DL_FUNC) &_individual_integer_variable_update, 1},
+    {"_individual_fixed_probability_multinomial_process", (DL_FUNC) &_individual_fixed_probability_multinomial_process, 5},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
