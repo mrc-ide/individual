@@ -35,6 +35,11 @@ TargetedEvent <- R6::R6Class(
       }
     },
 
+    #' @description Get the individuals who are scheduled
+    get_scheduled = function() {
+      Bitset$new(from = event_get_scheduled(self$.event))
+    },
+
     #' @description Stop a future event from triggering for a subset of individuals
     #' @param target the individuals to clear
     clear_schedule = function(target) {
