@@ -73,3 +73,24 @@ Bitset <- R6::R6Class(
     to_vector = function() bitset_to_vector(self$.bitset)
   )
 )
+
+#' @title Filter a bitset
+#' @description This non-modifying function returns a new \code{\link{Bitset}}
+#' object of the same maximum size as the original but which only contains
+#' those values at the indices specified by the argument `other`.
+#' Indices in `other` may be specified either as a vector of integers or as
+#' another bitset. Please note that filtering by another bitset is not a
+#' "bitwise and" intersection, and will have the same behavior as providing
+#' an equivalent vector of integer indices.
+#' @param bitset the bitset to filter
+#' @param other the values of bitset to keep
+#' @export
+filter_bitset = function(bitset, other) {
+  if (is.numeric(other)) {
+    return(Bitset$new(from = filter_bitset_vector(bitset$.bitset, other)))
+  } else if (inherits(other, 'Bitset')) {
+    return(
+      Bitset$new(from = filter_bitset_bitset(bitset$.bitset, other$.bitset))
+    )
+  }
+}
