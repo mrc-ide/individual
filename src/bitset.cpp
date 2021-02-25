@@ -84,6 +84,14 @@ void bitset_sample(
 }
 
 //[[Rcpp::export]]
+void bitset_sample_vector(
+    const Rcpp::XPtr<individual_index_t> b,
+    const std::vector<double> rate
+    ) {
+    bitset_sample_multi_internal(*b.get(), rate.begin(), rate.end());
+}
+
+//[[Rcpp::export]]
 std::vector<size_t> bitset_to_vector(const Rcpp::XPtr<individual_index_t> b) {
     auto result = std::vector<size_t>(b->size());
     auto i = 0u;

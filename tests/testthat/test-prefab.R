@@ -119,7 +119,7 @@ test_that("reschedule_listener schedules the correct update", {
 })
 
 test_that("Multinomial process samples probabilities correctly", {
-    n <- 1e4
+  n <- 1e4
   state <- CategoricalVariable$new(categories = LETTERS[1:5],initial_values = rep("A",n))
   l_p <- 0.9
   d_p <- c(0.5,0.25,0.2,0.05)
