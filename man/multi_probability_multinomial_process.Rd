@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{multi_probability_multinomial_process}
 \alias{multi_probability_multinomial_process}
-\title{Over-dispersed multinomial process}
+\title{Overdispersed multinomial process}
 \usage{
 multi_probability_multinomial_process(
   variable,
