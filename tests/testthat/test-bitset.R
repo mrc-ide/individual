@@ -42,6 +42,12 @@ test_that("bitset or works", {
   expect_equal(a$to_vector(), c(1, 3, 5, 6, 7))
 })
 
+test_that("bitset combinations work", {
+  a <- Bitset$new(10)$not()
+  b <- Bitset$new(10)
+  expect_equal(a$or(b)$to_vector(), seq(10))
+})
+
 test_that("bitset inverse works", {
   a <- Bitset$new(10)
   a$insert(c(1, 5, 6))
