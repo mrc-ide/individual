@@ -73,7 +73,7 @@ Rcpp::XPtr<process_t> fixed_probability_multinomial_process(
 };
 
 
-//' @title Over-dispersed multinomial process
+//' @title Overdispersed multinomial process
 //' @description Simulates a two-stage process where all individuals
 //' in a given 'source_state' sample whether to leave or not with a
 //' individual probability specified by the \code{\link{DoubleVariable}}

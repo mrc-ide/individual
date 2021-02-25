@@ -232,7 +232,7 @@ fixed_probability_multinomial_process <- function(variable, source_state, destin
     .Call(`_individual_fixed_probability_multinomial_process`, variable, source_state, destination_states, rate, destination_probabilities)
 }
 
-#' @title Over-dispersed multinomial process
+#' @title Overdispersed multinomial process
 #' @description Simulates a two-stage process where all individuals
 #' in a given 'source_state' sample whether to leave or not with a
 #' individual probability specified by the \code{\link{DoubleVariable}}
