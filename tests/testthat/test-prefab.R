@@ -155,3 +155,29 @@ test_that("Overdispersed multinomial process doesn't move people it shouldn't", 
   expect_true( all(state_b == 1:99) )
   expect_true( state_c == 100 )
 })
+
+test_that("Overdispersed bernoulli process works correctly", {
+  state <- CategoricalVariable$new(c('S', 'I'), c(rep('S', 10), 'I'))
+  r_v <- c(
+    rep(1,3),
+    rep(0.5,5),
+    rep(0,2),
+    1
+  )
+  rate <- DoubleVariable$new(initial_values = r_v)
+  multi_bp <- multi_probability_bernoulli_process(
+    variable = state,
+    from = "S",
+    to = "I",
+    rate_variable = rate 
+  )
+
+  individual:::execute_any_process(multi_bp,1)
+  state$.update()
+
+  state_s <- state$get_index_of(values = "S")$to_vector()
+  state_i <- state$get_index_of(values = "I")$to_vector()
+
+  expect_true(all(1:3 %in% state_i))
+  expect_true(all(9:10 %in% state_s))
+})

@@ -685,6 +685,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// multi_probability_bernoulli_process
+Rcpp::XPtr<process_t> multi_probability_bernoulli_process(const Rcpp::Environment variable, const std::string from, const std::string to, const Rcpp::Environment rate_variable);
+RcppExport SEXP _individual_multi_probability_bernoulli_process(SEXP variableSEXP, SEXP fromSEXP, SEXP toSEXP, SEXP rate_variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::Environment >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type from(fromSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type to(toSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::Environment >::type rate_variable(rate_variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(multi_probability_bernoulli_process(variable, from, to, rate_variable));
+    return rcpp_result_gen;
+END_RCPP
+}
 // execute_process
 void execute_process(Rcpp::XPtr<process_t> process, size_t timestep);
 RcppExport SEXP _individual_execute_process(SEXP processSEXP, SEXP timestepSEXP) {
@@ -773,6 +787,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_update", (DL_FUNC) &_individual_integer_variable_update, 1},
     {"_individual_fixed_probability_multinomial_process", (DL_FUNC) &_individual_fixed_probability_multinomial_process, 5},
     {"_individual_multi_probability_multinomial_process", (DL_FUNC) &_individual_multi_probability_multinomial_process, 5},
+    {"_individual_multi_probability_bernoulli_process", (DL_FUNC) &_individual_multi_probability_bernoulli_process, 4},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
