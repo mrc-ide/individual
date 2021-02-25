@@ -138,3 +138,45 @@ Rcpp::XPtr<process_t> multi_probability_multinomial_process(
         true
     ); 
 };
+
+
+//' @title Overdispersed Bernoulli process
+//' @description Simulates a Bernoulli process where all individuals
+//' in a given source state 'from' sample whether or not 
+//' to transition to destination state 'to' with a
+//' individual probability specified by the \code{\link{DoubleVariable}}
+//' object 'rate_variable'.
+//' @param variable a \code{\link{CategoricalVariable}} object
+//' @param from a string representing the source state
+//' @param to a string representing the destination state
+//' @param rate_variable \code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave
+//' @export
+// [[Rcpp::export]]
+Rcpp::XPtr<process_t> multi_probability_bernoulli_process(
+    const Rcpp::Environment variable,
+    const std::string from,
+    const std::string to,
+    const Rcpp::Environment rate_variable
+){
+    // the internal CategoricalVariable object
+    Rcpp::XPtr<CategoricalVariable> catvar = variable[".variable"];
+
+    // the internal DoubleVariable object
+    Rcpp::XPtr<DoubleVariable> ratevar = rate_variable[".variable"];
+
+    // make pointer to lambda function and return XPtr to R
+    return Rcpp::XPtr<process_t>(
+        new process_t([catvar,ratevar,from,to](size_t t){      
+
+            // sample leavers with their unique prob
+            individual_index_t leaving_individuals(catvar->get_index_of(std::vector<std::string>{from}));
+            std::vector<double> rate_vector = ratevar->get_values(leaving_individuals);
+            bitset_sample_multi_internal(leaving_individuals, rate_vector.begin(), rate_vector.end());
+
+            catvar->queue_update(to, leaving_individuals);
+
+        }),
+        true
+    ); 
+};
+

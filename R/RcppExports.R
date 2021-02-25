@@ -248,6 +248,21 @@ multi_probability_multinomial_process <- function(variable, source_state, destin
     .Call(`_individual_multi_probability_multinomial_process`, variable, source_state, destination_states, rate_variable, destination_probabilities)
 }
 
+#' @title Overdispersed Bernoulli process
+#' @description Simulates a Bernoulli process where all individuals
+#' in a given source state 'from' sample whether or not 
+#' to transition to destination state 'to' with a
+#' individual probability specified by the \code{\link{DoubleVariable}}
+#' object 'rate_variable'.
+#' @param variable a \code{\link{CategoricalVariable}} object
+#' @param from a string representing the source state
+#' @param to a string representing the destination state
+#' @param rate_variable \code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave
+#' @export
+multi_probability_bernoulli_process <- function(variable, from, to, rate_variable) {
+    .Call(`_individual_multi_probability_bernoulli_process`, variable, from, to, rate_variable)
+}
+
 execute_process <- function(process, timestep) {
     invisible(.Call(`_individual_execute_process`, process, timestep))
 }
