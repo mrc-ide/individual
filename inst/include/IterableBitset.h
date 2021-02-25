@@ -438,5 +438,44 @@ inline void bitset_sample_internal(
     }
 }
 
+//' @title sample the bitset
+//' @description retain a subset of values contained in this bitset, 
+//' where each element has unique probability given
+//' by elements in the input iterator. 
+//' This function modifies the bitset.
+template<class A, class InputIterator>
+inline void bitset_sample_multi_internal(
+    IterableBitset<A>& b,
+    InputIterator begin,
+    InputIterator end
+){  
+
+    // sample elements
+    size_t n = std::distance(begin, end);
+    std::vector<size_t> to_remove;
+    to_remove.reserve(n);
+    const auto random = Rcpp::runif(n);
+    auto it = begin;
+    for (size_t i=0; i<n; i++) {
+        if (random[i] >= *(it)) {
+            to_remove.emplace_back(i);
+        }
+        ++it;
+    }
+
+    // update the bitset
+    auto bitset_i = 0u;
+    auto bitset_it = b.cbegin();
+    for (auto i : to_remove) {
+      while(bitset_i != i) {
+        ++bitset_i;
+        ++bitset_it;
+      }
+      b.erase(*bitset_it);
+      ++bitset_i;
+      ++bitset_it;
+    }
+}
+
 #endif /* INST_INCLUDE_ITERABLEBITSET_H_ */
 

@@ -119,6 +119,17 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// bitset_sample_vector
+void bitset_sample_vector(const Rcpp::XPtr<individual_index_t> b, const std::vector<double> rate);
+RcppExport SEXP _individual_bitset_sample_vector(SEXP bSEXP, SEXP rateSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type rate(rateSEXP);
+    bitset_sample_vector(b, rate);
+    return R_NilValue;
+END_RCPP
+}
 // bitset_to_vector
 std::vector<size_t> bitset_to_vector(const Rcpp::XPtr<individual_index_t> b);
 RcppExport SEXP _individual_bitset_to_vector(SEXP bSEXP) {
@@ -659,6 +670,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// multi_probability_multinomial_process
+Rcpp::XPtr<process_t> multi_probability_multinomial_process(const Rcpp::Environment variable, const std::string source_state, const std::vector<std::string> destination_states, const Rcpp::Environment rate_variable, const std::vector<double> destination_probabilities);
+RcppExport SEXP _individual_multi_probability_multinomial_process(SEXP variableSEXP, SEXP source_stateSEXP, SEXP destination_statesSEXP, SEXP rate_variableSEXP, SEXP destination_probabilitiesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::Environment >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type source_state(source_stateSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string> >::type destination_states(destination_statesSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::Environment >::type rate_variable(rate_variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type destination_probabilities(destination_probabilitiesSEXP);
+    rcpp_result_gen = Rcpp::wrap(multi_probability_multinomial_process(variable, source_state, destination_states, rate_variable, destination_probabilities));
+    return rcpp_result_gen;
+END_RCPP
+}
 // execute_process
 void execute_process(Rcpp::XPtr<process_t> process, size_t timestep);
 RcppExport SEXP _individual_execute_process(SEXP processSEXP, SEXP timestepSEXP) {
@@ -700,6 +726,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_bitset_not", (DL_FUNC) &_individual_bitset_not, 1},
     {"_individual_bitset_or", (DL_FUNC) &_individual_bitset_or, 2},
     {"_individual_bitset_sample", (DL_FUNC) &_individual_bitset_sample, 2},
+    {"_individual_bitset_sample_vector", (DL_FUNC) &_individual_bitset_sample_vector, 2},
     {"_individual_bitset_to_vector", (DL_FUNC) &_individual_bitset_to_vector, 1},
     {"_individual_filter_bitset_vector", (DL_FUNC) &_individual_filter_bitset_vector, 2},
     {"_individual_filter_bitset_bitset", (DL_FUNC) &_individual_filter_bitset_bitset, 2},
@@ -745,6 +772,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_queue_update", (DL_FUNC) &_individual_integer_variable_queue_update, 3},
     {"_individual_integer_variable_update", (DL_FUNC) &_individual_integer_variable_update, 1},
     {"_individual_fixed_probability_multinomial_process", (DL_FUNC) &_individual_fixed_probability_multinomial_process, 5},
+    {"_individual_multi_probability_multinomial_process", (DL_FUNC) &_individual_multi_probability_multinomial_process, 5},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
