@@ -655,47 +655,47 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// fixed_probability_multinomial_process
-Rcpp::XPtr<process_t> fixed_probability_multinomial_process(const Rcpp::Environment variable, const std::string source_state, const std::vector<std::string> destination_states, const double rate, const std::vector<double> destination_probabilities);
-RcppExport SEXP _individual_fixed_probability_multinomial_process(SEXP variableSEXP, SEXP source_stateSEXP, SEXP destination_statesSEXP, SEXP rateSEXP, SEXP destination_probabilitiesSEXP) {
+// fixed_probability_multinomial_process_internal
+Rcpp::XPtr<process_t> fixed_probability_multinomial_process_internal(Rcpp::XPtr<CategoricalVariable> variable, const std::string source_state, const std::vector<std::string> destination_states, const double rate, const std::vector<double> destination_probabilities);
+RcppExport SEXP _individual_fixed_probability_multinomial_process_internal(SEXP variableSEXP, SEXP source_stateSEXP, SEXP destination_statesSEXP, SEXP rateSEXP, SEXP destination_probabilitiesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::Environment >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
     Rcpp::traits::input_parameter< const std::string >::type source_state(source_stateSEXP);
     Rcpp::traits::input_parameter< const std::vector<std::string> >::type destination_states(destination_statesSEXP);
     Rcpp::traits::input_parameter< const double >::type rate(rateSEXP);
     Rcpp::traits::input_parameter< const std::vector<double> >::type destination_probabilities(destination_probabilitiesSEXP);
-    rcpp_result_gen = Rcpp::wrap(fixed_probability_multinomial_process(variable, source_state, destination_states, rate, destination_probabilities));
+    rcpp_result_gen = Rcpp::wrap(fixed_probability_multinomial_process_internal(variable, source_state, destination_states, rate, destination_probabilities));
     return rcpp_result_gen;
 END_RCPP
 }
-// multi_probability_multinomial_process
-Rcpp::XPtr<process_t> multi_probability_multinomial_process(const Rcpp::Environment variable, const std::string source_state, const std::vector<std::string> destination_states, const Rcpp::Environment rate_variable, const std::vector<double> destination_probabilities);
-RcppExport SEXP _individual_multi_probability_multinomial_process(SEXP variableSEXP, SEXP source_stateSEXP, SEXP destination_statesSEXP, SEXP rate_variableSEXP, SEXP destination_probabilitiesSEXP) {
+// multi_probability_multinomial_process_internal
+Rcpp::XPtr<process_t> multi_probability_multinomial_process_internal(Rcpp::XPtr<CategoricalVariable> variable, const std::string source_state, const std::vector<std::string> destination_states, const Rcpp::XPtr<DoubleVariable> rate_variable, const std::vector<double> destination_probabilities);
+RcppExport SEXP _individual_multi_probability_multinomial_process_internal(SEXP variableSEXP, SEXP source_stateSEXP, SEXP destination_statesSEXP, SEXP rate_variableSEXP, SEXP destination_probabilitiesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::Environment >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
     Rcpp::traits::input_parameter< const std::string >::type source_state(source_stateSEXP);
     Rcpp::traits::input_parameter< const std::vector<std::string> >::type destination_states(destination_statesSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::Environment >::type rate_variable(rate_variableSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<DoubleVariable> >::type rate_variable(rate_variableSEXP);
     Rcpp::traits::input_parameter< const std::vector<double> >::type destination_probabilities(destination_probabilitiesSEXP);
-    rcpp_result_gen = Rcpp::wrap(multi_probability_multinomial_process(variable, source_state, destination_states, rate_variable, destination_probabilities));
+    rcpp_result_gen = Rcpp::wrap(multi_probability_multinomial_process_internal(variable, source_state, destination_states, rate_variable, destination_probabilities));
     return rcpp_result_gen;
 END_RCPP
 }
-// multi_probability_bernoulli_process
-Rcpp::XPtr<process_t> multi_probability_bernoulli_process(const Rcpp::Environment variable, const std::string from, const std::string to, const Rcpp::Environment rate_variable);
-RcppExport SEXP _individual_multi_probability_bernoulli_process(SEXP variableSEXP, SEXP fromSEXP, SEXP toSEXP, SEXP rate_variableSEXP) {
+// multi_probability_bernoulli_process_internal
+Rcpp::XPtr<process_t> multi_probability_bernoulli_process_internal(Rcpp::XPtr<CategoricalVariable> variable, const std::string from, const std::string to, const Rcpp::XPtr<DoubleVariable> rate_variable);
+RcppExport SEXP _individual_multi_probability_bernoulli_process_internal(SEXP variableSEXP, SEXP fromSEXP, SEXP toSEXP, SEXP rate_variableSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::Environment >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
     Rcpp::traits::input_parameter< const std::string >::type from(fromSEXP);
     Rcpp::traits::input_parameter< const std::string >::type to(toSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::Environment >::type rate_variable(rate_variableSEXP);
-    rcpp_result_gen = Rcpp::wrap(multi_probability_bernoulli_process(variable, from, to, rate_variable));
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<DoubleVariable> >::type rate_variable(rate_variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(multi_probability_bernoulli_process_internal(variable, from, to, rate_variable));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -785,9 +785,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_queue_fill", (DL_FUNC) &_individual_integer_variable_queue_fill, 2},
     {"_individual_integer_variable_queue_update", (DL_FUNC) &_individual_integer_variable_queue_update, 3},
     {"_individual_integer_variable_update", (DL_FUNC) &_individual_integer_variable_update, 1},
-    {"_individual_fixed_probability_multinomial_process", (DL_FUNC) &_individual_fixed_probability_multinomial_process, 5},
-    {"_individual_multi_probability_multinomial_process", (DL_FUNC) &_individual_multi_probability_multinomial_process, 5},
-    {"_individual_multi_probability_bernoulli_process", (DL_FUNC) &_individual_multi_probability_bernoulli_process, 4},
+    {"_individual_fixed_probability_multinomial_process_internal", (DL_FUNC) &_individual_fixed_probability_multinomial_process_internal, 5},
+    {"_individual_multi_probability_multinomial_process_internal", (DL_FUNC) &_individual_multi_probability_multinomial_process_internal, 5},
+    {"_individual_multi_probability_bernoulli_process_internal", (DL_FUNC) &_individual_multi_probability_bernoulli_process_internal, 4},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},

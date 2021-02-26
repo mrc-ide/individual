@@ -217,50 +217,16 @@ integer_variable_update <- function(variable) {
     invisible(.Call(`_individual_integer_variable_update`, variable))
 }
 
-#' @title Multinomial process
-#' @description Simulates a two-stage process where all individuals
-#' in a given 'source_state' sample whether to leave or not with probability
-#' 'rate'; those who leave go to one of the 'destination_states' with
-#' probabilities contained in the vector 'destination_probabilities'.
-#' @param variable a \code{\link{CategoricalVariable}} object
-#' @param source_state a string representing the source state
-#' @param destination_states a vector of strings representing the destination states
-#' @param rate probability of individuals in source state to leave
-#' @param destination_probabilities probability vector of destination states
-#' @export
-fixed_probability_multinomial_process <- function(variable, source_state, destination_states, rate, destination_probabilities) {
-    .Call(`_individual_fixed_probability_multinomial_process`, variable, source_state, destination_states, rate, destination_probabilities)
+fixed_probability_multinomial_process_internal <- function(variable, source_state, destination_states, rate, destination_probabilities) {
+    .Call(`_individual_fixed_probability_multinomial_process_internal`, variable, source_state, destination_states, rate, destination_probabilities)
 }
 
-#' @title Overdispersed multinomial process
-#' @description Simulates a two-stage process where all individuals
-#' in a given 'source_state' sample whether to leave or not with a
-#' individual probability specified by the \code{\link{DoubleVariable}}
-#' object 'rate_variable'; those who leave go to one of the 'destination_states' with
-#' probabilities contained in the vector 'destination_probabilities'.
-#' @param variable a \code{\link{CategoricalVariable}} object
-#' @param source_state a string representing the source state
-#' @param destination_states a vector of strings representing the destination states
-#' @param rate_variable \code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave
-#' @param destination_probabilities probability vector of destination states
-#' @export
-multi_probability_multinomial_process <- function(variable, source_state, destination_states, rate_variable, destination_probabilities) {
-    .Call(`_individual_multi_probability_multinomial_process`, variable, source_state, destination_states, rate_variable, destination_probabilities)
+multi_probability_multinomial_process_internal <- function(variable, source_state, destination_states, rate_variable, destination_probabilities) {
+    .Call(`_individual_multi_probability_multinomial_process_internal`, variable, source_state, destination_states, rate_variable, destination_probabilities)
 }
 
-#' @title Overdispersed Bernoulli process
-#' @description Simulates a Bernoulli process where all individuals
-#' in a given source state 'from' sample whether or not 
-#' to transition to destination state 'to' with a
-#' individual probability specified by the \code{\link{DoubleVariable}}
-#' object 'rate_variable'.
-#' @param variable a \code{\link{CategoricalVariable}} object
-#' @param from a string representing the source state
-#' @param to a string representing the destination state
-#' @param rate_variable \code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave
-#' @export
-multi_probability_bernoulli_process <- function(variable, from, to, rate_variable) {
-    .Call(`_individual_multi_probability_bernoulli_process`, variable, from, to, rate_variable)
+multi_probability_bernoulli_process_internal <- function(variable, from, to, rate_variable) {
+    .Call(`_individual_multi_probability_bernoulli_process_internal`, variable, from, to, rate_variable)
 }
 
 execute_process <- function(process, timestep) {

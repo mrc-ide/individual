@@ -11,20 +11,9 @@
 #include "utils.h"
 
 
-//' @title Multinomial process
-//' @description Simulates a two-stage process where all individuals
-//' in a given 'source_state' sample whether to leave or not with probability
-//' 'rate'; those who leave go to one of the 'destination_states' with
-//' probabilities contained in the vector 'destination_probabilities'.
-//' @param variable a \code{\link{CategoricalVariable}} object
-//' @param source_state a string representing the source state
-//' @param destination_states a vector of strings representing the destination states
-//' @param rate probability of individuals in source state to leave
-//' @param destination_probabilities probability vector of destination states
-//' @export
 // [[Rcpp::export]]
-Rcpp::XPtr<process_t> fixed_probability_multinomial_process(
-    const Rcpp::Environment variable,
+Rcpp::XPtr<process_t> fixed_probability_multinomial_process_internal(
+    Rcpp::XPtr<CategoricalVariable> variable,
     const std::string source_state,
     const std::vector<std::string> destination_states,
     const double rate,
@@ -34,15 +23,12 @@ Rcpp::XPtr<process_t> fixed_probability_multinomial_process(
     std::vector<double> cdf(destination_probabilities);
     std::partial_sum(destination_probabilities.begin(),destination_probabilities.end(),cdf.begin(),std::plus<double>()); 
 
-    // the internal CategoricalVariable object
-    Rcpp::XPtr<CategoricalVariable> catvar = variable[".variable"];
-
     // make pointer to lambda function and return XPtr to R
     return Rcpp::XPtr<process_t>(
-        new process_t([catvar,source_state,destination_states,rate,cdf](size_t t){      
+        new process_t([variable,source_state,destination_states,rate,cdf](size_t t){      
 
             // sample leavers
-            individual_index_t leaving_individuals(catvar->get_index_of(std::vector<std::string>{source_state}));
+            individual_index_t leaving_individuals(variable->get_index_of(std::vector<std::string>{source_state}));
             bitset_sample_internal(leaving_individuals, rate);
 
             // empty bitsets to put them (their destinations)
@@ -64,7 +50,7 @@ Rcpp::XPtr<process_t> fixed_probability_multinomial_process(
 
             // queue state updates
             for (size_t i=0; i<n; i++) {
-                catvar->queue_update(destination_states[i], destination_individuals[i]);
+                variable->queue_update(destination_states[i], destination_individuals[i]);
             }
 
         }),
@@ -73,43 +59,25 @@ Rcpp::XPtr<process_t> fixed_probability_multinomial_process(
 };
 
 
-//' @title Overdispersed multinomial process
-//' @description Simulates a two-stage process where all individuals
-//' in a given 'source_state' sample whether to leave or not with a
-//' individual probability specified by the \code{\link{DoubleVariable}}
-//' object 'rate_variable'; those who leave go to one of the 'destination_states' with
-//' probabilities contained in the vector 'destination_probabilities'.
-//' @param variable a \code{\link{CategoricalVariable}} object
-//' @param source_state a string representing the source state
-//' @param destination_states a vector of strings representing the destination states
-//' @param rate_variable \code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave
-//' @param destination_probabilities probability vector of destination states
-//' @export
 // [[Rcpp::export]]
-Rcpp::XPtr<process_t> multi_probability_multinomial_process(
-    const Rcpp::Environment variable,
+Rcpp::XPtr<process_t> multi_probability_multinomial_process_internal(
+    Rcpp::XPtr<CategoricalVariable> variable,
     const std::string source_state,
     const std::vector<std::string> destination_states,
-    const Rcpp::Environment rate_variable,
+    const Rcpp::XPtr<DoubleVariable> rate_variable,
     const std::vector<double> destination_probabilities 
 ){
     // array of cumulative probabilities
     std::vector<double> cdf(destination_probabilities);
     std::partial_sum(destination_probabilities.begin(),destination_probabilities.end(),cdf.begin(),std::plus<double>()); 
 
-    // the internal CategoricalVariable object
-    Rcpp::XPtr<CategoricalVariable> catvar = variable[".variable"];
-
-    // the internal DoubleVariable object
-    Rcpp::XPtr<DoubleVariable> ratevar = rate_variable[".variable"];
-
     // make pointer to lambda function and return XPtr to R
     return Rcpp::XPtr<process_t>(
-        new process_t([catvar,source_state,destination_states,ratevar,cdf](size_t t){      
+        new process_t([variable,source_state,destination_states,rate_variable,cdf](size_t t){      
 
             // sample leavers with their unique prob
-            individual_index_t leaving_individuals(catvar->get_index_of(std::vector<std::string>{source_state}));
-            std::vector<double> rate_vector = ratevar->get_values(leaving_individuals);
+            individual_index_t leaving_individuals(variable->get_index_of(std::vector<std::string>{source_state}));
+            std::vector<double> rate_vector = rate_variable->get_values(leaving_individuals);
             bitset_sample_multi_internal(leaving_individuals, rate_vector.begin(), rate_vector.end());
 
             // empty bitsets to put them (their destinations)
@@ -131,7 +99,7 @@ Rcpp::XPtr<process_t> multi_probability_multinomial_process(
 
             // queue state updates
             for (size_t i=0; i<n; i++) {
-                catvar->queue_update(destination_states[i], destination_individuals[i]);
+                variable->queue_update(destination_states[i], destination_individuals[i]);
             }
 
         }),
@@ -139,41 +107,24 @@ Rcpp::XPtr<process_t> multi_probability_multinomial_process(
     ); 
 };
 
-
-//' @title Overdispersed Bernoulli process
-//' @description Simulates a Bernoulli process where all individuals
-//' in a given source state 'from' sample whether or not 
-//' to transition to destination state 'to' with a
-//' individual probability specified by the \code{\link{DoubleVariable}}
-//' object 'rate_variable'.
-//' @param variable a \code{\link{CategoricalVariable}} object
-//' @param from a string representing the source state
-//' @param to a string representing the destination state
-//' @param rate_variable \code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave
-//' @export
 // [[Rcpp::export]]
-Rcpp::XPtr<process_t> multi_probability_bernoulli_process(
-    const Rcpp::Environment variable,
+Rcpp::XPtr<process_t> multi_probability_bernoulli_process_internal(
+    Rcpp::XPtr<CategoricalVariable> variable,
     const std::string from,
     const std::string to,
-    const Rcpp::Environment rate_variable
+    const Rcpp::XPtr<DoubleVariable> rate_variable
 ){
-    // the internal CategoricalVariable object
-    Rcpp::XPtr<CategoricalVariable> catvar = variable[".variable"];
-
-    // the internal DoubleVariable object
-    Rcpp::XPtr<DoubleVariable> ratevar = rate_variable[".variable"];
 
     // make pointer to lambda function and return XPtr to R
     return Rcpp::XPtr<process_t>(
-        new process_t([catvar,ratevar,from,to](size_t t){      
+        new process_t([variable,rate_variable,from,to](size_t t){      
 
             // sample leavers with their unique prob
-            individual_index_t leaving_individuals(catvar->get_index_of(std::vector<std::string>{from}));
-            std::vector<double> rate_vector = ratevar->get_values(leaving_individuals);
+            individual_index_t leaving_individuals(variable->get_index_of(std::vector<std::string>{from}));
+            std::vector<double> rate_vector = rate_variable->get_values(leaving_individuals);
             bitset_sample_multi_internal(leaving_individuals, rate_vector.begin(), rate_vector.end());
 
-            catvar->queue_update(to, leaving_individuals);
+            variable->queue_update(to, leaving_individuals);
 
         }),
         true
