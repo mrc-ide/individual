@@ -88,6 +88,9 @@ void bitset_sample_vector(
     const Rcpp::XPtr<individual_index_t> b,
     const std::vector<double> rate
     ) {
+    if(b->size() != rate.size()){
+        Rcpp::stop("vector of probabilties must equal the size of the bitset");
+    }
     bitset_sample_multi_internal(*b.get(), rate.begin(), rate.end());
 }
 

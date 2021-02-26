@@ -15,6 +15,78 @@ bernoulli_process <- function(variable, from, to, rate) {
   }
 }
 
+#' @title Multinomial process
+#' @description Simulates a two-stage process where all individuals
+#' in a given 'source_state' sample whether to leave or not with probability
+#' 'rate'; those who leave go to one of the 'destination_states' with
+#' probabilities contained in the vector 'destination_probabilities'.
+#' @param variable a \code{\link{CategoricalVariable}} object
+#' @param source_state a string representing the source state
+#' @param destination_states a vector of strings representing the destination states
+#' @param rate probability of individuals in source state to leave
+#' @param destination_probabilities probability vector of destination states
+#' @export
+fixed_probability_multinomial_process <- function(variable, source_state, destination_states, rate, destination_probabilities) {
+  stopifnot(length(destination_states) == length(destination_probabilities))
+  stopifnot( abs(sum(destination_probabilities) - 1) <= .Machine$double.eps )
+  stopifnot(inherits(variable , "CategoricalVariable"))
+  return(individual:::fixed_probability_multinomial_process_internal(
+    variable = variable$.variable,
+    source_state = source_state,
+    destination_states = destination_states,
+    rate = rate,
+    destination_probabilities = destination_probabilities
+  ))
+}
+
+#' @title Overdispersed multinomial process
+#' @description Simulates a two-stage process where all individuals
+#' in a given 'source_state' sample whether to leave or not with a
+#' individual probability specified by the \code{\link{DoubleVariable}}
+#' object 'rate_variable'; those who leave go to one of the 'destination_states' with
+#' probabilities contained in the vector 'destination_probabilities'.
+#' @param variable a \code{\link{CategoricalVariable}} object
+#' @param source_state a string representing the source state
+#' @param destination_states a vector of strings representing the destination states
+#' @param rate_variable \code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave
+#' @param destination_probabilities probability vector of destination states
+#' @export
+multi_probability_multinomial_process <- function(variable, source_state, destination_states, rate_variable, destination_probabilities) {
+  stopifnot(length(destination_states) == length(destination_probabilities))
+  stopifnot( abs(sum(destination_probabilities) - 1) <= .Machine$double.eps )
+  stopifnot(inherits(variable , "CategoricalVariable"))
+  stopifnot(inherits(rate_variable , "DoubleVariable"))
+  return(individual:::multi_probability_multinomial_process_internal(
+    variable = variable$.variable,
+    source_state = source_state,
+    destination_states = destination_states,
+    rate_variable = rate_variable$.variable,
+    destination_probabilities = destination_probabilities
+  ))
+}
+
+#' @title Overdispersed Bernoulli process
+#' @description Simulates a Bernoulli process where all individuals
+#' in a given source state 'from' sample whether or not 
+#' to transition to destination state 'to' with a
+#' individual probability specified by the \code{\link{DoubleVariable}}
+#' object 'rate_variable'.
+#' @param variable a \code{\link{CategoricalVariable}} object
+#' @param from a string representing the source state
+#' @param to a string representing the destination state
+#' @param rate_variable \code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave
+#' @export
+multi_probability_bernoulli_process <- function(variable, from, to, rate_variable) {
+  stopifnot(inherits(variable , "CategoricalVariable"))
+  stopifnot(inherits(rate_variable , "DoubleVariable"))
+  return(individual:::multi_probability_bernoulli_process_internal(
+    variable = variable$.variable,
+    from = from,
+    to = to,
+    rate_variable = rate_variable$.variable
+  ))
+}
+
 #' @title Update category listener
 #' @description Updates the category of a subpopulation as the result of an
 #' event being triggered
