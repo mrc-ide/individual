@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include <Rcpp.h>
+#include <bitset>
 
 template<class A>
 class IterableBitset;
@@ -230,6 +231,9 @@ inline IterableBitset<A> IterableBitset<A>::operator ~() const {
     for (auto i = 0u; i < result.bitmap.size(); ++i) {
         result.bitmap[i] = ~result.bitmap[i];
     }
+    //mask out the values after max_n
+    A residual = (static_cast<A>(1) << (result.max_n % result.num_bits)) - 1;
+    result.bitmap[result.bitmap.size() - 1] &= residual;
     result.n = result.max_n - result.n;
     return result;
 }
