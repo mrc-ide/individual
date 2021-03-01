@@ -9,3 +9,5 @@ docs
 ^.*\.Rproj$
 ^\.Rproj\.user$
 .github
+^doc$
+^Meta$

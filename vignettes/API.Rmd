@@ -1,0 +1,52 @@
+---
+title: "API"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{API}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(individual)
+```
+
+## Table of Contents {#toc}
+
+  1. [Introduction](#intro)
+  2. [Variables](#var)
+      1. [Categorical Variables](#cat_var)
+      2. [Integer Variables](#int_var)
+      3. [Double Variables](#dbl_var)
+  5. [References](#ref)
+
+## Introduction {#intro}
+
+This package defines a set of useful primitives for structuring and simulating individual based mechanistic models, with special emphasis to infectious disease modelling. Structuring means that the package lets you specify the state space of the model and transition rules for how state changes over time, and simulating means that the package defines a logical way to put state and transitions together to update state over a time step, and draw trajectories from the individual based model. Generically, transitions are any rules that change state, and in "individual" come in two forms: processes and events. The simulation updates over a discrete-time step, but the size of time step is left unspecified and can be arbitrarily small.
+
+## Variables {#var}
+
+In "individual", variables are how one defines state. While many variables will be dynamically updated throughout a simulation, they don't have to be. Modeling of an inherent propensity for some event for each individual that doesn't change over a simulation will still be specified using a variable object. 
+
+There are 3 types of variable objects: `CategoricalVariable` for discrete variables taking values in a finite set, `IntegerVariable` for discrete integer variables, and `DoubleVariable` for real (floating-point) number variables.
+
+### Categorical Variable {#cat_var}
+
+Most epidemiological models will *require* use of categorical variables to define state, for example, the Susceptible, Infectious, and Recovered classes in the classic [SIR model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model). In general, for compartmental models, each set of compartments which describes an aspect of an individual (SIR describing infection status, for example), should be mapped to a single `CategoricalVariable` in "individual". Note that multiple `CategoricalVariable` objects can be instantiated to express more complex descriptions of state; if individuals can also be in a high risk or low risk group, a second object can be instantiated to represent risk status. 
+
+There can be an unlimited number of categorical variable objects, but every individual can only take on a single value for each of them at any time. The allowable (categorical) state space for each individual is essentially a contingency table where the margins are given by the values for each `CategoricalVariable`.
+
+`CategoricalVariable` objects internally store state as a hash table of category values (with string keys), each of which contains a `Bitset` telling us the indices of individuals in that state, making operations on `CategoricalVariable` objects, or chains of operations extremely fast, and therefore should be the preferred variable type for disctete variables. However, cases in which discrete variables have a large number of values or when many values have few or no individuals with that value of the variable should use the `IntegerVariable` instead.
+
+### Integer Variable {#int_var}
+
+An `IntegerVariable` should be used for discrete variables that may either be technically unbounded, or whose set of possible values is so large that a `CategoricalVariable` is impractical.
+
+### Double Variable {#dbl_var}

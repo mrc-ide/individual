@@ -17,3 +17,5 @@ docs/
 .Rproj.user
 *.Rproj
 .vscode
+doc
+Meta
