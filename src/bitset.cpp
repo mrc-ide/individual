@@ -80,25 +80,18 @@ void bitset_sample(
     const Rcpp::XPtr<individual_index_t> b,
     double rate
     ) {
-    auto to_remove = Rcpp::sample(
-      b->size(),
-      Rcpp::rbinom(1, b->size(), 1 - std::min(rate, 1.))[0],
-      false, // replacement
-      R_NilValue, // evenly distributed
-      false // one based
-    );
-    std::sort(to_remove.begin(), to_remove.end());
-    auto bitset_i = 0u;
-    auto bitset_it = b->cbegin();
-    for (auto i : to_remove) {
-      while(bitset_i != i) {
-        ++bitset_i;
-        ++bitset_it;
-      }
-      b->erase(*bitset_it);
-      ++bitset_i;
-      ++bitset_it;
+    bitset_sample_internal(*b.get(), rate);
+}
+
+//[[Rcpp::export]]
+void bitset_sample_vector(
+    const Rcpp::XPtr<individual_index_t> b,
+    const std::vector<double> rate
+    ) {
+    if(b->size() != rate.size()){
+        Rcpp::stop("vector of probabilties must equal the size of the bitset");
     }
+    bitset_sample_multi_internal(*b.get(), rate.begin(), rate.end());
 }
 
 //[[Rcpp::export]]

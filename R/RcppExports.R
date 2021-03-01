@@ -41,6 +41,10 @@ bitset_sample <- function(b, rate) {
     invisible(.Call(`_individual_bitset_sample`, b, rate))
 }
 
+bitset_sample_vector <- function(b, rate) {
+    invisible(.Call(`_individual_bitset_sample_vector`, b, rate))
+}
+
 bitset_to_vector <- function(b) {
     .Call(`_individual_bitset_to_vector`, b)
 }
@@ -211,6 +215,18 @@ integer_variable_queue_update <- function(variable, value, index) {
 
 integer_variable_update <- function(variable) {
     invisible(.Call(`_individual_integer_variable_update`, variable))
+}
+
+fixed_probability_multinomial_process_internal <- function(variable, source_state, destination_states, rate, destination_probabilities) {
+    .Call(`_individual_fixed_probability_multinomial_process_internal`, variable, source_state, destination_states, rate, destination_probabilities)
+}
+
+multi_probability_multinomial_process_internal <- function(variable, source_state, destination_states, rate_variable, destination_probabilities) {
+    .Call(`_individual_multi_probability_multinomial_process_internal`, variable, source_state, destination_states, rate_variable, destination_probabilities)
+}
+
+multi_probability_bernoulli_process_internal <- function(variable, from, to, rate_variable) {
+    .Call(`_individual_multi_probability_bernoulli_process_internal`, variable, from, to, rate_variable)
 }
 
 execute_process <- function(process, timestep) {

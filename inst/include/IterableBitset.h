@@ -412,5 +412,63 @@ inline IterableBitset<A> filter_bitset(
     return result;
 }
 
+//' @title sample the bitset
+//' @description retain a subset of values contained in this bitset, 
+//' where each element has probability 'rate' to remain. 
+//' This function modifies the bitset.
+template<class A>
+inline void bitset_sample_internal(
+    IterableBitset<A>& b,
+    const double rate
+){
+    auto to_remove = Rcpp::sample(
+        b.size(),
+        Rcpp::rbinom(1, b.size(), 1 - std::min(rate, 1.))[0],
+        false, // replacement
+        R_NilValue, // evenly distributed
+        false // one based
+    );
+    std::sort(to_remove.begin(), to_remove.end());
+    auto bitset_i = 0u;
+    auto bitset_it = b.cbegin();
+    for (auto i : to_remove) {
+      while(bitset_i != i) {
+        ++bitset_i;
+        ++bitset_it;
+      }
+      b.erase(*bitset_it);
+      ++bitset_i;
+      ++bitset_it;
+    }
+}
+
+//' @title sample the bitset
+//' @description retain a subset of values contained in this bitset, 
+//' where each element has unique probability to remain given
+//' by elements in the input iterator. 
+//' This function modifies the bitset.
+template<class A, class InputIterator>
+inline void bitset_sample_multi_internal(
+    IterableBitset<A>& b,
+    InputIterator begin,
+    InputIterator end
+){  
+    // sample elements
+    size_t n = b.size();
+    const auto random = Rcpp::runif(n);
+    auto i = 0u;
+    auto probs_it = begin;
+    auto bitset_it = b.cbegin();
+    while (i < n) {
+        if (random[i] >= *(probs_it)) {
+            b.erase(*bitset_it);
+        }
+        ++i;
+        ++probs_it;
+        ++bitset_it;
+    }
+
+}
+
 #endif /* INST_INCLUDE_ITERABLEBITSET_H_ */
 
