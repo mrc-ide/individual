@@ -1,6 +1,9 @@
 #' @title Categorical Variable Class
-#' @description Represents a categorical variable for an individual
-#' Used to quickly find individuals who could be in one of many options
+#' @description Represents a categorical variable for an individual.
+#' This class should be used for discrete variables taking values in 
+#' a finite set, such as infection, health, or behavioral state. It should
+#' be used in preference to \code{\link[individual]{IntegerVariable}}
+#' if possible becuase certain operations will be faster.
 #' @export
 CategoricalVariable <- R6::R6Class(
   'CategoricalVariable',
