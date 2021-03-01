@@ -15,6 +15,7 @@ This is useful for events which are triggered for a sub-population
 \itemize{
 \item \href{#method-new}{\code{TargetedEvent$new()}}
 \item \href{#method-schedule}{\code{TargetedEvent$schedule()}}
+\item \href{#method-get_scheduled}{\code{TargetedEvent$get_scheduled()}}
 \item \href{#method-clear_schedule}{\code{TargetedEvent$clear_schedule()}}
 \item \href{#method-.process_listener}{\code{TargetedEvent$.process_listener()}}
 \item \href{#method-clone}{\code{TargetedEvent$clone()}}
@@ -26,7 +27,6 @@ This is useful for events which are triggered for a sub-population
 \item \out{<span class="pkg-link" data-pkg="individual" data-topic="Event" data-id=".process">}\href{../../individual/html/Event.html#method-.process}{\code{individual::Event$.process()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="individual" data-topic="Event" data-id=".tick">}\href{../../individual/html/Event.html#method-.tick}{\code{individual::Event$.tick()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="individual" data-topic="Event" data-id="add_listener">}\href{../../individual/html/Event.html#method-add_listener}{\code{individual::Event$add_listener()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="individual" data-topic="Event" data-id="get_scheduled">}\href{../../individual/html/Event.html#method-get_scheduled}{\code{individual::Event$get_scheduled()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -66,6 +66,16 @@ can be a scalar or a vector of values for each target individual}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_scheduled"></a>}}
+\if{latex}{\out{\hypertarget{method-get_scheduled}{}}}
+\subsection{Method \code{get_scheduled()}}{
+Get the individuals who are scheduled
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$get_scheduled()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clear_schedule"></a>}}

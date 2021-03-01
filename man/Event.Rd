@@ -12,7 +12,6 @@ Describes a general event in the simulation
 \item \href{#method-new}{\code{Event$new()}}
 \item \href{#method-add_listener}{\code{Event$add_listener()}}
 \item \href{#method-schedule}{\code{Event$schedule()}}
-\item \href{#method-get_scheduled}{\code{Event$get_scheduled()}}
 \item \href{#method-clear_schedule}{\code{Event$clear_schedule()}}
 \item \href{#method-.tick}{\code{Event$.tick()}}
 \item \href{#method-.process}{\code{Event$.process()}}
@@ -71,16 +70,6 @@ can be a scalar or an vector of values for several times in the future}
 }
 \if{html}{\out{</div>}}
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_scheduled"></a>}}
-\if{latex}{\out{\hypertarget{method-get_scheduled}{}}}
-\subsection{Method \code{get_scheduled()}}{
-Get the individuals who are scheduled
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Event$get_scheduled()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clear_schedule"></a>}}
