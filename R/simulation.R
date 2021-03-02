@@ -11,7 +11,7 @@
 #' renderer <- Render$new(timesteps)
 #'
 #' transition <- function(from, to, rate) {
-#'   return(function(api) {
+#'   return(function(t) {
 #'     from_state <- state$get_index_of(from)
 #'     state$queue_update(
 #'       to,

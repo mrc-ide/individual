@@ -7,6 +7,7 @@
 #' @param rate the rate to move individuals between categories
 #' @export
 bernoulli_process <- function(variable, from, to, rate) {
+  stopifnot(inherits(variable, "CategoricalVariable"))
   function(t) {
     variable$queue_update(
       to,
@@ -118,7 +119,7 @@ reschedule_listener <- function(event, delay) {
 categorical_count_renderer_process <- function(renderer, variable, categories) {
   function(t) {
     for (c in categories) {
-      renderer$render(paste0(c, '_count'), variable$get_index_of(c)$size(), t)
+      renderer$render(paste0(c, '_count'), variable$get_size_of(c), t)
     }
   }
 }
