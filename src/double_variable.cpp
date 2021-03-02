@@ -40,9 +40,7 @@ std::vector<double> double_variable_get_values_at_index_vector(
     std::vector<size_t> index
     ) {
     decrement(index);
-    auto bitmap = individual_index_t(variable->size);
-    bitmap.insert_safe(index.begin(), index.end());
-    return variable->get_values(bitmap);
+    return variable->get_values(index);
 }
 
 // [[Rcpp::export]]
