@@ -34,7 +34,7 @@ Event <- R6::R6Class(
       for (listener in self$.listeners) {
         if (event_should_trigger(self$.event)) {
           if (inherits(listener, "externalptr")) {
-            process_listener(self$.event, listener)
+            self$.process_listener_cpp(self$.event, listener)
           } else {
             self$.process_listener(listener)
           }
@@ -44,6 +44,14 @@ Event <- R6::R6Class(
 
     .process_listener = function(listener) {
       listener(event_get_timestep(self$.event))
+    },
+
+    .process_listener_cpp = function(listener){
+      individual:::process_listener(
+        event = self$.event, 
+        listener = listener
+      )
     }
+
   )
 )
