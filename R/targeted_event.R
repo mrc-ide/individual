@@ -55,6 +55,15 @@ TargetedEvent <- R6::R6Class(
         event_get_timestep(self$.event),
         Bitset$new(from=event_get_target(self$.event))
       )
+    },
+
+    .process_listener_cpp = function(listener){
+      individual:::process_targeted_listener(
+        event = self$.event, 
+        listener = listener,
+        target = Bitset$new(from=event_get_target(self$.event))
+      )
     }
+
   )
 )

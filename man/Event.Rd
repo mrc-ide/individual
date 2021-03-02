@@ -12,11 +12,11 @@ Describes a general event in the simulation
 \item \href{#method-new}{\code{Event$new()}}
 \item \href{#method-add_listener}{\code{Event$add_listener()}}
 \item \href{#method-schedule}{\code{Event$schedule()}}
-\item \href{#method-get_scheduled}{\code{Event$get_scheduled()}}
 \item \href{#method-clear_schedule}{\code{Event$clear_schedule()}}
 \item \href{#method-.tick}{\code{Event$.tick()}}
 \item \href{#method-.process}{\code{Event$.process()}}
 \item \href{#method-.process_listener}{\code{Event$.process_listener()}}
+\item \href{#method-.process_listener_cpp}{\code{Event$.process_listener_cpp()}}
 \item \href{#method-clone}{\code{Event$clone()}}
 }
 }
@@ -73,16 +73,6 @@ can be a scalar or an vector of values for several times in the future}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_scheduled"></a>}}
-\if{latex}{\out{\hypertarget{method-get_scheduled}{}}}
-\subsection{Method \code{get_scheduled()}}{
-Get the individuals who are scheduled
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Event$get_scheduled()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clear_schedule"></a>}}
 \if{latex}{\out{\hypertarget{method-clear_schedule}{}}}
 \subsection{Method \code{clear_schedule()}}{
@@ -116,6 +106,15 @@ Stop a future event from triggering
 \subsection{Method \code{.process_listener()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$.process_listener(listener)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-.process_listener_cpp"></a>}}
+\if{latex}{\out{\hypertarget{method-.process_listener_cpp}{}}}
+\subsection{Method \code{.process_listener_cpp()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Event$.process_listener_cpp(listener)}\if{html}{\out{</div>}}
 }
 
 }

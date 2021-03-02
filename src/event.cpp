@@ -107,3 +107,22 @@ Rcpp::XPtr<individual_index_t> event_get_target(const Rcpp::XPtr<TargetedEvent> 
         true
     );
 }
+
+// [[Rcpp::export]]
+void process_listener(
+    const Rcpp::XPtr<Event> event,
+    const Rcpp::XPtr<listener_t> listener
+) {
+    size_t t = event->t;
+    (*listener)(t);
+};
+
+// [[Rcpp::export]]
+void process_targeted_listener(
+    const Rcpp::XPtr<Event> event,
+    const Rcpp::XPtr<targeted_listener_t> listener,
+    const Rcpp::XPtr<individual_index_t> target
+) {
+    size_t t = event->t;
+    (*listener)(t, *target.get());
+}
