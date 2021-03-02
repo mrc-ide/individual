@@ -18,6 +18,7 @@ This is useful for events which are triggered for a sub-population
 \item \href{#method-get_scheduled}{\code{TargetedEvent$get_scheduled()}}
 \item \href{#method-clear_schedule}{\code{TargetedEvent$clear_schedule()}}
 \item \href{#method-.process_listener}{\code{TargetedEvent$.process_listener()}}
+\item \href{#method-.process_listener_cpp}{\code{TargetedEvent$.process_listener_cpp()}}
 \item \href{#method-clone}{\code{TargetedEvent$clone()}}
 }
 }
@@ -100,6 +101,15 @@ Stop a future event from triggering for a subset of individuals
 \subsection{Method \code{.process_listener()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$.process_listener(listener)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-.process_listener_cpp"></a>}}
+\if{latex}{\out{\hypertarget{method-.process_listener_cpp}{}}}
+\subsection{Method \code{.process_listener_cpp()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$.process_listener_cpp(listener)}\if{html}{\out{</div>}}
 }
 
 }

@@ -526,6 +526,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// process_listener
+void process_listener(const Rcpp::XPtr<Event> event, const Rcpp::XPtr<listener_t> listener);
+RcppExport SEXP _individual_process_listener(SEXP eventSEXP, SEXP listenerSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<Event> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<listener_t> >::type listener(listenerSEXP);
+    process_listener(event, listener);
+    return R_NilValue;
+END_RCPP
+}
+// process_targeted_listener
+void process_targeted_listener(const Rcpp::XPtr<Event> event, const Rcpp::XPtr<targeted_listener_t> listener, const Rcpp::XPtr<individual_index_t> target);
+RcppExport SEXP _individual_process_targeted_listener(SEXP eventSEXP, SEXP listenerSEXP, SEXP targetSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<Event> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<targeted_listener_t> >::type listener(listenerSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type target(targetSEXP);
+    process_targeted_listener(event, listener, target);
+    return R_NilValue;
+END_RCPP
+}
 // create_integer_variable
 Rcpp::XPtr<IntegerVariable> create_integer_variable(const std::vector<int>& values);
 RcppExport SEXP _individual_create_integer_variable(SEXP valuesSEXP) {
@@ -774,6 +797,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_event_get_timestep", (DL_FUNC) &_individual_event_get_timestep, 1},
     {"_individual_event_should_trigger", (DL_FUNC) &_individual_event_should_trigger, 1},
     {"_individual_event_get_target", (DL_FUNC) &_individual_event_get_target, 1},
+    {"_individual_process_listener", (DL_FUNC) &_individual_process_listener, 2},
+    {"_individual_process_targeted_listener", (DL_FUNC) &_individual_process_targeted_listener, 3},
     {"_individual_create_integer_variable", (DL_FUNC) &_individual_create_integer_variable, 1},
     {"_individual_integer_variable_get_values", (DL_FUNC) &_individual_integer_variable_get_values, 1},
     {"_individual_integer_variable_get_values_at_index", (DL_FUNC) &_individual_integer_variable_get_values_at_index, 2},

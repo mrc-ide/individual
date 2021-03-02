@@ -16,6 +16,7 @@ Describes a general event in the simulation
 \item \href{#method-.tick}{\code{Event$.tick()}}
 \item \href{#method-.process}{\code{Event$.process()}}
 \item \href{#method-.process_listener}{\code{Event$.process_listener()}}
+\item \href{#method-.process_listener_cpp}{\code{Event$.process_listener_cpp()}}
 \item \href{#method-clone}{\code{Event$clone()}}
 }
 }
@@ -105,6 +106,15 @@ Stop a future event from triggering
 \subsection{Method \code{.process_listener()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$.process_listener(listener)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-.process_listener_cpp"></a>}}
+\if{latex}{\out{\hypertarget{method-.process_listener_cpp}{}}}
+\subsection{Method \code{.process_listener_cpp()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Event$.process_listener_cpp(listener)}\if{html}{\out{</div>}}
 }
 
 }
