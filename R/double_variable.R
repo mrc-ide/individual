@@ -1,5 +1,5 @@
 #' @title DoubleVariable Class
-#' @description Represents a double variable for an individual in our simulation
+#' @description Represents a continuous variable for an individual in our simulation
 #' @export
 DoubleVariable <- R6::R6Class(
   'DoubleVariable',
