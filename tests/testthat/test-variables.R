@@ -49,13 +49,21 @@ test_that("getting variables works", {
   expect_equal(sequence_2$get_values(), (1:10) + 10)
 })
 
+test_that("getting double variables with repeats works", {
+  size <- 10
+  sequence <- DoubleVariable$new(seq_len(size))
+
+  expect_equal(sequence$get_values(c(1, 1, 2, 2)), c(1, 1, 2, 2))
+})
+
+
 test_that("getting variables at an index works", {
   size <- 10
   sequence <- DoubleVariable$new(seq_len(size))
   sequence_2 <- DoubleVariable$new(seq_len(size) + 10)
 
   expect_equal(sequence$get_values(NULL), 1:10)
-  expect_error(sequence_2$get_values(5:15), '*')
+  expect_error(sequence_2$get_values(5:15))
   expect_equal(sequence_2$get_values(5:10), 15:20)
 })
 
