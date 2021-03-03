@@ -90,8 +90,9 @@ multi_probability_bernoulli_process <- function(variable, from, to, rate_variabl
 
 #' @title Update category listener
 #' @description Updates the category of a subpopulation as the result of an
-#' event being triggered
-#' @param variable a categorical variable
+#' event firing, to be used in the \code{\link[individual]{TargetedEvent}}
+#' class.
+#' @param variable a \code{\link[individual]{CategoricalVariable}} object
 #' @param to a string representing the destination category
 #' @export
 update_category_listener <- function(variable, to) {
@@ -100,8 +101,8 @@ update_category_listener <- function(variable, to) {
 
 #' @title Reschedule listener
 #' @description Schedules a followup event as the result of an event
-#' being triggered
-#' @param event a TriggeredEvent
+#' firing
+#' @param event a \code{\link[individual]{TargetedEvent}}
 #' @param delay the delay until the follow-up event
 #' @export
 reschedule_listener <- function(event, delay) {
