@@ -61,7 +61,7 @@ TargetedEvent <- R6::R6Class(
       individual:::process_targeted_listener(
         event = self$.event, 
         listener = listener,
-        target = Bitset$new(from=event_get_target(self$.event))
+        target = event_get_target(self$.event)
       )
     }
 
