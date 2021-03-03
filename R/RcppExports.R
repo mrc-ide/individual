@@ -173,6 +173,14 @@ event_get_target <- function(event) {
     .Call(`_individual_event_get_target`, event)
 }
 
+process_listener <- function(event, listener) {
+    invisible(.Call(`_individual_process_listener`, event, listener))
+}
+
+process_targeted_listener <- function(event, listener, target) {
+    invisible(.Call(`_individual_process_targeted_listener`, event, listener, target))
+}
+
 create_integer_variable <- function(values) {
     .Call(`_individual_create_integer_variable`, values)
 }
