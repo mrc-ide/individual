@@ -7,11 +7,12 @@
 update_category_listener(variable, to)
 }
 \arguments{
-\item{variable}{a categorical variable}
+\item{variable}{a \code{\link[individual]{CategoricalVariable}} object}
 
 \item{to}{a string representing the destination category}
 }
 \description{
 Updates the category of a subpopulation as the result of an
-event being triggered
+event firing, to be used in the \code{\link[individual]{TargetedEvent}}
+class.
 }

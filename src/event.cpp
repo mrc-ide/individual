@@ -53,7 +53,7 @@ void targeted_event_clear_schedule(
 }
 
 //[[Rcpp::export]]
-Rcpp::XPtr<individual_index_t> event_get_scheduled(
+Rcpp::XPtr<individual_index_t> targeted_event_get_scheduled(
     const Rcpp::XPtr<TargetedEvent> event
     ) {
     return Rcpp::XPtr<individual_index_t>(
@@ -101,7 +101,7 @@ bool event_should_trigger(const Rcpp::XPtr<EventBase> event) {
 }
 
 //[[Rcpp::export]]
-Rcpp::XPtr<individual_index_t> event_get_target(const Rcpp::XPtr<TargetedEvent> event) {
+Rcpp::XPtr<individual_index_t> targeted_event_get_target(const Rcpp::XPtr<TargetedEvent> event) {
     return Rcpp::XPtr<individual_index_t>(
         new individual_index_t(event->current_target()),
         true

@@ -60,7 +60,8 @@ schedule this event to occur in the future
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{target}}{the individuals to pass to the listener}
+\item{\code{target}}{the individuals to pass to the listener, this may be 
+either a vector of integers or a \code{\link[individual]{Bitset}}.}
 
 \item{\code{delay}}{the number of timesteps to wait before triggering the event,
 can be a scalar or a vector of values for each target individual}
@@ -90,7 +91,8 @@ Stop a future event from triggering for a subset of individuals
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{target}}{the individuals to clear}
+\item{\code{target}}{the individuals to clear, this may be either a vector of integers or
+a \code{\link[individual]{Bitset}}.}
 }
 \if{html}{\out{</div>}}
 }

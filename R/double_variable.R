@@ -14,8 +14,10 @@ DoubleVariable <- R6::R6Class(
     },
 
     #' @description get the variable values
-    #' @param index optionally return a subset of the variable vector
-    get_values = function(index=NULL) {
+    #' @param index optionally return a subset of the variable vector. If
+    #' \code{NULL}, return all values; if passed a \code{\link[individual]{Bitset}}
+    #' or integer vector, return values of those individuals.
+    get_values = function(index = NULL) {
       if (is.null(index)) {
         return(double_variable_get_values(self$.variable))
       }
@@ -25,7 +27,8 @@ DoubleVariable <- R6::R6Class(
       double_variable_get_values_at_index(self$.variable, index$.bitset)
     },
 
-    #' @description return a bitset for individuals whose value lies in an interval
+    #' @description return a \code{\link[individual]{Bitset}} giving individuals 
+    #' whose value lies in an interval
     #' Search for indices corresponding to values in the interval [a,b].
     #' @param a lower bound
     #' @param b upper bound
@@ -50,15 +53,15 @@ DoubleVariable <- R6::R6Class(
     #' that subset
     #' 2. Subset fill. The index vector represents a subset of the variable to
     #' update. The value vector, of size 1, will fill the specified subset
-    #' 3. Variable reset. The index vector is set to `NULL` and the value vector
+    #' 3. Variable reset. The index vector is set to \code{NULL} and the value vector
     #' replaces all of the current values in the simulation. The value vector is
     #' should match the size of the population.
-    #' 4. Variable fill. The index vector is set to `NULL` and the value vector,
+    #' 4. Variable fill. The index vector is set to \code{NULL} and the value vector,
     #' of size 1, is used to fill all of the variable values in the population.
     #' @param values a vector or scalar of values to assign at the index
-    #' @param index is the index at which to apply the change, use NULL for the
-    #' fill options
-
+    #' @param index is the index at which to apply the change, use \code{NULL} for the
+    #' fill options. If using indices, this may be either a vector of integers or
+    #' a \code{\link[individual]{Bitset}}.
     queue_update = function(values, index = NULL) {
       if(is.null(index)){
         if(length(values) == 1){
@@ -70,7 +73,7 @@ DoubleVariable <- R6::R6Class(
           double_variable_queue_update(
             self$.variable,
             values,
-            numeric(0)
+            integer(0)
           )
         }
       } else {

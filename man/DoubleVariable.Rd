@@ -4,7 +4,7 @@
 \alias{DoubleVariable}
 \title{DoubleVariable Class}
 \description{
-Represents a double variable for an individual in our simulation
+Represents a continuous variable for an individual in our simulation
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -48,7 +48,9 @@ get the variable values
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{index}}{optionally return a subset of the variable vector}
+\item{\code{index}}{optionally return a subset of the variable vector. If
+\code{NULL}, return all values; if passed a \code{\link[individual]{Bitset}}
+or integer vector, return values of those individuals.}
 }
 \if{html}{\out{</div>}}
 }
@@ -57,7 +59,8 @@ get the variable values
 \if{html}{\out{<a id="method-get_index_of"></a>}}
 \if{latex}{\out{\hypertarget{method-get_index_of}{}}}
 \subsection{Method \code{get_index_of()}}{
-return a bitset for individuals whose value lies in an interval
+return a \code{\link[individual]{Bitset}} giving individuals 
+whose value lies in an interval
 Search for indices corresponding to values in the interval [a,b].
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$get_index_of(a, b)}\if{html}{\out{</div>}}
@@ -104,10 +107,10 @@ update. The value vector, of the same size, represents the new values for
 that subset
 2. Subset fill. The index vector represents a subset of the variable to
 update. The value vector, of size 1, will fill the specified subset
-3. Variable reset. The index vector is set to `NULL` and the value vector
+3. Variable reset. The index vector is set to \code{NULL} and the value vector
 replaces all of the current values in the simulation. The value vector is
 should match the size of the population.
-4. Variable fill. The index vector is set to `NULL` and the value vector,
+4. Variable fill. The index vector is set to \code{NULL} and the value vector,
 of size 1, is used to fill all of the variable values in the population.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$queue_update(values, index = NULL)}\if{html}{\out{</div>}}
@@ -118,8 +121,9 @@ of size 1, is used to fill all of the variable values in the population.
 \describe{
 \item{\code{values}}{a vector or scalar of values to assign at the index}
 
-\item{\code{index}}{is the index at which to apply the change, use NULL for the
-fill options}
+\item{\code{index}}{is the index at which to apply the change, use \code{NULL} for the
+fill options. If using indices, this may be either a vector of integers or
+a \code{\link[individual]{Bitset}}.}
 }
 \if{html}{\out{</div>}}
 }

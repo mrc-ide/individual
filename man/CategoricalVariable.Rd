@@ -4,8 +4,11 @@
 \alias{CategoricalVariable}
 \title{Categorical Variable Class}
 \description{
-Represents a categorical variable for an individual
-Used to quickly find individuals who could be in one of many options
+Represents a categorical variable for an individual.
+This class should be used for discrete variables taking values in 
+a finite set, such as infection, health, or behavioral state. It should
+be used in preference to \code{\link[individual]{IntegerVariable}}
+if possible becuase certain operations will be faster.
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -42,7 +45,7 @@ individual}
 \if{html}{\out{<a id="method-get_index_of"></a>}}
 \if{latex}{\out{\hypertarget{method-get_index_of}{}}}
 \subsection{Method \code{get_index_of()}}{
-return a bitset for individuals with the given `values`
+return a \code{\link[individual]{Bitset}} for individuals with the given `values`
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$get_index_of(values)}\if{html}{\out{</div>}}
 }
@@ -84,7 +87,11 @@ queue an update for this variable
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{values}}{the values to filter}
+\item{\code{index}}{the indices of individuals whose value will be updated
+to the one specified in \code{values}. This may be either a vector of integers or
+a \code{\link[individual]{Bitset}}.}
+
+\item{\code{values}}{the new values}
 }
 \if{html}{\out{</div>}}
 }

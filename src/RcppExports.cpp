@@ -446,14 +446,14 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// event_get_scheduled
-Rcpp::XPtr<individual_index_t> event_get_scheduled(const Rcpp::XPtr<TargetedEvent> event);
-RcppExport SEXP _individual_event_get_scheduled(SEXP eventSEXP) {
+// targeted_event_get_scheduled
+Rcpp::XPtr<individual_index_t> targeted_event_get_scheduled(const Rcpp::XPtr<TargetedEvent> event);
+RcppExport SEXP _individual_targeted_event_get_scheduled(SEXP eventSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
-    rcpp_result_gen = Rcpp::wrap(event_get_scheduled(event));
+    rcpp_result_gen = Rcpp::wrap(targeted_event_get_scheduled(event));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -515,14 +515,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// event_get_target
-Rcpp::XPtr<individual_index_t> event_get_target(const Rcpp::XPtr<TargetedEvent> event);
-RcppExport SEXP _individual_event_get_target(SEXP eventSEXP) {
+// targeted_event_get_target
+Rcpp::XPtr<individual_index_t> targeted_event_get_target(const Rcpp::XPtr<TargetedEvent> event);
+RcppExport SEXP _individual_targeted_event_get_target(SEXP eventSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
-    rcpp_result_gen = Rcpp::wrap(event_get_target(event));
+    rcpp_result_gen = Rcpp::wrap(targeted_event_get_target(event));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -790,13 +790,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_event_clear_schedule", (DL_FUNC) &_individual_event_clear_schedule, 1},
     {"_individual_targeted_event_clear_schedule_vector", (DL_FUNC) &_individual_targeted_event_clear_schedule_vector, 2},
     {"_individual_targeted_event_clear_schedule", (DL_FUNC) &_individual_targeted_event_clear_schedule, 2},
-    {"_individual_event_get_scheduled", (DL_FUNC) &_individual_event_get_scheduled, 1},
+    {"_individual_targeted_event_get_scheduled", (DL_FUNC) &_individual_targeted_event_get_scheduled, 1},
     {"_individual_targeted_event_schedule", (DL_FUNC) &_individual_targeted_event_schedule, 3},
     {"_individual_targeted_event_schedule_vector", (DL_FUNC) &_individual_targeted_event_schedule_vector, 3},
     {"_individual_targeted_event_schedule_multi_delay", (DL_FUNC) &_individual_targeted_event_schedule_multi_delay, 3},
     {"_individual_event_get_timestep", (DL_FUNC) &_individual_event_get_timestep, 1},
     {"_individual_event_should_trigger", (DL_FUNC) &_individual_event_should_trigger, 1},
-    {"_individual_event_get_target", (DL_FUNC) &_individual_event_get_target, 1},
+    {"_individual_targeted_event_get_target", (DL_FUNC) &_individual_targeted_event_get_target, 1},
     {"_individual_process_listener", (DL_FUNC) &_individual_process_listener, 2},
     {"_individual_process_targeted_listener", (DL_FUNC) &_individual_process_targeted_listener, 3},
     {"_individual_create_integer_variable", (DL_FUNC) &_individual_create_integer_variable, 1},

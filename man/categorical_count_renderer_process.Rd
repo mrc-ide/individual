@@ -7,9 +7,9 @@
 categorical_count_renderer_process(renderer, variable, categories)
 }
 \arguments{
-\item{renderer}{your renderer object}
+\item{renderer}{your \code{\link[individual]{Render}} object}
 
-\item{variable}{a categorical variable}
+\item{variable}{a \code{\link[individual]{CategoricalVariable}} object}
 
 \item{categories}{a character vector of categories to render}
 }
