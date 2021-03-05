@@ -96,6 +96,7 @@ multi_probability_bernoulli_process <- function(variable, from, to, rate_variabl
 #' @param to a string representing the destination category
 #' @export
 update_category_listener <- function(variable, to) {
+  stopifnot(inherits(variable, "CategoricalVariable"))
   function(t, target) { variable$queue_update(to, target) }
 }
 
@@ -106,6 +107,7 @@ update_category_listener <- function(variable, to) {
 #' @param delay the delay until the follow-up event
 #' @export
 reschedule_listener <- function(event, delay) {
+  stopifnot(inherits(variable, "TargetedEvent"))
   function(t, target) {
     event$schedule(target, delay)
   }
@@ -113,11 +115,13 @@ reschedule_listener <- function(event, delay) {
 
 #' @title Render Categories
 #' @description Renders the number of individuals in each category
-#' @param renderer your renderer object
-#' @param variable a categorical variable
+#' @param renderer your \code{\link[individual]{Render}} object
+#' @param variable a \code{\link[individual]{CategoricalVariable}} object
 #' @param categories a character vector of categories to render
 #' @export
 categorical_count_renderer_process <- function(renderer, variable, categories) {
+  stopifnot(inherits(variable, "TargetedEvent"))
+  stopifnot(inherits(renderer, "Render"))
   function(t) {
     for (c in categories) {
       renderer$render(paste0(c, '_count'), variable$get_size_of(c), t)

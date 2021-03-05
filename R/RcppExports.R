@@ -145,8 +145,8 @@ targeted_event_clear_schedule <- function(event, target) {
     invisible(.Call(`_individual_targeted_event_clear_schedule`, event, target))
 }
 
-event_get_scheduled <- function(event) {
-    .Call(`_individual_event_get_scheduled`, event)
+targeted_event_get_scheduled <- function(event) {
+    .Call(`_individual_targeted_event_get_scheduled`, event)
 }
 
 targeted_event_schedule <- function(event, target, delay) {
@@ -169,8 +169,8 @@ event_should_trigger <- function(event) {
     .Call(`_individual_event_should_trigger`, event)
 }
 
-event_get_target <- function(event) {
-    .Call(`_individual_event_get_target`, event)
+targeted_event_get_target <- function(event) {
+    .Call(`_individual_targeted_event_get_target`, event)
 }
 
 process_listener <- function(event, listener) {

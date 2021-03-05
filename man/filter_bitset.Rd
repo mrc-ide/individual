@@ -7,9 +7,9 @@
 filter_bitset(bitset, other)
 }
 \arguments{
-\item{bitset}{the bitset to filter}
+\item{bitset}{the \code{\link{Bitset}} to filter}
 
-\item{other}{the values of bitset to keep}
+\item{other}{the values to keep (may be a vector of intergers or another \code{\link{Bitset}})}
 }
 \description{
 This non-modifying function returns a new \code{\link{Bitset}}

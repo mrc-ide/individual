@@ -7,11 +7,11 @@
 reschedule_listener(event, delay)
 }
 \arguments{
-\item{event}{a TriggeredEvent}
+\item{event}{a \code{\link[individual]{TargetedEvent}}}
 
 \item{delay}{the delay until the follow-up event}
 }
 \description{
 Schedules a followup event as the result of an event
-being triggered
+firing
 }

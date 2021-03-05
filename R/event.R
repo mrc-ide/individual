@@ -27,7 +27,7 @@ Event <- R6::R6Class(
 
     #' @description Stop a future event from triggering
     clear_schedule = function() event_clear_schedule(self$.event),
-
+  
     .tick = function() event_tick(self$.event),
 
     .process = function() {

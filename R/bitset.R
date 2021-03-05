@@ -82,15 +82,13 @@ Bitset <- R6::R6Class(
 #' another bitset. Please note that filtering by another bitset is not a
 #' "bitwise and" intersection, and will have the same behavior as providing
 #' an equivalent vector of integer indices.
-#' @param bitset the bitset to filter
-#' @param other the values of bitset to keep
+#' @param bitset the \code{\link{Bitset}} to filter
+#' @param other the values to keep (may be a vector of intergers or another \code{\link{Bitset}})
 #' @export
 filter_bitset = function(bitset, other) {
-  if (is.numeric(other)) {
-    return(Bitset$new(from = filter_bitset_vector(bitset$.bitset, other)))
-  } else if (inherits(other, 'Bitset')) {
-    return(
-      Bitset$new(from = filter_bitset_bitset(bitset$.bitset, other$.bitset))
-    )
+  if ( inherits(other, "Bitset")) {
+    return(Bitset$new(from = filter_bitset_bitset(bitset$.bitset, other$.bitset)))
+  } else {
+    return(Bitset$new(from = filter_bitset_vector(bitset$.bitset, as.integer(other))))
   }
 }

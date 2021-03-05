@@ -13,7 +13,8 @@ TargetedEvent <- R6::R6Class(
     },
 
     #' @description schedule this event to occur in the future
-    #' @param target the individuals to pass to the listener
+    #' @param target the individuals to pass to the listener, this may be 
+    #' either a vector of integers or a \code{\link[individual]{Bitset}}.
     #' @param delay the number of timesteps to wait before triggering the event,
     #' can be a scalar or a vector of values for each target individual
     schedule = function(target, delay) {
@@ -37,23 +38,24 @@ TargetedEvent <- R6::R6Class(
 
     #' @description Get the individuals who are scheduled
     get_scheduled = function() {
-      Bitset$new(from = event_get_scheduled(self$.event))
+      Bitset$new(from = targeted_event_get_scheduled(self$.event))
     },
 
     #' @description Stop a future event from triggering for a subset of individuals
-    #' @param target the individuals to clear
+    #' @param target the individuals to clear, this may be either a vector of integers or
+    #' a \code{\link[individual]{Bitset}}.
     clear_schedule = function(target) {
-      if (is.numeric(target)) {
-        targeted_event_clear_schedule_vector(self$.event, target)
-      } else {
+      if (inherits(target, "Bitset")){
         targeted_event_clear_schedule(self$.event, target$.bitset)
+      } else {
+        targeted_event_clear_schedule_vector(self$.event, as.integer(target))
       }
     },
 
     .process_listener = function(listener) {
       listener(
         event_get_timestep(self$.event),
-        Bitset$new(from=event_get_target(self$.event))
+        Bitset$new(from=targeted_event_get_target(self$.event))
       )
     },
 
@@ -61,7 +63,7 @@ TargetedEvent <- R6::R6Class(
       individual:::process_targeted_listener(
         event = self$.event, 
         listener = listener,
-        target = event_get_target(self$.event)
+        target = targeted_event_get_target(self$.event)
       )
     }
 

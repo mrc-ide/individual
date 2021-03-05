@@ -32,12 +32,15 @@ CategoricalVariable <- R6::R6Class(
     },
 
     #' @description queue an update for this variable
-    #' @param values the values to filter
+    #' @param values the new values
+    #' @param index the indices of individuals whose value will be updated
+    #' to the one specified in \code{values}. This may be either a vector of integers or
+    #' a \code{\link[individual]{Bitset}}.
     queue_update = function(value, index) {
-      if (is.numeric(index)) {
-        categorical_variable_queue_update_vector(self$.variable, value, index)
+      if (inherits(index, "Bitset")) {
+        categorical_variable_queue_update(self$.variable, value, index$.bitset)        
       } else {
-        categorical_variable_queue_update(self$.variable, value, index$.bitset)
+        categorical_variable_queue_update_vector(self$.variable, value, as.integer(index))
       }
     },
 

@@ -78,7 +78,7 @@ can be a scalar or an vector of values for several times in the future}
 \subsection{Method \code{clear_schedule()}}{
 Stop a future event from triggering
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Event$clear_schedule(event)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Event$clear_schedule()}\if{html}{\out{</div>}}
 }
 
 }
