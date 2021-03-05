@@ -107,7 +107,7 @@ update_category_listener <- function(variable, to) {
 #' @param delay the delay until the follow-up event
 #' @export
 reschedule_listener <- function(event, delay) {
-  stopifnot(inherits(variable, "TargetedEvent"))
+  stopifnot(inherits(event, "TargetedEvent"))
   function(t, target) {
     event$schedule(target, delay)
   }
@@ -120,7 +120,7 @@ reschedule_listener <- function(event, delay) {
 #' @param categories a character vector of categories to render
 #' @export
 categorical_count_renderer_process <- function(renderer, variable, categories) {
-  stopifnot(inherits(variable, "TargetedEvent"))
+  stopifnot(inherits(variable, "CategoricalVariable"))
   stopifnot(inherits(renderer, "Render"))
   function(t) {
     for (c in categories) {
