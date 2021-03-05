@@ -40,6 +40,16 @@ struct DoubleVariable : public Variable {
         return result;
     }
 
+    virtual std::vector<double> get_values(const std::vector<size_t>& index) {
+        auto result = std::vector<double>(index.size());
+        auto result_i = 0u;
+        for (auto i : index) {
+            result[result_i] = values.at(i);
+            ++result_i;
+        }
+        return result;
+    }
+
     // get indices of individuals whose value is in some [a,b]
     virtual individual_index_t get_index_of_range(
         const double a, const double b
