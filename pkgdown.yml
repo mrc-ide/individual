@@ -1,0 +1,8 @@
+pandoc: 2.7.3
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  API: API.html
+  Contributing: Contributing.html
+last_built: 2021-03-08T11:42Z
+
