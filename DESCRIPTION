@@ -1,12 +1,18 @@
 Package: individual
 Title: A package for specifying and simulating individial based models
-Version: 0.0.9
+Version: 0.1.0
 Authors@R: c(
   person(
     given = "Giovanni",
     family = "Charles",
     role = c('aut', 'cre'),
     email = 'giovanni.charles@gmail.com'
+  ),
+  person(
+    given = "Sean",
+    family = "Wu",
+    role = c('ctb'),
+    email = 'slwood89@gmail.com'
   ),
   person(
     given = "Imperial College of Science, Technology and Medicine",

@@ -1,185 +1,133 @@
 /*
  * prefab.cpp
  *
- *  Created on: 13 May 2020
- *      Author: gc1610
+ *  Created on: 24 Feb 2021
+ *      Author: slwu89
  */
 
-#include <Rcpp.h>
-#include "../inst/include/ProcessAPI.h"
+#include "../inst/include/DoubleVariable.h"
+#include "../inst/include/CategoricalVariable.h"
+#include "../inst/include/IntegerVariable.h"
+#include "utils.h"
 
-//'@title create a listener to update the state of the target population
-//'@param individual the name of the individual type
-//'@param state the state to transition to
-//'@export
-//[[Rcpp::export]]
-Rcpp::XPtr<listener_t> update_state_listener(
-    const std::string individual,
-    const std::string state
-    ) {
-    return Rcpp::XPtr<listener_t>(
-        new listener_t([=] (
-                ProcessAPI& api,
-                const individual_index_t& target
-            ) {
-            api.queue_state_update(individual, state, target);
-        }),
-        true
-    );
-}
 
-//'@title create a listener to schedule a target population for a new event
-//'@param event the name of the event to schedule
-//'@param delay the delay for the new event
-//'@export
-//[[Rcpp::export]]
-Rcpp::XPtr<listener_t> reschedule_listener(const std::string event, double delay) {
-    return Rcpp::XPtr<listener_t>(
-        new listener_t([=] (
-                ProcessAPI& api,
-                const individual_index_t& target
-            ) {
-            api.schedule(event, target, delay);
-        }),
-        true
-    );
-}
-
-//'@title create a process to transition individuals between states at a constant rate
-//'@param individual the name of an individual
-//'@param from_state the name of the source state
-//'@param to_state the name of the target state
-//'@param rate the rate at which state transitions occur
-//'@export
-//[[Rcpp::export]]
-Rcpp::XPtr<process_t> fixed_probability_state_change_process(
-    const std::string individual,
-    const std::string from_state,
-    const std::string to_state,
-    double rate
-    ) {
-    return Rcpp::XPtr<process_t>(
-        new process_t([=] (
-            ProcessAPI& api) {
-            auto target_individuals = api.get_state(individual, from_state);
-            const auto& random = Rcpp::runif(target_individuals.size());
-            auto random_index = 0;
-            for (const auto individual : target_individuals) {
-                if (random[random_index] > rate) {
-                    target_individuals.erase(individual);
-                }
-                ++random_index;
-            }
-            api.queue_state_update(individual, to_state, target_individuals);
-        }),
-        true
-    );
-}
-
-//'@title create a process to transition individuals from one state to multiple destination states at a constant rate
-//'@param individual the name of an individual
-//'@param source_state the name of the source state
-//'@param destination_states vector of names of destination states
-//'@param rate the rate at which each individual leaves
-//'@param destination_probabilities a vector of probabilities for destination states upon leaving the source state
-//'@export
-//[[Rcpp::export]]
-Rcpp::XPtr<process_t> fixed_probability_forked_state_change_process(
-    const std::string individual,
+// [[Rcpp::export]]
+Rcpp::XPtr<process_t> fixed_probability_multinomial_process_internal(
+    Rcpp::XPtr<CategoricalVariable> variable,
     const std::string source_state,
     const std::vector<std::string> destination_states,
-    double rate,
-    const std::vector<double> destination_probabilities
-) { 
+    const double rate,
+    const std::vector<double> destination_probabilities 
+){
     // array of cumulative probabilities
     std::vector<double> cdf(destination_probabilities);
-    std::partial_sum(destination_probabilities.begin(),destination_probabilities.end(),cdf.begin(),std::plus<double>());
+    std::partial_sum(destination_probabilities.begin(),destination_probabilities.end(),cdf.begin(),std::plus<double>()); 
+
     // make pointer to lambda function and return XPtr to R
     return Rcpp::XPtr<process_t>(
-        new process_t([individual,source_state,destination_states,rate,cdf](ProcessAPI& api){                     
-            auto target_individuals = api.get_state(individual, source_state); // people in source state
-            std::vector<size_t> source_individuals(target_individuals.begin(),target_individuals.end());
-            int n_leave = Rcpp::rbinom(1, target_individuals.size(), rate)[0]; // leavers
-            int n_dest = destination_states.size();
-            // get the indices of the leavers by uniform sampling w/out replacement (everyone has equal probability 'rate' to leave) 
-            auto leaving_individuals = Rcpp::sample(
-                source_individuals.size(), 
-                n_leave, 
-                false, // replacement
-                R_NilValue, // probs (uniform)
-                false // one-indexed
-            );
-            // indicies of individuals going to each destination state
-            std::vector<std::vector<size_t>> individuals_to_dest(n_dest);
-            const auto& random = Rcpp::runif(n_leave);
+        new process_t([variable,source_state,destination_states,rate,cdf](size_t t){      
+
+            // sample leavers
+            individual_index_t leaving_individuals(variable->get_index_of(std::vector<std::string>{source_state}));
+            bitset_sample_internal(leaving_individuals, rate);
+
+            // empty bitsets to put them (their destinations)
+            std::vector<individual_index_t> destination_individuals;
+            size_t n = destination_states.size();
+            for (size_t i=0; i<n; i++) {
+                destination_individuals.emplace_back(leaving_individuals.max_size());
+            }
+
+            // random variate for each leaver to see where they go
+            const auto random = Rcpp::runif(leaving_individuals.size());
             auto random_index = 0;
-            for (const auto individual : leaving_individuals) {
-                auto dest_iter = std::upper_bound(cdf.begin(), cdf.end(), random[random_index]);
-                int dest = std::distance(cdf.begin(), dest_iter);
-                individuals_to_dest[dest].emplace_back(source_individuals[individual]);
+            for (auto it = std::begin(leaving_individuals); it != std::end(leaving_individuals); ++it) {
+                auto dest_it = std::upper_bound(cdf.begin(), cdf.end(), random[random_index]);
+                int dest = std::distance(cdf.begin(), dest_it);
+                destination_individuals[dest].insert(*it);
                 ++random_index;
             }
-            // queue state update for each destination state
-            for (int i=0; i<n_dest; i++){
-                api.queue_state_update(individual, destination_states[i], individuals_to_dest[i]);
+
+            // queue state updates
+            for (size_t i=0; i<n; i++) {
+                variable->queue_update(destination_states[i], destination_individuals[i]);
             }
+
         }),
         true
-    );
-}
+    ); 
+};
 
-//'@title create a process to render the number of individuals in the specified states
-//'@param individual the name of an individual
-//'@param states a vector of state names
-//'@export
-//[[Rcpp::export]]
-Rcpp::XPtr<process_t> state_count_renderer_process(
-    const std::string individual,
-    const std::vector<std::string> states
-    ) {
+
+// [[Rcpp::export]]
+Rcpp::XPtr<process_t> multi_probability_multinomial_process_internal(
+    Rcpp::XPtr<CategoricalVariable> variable,
+    const std::string source_state,
+    const std::vector<std::string> destination_states,
+    const Rcpp::XPtr<DoubleVariable> rate_variable,
+    const std::vector<double> destination_probabilities 
+){
+    // array of cumulative probabilities
+    std::vector<double> cdf(destination_probabilities);
+    std::partial_sum(destination_probabilities.begin(),destination_probabilities.end(),cdf.begin(),std::plus<double>()); 
+
+    // make pointer to lambda function and return XPtr to R
     return Rcpp::XPtr<process_t>(
-        new process_t([=] (
-            ProcessAPI& api) {
-            for (const auto& state : states) {
-                const auto& state_index = api.get_state(individual, state);
-                std::stringstream name;
-                name << individual << '_' << state << "_count";
-                api.render(name.str(), state_index.size());
+        new process_t([variable,source_state,destination_states,rate_variable,cdf](size_t t){      
+
+            // sample leavers with their unique prob
+            individual_index_t leaving_individuals(variable->get_index_of(std::vector<std::string>{source_state}));
+            std::vector<double> rate_vector = rate_variable->get_values(leaving_individuals);
+            bitset_sample_multi_internal(leaving_individuals, rate_vector.begin(), rate_vector.end());
+
+            // empty bitsets to put them (their destinations)
+            std::vector<individual_index_t> destination_individuals;
+            size_t n = destination_states.size();
+            for(size_t i=0; i<n; i++) {
+                destination_individuals.emplace_back(leaving_individuals.max_size());
             }
+
+            // random variate for each leaver to see where they go
+            const auto random = Rcpp::runif(leaving_individuals.size());
+            auto random_index = 0;
+            for (auto it = std::begin(leaving_individuals); it != std::end(leaving_individuals); ++it) {
+                auto dest_it = std::upper_bound(cdf.begin(), cdf.end(), random[random_index]);
+                int dest = std::distance(cdf.begin(), dest_it);
+                destination_individuals[dest].insert(*it);
+                ++random_index;
+            }
+
+            // queue state updates
+            for (size_t i=0; i<n; i++) {
+                variable->queue_update(destination_states[i], destination_individuals[i]);
+            }
+
         }),
         true
-    );
-}
+    ); 
+};
 
-//'@title create a process to render the mean value of the specified variables
-//'@param individual the name of an individual
-//'@param variables a vector of variable names
-//'@export
-//[[Rcpp::export]]
-Rcpp::XPtr<process_t> variable_mean_renderer_process(
-    const std::string individual,
-    const std::vector<std::string> variables
-    ) {
+// [[Rcpp::export]]
+Rcpp::XPtr<process_t> multi_probability_bernoulli_process_internal(
+    Rcpp::XPtr<CategoricalVariable> variable,
+    const std::string from,
+    const std::string to,
+    const Rcpp::XPtr<DoubleVariable> rate_variable
+){
+
+    // make pointer to lambda function and return XPtr to R
     return Rcpp::XPtr<process_t>(
-        new process_t([=] (
-            ProcessAPI& api) {
-            for (const auto& variable : variables) {
-                const auto& values = api.get_variable(individual, variable);
-                std::stringstream name;
-                name << individual << '_' << variable << "_mean";
-                auto mean = 0.;
-                for (auto value : values) {
-                    mean += value;
-                }
-                api.render(name.str(), mean / values.size());
-            }
+        new process_t([variable,rate_variable,from,to](size_t t){      
+
+            // sample leavers with their unique prob
+            individual_index_t leaving_individuals(variable->get_index_of(std::vector<std::string>{from}));
+            std::vector<double> rate_vector = rate_variable->get_values(leaving_individuals);
+            bitset_sample_multi_internal(leaving_individuals, rate_vector.begin(), rate_vector.end());
+
+            variable->queue_update(to, leaving_individuals);
+
         }),
         true
-    );
-}
+    ); 
+};
 
-
-//[[Rcpp::export]]
-void execute_process(Rcpp::XPtr<process_t> process, Rcpp::XPtr<ProcessAPI> api) {
-    (*process)(*api);
-}

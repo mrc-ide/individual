@@ -9,6 +9,8 @@
 #define INST_INCLUDE_ITERABLEBITSET_H_
 
 #include <cmath>
+#include <Rcpp.h>
+#include <bitset>
 
 template<class A>
 class IterableBitset;
@@ -71,6 +73,7 @@ public:
     bool operator!=(const IterableBitset&) const;
     IterableBitset operator&(const IterableBitset&) const;
     IterableBitset operator|(const IterableBitset&) const;
+    IterableBitset operator~() const;
     IterableBitset& operator&=(const IterableBitset&);
     IterableBitset& operator|=(const IterableBitset&);
     iterator begin();
@@ -83,7 +86,10 @@ public:
     const_iterator find(size_t) const;
     template<class InputIterator>
     void insert(InputIterator, InputIterator);
+    template<class InputIterator>
+    void insert_safe(InputIterator, InputIterator);
     void insert(size_t);
+    void insert_safe(size_t);
     size_type size() const;
     size_type max_size() const;
     bool empty() const;
@@ -220,7 +226,23 @@ inline IterableBitset<A> IterableBitset<A>::operator |(const IterableBitset<A>& 
 }
 
 template<class A>
+inline IterableBitset<A> IterableBitset<A>::operator ~() const {
+    auto result = IterableBitset<A>(*this);
+    for (auto i = 0u; i < result.bitmap.size(); ++i) {
+        result.bitmap[i] = ~result.bitmap[i];
+    }
+    //mask out the values after max_n
+    A residual = (static_cast<A>(1) << (result.max_n % result.num_bits)) - 1;
+    result.bitmap[result.bitmap.size() - 1] &= residual;
+    result.n = result.max_n - result.n;
+    return result;
+}
+
+template<class A>
 inline IterableBitset<A>& IterableBitset<A>::operator &=(const IterableBitset<A>& other) {
+    if (max_size() != other.max_size()) {
+        Rcpp::stop("Incompatible bitmap sizes");
+    }
     n = 0;
     for (auto i = 0u; i < bitmap.size(); ++i) {
         bitmap[i] &= other.bitmap[i];
@@ -231,6 +253,9 @@ inline IterableBitset<A>& IterableBitset<A>::operator &=(const IterableBitset<A>
 
 template<class A>
 inline IterableBitset<A>& IterableBitset<A>::operator |=(const IterableBitset<A>& other) {
+    if (max_size() != other.max_size()) {
+        Rcpp::stop("Incompatible bitmap sizes");
+    }
     n = 0;
     for (auto i = 0u; i < bitmap.size(); ++i) {
         bitmap[i] |= other.bitmap[i];
@@ -316,6 +341,16 @@ inline void IterableBitset<A>::insert(InputIterator begin, InputIterator end) {
     }
 }
 
+template<class A>
+template<class InputIterator>
+inline void IterableBitset<A>::insert_safe(InputIterator begin, InputIterator end) {
+    auto it = begin;
+    while (it != end) {
+        insert_safe(*it);
+        ++it;
+    }
+}
+
 //' @title insert
 //' @description insert one element into the bitset
 template<class A>
@@ -324,6 +359,14 @@ inline void IterableBitset<A>::insert(size_t v) {
         set(v);
         n++;
     }
+}
+
+template<class A>
+inline void IterableBitset<A>::insert_safe(size_t v) {
+    if (v < 0 || v >= max_n) {
+        Rcpp::stop("Insert out of range");
+    }
+    insert(v);
 }
 
 template<class A>
@@ -341,4 +384,91 @@ inline bool IterableBitset<A>::empty() const {
     return n == 0;
 }
 
+//' @title filter the bitset
+//' @description keep only the i-th values of the source bitset for i in this iterator
+template<class A, class InputIterator>
+inline IterableBitset<A> filter_bitset(
+    const IterableBitset<A>& source,
+    InputIterator begin,
+    InputIterator end
+    ) {
+    auto result = IterableBitset<A>(source.max_size());
+    auto is = std::vector<size_t>(begin, end);
+    std::sort(std::begin(is), std::end(is));
+    auto diffs = std::vector<size_t>(is.size());
+    std::adjacent_difference(
+        std::begin(is),
+        std::end(is),
+        std::begin(diffs)
+    );
+    auto it = std::begin(source);
+    for (auto d : diffs) {
+        std::advance(it, d);
+        if (it == std::end(source)) {
+            Rcpp::stop("invalid index for filtering");
+        }
+        result.insert(*it);
+    }
+    return result;
+}
+
+//' @title sample the bitset
+//' @description retain a subset of values contained in this bitset, 
+//' where each element has probability 'rate' to remain. 
+//' This function modifies the bitset.
+template<class A>
+inline void bitset_sample_internal(
+    IterableBitset<A>& b,
+    const double rate
+){
+    auto to_remove = Rcpp::sample(
+        b.size(),
+        Rcpp::rbinom(1, b.size(), 1 - std::min(rate, 1.))[0],
+        false, // replacement
+        R_NilValue, // evenly distributed
+        false // one based
+    );
+    std::sort(to_remove.begin(), to_remove.end());
+    auto bitset_i = 0u;
+    auto bitset_it = b.cbegin();
+    for (auto i : to_remove) {
+      while(bitset_i != i) {
+        ++bitset_i;
+        ++bitset_it;
+      }
+      b.erase(*bitset_it);
+      ++bitset_i;
+      ++bitset_it;
+    }
+}
+
+//' @title sample the bitset
+//' @description retain a subset of values contained in this bitset, 
+//' where each element has unique probability to remain given
+//' by elements in the input iterator. 
+//' This function modifies the bitset.
+template<class A, class InputIterator>
+inline void bitset_sample_multi_internal(
+    IterableBitset<A>& b,
+    InputIterator begin,
+    InputIterator end
+){  
+    // sample elements
+    size_t n = b.size();
+    const auto random = Rcpp::runif(n);
+    auto i = 0u;
+    auto probs_it = begin;
+    auto bitset_it = b.cbegin();
+    while (i < n) {
+        if (random[i] >= *(probs_it)) {
+            b.erase(*bitset_it);
+        }
+        ++i;
+        ++probs_it;
+        ++bitset_it;
+    }
+
+}
+
 #endif /* INST_INCLUDE_ITERABLEBITSET_H_ */
+

@@ -9,8 +9,9 @@
 #define INDIVIDUAL_TYPES_H_
 
 #include <Rcpp.h>
-#include "State.h"
-#include "Scheduler.h"
-#include "ProcessAPI.h"
+#include "CategoricalVariable.h"
+#include "IntegerVariable.h"
+#include "DoubleVariable.h"
+#include "Event.h"
 
 #endif /* INDIVIDUAL_TYPES_H_ */

@@ -8,3 +8,7 @@ docs
 ^pkgdown$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.github
+^doc$
+^Meta$
+codecov.yml
