@@ -9,56 +9,6 @@ test_that("bernoulli_process moves a sane number of individuals around", {
   expect_equal(n_s + n_i, 11)
 })
 
-test_that("fixed_probability_forked_state_change_process works properly", {
-  n <- 1e5
-  Source <- State$new('Source', n)
-  Dest1 <- State$new('Dest1', 0)
-  Dest2 <- State$new('Dest2', 0)
-  Dest3 <- State$new('Dest3', 0)
-  Dest4 <- State$new('Dest4', 0)
-  Dest5 <- State$new('Dest5', 0)
-  human <- Individual$new('human', list(Source, Dest1, Dest2, Dest3, Dest4, Dest5))
-  sim <- setup_simulation(list(human))
-
-  rate <- 0.9
-  probs <- c(0.5,0.3,0.1,0.08,0.02)
-
-  execute_process(
-    fixed_probability_forked_state_change_process(
-      'human',
-      'Source',
-      paste0("Dest",1:5),
-      rate,
-      probs
-    ),
-    sim$cpp_api
-  )
-  state_apply_updates(sim$state)
-
-  states <- c(
-    sim$r_api$get_state_size(human, Source),
-    sim$r_api$get_state_size(human, Dest1),
-    sim$r_api$get_state_size(human, Dest2),
-    sim$r_api$get_state_size(human, Dest3),
-    sim$r_api$get_state_size(human, Dest4),
-    sim$r_api$get_state_size(human, Dest5)
-  )
-
-  states_expected <- c(
-    n*(1-rate),
-    n*rate*probs[1],
-    n*rate*probs[2],
-    n*rate*probs[3],
-    n*rate*probs[4],
-    n*rate*probs[5]
-  )
-  states_expected <- as.integer(states_expected)
-
-  ks <- ks.test(states,states_expected)
-  expect_gt(ks$p.value,0.98)
-})
-
-
 test_that("update_state_listener updates the state correctly", {
   state <- CategoricalVariable$new(c('S', 'I'), c(rep('S', 10), 'I'))
   event <- TargetedEvent$new(11)

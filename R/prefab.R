@@ -31,7 +31,7 @@ fixed_probability_multinomial_process <- function(variable, source_state, destin
   stopifnot(length(destination_states) == length(destination_probabilities))
   stopifnot( abs(sum(destination_probabilities) - 1) <= .Machine$double.eps )
   stopifnot(inherits(variable , "CategoricalVariable"))
-  return(individual:::fixed_probability_multinomial_process_internal(
+  return(fixed_probability_multinomial_process_internal(
     variable = variable$.variable,
     source_state = source_state,
     destination_states = destination_states,
@@ -57,7 +57,7 @@ multi_probability_multinomial_process <- function(variable, source_state, destin
   stopifnot( abs(sum(destination_probabilities) - 1) <= .Machine$double.eps )
   stopifnot(inherits(variable , "CategoricalVariable"))
   stopifnot(inherits(rate_variable , "DoubleVariable"))
-  return(individual:::multi_probability_multinomial_process_internal(
+  return(multi_probability_multinomial_process_internal(
     variable = variable$.variable,
     source_state = source_state,
     destination_states = destination_states,
@@ -80,7 +80,7 @@ multi_probability_multinomial_process <- function(variable, source_state, destin
 multi_probability_bernoulli_process <- function(variable, from, to, rate_variable) {
   stopifnot(inherits(variable , "CategoricalVariable"))
   stopifnot(inherits(rate_variable , "DoubleVariable"))
-  return(individual:::multi_probability_bernoulli_process_internal(
+  return(multi_probability_bernoulli_process_internal(
     variable = variable$.variable,
     from = from,
     to = to,

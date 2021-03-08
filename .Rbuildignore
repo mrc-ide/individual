@@ -11,3 +11,4 @@ docs
 .github
 ^doc$
 ^Meta$
+codecov.yml
