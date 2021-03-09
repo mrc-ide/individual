@@ -106,9 +106,35 @@
 <h2 class="hasAnchor">
 <a href="#the-basics" class="anchor"></a>The Basics</h2>
 <p>This package gives you a framework for creating new individual models.</p>
-<p>You start by defining your model. This helps others clearly see the structure of your model.</p>
+<p>You start by defining your variables. This helps others clearly see the structure of your model.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">population</span> <span class="op">&lt;-</span> <span class="fl">1000</span>
+<code class="sourceCode R"><span class="va">population</span> <span class="op">&lt;-</span> <span class="fl">4</span>
+<span class="va">state</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/CategoricalVariable.html">CategoricalVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span>, <span class="st">'R'</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="va">population</span><span class="op">)</span><span class="op">)</span>
+<span class="va">immunity</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/DoubleVariable.html">DoubleVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">population</span>, <span class="fl">0</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span>
+<span class="va">age</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/DoubleVariable.html">DoubleVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span><span class="op">(</span><span class="va">population</span>, rate<span class="op">=</span><span class="fl">1</span><span class="op">/</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">renderer</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/Render.html">Render</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">timesteps</span><span class="op">)</span>
+
+<span class="va">transition</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">from</span>, <span class="va">to</span>, <span class="va">rate</span><span class="op">)</span> <span class="op">{</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">from_state</span> <span class="op">&lt;-</span> <span class="va">state</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="va">from</span><span class="op">)</span>
+    <span class="va">state</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>
+      <span class="va">to</span>,
+      <span class="va">from_state</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span><span class="va">rate</span><span class="op">)</span>
+    <span class="op">)</span>
+  <span class="op">}</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="va">processes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="fu">transition</span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span>, <span class="fl">.2</span><span class="op">)</span>,
+  <span class="fu">transition</span><span class="op">(</span><span class="st">'I'</span>, <span class="st">'R'</span>, <span class="fl">.1</span><span class="op">)</span>,
+  <span class="fu">transition</span><span class="op">(</span><span class="st">'R'</span>, <span class="st">'S'</span>, <span class="fl">.05</span><span class="op">)</span>,
+  <span class="fu"><a href="reference/categorical_count_renderer_process.html">categorical_count_renderer_process</a></span><span class="op">(</span><span class="va">renderer</span>, <span class="va">state</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span>, <span class="st">'R'</span><span class="op">)</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="fu"><a href="reference/simulation_loop.html">simulation_loop</a></span><span class="op">(</span>variables<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span>, processes<span class="op">=</span><span class="va">processes</span>, timesteps<span class="op">=</span><span class="va">timesteps</span><span class="op">)</span>
+<span class="va">renderer</span><span class="op">$</span><span class="fu">to_dataframe</span><span class="op">(</span><span class="op">)</span>
+<span class="va">population</span> <span class="op">&lt;-</span> <span class="fl">1000</span>
 
 <span class="co"># States</span>
 <span class="va">S</span> <span class="op">&lt;-</span> <span class="va">State</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">'S'</span>, <span class="va">population</span><span class="op">)</span>
@@ -125,23 +151,28 @@
   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">S</span>, <span class="va">I</span>, <span class="va">R</span><span class="op">)</span>,
   variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">immunity</span>, <span class="va">age</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
-<p>Then you define processes. These are functions that describe how Variables and States change throughout your simulation.</p>
+<p>Then you define processes. These are functions that describe how variables change in your simulation.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">recovery_event</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/Event.html">Event</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">'recovery'</span><span class="op">)</span>
-<span class="va">recovery_event</span><span class="op">$</span><span class="fu">add_listener</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">api</span>, <span class="va">target</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">api</span><span class="op">$</span><span class="fu">queue_state_update</span><span class="op">(</span><span class="va">human</span>, <span class="va">R</span>, <span class="va">target</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">recovery_event</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/TargetedEvent.html">TargetedEvent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">'recovery'</span><span class="op">)</span>
+<span class="va">recovery_event</span><span class="op">$</span><span class="fu">add_listener</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">timestep</span>, <span class="va">target</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">state</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span><span class="st">'R'</span>, <span class="va">target</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 
-<span class="va">recovery_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">api</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">infected</span> <span class="op">&lt;-</span> <span class="va">api</span><span class="op">$</span><span class="fu">get_state</span><span class="op">(</span><span class="va">human</span>, <span class="va">I</span><span class="op">)</span>
-  <span class="va">already_scheduled</span> <span class="op">&lt;-</span> <span class="va">api</span><span class="op">$</span><span class="fu">get_scheduled</span><span class="op">(</span><span class="va">recovery_event</span><span class="op">)</span>
-  <span class="va">infected</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span><span class="op">(</span><span class="va">infected</span>, <span class="va">already_scheduled</span><span class="op">)</span> 
-  <span class="va">to_recover</span> <span class="op">&lt;-</span> <span class="va">infected</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">infected</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">.5</span><span class="op">]</span>
-  <span class="va">api</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span><span class="va">recovery_event</span>, <span class="va">to_recover</span>, <span class="fl">5</span><span class="op">)</span>
+<span class="va">recovery_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">timestep</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">infected</span> <span class="op">&lt;-</span> <span class="va">state</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">'I'</span><span class="op">)</span>
+  <span class="va">already_scheduled</span> <span class="op">&lt;-</span> <span class="va">recovery_event</span><span class="op">$</span><span class="fu">get_scheduled</span><span class="op">(</span><span class="op">)</span>
+  <span class="va">infected</span> <span class="op">&lt;-</span> <span class="va">infected</span><span class="op">$</span><span class="fu">and</span><span class="op">(</span><span class="va">already_scheduled</span><span class="op">$</span><span class="fu">not</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">to_recover</span> <span class="op">&lt;-</span> <span class="va">infected</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span><span class="fl">.5</span><span class="op">)</span>
+  <span class="va">recovery_event</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span><span class="va">to_recover</span>, delay <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>You can then pass your complete model to the main simulation loop:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/simulate.html">simulate</a></span><span class="op">(</span><span class="va">human</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">recovery_process</span><span class="op">)</span>, <span class="fl">5</span><span class="op">*</span><span class="fl">365</span>, events<span class="op">=</span><span class="op">(</span><span class="va">recovery_event</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/simulation_loop.html">simulation_loop</a></span><span class="op">(</span>
+  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">immunity</span>, <span class="va">age</span><span class="op">)</span>,
+  processes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">recovery_process</span><span class="op">)</span>,
+  events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">recovery_event</span><span class="op">)</span>,
+  timesteps<span class="op">=</span><span class="fl">100</span>
+<span class="op">)</span></code></pre></div>
 <div id="execution-loop" class="section level3">
 <h3 class="hasAnchor">
 <a href="#execution-loop" class="anchor"></a>Execution loop</h3>
@@ -154,49 +185,20 @@
 <p>All processes work off the same simulation state. All state transitions and variable updates are only applied <em>after</em> every process has run.</p>
 <p>When processes create conflicting state updates, the last update will take precedence. For example, if you have a death process and an infection process. You will want to pass the death process last to the simulation loop to make sure those changes persist:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">death_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">api</span><span class="op">)</span> <span class="op">{</span>
+<code class="sourceCode R"><span class="va">death_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">timestep</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># reset the state and all variables</span>
   <span class="co"># ...</span>
 <span class="op">}</span>
 
-<span class="va">infection_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">api</span><span class="op">)</span> <span class="op">{</span>
+<span class="va">infection_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">timestep</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># update the state and variables to represent an infection</span>
   <span class="co"># ...</span>
 <span class="op">}</span>
 
-<span class="fu"><a href="https://rdrr.io/r/stats/simulate.html">simulate</a></span><span class="op">(</span><span class="va">human</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">infection_process</span>, <span class="va">death_process</span><span class="op">)</span>, <span class="fl">5</span><span class="op">*</span><span class="fl">365</span><span class="op">)</span></code></pre></div>
-</div>
-<div id="api" class="section level3">
-<h3 class="hasAnchor">
-<a href="#api" class="anchor"></a>API</h3>
-<p>Processes and listeners interact with the simulation through the API.</p>
-<div id="simulation-state" class="section level4">
-<h4 class="hasAnchor">
-<a href="#simulation-state" class="anchor"></a>Simulation state</h4>
-<p>Processes can view the simulation through:</p>
-<pre><code>api$get_state
-api$get_variable</code></pre>
-<p>and update it through:</p>
-<pre><code>api$queue_state_update
-api$queue_variable_update</code></pre>
-<p>Updates are applied after all the processes are run.</p>
-</div>
-<div id="scheduling" class="section level4">
-<h4 class="hasAnchor">
-<a href="#scheduling" class="anchor"></a>Scheduling</h4>
-<p>Processes can view the schedule with:</p>
-<pre><code>api$get_scheduled</code></pre>
-<p>and update it through:</p>
-<pre><code>api$schedule
-api$clear_schedule</code></pre>
-</div>
-<div id="rendering" class="section level4">
-<h4 class="hasAnchor">
-<a href="#rendering" class="anchor"></a>Rendering</h4>
-<p>Processes can write to the simulation output using</p>
-<pre><code>api$render</code></pre>
-<p>All the API methods are documented in the package reference section.</p>
-</div>
+<span class="fu"><a href="reference/simulation_loop.html">simulation_loop</a></span><span class="op">(</span>
+  processes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">death_process</span>, <span class="va">infection_process</span><span class="op">)</span>,
+  timesteps<span class="op">=</span><span class="fl">100</span>
+<span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="usage" class="section level2">
