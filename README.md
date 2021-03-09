@@ -55,45 +55,6 @@ population <- 4
 state <- CategoricalVariable$new(c('S', 'I', 'R'), rep('S', population))
 immunity <- DoubleVariable$new(runif(population, 0, .2))
 age <- DoubleVariable$new(rexp(population, rate=1/10))
-
-renderer <- Render$new(timesteps)
-
-transition <- function(from, to, rate) {
-  return(function(t) {
-    from_state <- state$get_index_of(from)
-    state$queue_update(
-      to,
-      from_state$sample(rate)
-    )
-  })
-}
-
-processes <- list(
-  transition('S', 'I', .2),
-  transition('I', 'R', .1),
-  transition('R', 'S', .05),
-  categorical_count_renderer_process(renderer, state, c('S', 'I', 'R'))
-)
-
-simulation_loop(variables=list(state), processes=processes, timesteps=timesteps)
-renderer$to_dataframe()
-population <- 1000
-
-# States
-S <- State$new('S', population)
-I <- State$new('I', 0)
-R <- State$new('R', 0)
-
-# Variables
-immunity <- Variable$new('immunity', function(size) runif(size, 0, .2))
-age <- Variable$new('age', function(size) rexp(size, rate=1/10))
-
-# Individuals
-human <- Individual$new(
-  'human',
-  list(S, I, R),
-  variables = list(immunity, age)
-)
 ```
 
 Then you define processes. These are functions that describe how variables change in your simulation.
