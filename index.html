@@ -111,46 +111,7 @@
 <code class="sourceCode R"><span class="va">population</span> <span class="op">&lt;-</span> <span class="fl">4</span>
 <span class="va">state</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/CategoricalVariable.html">CategoricalVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span>, <span class="st">'R'</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="va">population</span><span class="op">)</span><span class="op">)</span>
 <span class="va">immunity</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/DoubleVariable.html">DoubleVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">population</span>, <span class="fl">0</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span>
-<span class="va">age</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/DoubleVariable.html">DoubleVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span><span class="op">(</span><span class="va">population</span>, rate<span class="op">=</span><span class="fl">1</span><span class="op">/</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">renderer</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/Render.html">Render</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">timesteps</span><span class="op">)</span>
-
-<span class="va">transition</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">from</span>, <span class="va">to</span>, <span class="va">rate</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">from_state</span> <span class="op">&lt;-</span> <span class="va">state</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="va">from</span><span class="op">)</span>
-    <span class="va">state</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>
-      <span class="va">to</span>,
-      <span class="va">from_state</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span><span class="va">rate</span><span class="op">)</span>
-    <span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="va">processes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  <span class="fu">transition</span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span>, <span class="fl">.2</span><span class="op">)</span>,
-  <span class="fu">transition</span><span class="op">(</span><span class="st">'I'</span>, <span class="st">'R'</span>, <span class="fl">.1</span><span class="op">)</span>,
-  <span class="fu">transition</span><span class="op">(</span><span class="st">'R'</span>, <span class="st">'S'</span>, <span class="fl">.05</span><span class="op">)</span>,
-  <span class="fu"><a href="reference/categorical_count_renderer_process.html">categorical_count_renderer_process</a></span><span class="op">(</span><span class="va">renderer</span>, <span class="va">state</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span>, <span class="st">'R'</span><span class="op">)</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="fu"><a href="reference/simulation_loop.html">simulation_loop</a></span><span class="op">(</span>variables<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span>, processes<span class="op">=</span><span class="va">processes</span>, timesteps<span class="op">=</span><span class="va">timesteps</span><span class="op">)</span>
-<span class="va">renderer</span><span class="op">$</span><span class="fu">to_dataframe</span><span class="op">(</span><span class="op">)</span>
-<span class="va">population</span> <span class="op">&lt;-</span> <span class="fl">1000</span>
-
-<span class="co"># States</span>
-<span class="va">S</span> <span class="op">&lt;-</span> <span class="va">State</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">'S'</span>, <span class="va">population</span><span class="op">)</span>
-<span class="va">I</span> <span class="op">&lt;-</span> <span class="va">State</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">'I'</span>, <span class="fl">0</span><span class="op">)</span>
-<span class="va">R</span> <span class="op">&lt;-</span> <span class="va">State</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">'R'</span>, <span class="fl">0</span><span class="op">)</span>
-
-<span class="co"># Variables</span>
-<span class="va">immunity</span> <span class="op">&lt;-</span> <span class="va">Variable</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">'immunity'</span>, <span class="kw">function</span><span class="op">(</span><span class="va">size</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">size</span>, <span class="fl">0</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span>
-<span class="va">age</span> <span class="op">&lt;-</span> <span class="va">Variable</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">'age'</span>, <span class="kw">function</span><span class="op">(</span><span class="va">size</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span><span class="op">(</span><span class="va">size</span>, rate<span class="op">=</span><span class="fl">1</span><span class="op">/</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Individuals</span>
-<span class="va">human</span> <span class="op">&lt;-</span> <span class="va">Individual</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
-  <span class="st">'human'</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">S</span>, <span class="va">I</span>, <span class="va">R</span><span class="op">)</span>,
-  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">immunity</span>, <span class="va">age</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+<span class="va">age</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/DoubleVariable.html">DoubleVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span><span class="op">(</span><span class="va">population</span>, rate<span class="op">=</span><span class="fl">1</span><span class="op">/</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Then you define processes. These are functions that describe how variables change in your simulation.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">recovery_event</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/TargetedEvent.html">TargetedEvent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">'recovery'</span><span class="op">)</span>
