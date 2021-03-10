@@ -17,8 +17,8 @@ multi_probability_bernoulli_process(variable, from, to, rate_variable)
 }
 \description{
 Simulates a Bernoulli process where all individuals
-in a given source state 'from' sample whether or not 
-to transition to destination state 'to' with a
+in a given source state \code{from} sample whether or not 
+to transition to destination state \code{to} with a
 individual probability specified by the \code{\link{DoubleVariable}}
-object 'rate_variable'.
+object \code{rate_variable}.
 }

@@ -32,7 +32,7 @@ Bitset <- R6::R6Class(
     },
 
     #' @description remove from the bitset
-    #' @param v an integer vector of elements to remove
+    #' @param v an integer vector of elements (not indices) to remove
     remove = function(v) {
       bitset_remove(self$.bitset, v)
       self
@@ -59,9 +59,15 @@ Bitset <- R6::R6Class(
     not = function() Bitset$new(from = bitset_not(self$.bitset)),
 
     #' @description to sample a subset
-    #' @param rate the success rate for keeping each element
+    #' @param rate the success rate for keeping each element, can be
+    #' a single value for all elements or a vector with of unique
+    #' probabilities for keeping each element
     sample = function(rate) {
-      bitset_sample(self$.bitset, rate)
+      if (length(rate) == 1) {
+        bitset_sample(self$.bitset, rate)
+      } else {
+        bitset_sample_vector(self$.bitset, rate)
+      }      
       self
     },
 

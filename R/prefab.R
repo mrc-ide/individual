@@ -1,6 +1,6 @@
 #' @title Bernoulli process
-#' @description Updates categorical variable from the `from` state to the `to`
-#' state at the rate `rate`
+#' @description Updates categorical variable from the \code{from} state to the \code{to}
+#' state at the rate \code{rate}
 #' @param variable a categorical variable
 #' @param from a string representing the source category
 #' @param to a string representing the destination category
@@ -19,8 +19,8 @@ bernoulli_process <- function(variable, from, to, rate) {
 #' @title Multinomial process
 #' @description Simulates a two-stage process where all individuals
 #' in a given 'source_state' sample whether to leave or not with probability
-#' 'rate'; those who leave go to one of the 'destination_states' with
-#' probabilities contained in the vector 'destination_probabilities'.
+#' \code{rate}; those who leave go to one of the \code{destination_states} with
+#' probabilities contained in the vector \code{destination_probabilities}.
 #' @param variable a \code{\link{CategoricalVariable}} object
 #' @param source_state a string representing the source state
 #' @param destination_states a vector of strings representing the destination states
@@ -42,10 +42,10 @@ fixed_probability_multinomial_process <- function(variable, source_state, destin
 
 #' @title Overdispersed multinomial process
 #' @description Simulates a two-stage process where all individuals
-#' in a given 'source_state' sample whether to leave or not with a
+#' in a given \code{source_state} sample whether to leave or not with a
 #' individual probability specified by the \code{\link{DoubleVariable}}
-#' object 'rate_variable'; those who leave go to one of the 'destination_states' with
-#' probabilities contained in the vector 'destination_probabilities'.
+#' object \code{rate_variable}; those who leave go to one of the \code{destination_states} with
+#' probabilities contained in the vector \code{destination_probabilities}.
 #' @param variable a \code{\link{CategoricalVariable}} object
 #' @param source_state a string representing the source state
 #' @param destination_states a vector of strings representing the destination states
@@ -68,10 +68,10 @@ multi_probability_multinomial_process <- function(variable, source_state, destin
 
 #' @title Overdispersed Bernoulli process
 #' @description Simulates a Bernoulli process where all individuals
-#' in a given source state 'from' sample whether or not 
-#' to transition to destination state 'to' with a
+#' in a given source state \code{from} sample whether or not 
+#' to transition to destination state \code{to} with a
 #' individual probability specified by the \code{\link{DoubleVariable}}
-#' object 'rate_variable'.
+#' object \code{rate_variable}.
 #' @param variable a \code{\link{CategoricalVariable}} object
 #' @param from a string representing the source state
 #' @param to a string representing the destination state
