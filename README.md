@@ -122,11 +122,11 @@ simulation_loop(
 
 ## Usage
 
-Please refer to the vignettes for tutorials on how to start making
-epi models. We recommend first reading `vignette("Tutorial")` which describes
+We recommend first reading `vignette("Tutorial")` which describes
 how to simulate a simple SIR model in "individual", and later `vignette("API")`
 which describes in detail how to use the data structures in "individual" to
-build more complicated models.
+build more complicated models. If you are running into performance issues,
+learn more about how to speed up your model in `vignette("Performance")`.
 
 ## Contributing
 
