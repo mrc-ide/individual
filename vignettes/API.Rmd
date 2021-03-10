@@ -63,7 +63,7 @@ A `DoubleVariable` can be used for continuous variables that are represented as 
 
 In "individual", processes are functions which are called on each time step with a single argument, `t`, the current time step of the simulation. Processes are how most of the dynamics of a model are specified, and are implemented as [closures](http://adv-r.had.co.nz/Functional-programming.html#closures), which are functions that are able to access data not included in the list of function arguments.
 
-An illustrative example can be found in the provided `bernoulli_process`, which moves individuals from one value (source) of a `CategoricalVariable` to another (destination) at a constant probability (such that the dwell time in the "from" state follows a Geometric distribution). 
+An illustrative example can be found in the provided `bernoulli_process`, which moves individuals from one value (source) of a `CategoricalVariable` to another (destination) at a constant probability (such that the dwell time in the "from" state follows a [geometric distribution](https://en.wikipedia.org/wiki/Geometric_distribution)). 
 
 ```{r, eval=FALSE}
 bernoulli_process <- function(variable, from, to, rate) {
@@ -76,7 +76,7 @@ bernoulli_process <- function(variable, from, to, rate) {
 }
 ```
 
-We can test empirically that dwell times do indeed follow a Geometric distribution (and demonstrate uses of `IntegerVariable` objects) by modifying slightly the function to take `int_variable`, an object of class `IntegerVariable`. Each time the returned function closure is called it randomly samples a subset of individuals to move to the destination state, and records the time step at which those individuals move in the `IntegerVariable`. We run the simple "simulation" loop until there are no more individuals left in the source state, and compare the dwell times in the source state to the results of `rgeom`, and see that they are from the same distribution.
+We can test empirically that dwell times do indeed follow a geometric distribution (and demonstrate uses of `IntegerVariable` objects) by modifying slightly the function to take `int_variable`, an object of class `IntegerVariable`. Each time the returned function closure is called it randomly samples a subset of individuals to move to the destination state, and records the time step at which those individuals move in the `IntegerVariable`. We run the simple "simulation" loop until there are no more individuals left in the source state, and compare the dwell times in the source state to the results of `rgeom`, and see that they are from the same distribution.
 
 ```{r}
 bernoulli_process_time <- function(variable, int_variable, from, to, rate) {
@@ -102,7 +102,7 @@ while (state$get_size_of('S') > 0) {
 }
 
 times <- time$get_values()
-ks.test(times, rgeom(n,prob = 0.1))
+chisq.test(times, rgeom(n,prob = 0.1),simulate.p.value = T)
 ```
 By using `IntegerVariable` and `DoubleVariable` objects to modify the probability with which individuals move between states, as well as counters for recording previous state transitions and times, fairly complex dynamics can be specified from simple building blocks. Several "prefab" functions are provided to make function closures corresponding to state transition processes common in epidemiological models.
 
