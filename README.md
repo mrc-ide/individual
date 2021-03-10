@@ -130,7 +130,7 @@ learn more about how to speed up your model in `vignette("Performance")`.
 
 ## Contributing
 
-Thank you! Please refer to the vignette on vignette("Contributing") for info on how to
+Thank you! Please refer to the vignette on `vignette("Contributing")` for info on how to
 contribute :)
 
 ## License
