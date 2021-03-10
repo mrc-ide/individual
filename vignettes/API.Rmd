@@ -18,18 +18,18 @@ knitr::opts_chunk$set(
 library(individual)
 ```
 
-## Table of Contents {#toc}
+<!-- ## Table of Contents {#toc} -->
 
-  1. [Introduction](#intro)
-  2. [Variables](#var)
-      1. [Categorical Variables](#cat_var)
-      2. [Integer Variables](#int_var)
-      3. [Double Variables](#dbl_var)
-  3. [Processes](#proc)
-      1. [Render](#rend)
-  4. [Events](#event)
-      1. [Targeted Events](#t_event)
-  5. [Simulate](#sim)
+<!--   1. [Introduction](#intro) -->
+<!--   2. [Variables](#var) -->
+<!--       1. [Categorical Variables](#cat_var) -->
+<!--       2. [Integer Variables](#int_var) -->
+<!--       3. [Double Variables](#dbl_var) -->
+<!--   3. [Processes](#proc) -->
+<!--       1. [Render](#rend) -->
+<!--   4. [Events](#event) -->
+<!--       1. [Targeted Events](#t_event) -->
+<!--   5. [Simulate](#sim) -->
 
 ## Introduction {#intro}
 
@@ -130,9 +130,18 @@ Events can be scheduled by processes; when an event fires, the event listener is
 
 ### Targeted Events {#t_event}
 
-Unlike `Event` objects, whose listeners are called with a single argument `t`, when the listeners of `TargetedEvent` objects are called, two arguments are passed. The first is the current time step `t`, and the second is a `Bitset` object giving the indies of individuals which will be affected by the event. When scheduling a `TargetedEvent`, a user provides a vector or `Bitset` of indicies for those individuals which will have the event scheduled. In addition, a user provides a delay which the event will occur after. The delay can either be a single value, so all individuals will experience the event after that delay, or a vector of values equal to the number of individuals who were scheduled. This allows, for example individual heterogeneity in distribution of waiting times for some event.
+Unlike `Event` objects, whose listeners are called with a single argument `t`, when the listeners of `TargetedEvent` objects are called, two arguments are passed. The first is the current time step `t`, and the second is a `Bitset` object giving the indies of individuals which will be affected by the event. Because it stores these objects internally to schedule future updates, initialization of `TargetedEvent` objects requires the total population size as an argument. When scheduling a `TargetedEvent`, a user provides a vector or `Bitset` of indicies for those individuals which will have the event scheduled. In addition, a user provides a delay which the event will occur after. The delay can either be a single value, so all individuals will experience the event after that delay, or a vector of values equal to the number of individuals who were scheduled. This allows, for example individual heterogeneity in distribution of waiting times for some event.
 
 Much like regular [Events](#event), previously scheduled targeted events can be canceled, requiring either a `Bitset` or vector of indices for individuals whose events should be canceled.
+
+The code to define events is typically quite brief, although typically another process must be defined that queues them. A recovery event in an SIR model for example, might look like this, where `state` is a `CategoricalVariable`:
+
+```{r,eval=FALSE}
+recovery_event <- TargetedEvent$new('recovery')
+recovery_event$add_listener(function(timestep, target) {
+  state$queue_update('R', target)
+})
+```
 
 ## Simulate {#sim}
 
