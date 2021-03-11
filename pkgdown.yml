@@ -4,5 +4,7 @@ pkgdown_sha: ~
 articles:
   API: API.html
   Contributing: Contributing.html
-last_built: 2021-03-09T10:12Z
+  Performance: Performance.html
+  Tutorial: Tutorial.html
+last_built: 2021-03-11T16:46Z
 

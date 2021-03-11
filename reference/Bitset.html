@@ -102,6 +102,12 @@ perform an operation without destroying your current bitset." />
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
     </li>
+    <li>
+      <a href="../articles/Performance.html">Performance</a>
+    </li>
+    <li>
+      <a href="../articles/Tutorial.html">Tutorial</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -188,7 +194,7 @@ perform an operation without destroying your current bitset.</p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>v</code></dt><dd><p>an integer vector of elements to remove</p></dd>
+<dt><code>v</code></dt><dd><p>an integer vector of elements (not indices) to remove</p></dd>
 
 </dl><p></div></p>
 <p><hr>
@@ -228,7 +234,9 @@ perform an operation without destroying your current bitset.</p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>rate</code></dt><dd><p>the success rate for keeping each element</p></dd>
+<dt><code>rate</code></dt><dd><p>the success rate for keeping each element, can be
+a single value for all elements or a vector with of unique
+probabilities for keeping each element</p></dd>
 
 </dl><p></div></p>
 <p><hr>
