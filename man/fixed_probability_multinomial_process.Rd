@@ -26,6 +26,6 @@ fixed_probability_multinomial_process(
 \description{
 Simulates a two-stage process where all individuals
 in a given 'source_state' sample whether to leave or not with probability
-'rate'; those who leave go to one of the 'destination_states' with
-probabilities contained in the vector 'destination_probabilities'.
+\code{rate}; those who leave go to one of the \code{destination_states} with
+probabilities contained in the vector \code{destination_probabilities}.
 }

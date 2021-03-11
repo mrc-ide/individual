@@ -47,51 +47,42 @@ docker build . -f docker/Dockerfile.dev -t [your image name]
 
 This package gives you a framework for creating new individual models.
 
-You start by defining your model. This helps others clearly see the structure of
+You start by defining your variables. This helps others clearly see the structure of
 your model.
 
 ```R
-population <- 1000
-
-# States
-S <- State$new('S', population)
-I <- State$new('I', 0)
-R <- State$new('R', 0)
-
-# Variables
-immunity <- Variable$new('immunity', function(size) runif(size, 0, .2))
-age <- Variable$new('age', function(size) rexp(size, rate=1/10))
-
-# Individuals
-human <- Individual$new(
-  'human',
-  list(S, I, R),
-  variables = list(immunity, age)
-)
+population <- 4
+state <- CategoricalVariable$new(c('S', 'I', 'R'), rep('S', population))
+immunity <- DoubleVariable$new(runif(population, 0, .2))
+age <- DoubleVariable$new(rexp(population, rate=1/10))
 ```
 
-Then you define processes. These are functions that describe how Variables and
-States change throughout your simulation.
+Then you define processes. These are functions that describe how variables change in your simulation.
 
 ```R
-recovery_event <- Event$new('recovery')
-recovery_event$add_listener(function(api, target) {
-  api$queue_state_update(human, R, target)
+recovery_event <- TargetedEvent$new('recovery')
+recovery_event$add_listener(function(timestep, target) {
+  state$queue_update('R', target)
 })
 
-recovery_process <- function(api) {
-  infected <- api$get_state(human, I)
-  already_scheduled <- api$get_scheduled(recovery_event)
-  infected <- setdiff(infected, already_scheduled) 
-  to_recover <- infected[runif(length(infected)) < .5]
-  api$schedule(recovery_event, to_recover, 5)
+recovery_process <- function(timestep) {
+  infected <- state$get_index_of('I')
+  already_scheduled <- recovery_event$get_scheduled()
+  infected <- infected$and(already_scheduled$not())
+  to_recover <- infected$sample(.5)
+  recovery_event$schedule(to_recover, delay = 5)
 }
 ```
 
 You can then pass your complete model to the main simulation loop:
 
 ```R
-simulate(human, list(recovery_process), 5*365, events=(recovery_event))
+simulation_loop(
+  variables = list(state, immunity, age),
+  processes = list(recovery_process),
+  events = list(recovery_event),
+  timesteps=100
+)
 ```
 
 ### Execution loop
@@ -113,74 +104,33 @@ You will want to pass the death process last to the simulation loop to make sure
 those changes persist:
 
 ```R
-death_process <- function(api) {
+death_process <- function(timestep) {
   # reset the state and all variables
   # ...
 }
 
-infection_process <- function(api) {
+infection_process <- function(timestep) {
   # update the state and variables to represent an infection
   # ...
 }
 
-simulate(human, list(infection_process, death_process), 5*365)
+simulation_loop(
+  processes = list(death_process, infection_process),
+  timesteps=100
+)
 ```
-
-### API
-
-Processes and listeners interact with the simulation through the API.
-
-#### Simulation state
-
-Processes can view the simulation through:
-
-```
-api$get_state
-api$get_variable
-```
-
-and update it through:
-
-```
-api$queue_state_update
-api$queue_variable_update
-```
-
-Updates are applied after all the processes are run.
-
-#### Scheduling
-
-Processes can view the schedule with:
-
-```
-api$get_scheduled
-```
-
-and update it through:
-
-```
-api$schedule
-api$clear_schedule
-```
-
-#### Rendering
-
-Processes can write to the simulation output using
-
-```
-api$render
-```
-
-All the API methods are documented in the package reference section.
 
 ## Usage
 
-Please refer to the vignettes for tutorials on how to start making
-epi models
+We recommend first reading `vignette("Tutorial")` which describes
+how to simulate a simple SIR model in "individual", and later `vignette("API")`
+which describes in detail how to use the data structures in "individual" to
+build more complicated models. If you are running into performance issues,
+learn more about how to speed up your model in `vignette("Performance")`.
 
 ## Contributing
 
-Thank you! Please refer to the vignette on Contributing for info on how to
+Thank you! Please refer to the vignette on `vignette("Contributing")` for info on how to
 contribute :)
 
 ## License

@@ -25,8 +25,8 @@ multi_probability_multinomial_process(
 }
 \description{
 Simulates a two-stage process where all individuals
-in a given 'source_state' sample whether to leave or not with a
+in a given \code{source_state} sample whether to leave or not with a
 individual probability specified by the \code{\link{DoubleVariable}}
-object 'rate_variable'; those who leave go to one of the 'destination_states' with
-probabilities contained in the vector 'destination_probabilities'.
+object \code{rate_variable}; those who leave go to one of the \code{destination_states} with
+probabilities contained in the vector \code{destination_probabilities}.
 }
