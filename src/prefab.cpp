@@ -131,3 +131,33 @@ Rcpp::XPtr<process_t> multi_probability_bernoulli_process_internal(
     ); 
 };
 
+// [[Rcpp::export]]
+Rcpp::XPtr<process_t> infection_age_process_internal(
+    Rcpp::XPtr<CategoricalVariable> state,
+    const std::string from,
+    const std::string to,
+    const Rcpp::XPtr<IntegerVariable> age,
+    const int age_bins
+) {
+    // make pointer to lambda function and return XPtr to R
+    return Rcpp::XPtr<process_t>(
+        new process_t([state,age,age_bins,from,to](size_t t){
+
+            // get number of infectious individuals and total individuals in each age bin
+            std::vector<int> N(age_bins);
+            std::vector<int> I(age_bins);
+            for (int a=1; a <= age_bins; ++a) {
+                N[a-1] = age->get_size_of_set(a);
+            }
+
+            // // sample leavers with their unique prob
+            // individual_index_t leaving_individuals(variable->get_index_of(std::vector<std::string>{from}));
+            // std::vector<double> rate_vector = rate_variable->get_values(leaving_individuals);
+            // bitset_sample_multi_internal(leaving_individuals, rate_vector.begin(), rate_vector.end());
+
+            // variable->queue_update(to, leaving_individuals);
+
+        }),
+        true
+    );
+}

@@ -55,15 +55,13 @@ struct DoubleVariable : public Variable {
         const double a, const double b
     ) const {
         
-        std::vector<size_t> result_ix;
+        auto result = individual_index_t(size);
         for(size_t it = 0; it < values.size(); it++) {
             if( !(values[it] < a) && !(b < values[it]) ) {
-                result_ix.push_back(it);
+                result.insert(it);
             }
         }
-
-        auto result = individual_index_t(size);
-        result.insert_safe(result_ix.begin(), result_ix.end());
+        
         return result;
 
     }

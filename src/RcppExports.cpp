@@ -621,13 +621,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // integer_variable_get_size_of_set
-int integer_variable_get_size_of_set(Rcpp::XPtr<IntegerVariable> variable, std::vector<int> values_set);
+int integer_variable_get_size_of_set(Rcpp::XPtr<IntegerVariable> variable, const std::vector<int> values_set);
 RcppExport SEXP _individual_integer_variable_get_size_of_set(SEXP variableSEXP, SEXP values_setSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< std::vector<int> >::type values_set(values_setSEXP);
+    Rcpp::traits::input_parameter< const std::vector<int> >::type values_set(values_setSEXP);
     rcpp_result_gen = Rcpp::wrap(integer_variable_get_size_of_set(variable, values_set));
     return rcpp_result_gen;
 END_RCPP

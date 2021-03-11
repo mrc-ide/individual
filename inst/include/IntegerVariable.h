@@ -45,34 +45,46 @@ struct IntegerVariable : public Variable {
     virtual individual_index_t get_index_of_set(
         const std::vector<int> values_set
     ) const {
-        std::vector<size_t> result_ix;
+    
+        auto result = individual_index_t(size);
         for(size_t it = 0; it < values.size(); it++){
             auto findit = std::find(values_set.begin(), values_set.end(), values[it]);
             if(findit != values_set.end()){
-                result_ix.push_back(it);
+                result.insert(it);
             }
         }
 
+        return result;
+    }
+
+    // get indices of individuals whose value is in some set
+    virtual individual_index_t get_index_of_set(
+        const int values_set
+    ) const {
+
         auto result = individual_index_t(size);
-        result.insert_safe(result_ix.begin(), result_ix.end());
+        for(size_t it = 0; it < values.size(); it++){
+            if (values[it] == values_set) {
+                result.insert(it);
+            }
+        }
+
         return result;
  
-    } 
+    }
 
     // get indices of individuals whose value is in some [a,b]
     virtual individual_index_t get_index_of_range(
         const int a, const int b
     ) const {
         
-        std::vector<size_t> result_ix;
+        auto result = individual_index_t(size);
         for(size_t it = 0; it < values.size(); it++) {
             if( !(values[it] < a) && !(b < values[it]) ) {
-                result_ix.push_back(it);
+                result.insert(it);
             }
         }
-
-        auto result = individual_index_t(size);
-        result.insert_safe(result_ix.begin(), result_ix.end());
+        
         return result;
 
     }
@@ -89,6 +101,16 @@ struct IntegerVariable : public Variable {
             }
         }
 
+        return result;
+ 
+    }
+
+    // get number of individuals whose value is some specific value
+    virtual int get_size_of_set(
+        const int values_set
+    ) const {
+
+        int result = std::count(values.begin(), values.end(), values_set);
         return result;
  
     }

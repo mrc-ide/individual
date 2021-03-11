@@ -38,7 +38,7 @@ renderers
 \item{\code{individuals}}{to render states for}
 
 \item{\code{renderers}}{additional renderers to execute. Renderers are functions
-which take a SimFrame as an argument and return a list of
+which take the current timestep as an argument and return a list of
 scalar outputs to store to the final render}
 }
 \if{html}{\out{</div>}}
