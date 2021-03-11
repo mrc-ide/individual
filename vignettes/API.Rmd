@@ -18,19 +18,23 @@ knitr::opts_chunk$set(
 library(individual)
 ```
 
-<!-- ## Table of Contents {#toc} -->
+```{r conditional_block, eval=!pkgdown::in_pkgdown(),echo=F}
+knitr::asis_output(
+"## Table of Contents {#toc}
 
-<!--   1. [Introduction](#intro) -->
-<!--   2. [Variables](#var) -->
-<!--       1. [Categorical Variables](#cat_var) -->
-<!--       2. [Integer Variables](#int_var) -->
-<!--       3. [Double Variables](#dbl_var) -->
-<!--   3. [Processes](#proc) -->
-<!--       1. [Render](#rend) -->
-<!--   4. [Events](#event) -->
-<!--       1. [Targeted Events](#t_event) -->
-<!--   5. [Simulate](#sim) -->
-
+  1. [Introduction](#intro)
+  2. [Variables](#var)
+      1. [Categorical Variables](#cat_var)
+      2. [Integer Variables](#int_var)
+      3. [Double Variables](#dbl_var)
+  3. [Processes](#proc)
+      1. [Render](#rend)
+  4. [Events](#event)
+      1. [Targeted Events](#t_event)
+  5. [Simulate](#sim)"
+)
+```
+ 
 ## Introduction {#intro}
 
 This package defines a set of useful primitives for structuring and simulating individual based mechanistic models, with special emphasis to infectious disease modelling. Structuring means that the package lets you specify the state space of the model and transition rules for how state changes over time, and simulating means that the package defines a logical way to put state and transitions together to update state over a time step, and draw trajectories from the individual based model. Generically, transitions are any rules that change state, and in "individual" come in two forms: processes and events. The simulation updates over a discrete-time step, but the size of time step is left unspecified and can be arbitrarily small.
