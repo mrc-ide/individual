@@ -81,7 +81,7 @@ remove from the bitset
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{v}}{an integer vector of elements to remove}
+\item{\code{v}}{an integer vector of elements (not indices) to remove}
 }
 \if{html}{\out{</div>}}
 }
@@ -152,7 +152,9 @@ to sample a subset
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{rate}}{the success rate for keeping each element}
+\item{\code{rate}}{the success rate for keeping each element, can be
+a single value for all elements or a vector with of unique
+probabilities for keeping each element}
 }
 \if{html}{\out{</div>}}
 }

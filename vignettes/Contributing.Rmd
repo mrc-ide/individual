@@ -49,6 +49,7 @@ Large releases will have a `release/*` branch to manage the transition. No new f
 *src/* - The C++ side of the R interface and tests
 
 *inst/include/Variable.h* - The implementations of Variables
+
 *inst/include/Event.h* - The implementations of Events
 
 *tests/* - are divided into unit, integration and performance tests. Integration tests are

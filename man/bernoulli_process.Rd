@@ -16,6 +16,6 @@ bernoulli_process(variable, from, to, rate)
 \item{rate}{the rate to move individuals between categories}
 }
 \description{
-Updates categorical variable from the `from` state to the `to`
-state at the rate `rate`
+Updates categorical variable from the \code{from} state to the \code{to}
+state at the rate \code{rate}
 }
