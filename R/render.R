@@ -14,7 +14,7 @@ Render <- R6::R6Class(
     #' @param individuals to render states for
     #' @param timesteps number of timesteps in the simulation
     #' @param renderers additional renderers to execute. Renderers are functions
-    #' which take a SimFrame as an argument and return a list of
+    #' which take the current timestep as an argument and return a list of
     #' scalar outputs to store to the final render
     initialize = function(timesteps) {
       private$.timesteps = timesteps
