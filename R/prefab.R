@@ -91,6 +91,11 @@ multi_probability_bernoulli_process <- function(variable, from, to, rate_variabl
 #' @title Infection process for age-structured models
 #' @description Simulates infection for age-structured models, where
 #' individuals contact each other at a rate given by some mixing (contact) matrix.
+#' The force of infection on susceptibles in a given age class is computed as:
+#' \deqn{\lambda_{i} = p \sum\limits_{j} C_{i,j} \left( \frac{I_{j}}{N_{j}} \right)  }
+#' Where \eqn{C} is the matrix of contact rates, \eqn{p} is the probability of infection
+#' per-contact. The per-capita probability of infection for susceptible individuals is then:
+#' \deqn{1 - e^{-\lambda_{i} \Delta t}}
 #' @param state a \code{\link{CategoricalVariable}} object
 #' @param susceptible a string representing the susceptible state (usually "S")
 #' @param exposed a string representing the state new infections go to (usually "E" or "I")
