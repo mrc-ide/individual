@@ -181,3 +181,75 @@ test_that("Overdispersed bernoulli process works correctly", {
   expect_true(all(1:3 %in% state_i))
   expect_true(all(9:10 %in% state_s))
 })
+
+test_that("age-structured infection process gives same results as R version", {
+
+  N <- 1e3
+  I0 <- 1e2
+  S0 <- N - I0
+  dt <- 0.1
+  p <- 0.5 
+  c <- 0.5
+
+  health_states_init <- rep("S",N)
+  health_states_init[sample.int(n = N,size = I0)] <- "I"
+
+  Nage <- 10
+  c_mixing <- matrix(data = c/Nage,nrow = Nage,ncol = Nage)
+
+  age <- sample(x = 1:Nage,size = N,replace = T)
+
+  health_R <- CategoricalVariable$new(categories = c("S","I","R"),initial_values = health_states_init)
+  age_R <- IntegerVariable$new(initial_values = age)
+
+  health_cpp <- CategoricalVariable$new(categories = c("S","I","R"),initial_values = health_states_init)
+  age_cpp <- IntegerVariable$new(initial_values = age)
+
+  infection_age_process_R <- function(t){
+    # number of infectious individuals in each age group
+    I <- sapply(X = 1:Nage,FUN = function(a){
+      I_a <- health_R$get_index_of("I")
+      I_a$and(age_R$get_index_of(a))
+      I_a$size()
+    })
+    # total population size of each age group
+    N <- sapply(X = 1:Nage,FUN = function(a){
+      age_R$get_size_of(a)
+    })
+    # compute FOI
+    for(a in 1:Nage){
+      foi <- p * sum(c_mixing[a,] * (I/N)) 
+      S_a <- health_R$get_index_of("S")$and(age_R$get_index_of(a))
+      S_a$sample(rate = pexp(q = foi * dt))
+      health_R$queue_update(value = "I",index = S_a)
+    }
+  }
+
+  infection_age_process_cpp <- infection_age_process(
+    state = health_cpp,
+    susceptible = "S",
+    exposed = "I",
+    infectious = "I",
+    age = age_cpp,
+    age_bins = Nage,
+    p = p,
+    dt = dt,
+    mixing = c_mixing
+  )
+
+  set.seed(9352511L)
+
+  infection_age_process_R(1)
+
+  set.seed(9352511L)
+
+  execute_process(process = infection_age_process_cpp,timestep = 1)
+
+  health_R$.update()
+  health_cpp$.update()
+  
+  expect_equal(
+    health_R$get_index_of("I")$to_vector(),
+    health_cpp$get_index_of("I")$to_vector()
+  )
+})

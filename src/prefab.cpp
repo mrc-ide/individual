@@ -147,12 +147,14 @@ Rcpp::XPtr<process_t> infection_age_process_internal(
     return Rcpp::XPtr<process_t>(
         new process_t([state,age,age_bins,susceptible,exposed,infectious,p,dt,mixing](size_t t){
 
-            // get number of infectious and total individuals in each age bin
-            // and indices of susceptible individuals in each age bin
-            Rcpp::NumericVector N(age_bins);
+            // data structures we need to compute the age-structured force of infection
+            // need NumericVector for sugar elementwise addition, division, and sum
+            Rcpp::NumericVector N(age_bins); 
             Rcpp::NumericVector I(age_bins);
             std::vector<individual_index_t> S(age_bins, state->size);
 
+            // get number of infectious and total individuals in each age bin
+            // and indices of susceptible individuals in each age bin
             for (int a=1; a <= age_bins; ++a) {
 
                 individual_index_t I_a = state->get_index_of(infectious);             
