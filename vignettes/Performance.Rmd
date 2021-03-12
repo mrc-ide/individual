@@ -37,7 +37,7 @@ The "individual" package is designed for running big individual-based models. Bu
 
 The [bitset](https://en.wikipedia.org/wiki/Bit_array) data structure used to store categorical state information, `individual::Bitset` is able to preform set operations extremely quickly using [bitwise operations](https://en.wikipedia.org/wiki/Bitwise_operation). Taking advantage of these operations can lead to very fast processes, when you need to find some particular subset of individuals.
 
-Let's take a look at the recovery process in `vignette("Tutorial")`. A crucial operation here is to get all infectious individuals who are not already scheduled for recovery. The object `I` is a bitset containing all those individuals currently infectious, and `already_scheduled` is another bitset containing those individuals scheduled for a recovery event. Using `already_scheduled$not()` returns a new bitset of those individuals *not* in the set of already scheduled persons. This is passed to the `I$and()`, which modifies `I` in-place so that the result is the intersection of currently infectious persons and persons who have no yet been scheduled for a recovery event, which is precisely the set of people we want.
+Let's take a look at the recovery process in `vignette("Tutorial")`. A crucial operation here is to get all infectious individuals who are not already scheduled for recovery. The object `I` is a bitset containing all those individuals currently infectious, and `already_scheduled` is another bitset containing those individuals scheduled for a recovery event. Using `already_scheduled$not()` returns a new bitset of those individuals *not* in the set of already scheduled persons. This is passed to the `I$and()`, which modifies `I` in-place so that the result is the intersection of currently infectious persons and persons who have not yet been scheduled for a recovery event, which is precisely the set of people we want.
 
 ```{r,eval=FALSE}
 recovery_process <- function(t){
@@ -67,7 +67,7 @@ Bitsets offer methods to preform unions (`Bitset$or()`) and intersections (`Bits
 
 Every time your processes ask for a variable, there is an overhead associated with moving simulation data into R, potentially incurring expensive copying of data.
 
-Because many epidemiological models have similar state transitions, we've included several "prefab" processes and event listeners which provide significant speed improvements and can be used out of the box in models. The processes available are:
+Because many epidemiological models have similar state transitions, we've included several "prefab" processes and event listeners implemented in C++ which provide significant speed improvements and can be used out of the box in models. The functions return pointers which can be passed to the process list of `individual::simulate_loop` or event listeners just like closures in R. The processes available are:
 
   * `individual::bernoulli_process`: moves individuals from one categorical variable state to another at a constant probability
   * `individual::multi_probability_bernoulli_process`: moves individuals from one categorical variable state to another at a 
@@ -76,6 +76,10 @@ Because many epidemiological models have similar state transitions, we've includ
   values with constant probability to leave and multinomially distributed choice of destination state.
   * `individual::multi_probability_multinomial_process`: moves individuals from one categorical variable state to a set of possible destination
   values with individual level probability to leave specified by a `individual::DoubleVariable` object and multinomially distributed choice of destination state.
+  * `individual::infection_age_process`: Simulates infection for age-structured models, where individuals come into contact at a rate given by a mixing (contact) matrix.
+  
+Prefabs for event listeners and renderers:
+
   * `individual::update_category_listener`: event listener for `individual::TargetedEvent` objects which updates the categorical variable state when it fires.
   * `individual::reschedule_listener`: event listener for `individual::TargetedEvent` objects which schedules some new followup event when it fires.
   * `individual::categorical_count_renderer_process`: used for `individual::Render` objects that counts the size of each state in a categorical variable.
@@ -90,7 +94,7 @@ These are the basic steps to add C++ processes to your R package:
 2. Add `individual` to the `LinkingTo` section of your package DESCRIPTION
 3. Write your process
 
-Processes in C++ are of type `Rcpp::XPtr<process_t>`, defined in `common_types.h`. Types for listeners for `individual::Event` and `individual::TargetedEvent` are `listener_t` and `targeted_listener_t`, defined in `Event.h`. Below is how the C++ implementation of
+Processes in C++ are of type `process_t`, defined in `common_types.h`. Types for listeners for `individual::Event` and `individual::TargetedEvent` are `listener_t` and `targeted_listener_t`, defined in `Event.h`. Below is how the C++ implementation of
 `multi_probability_bernoulli_process` is coded.
 
 Note that the return type is a `Rcpp::XPtr` [(see here)](https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1XPtr.html) to a `process_t`, which is implemented as a `std::function` [(see here)](http://www.cplusplus.com/reference/functional/function/) object, a C++ class that can

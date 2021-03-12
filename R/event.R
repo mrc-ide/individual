@@ -9,19 +9,20 @@ Event <- R6::R6Class(
     .listeners = list(),
 
     #' @description Initialise an Event
-    #' @param name, the name of the event
+    #' @param name the name of the event
     initialize = function() {
       self$.event <- create_event()
     },
 
     #' @description Add an event listener
-    #' @param listener the function to be executed on the event
+    #' @param listener the function to be executed on the event, which takes a single
+    #' argument giving the time step when this event is triggered. 
     add_listener = function(listener) {
       self$.listeners <- c(self$.listeners, listener)
     },
 
-    #' @description schedule this event to occur in the future
-    #' @param delay the number of timesteps to wait before triggering the event,
+    #' @description Schedule this event to occur in the future
+    #' @param delay the number of time steps to wait before triggering the event,
     #' can be a scalar or an vector of values for several times in the future
     schedule = function(delay) event_schedule(self$.event, delay),
 
@@ -47,7 +48,7 @@ Event <- R6::R6Class(
     },
 
     .process_listener_cpp = function(listener){
-      individual:::process_listener(
+      process_listener(
         event = self$.event, 
         listener = listener
       )

@@ -14,8 +14,8 @@ filter_bitset(bitset, other)
 \description{
 This non-modifying function returns a new \code{\link{Bitset}}
 object of the same maximum size as the original but which only contains
-those values at the indices specified by the argument `other`.
-Indices in `other` may be specified either as a vector of integers or as
+those values at the indices specified by the argument \code{other}.
+Indices in \code{other} may be specified either as a vector of integers or as
 another bitset. Please note that filtering by another bitset is not a
 "bitwise and" intersection, and will have the same behavior as providing
 an equivalent vector of integer indices.

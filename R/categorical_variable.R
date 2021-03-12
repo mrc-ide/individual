@@ -19,13 +19,13 @@ CategoricalVariable <- R6::R6Class(
       self$.variable <- create_categorical_variable(categories, initial_values)
     },
 
-    #' @description return a \code{\link[individual]{Bitset}} for individuals with the given `values`
+    #' @description return a \code{\link[individual]{Bitset}} for individuals with the given \code{values}
     #' @param values the values to filter
     get_index_of = function(values) {
       Bitset$new(from = categorical_variable_get_index_of(self$.variable, values))
     },
 
-    #' @description return the number of individuals with the given `values`
+    #' @description return the number of individuals with the given \code{values}
     #' @param values the values to filter
     get_size_of = function(values) {
       categorical_variable_get_size_of(self$.variable, values)

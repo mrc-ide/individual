@@ -1,5 +1,5 @@
 #' @title Integer Variable Class
-#' @description Represents a integer-valued variable for an individual.
+#' @description Represents a integer valued variable for an individual.
 #' This class is similar to \code{\link[individual]{CategoricalVariable}},
 #' but can be used for variables with unbounded ranges, or other situations where part
 #' of an individual's state is better represented by an integer, such as
@@ -12,13 +12,12 @@ IntegerVariable <- R6::R6Class(
     .variable = NULL,
 
     #' @description Create a new IntegerVariable
-    #' @param initial_values a vector of the initial value for each which will be coerced to integer type
-    #' individual
+    #' @param initial_values a vector of the initial values for each individual
     initialize = function(initial_values) {
       self$.variable <- create_integer_variable(as.integer(initial_values))
     },
 
-    #' @description get the variable values
+    #' @description Get the variable values
     #' @param index optionally return a subset of the variable vector. If
     #' \code{NULL}, return all values; if passed a \code{\link[individual]{Bitset}}
     #' or integer vector, return values of those individuals.
@@ -33,9 +32,9 @@ IntegerVariable <- R6::R6Class(
     },
 
 
-    #' @description return a bitset for individuals with some subset of values
+    #' @description Return a \code{\link[individual]{Bitset}} for individuals with some subset of values
     #' Either search for indices corresponding to values in \code{set}, or
-    #' for indices corresponding to values in range [a,b].
+    #' for indices corresponding to values in range \eqn{[a,b]}.
     #' @param set a vector of values 
     #' @param a lower bound
     #' @param b upper bound
@@ -50,9 +49,9 @@ IntegerVariable <- R6::R6Class(
         stop("please provide a set of values to check, or both bounds of range [a,b]")        
     },
 
-    #' @description return the number of individuals with some subset of values
+    #' @description Return the number of individuals with some subset of values
     #' Either search for indices corresponding to values in \code{set}, or
-    #' for indices corresponding to values in range [a,b].
+    #' for indices corresponding to values in range \eqn{[a,b]}.
     #' @param set a vector of values 
     #' @param a lower bound
     #' @param b upper bound
@@ -69,16 +68,20 @@ IntegerVariable <- R6::R6Class(
 
     #' @description Queue an update for a variable. There are 4 types of variable update:
     #'
-    #' 1. Subset update. The index vector represents a subset of the variable to
-    #' update. The value vector, of the same size, represents the new values for
-    #' that subset
-    #' 2. Subset fill. The index vector represents a subset of the variable to
-    #' update. The value vector, of size 1, will fill the specified subset
-    #' 3. Variable reset. The index vector is set to \code{NULL} and the value vector
-    #' replaces all of the current values in the simulation. The value vector
-    #' should match the size of the population.
-    #' 4. Variable fill. The index vector is set to \code{NULL} and the value vector,
-    #' of size 1, is used to fill all of the variable values in the population.
+    #' \enumerate{
+    #'  \item{Subset update: }{The argument \code{index} represents a subset of the variable to
+    #' update. The argument \code{values} should be a vector whose length matches the size of \code{index},
+    #' which represents the new values for that subset.}
+    #'  \item{Subset fill: }{The argument \code{index} represents a subset of the variable to
+    #' update. The argument \code{values} should be a single number, which fills the specified subset.}
+    #'  \item{Variable reset: }{The index vector is set to \code{NULL} and the argument \code{values}
+    #' replaces all of the current values in the simulation. \code{values} should be a vector
+    #' whose length should match the size of the population, which fills all the variable values in
+    #' the population}
+    #'  \item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
+    #' should be a single number, which fills all of the variable values in 
+    #' the population.}
+    #' }
     #' @param values a vector or scalar of values to assign at the index
     #' @param index is the index at which to apply the change, use \code{NULL} for the
     #' fill options. If using indices, this may be either a vector of integers or

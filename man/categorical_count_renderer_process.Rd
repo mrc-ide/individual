@@ -7,7 +7,7 @@
 categorical_count_renderer_process(renderer, variable, categories)
 }
 \arguments{
-\item{renderer}{your \code{\link[individual]{Render}} object}
+\item{renderer}{a \code{\link[individual]{Render}} object}
 
 \item{variable}{a \code{\link[individual]{CategoricalVariable}} object}
 
