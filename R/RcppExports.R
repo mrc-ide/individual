@@ -237,6 +237,10 @@ multi_probability_bernoulli_process_internal <- function(variable, from, to, rat
     .Call(`_individual_multi_probability_bernoulli_process_internal`, variable, from, to, rate_variable)
 }
 
+infection_age_process_internal <- function(state, susceptible, exposed, infectious, age, age_bins, p, dt, mixing) {
+    .Call(`_individual_infection_age_process_internal`, state, susceptible, exposed, infectious, age, age_bins, p, dt, mixing)
+}
+
 execute_process <- function(process, timestep) {
     invisible(.Call(`_individual_execute_process`, process, timestep))
 }

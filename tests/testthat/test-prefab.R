@@ -91,7 +91,7 @@ test_that("Multinomial process samples probabilities correctly", {
   state_exp['D'] <- n*l_p*d_p[3]
   state_exp['E'] <- n*l_p*d_p[4]
 
-  pval <- ks.test(x = state_new,y = state_exp)$p.value
+  pval <- chisq.test(x = state_new,y = state_exp, simulate.p.value = TRUE)$p.value
   expect_gte(pval,0.985)
 })
 
