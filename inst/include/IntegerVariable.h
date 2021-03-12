@@ -57,14 +57,14 @@ struct IntegerVariable : public Variable {
         return result;
     }
 
-    // get indices of individuals whose value is in some set
+    // get indices of individuals with a particular value
     virtual individual_index_t get_index_of_set(
-        const int values_set
+        const int value
     ) const {
 
         auto result = individual_index_t(size);
         for(size_t it = 0; it < values.size(); it++){
-            if (values[it] == values_set) {
+            if (values[it] == value) {
                 result.insert(it);
             }
         }
@@ -105,12 +105,12 @@ struct IntegerVariable : public Variable {
  
     }
 
-    // get number of individuals whose value is some specific value
+    // get number of individuals with a particular value
     virtual int get_size_of_set(
-        const int values_set
+        const int value
     ) const {
 
-        int result = std::count(values.begin(), values.end(), values_set);
+        int result = std::count(values.begin(), values.end(), value);
         return result;
  
     }
