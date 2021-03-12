@@ -88,6 +88,43 @@ multi_probability_bernoulli_process <- function(variable, from, to, rate_variabl
   ))
 }
 
+#' @title Infection process for age-structured models
+#' @description Simulates infection for age-structured models, where
+#' individuals contact each other at a rate given by some mixing (contact) matrix.
+#' The force of infection on susceptibles in a given age class is computed as:
+#' \deqn{\lambda_{i} = p \sum\limits_{j} C_{i,j} \left( \frac{I_{j}}{N_{j}} \right)  }
+#' Where \eqn{C} is the matrix of contact rates, \eqn{p} is the probability of infection
+#' per-contact. The per-capita probability of infection for susceptible individuals is then:
+#' \deqn{1 - e^{-\lambda_{i} \Delta t}}
+#' @param state a \code{\link{CategoricalVariable}} object
+#' @param susceptible a string representing the susceptible state (usually "S")
+#' @param exposed a string representing the state new infections go to (usually "E" or "I")
+#' @param infectious a string representing the infected and infectious  state (usually "I")
+#' @param age a \code{\link{IntegerVariable}} giving the age of each individual 
+#' @param age_bins the total number of age bins (groups)
+#' @param p the probability of infection given a contact
+#' @param dt the size of the time step (in units relative to the contact rates in \code{mixing})
+#' @param mixing a mixing (contact) matrix between age groups 
+#' @export
+infection_age_process <- function(state, susceptible, exposed, infectious, age, age_bins, p, dt, mixing) {
+  stopifnot( all(dim(mixing) == age_bins) )
+  stopifnot( inherits(state, "CategoricalVariable") )
+  stopifnot( inherits(age, "IntegerVariable") )
+  return(
+    infection_age_process_internal(
+      state = state$.variable,
+      susceptible = as.character(susceptible),
+      exposed = as.character(exposed),
+      infectious = as.character(infectious),
+      age = age$.variable,
+      age_bins = as.integer(age_bins),
+      p = as.numeric(p),
+      dt = as.numeric(dt),
+      mixing = mixing
+    )
+  )
+}
+
 #' @title Update category listener
 #' @description Updates the category of a subpopulation as the result of an
 #' event firing, to be used in the \code{\link[individual]{TargetedEvent}}
