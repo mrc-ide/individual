@@ -76,6 +76,14 @@ void bitset_or(
 }
 
 //[[Rcpp::export]]
+void bitset_xor(
+    const Rcpp::XPtr<individual_index_t> a,
+    const Rcpp::XPtr<individual_index_t> b
+    ) {
+    (*a) &= ~(*b);
+}
+
+//[[Rcpp::export]]
 void bitset_sample(
     const Rcpp::XPtr<individual_index_t> b,
     double rate

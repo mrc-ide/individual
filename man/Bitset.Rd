@@ -27,6 +27,7 @@ perform an operation without destroying your current bitset.
 \item \href{#method-or}{\code{Bitset$or()}}
 \item \href{#method-and}{\code{Bitset$and()}}
 \item \href{#method-not}{\code{Bitset$not()}}
+\item \href{#method-xor}{\code{Bitset$xor()}}
 \item \href{#method-sample}{\code{Bitset$sample()}}
 \item \href{#method-copy}{\code{Bitset$copy()}}
 \item \href{#method-to_vector}{\code{Bitset$to_vector()}}
@@ -137,6 +138,17 @@ to "bitwise and" or intersect two Bitsets
 to "bitwise not" or complement a Bitset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$not()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-xor"></a>}}
+\if{latex}{\out{\hypertarget{method-xor}{}}}
+\subsection{Method \code{xor()}}{
+to "bitwise xor" or the set difference of this Bitset with another
+(keep elements of this Bitset which are not in \code{other}).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$xor(other)}\if{html}{\out{</div>}}
 }
 
 }

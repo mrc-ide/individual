@@ -42,6 +42,19 @@ test_that("bitset or works", {
   expect_equal(a$to_vector(), c(1, 3, 5, 6, 7))
 })
 
+test_that("bitset xor works", {
+  a <- Bitset$new(100)
+  b <- Bitset$new(100)
+  a0 <- 1:50
+  b0 <- 30:70
+  a$insert(a0)
+  b$insert(b0)
+  a$xor(b)
+  expect_equal(
+    a$to_vector(), setdiff(a0,b0)
+  )
+})
+
 test_that("bitset combinations work", {
   a <- Bitset$new(10)$not()
   b <- Bitset$new(10)

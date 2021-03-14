@@ -108,6 +108,17 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// bitset_xor
+void bitset_xor(const Rcpp::XPtr<individual_index_t> a, const Rcpp::XPtr<individual_index_t> b);
+RcppExport SEXP _individual_bitset_xor(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    bitset_xor(a, b);
+    return R_NilValue;
+END_RCPP
+}
 // bitset_sample
 void bitset_sample(const Rcpp::XPtr<individual_index_t> b, double rate);
 RcppExport SEXP _individual_bitset_sample(SEXP bSEXP, SEXP rateSEXP) {
@@ -781,6 +792,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_bitset_and", (DL_FUNC) &_individual_bitset_and, 2},
     {"_individual_bitset_not", (DL_FUNC) &_individual_bitset_not, 1},
     {"_individual_bitset_or", (DL_FUNC) &_individual_bitset_or, 2},
+    {"_individual_bitset_xor", (DL_FUNC) &_individual_bitset_xor, 2},
     {"_individual_bitset_sample", (DL_FUNC) &_individual_bitset_sample, 2},
     {"_individual_bitset_sample_vector", (DL_FUNC) &_individual_bitset_sample_vector, 2},
     {"_individual_bitset_to_vector", (DL_FUNC) &_individual_bitset_to_vector, 1},

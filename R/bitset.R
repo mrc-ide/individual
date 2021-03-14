@@ -58,6 +58,13 @@ Bitset <- R6::R6Class(
     #' @description to "bitwise not" or complement a Bitset
     not = function() Bitset$new(from = bitset_not(self$.bitset)),
 
+    #' @description to "bitwise xor" or the set difference of this Bitset with another
+    #' (keep elements of this Bitset which are not in \code{other}).
+    xor = function(other){
+      bitset_xor(self$.bitset, other$.bitset)
+      self
+    },
+
     #' @description to sample a subset
     #' @param rate the success rate for keeping each element, can be
     #' a single value for all elements or a vector with of unique
