@@ -1,5 +1,5 @@
 #' @title DoubleVariable Class
-#' @description Represents a continuous variable for an individual in our simulation
+#' @description Represents a continuous variable for an individual.
 #' @export
 DoubleVariable <- R6::R6Class(
   'DoubleVariable',
@@ -28,8 +28,7 @@ DoubleVariable <- R6::R6Class(
     },
 
     #' @description return a \code{\link[individual]{Bitset}} giving individuals 
-    #' whose value lies in an interval
-    #' Search for indices corresponding to values in the interval [a,b].
+    #' whose value lies in an interval \eqn{[a,b]}.
     #' @param a lower bound
     #' @param b upper bound
     get_index_of = function(a, b) {
@@ -38,7 +37,7 @@ DoubleVariable <- R6::R6Class(
     },
 
     #' @description return the number of individuals whose value lies in an interval
-    #' Count individuals whose value lies in the interval [a,b].
+    #' Count individuals whose value lies in an interval \eqn{[a,b]}.
     #' @param a lower bound
     #' @param b upper bound
     get_size_of = function(a, b) {
@@ -47,17 +46,20 @@ DoubleVariable <- R6::R6Class(
     },
 
     #' @description Queue an update for a variable. There are 4 types of variable update:
-    #'
-    #' 1. Subset update. The index vector represents a subset of the variable to
-    #' update. The value vector, of the same size, represents the new values for
-    #' that subset
-    #' 2. Subset fill. The index vector represents a subset of the variable to
-    #' update. The value vector, of size 1, will fill the specified subset
-    #' 3. Variable reset. The index vector is set to \code{NULL} and the value vector
-    #' replaces all of the current values in the simulation. The value vector is
-    #' should match the size of the population.
-    #' 4. Variable fill. The index vector is set to \code{NULL} and the value vector,
-    #' of size 1, is used to fill all of the variable values in the population.
+    #' \enumerate{
+    #'  \item{Subset update: }{The argument \code{index} represents a subset of the variable to
+    #' update. The argument \code{values} should be a vector whose length matches the size of \code{index},
+    #' which represents the new values for that subset.}
+    #'  \item{Subset fill: }{The argument \code{index} represents a subset of the variable to
+    #' update. The argument \code{values} should be a single number, which fills the specified subset.}
+    #'  \item{Variable reset: }{The index vector is set to \code{NULL} and the argument \code{values}
+    #' replaces all of the current values in the simulation. \code{values} should be a vector
+    #' whose length should match the size of the population, which fills all the variable values in
+    #' the population}
+    #'  \item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
+    #' should be a single number, which fills all of the variable values in 
+    #' the population.}
+    #' }
     #' @param values a vector or scalar of values to assign at the index
     #' @param index is the index at which to apply the change, use \code{NULL} for the
     #' fill options. If using indices, this may be either a vector of integers or

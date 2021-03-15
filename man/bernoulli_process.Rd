@@ -13,9 +13,9 @@ bernoulli_process(variable, from, to, rate)
 
 \item{to}{a string representing the destination category}
 
-\item{rate}{the rate to move individuals between categories}
+\item{rate}{the probability to move individuals between categories}
 }
 \description{
 Updates categorical variable from the \code{from} state to the \code{to}
-state at the rate \code{rate}
+state with probability \code{rate}
 }

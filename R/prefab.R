@@ -1,10 +1,10 @@
 #' @title Bernoulli process
 #' @description Updates categorical variable from the \code{from} state to the \code{to}
-#' state at the rate \code{rate}
+#' state with probability \code{rate}
 #' @param variable a categorical variable
 #' @param from a string representing the source category
 #' @param to a string representing the destination category
-#' @param rate the rate to move individuals between categories
+#' @param rate the probability to move individuals between categories
 #' @export
 bernoulli_process <- function(variable, from, to, rate) {
   stopifnot(inherits(variable, "CategoricalVariable"))
@@ -18,7 +18,7 @@ bernoulli_process <- function(variable, from, to, rate) {
 
 #' @title Multinomial process
 #' @description Simulates a two-stage process where all individuals
-#' in a given 'source_state' sample whether to leave or not with probability
+#' in a given \code{source_state} sample whether to leave or not with probability
 #' \code{rate}; those who leave go to one of the \code{destination_states} with
 #' probabilities contained in the vector \code{destination_probabilities}.
 #' @param variable a \code{\link{CategoricalVariable}} object
@@ -94,7 +94,7 @@ multi_probability_bernoulli_process <- function(variable, from, to, rate_variabl
 #' The force of infection on susceptibles in a given age class is computed as:
 #' \deqn{\lambda_{i} = p \sum\limits_{j} C_{i,j} \left( \frac{I_{j}}{N_{j}} \right)  }
 #' Where \eqn{C} is the matrix of contact rates, \eqn{p} is the probability of infection
-#' per-contact. The per-capita probability of infection for susceptible individuals is then:
+#' per contact. The per-capita probability of infection for susceptible individuals is then:
 #' \deqn{1 - e^{-\lambda_{i} \Delta t}}
 #' @param state a \code{\link{CategoricalVariable}} object
 #' @param susceptible a string representing the susceptible state (usually "S")
@@ -152,7 +152,7 @@ reschedule_listener <- function(event, delay) {
 
 #' @title Render Categories
 #' @description Renders the number of individuals in each category
-#' @param renderer your \code{\link[individual]{Render}} object
+#' @param renderer a \code{\link[individual]{Render}} object
 #' @param variable a \code{\link[individual]{CategoricalVariable}} object
 #' @param categories a character vector of categories to render
 #' @export

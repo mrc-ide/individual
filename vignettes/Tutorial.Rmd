@@ -33,11 +33,11 @@ knitr::asis_output(
 
 ## Introduction {#intro}
 
-The [Susceptible-Infectious-Recovered (SIR) model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model) is the "hello, world!" for infectious disease simulations, and here we describe how to build it in "individual". This tutorial will illustrate the use of events, processes, and rendering output.
+The [Susceptible-Infectious-Recovered (SIR) model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model) is the "hello, world!" model for infectious disease simulations, and here we describe how to build it in "individual". This tutorial will illustrate the use of events, processes, and rendering output.
 
 ### Specification {#spec}
 
-To start, we should define some constants. The epidemic will be simulated in a population of 1000, where 5 are initially infectious, whose indices are randomly sampled. The effective contact rate $\beta$ will be a function of the deterministic $R_{0}$ and recovery rate $\gamma$. We also specify `dt`, which is the size of the time step $(\Delta t)$. Because "individual" does not specify the size of the time step, by adjusting transition probabilities appropriately we can scale the model to any desired `dt`. If the maximum time is `tmax` then the number of discrete time steps with some resolution is `tmax/dt`.
+To start, we should define some constants. The epidemic will be simulated in a population of 1000, where 5 persons are initially infectious, whose indices are randomly sampled. The effective contact rate $\beta$ will be a function of the deterministic $R_{0}$ and recovery rate $\gamma$. We also specify `dt`, which is the size of the time step $(\Delta t)$. Because "individual" does not specify the size of the time step, by adjusting transition probabilities appropriately we can scale the model to any desired `dt`. If the maximum time is `tmax` then the number of discrete time steps with some resolution is `tmax/dt`.
 
 ```{r}
 N <- 1e3
@@ -62,7 +62,7 @@ health <- CategoricalVariable$new(categories = health_states,initial_values = he
 
 ### Processes {#proc}
 
-In order to model infection, we need a process. This is a function that takes only a single argument, `t`, for the current time step (unused here, but can model time-dependent processes, such as seasonality or school holiday). Within the function, we get the current number of infectious individuals, then calculate the *per-capita* force of infection, $\lambda = \beta I/N$, on each susceptible person, $\beta I/N$. Next we get a `individual::Bitset` containing those susceptible individuals and use the `base::sample` method to random select those who will be infected on this time step. The probability is given by $1 - e^{-\lambda\Delta t}$. This is the same as the CDF of an exponential random variate so we use `stats::pexp` to compute that quantity. Finally, we queue a state update for those individuals who were sampled.
+In order to model infection, we need a process. This is a function that takes only a single argument, `t`, for the current time step (unused here, but can model time-dependent processes, such as seasonality or school holiday). Within the function, we get the current number of infectious individuals, then calculate the *per-capita* force of infection on each susceptible person, $\lambda = \beta I/N$. Next we get a `individual::Bitset` containing those susceptible individuals and use the `sample` method to randomly select those who will be infected on this time step. The probability is given by $1 - e^{-\lambda\Delta t}$. This is the same as the CDF of an exponential random variate so we use `stats::pexp` to compute that quantity. Finally, we queue a state update for those individuals who were sampled.
 
 ```{r}
 infection_process <- function(t){
@@ -76,7 +76,7 @@ infection_process <- function(t){
 
 ### Events {#event}
 
-Now we need to model recovery. For geometrically distributed infectious periods, we could use another process that randomly samples some individuals each time step to recover, but we'll use a `individual::TargetedEvent` to illustrate their use. The recovery event is quite simple, and the "listener" which is added is the function that is called for a queued event, taking `target`, a `individual::Bitset` of scheduled individuals, as its second argument. Those individuals are scheduled for a state update within the listener function body. 
+Now we need to model recovery. For geometrically distributed infectious periods, we could use another process that randomly samples some individuals each time step to recover, but we'll use a `individual::TargetedEvent` to illustrate their use. The recovery event is quite simple, and the "listener" which is added is a function that is called when the event triggers, taking `target`, a `individual::Bitset` of scheduled individuals, as its second argument. Those individuals are scheduled for a state update within the listener function body. 
 
 ```{r}
 recovery_event <- TargetedEvent$new(population_size = N)
@@ -87,7 +87,7 @@ recovery_event$add_listener(function(t, target) {
 
 Finally, we need to define a recovery process that queues future recovery events. We first get `individual::Bitset` objects of those currently infectious individuals and those who have already been scheduled for a recovery. Then, using bitwise operations, we get the intersection of already infectious persons with persons who have not been scheduled, precisely those who need to have recovery times sampled and recoveries scheduled. We sample those times from `stats::rgeom`, where the probability for recovery is $1-e^{-\gamma \Delta t}$. Note that we add one to the resulting vector, because by default R uses a "number of failures" parameterization rather than "number of trials", meaning it would be possible for an individual to be infectious for 0 time steps without the correction. Finally we schedule the recovery using the recovery event object.
 
-We note at this point because of the geometric distribution of infectious duration, using a `individual::TargetedEvent` is not necessary and a recovery process much like the infection process would have sufficed. Also it would be possible to queue the recovery event at the same time the infection state update was made, but we separate event and process for illustration of how the package works.
+We note at this point would be possible to queue the recovery event at the same time the infection state update was made, but we separate event and process for illustration of how the package works.
 
 ```{r}
 recovery_process <- function(t){

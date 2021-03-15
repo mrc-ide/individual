@@ -1,7 +1,9 @@
 #' @title A Bitset Class
-#' @description Allow fast integer set operations in R. WARNING: all operations
-#' (except `$not`) are in-place so please use `$copy` if you would like to
-#' perform an operation without destroying your current bitset.
+#' @description This is a data strucutre that compactly stores the presence of 
+#' integers in some finite set (\code{max_size}), and can 
+#' efficiently perform set operations (union, intersection, complement). 
+#' WARNING: all operations (except \code{$not}) are in-place so please use \code{$copy} 
+#' if you would like to perform an operation without destroying your current bitset.
 #' @export Bitset
 Bitset <- R6::R6Class(
   'Bitset',
@@ -56,10 +58,11 @@ Bitset <- R6::R6Class(
     },
 
     #' @description to "bitwise not" or complement a Bitset
+    #' This method returns a new Bitset rather than doing in-place modification.
     not = function() Bitset$new(from = bitset_not(self$.bitset)),
 
-    #' @description to sample a subset
-    #' @param rate the success rate for keeping each element, can be
+    #' @description to sample a Bitset
+    #' @param rate the success probability for keeping each element, can be
     #' a single value for all elements or a vector with of unique
     #' probabilities for keeping each element
     sample = function(rate) {
@@ -83,8 +86,8 @@ Bitset <- R6::R6Class(
 #' @title Filter a bitset
 #' @description This non-modifying function returns a new \code{\link{Bitset}}
 #' object of the same maximum size as the original but which only contains
-#' those values at the indices specified by the argument `other`.
-#' Indices in `other` may be specified either as a vector of integers or as
+#' those values at the indices specified by the argument \code{other}.
+#' Indices in \code{other} may be specified either as a vector of integers or as
 #' another bitset. Please note that filtering by another bitset is not a
 #' "bitwise and" intersection, and will have the same behavior as providing
 #' an equivalent vector of integer indices.
