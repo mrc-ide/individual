@@ -54,7 +54,7 @@ std::vector<std::string> categorical_variable_get_categories(
     ) {
     std::vector<std::string> categories;
     categories.reserve(variable->indices.size());
-    for (auto& it : variable->indices) {
+    for (const auto& it : variable->indices) {
         categories.emplace_back(it.first);
     }
     return categories;
