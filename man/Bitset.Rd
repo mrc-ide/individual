@@ -29,6 +29,8 @@ if you would like to perform an operation without destroying your current bitset
 \item \href{#method-or}{\code{Bitset$or()}}
 \item \href{#method-and}{\code{Bitset$and()}}
 \item \href{#method-not}{\code{Bitset$not()}}
+\item \href{#method-xor}{\code{Bitset$xor()}}
+\item \href{#method-set_difference}{\code{Bitset$set_difference()}}
 \item \href{#method-sample}{\code{Bitset$sample()}}
 \item \href{#method-copy}{\code{Bitset$copy()}}
 \item \href{#method-to_vector}{\code{Bitset$to_vector()}}
@@ -140,6 +142,28 @@ to "bitwise not" or complement a Bitset
 This method returns a new Bitset rather than doing in-place modification.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$not()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-xor"></a>}}
+\if{latex}{\out{\hypertarget{method-xor}{}}}
+\subsection{Method \code{xor()}}{
+to "bitwise xor" or get the symmetric difference of two Bitsets
+(keep elements in either Bitset but not in their intersection)
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$xor(other)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_difference"></a>}}
+\if{latex}{\out{\hypertarget{method-set_difference}{}}}
+\subsection{Method \code{set_difference()}}{
+Take the set difference of this Bitset with another
+(keep elements of this Bitset which are not in \code{other}).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$set_difference(other)}\if{html}{\out{</div>}}
 }
 
 }
