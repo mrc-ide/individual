@@ -90,9 +90,18 @@ Unfortunately, we don't have a prefab for every situation. Please feel free to w
 
 These are the basic steps to add C++ processes to your R package:
 
-1. Run `usethis::use_rcpp` to set your package up for C++ development
-2. Add `individual` to the `LinkingTo` section of your package DESCRIPTION
-3. Write your process
+1. Run `usethis::use_rcpp` to set your package up for C++ development.
+2. Add `individual` to the `LinkingTo` section of your package DESCRIPTION.
+3. If you package is named `mypackage`, create a header file containing `#include<individual.h>` in any of these locations:
+  ```
+  src/mypackage_types.h
+  src/mypackage_types.hpp
+  inst/include/mypackage_types.h
+  inst/include/mypackage_types.hpp
+  ```
+  Then this header file will be automatically included in `RcppExports.cpp`. For more information, see section "2.5 Types in Generated Code" in the [Rcpp Attributes vignette](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf).
+  
+4. Write your process!
 
 Processes in C++ are of type `process_t`, defined in `common_types.h`. Types for listeners for `individual::Event` and `individual::TargetedEvent` are `listener_t` and `targeted_listener_t`, defined in `Event.h`. Below is how the C++ implementation of
 `multi_probability_bernoulli_process` is coded.
