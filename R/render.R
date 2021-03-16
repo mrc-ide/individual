@@ -1,5 +1,5 @@
-#' Class: Render
-#' Class to render output for the simulation
+#' @title Render
+#' @description Class to render output for the simulation
 #' @export
 Render <- R6::R6Class(
   'Render',
@@ -8,14 +8,11 @@ Render <- R6::R6Class(
     .timesteps = 0
   ),
   public = list(
+
     #' @description
     #' Initialise a renderer for the simulation, creates the default state
     #' renderers
-    #' @param individuals to render states for
     #' @param timesteps number of timesteps in the simulation
-    #' @param renderers additional renderers to execute. Renderers are functions
-    #' which take the current timestep as an argument and return a list of
-    #' scalar outputs to store to the final render
     initialize = function(timesteps) {
       private$.timesteps = timesteps
       private$.vectors[['timestep']] <- seq_len(timesteps)
@@ -37,7 +34,7 @@ Render <- R6::R6Class(
     },
 
     #' @description
-    #' Make a dataframe for the render
+    #' Return the render as a \code{\link[base]{data.frame}}
     to_dataframe = function() {
       data.frame(private$.vectors)
     }

@@ -41,6 +41,6 @@ individuals contact each other at a rate given by some mixing (contact) matrix.
 The force of infection on susceptibles in a given age class is computed as:
 \deqn{\lambda_{i} = p \sum\limits_{j} C_{i,j} \left( \frac{I_{j}}{N_{j}} \right)  }
 Where \eqn{C} is the matrix of contact rates, \eqn{p} is the probability of infection
-per-contact. The per-capita probability of infection for susceptible individuals is then:
+per contact. The per-capita probability of infection for susceptible individuals is then:
 \deqn{1 - e^{-\lambda_{i} \Delta t}}
 }

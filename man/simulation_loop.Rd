@@ -21,7 +21,8 @@ simulation_loop(
 \item{timesteps}{the number of timesteps to simulate}
 }
 \description{
-A premade simulation loop
+Run a simulation where event listeners take precedence 
+over processes for state changes.
 }
 \examples{
 population <- 4

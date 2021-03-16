@@ -1,5 +1,6 @@
 #' @title A premade simulation loop
-#'
+#' @description Run a simulation where event listeners take precedence 
+#' over processes for state changes.
 #' @param variables a list of Variables
 #' @param events a list of Events
 #' @param processes a list of processes to execute on each timestep
@@ -55,7 +56,7 @@ simulation_loop <- function(
   }
 }
 
-#' @title Execute a cpp or R process in the simulation
+#' @title Execute a C++ or R process in the simulation
 #' @param p the process to execute
 #' @param t the timestep to pass to the process
 #' @noRd

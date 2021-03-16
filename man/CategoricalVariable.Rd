@@ -45,7 +45,7 @@ individual}
 \if{html}{\out{<a id="method-get_index_of"></a>}}
 \if{latex}{\out{\hypertarget{method-get_index_of}{}}}
 \subsection{Method \code{get_index_of()}}{
-return a \code{\link[individual]{Bitset}} for individuals with the given `values`
+return a \code{\link[individual]{Bitset}} for individuals with the given \code{values}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$get_index_of(values)}\if{html}{\out{</div>}}
 }
@@ -62,7 +62,7 @@ return a \code{\link[individual]{Bitset}} for individuals with the given `values
 \if{html}{\out{<a id="method-get_size_of"></a>}}
 \if{latex}{\out{\hypertarget{method-get_size_of}{}}}
 \subsection{Method \code{get_size_of()}}{
-return the number of individuals with the given `values`
+return the number of individuals with the given \code{values}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$get_size_of(values)}\if{html}{\out{</div>}}
 }

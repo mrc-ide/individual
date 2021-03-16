@@ -5,7 +5,7 @@
 \title{TargetedEvent Class}
 \description{
 Describes a targeted event in the simulation
-This is useful for events which are triggered for a sub-population
+This is useful for events which are triggered for a sub-population.
 }
 \section{Super class}{
 \code{\link[individual:Event]{individual::Event}} -> \code{TargetedEvent}
@@ -35,7 +35,7 @@ This is useful for events which are triggered for a sub-population
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Initialise a Triggered event
+Initialise a TargetedEvent
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$new(population_size)}\if{html}{\out{</div>}}
 }
@@ -43,7 +43,7 @@ Initialise a Triggered event
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{population_size}}{the size of the target population}
+\item{\code{population_size}}{the size of the population}
 }
 \if{html}{\out{</div>}}
 }
@@ -52,7 +52,7 @@ Initialise a Triggered event
 \if{html}{\out{<a id="method-schedule"></a>}}
 \if{latex}{\out{\hypertarget{method-schedule}{}}}
 \subsection{Method \code{schedule()}}{
-schedule this event to occur in the future
+Schedule this event to occur in the future
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$schedule(target, delay)}\if{html}{\out{</div>}}
 }
@@ -73,7 +73,7 @@ can be a scalar or a vector of values for each target individual}
 \if{html}{\out{<a id="method-get_scheduled"></a>}}
 \if{latex}{\out{\hypertarget{method-get_scheduled}{}}}
 \subsection{Method \code{get_scheduled()}}{
-Get the individuals who are scheduled
+Get the individuals who are scheduled as a \code{\link[individual]{Bitset}}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$get_scheduled()}\if{html}{\out{</div>}}
 }

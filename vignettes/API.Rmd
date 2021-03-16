@@ -37,23 +37,23 @@ knitr::asis_output(
  
 ## Introduction {#intro}
 
-This package defines a set of useful primitives for structuring and simulating individual based mechanistic models, with special emphasis to infectious disease modelling. Structuring means that the package lets you specify the state space of the model and transition rules for how state changes over time, and simulating means that the package defines a logical way to put state and transitions together to update state over a time step, and draw trajectories from the individual based model. Generically, transitions are any rules that change state, and in "individual" come in two forms: processes and events. The simulation updates over a discrete-time step, but the size of time step is left unspecified and can be arbitrarily small.
+This package defines a set of useful primitives for structuring and simulating individual based mechanistic models, with special emphasis on infectious disease modelling. *Structuring* means that the package lets you specify the state space of the model and transition rules for how state changes over time, and *simulating* means that the package defines a principled way to put state and transitions together to update state over a time step, and draw trajectories from the individual based model. Generically, transitions are any rules that change state, and in "individual" come in two forms: [processes](#proc) and [events](#event). The simulation updates over a discrete-time step, but the size of time step is left unspecified and can be arbitrarily small.
 
-This vignette provides an explanation of the various primitive elements provided by the "individual" package for modelling and how they work together. Please see the other vignettes for practical examples.
+This vignette provides a description of the various primitive elements provided by the "individual" package for modelling and explains how they work together. Please see the `vignette("Tutorial")` for a practical example.
 
 ## Variables {#var}
 
-In "individual", variables are how one defines state. While many variables will be dynamically updated throughout a simulation, they don't have to be. Modeling of an inherent propensity for some event for each individual that doesn't change over a simulation will still be specified using a variable object. Variables represent any attribute that is attached to an individual.
+In "individual", variables are how one defines state, and represent any attribute of an individual. While many variables will be dynamically updated throughout a simulation, they don't have to be. Specifying a baseline characteristic for each individual that doesn't change over a simulation will still be specified using a variable object.
 
-There are 3 types of variable objects: `individual::CategoricalVariable` for discrete variables taking values in a finite set, `individual::IntegerVariable` for discrete integer variables, and `individual::DoubleVariable` for real (floating-point) number variables.
+There are 3 types of variable objects: `individual::CategoricalVariable` for discrete variables taking values in a finite set, `individual::IntegerVariable` for discrete integer variables, and `individual::DoubleVariable` for continuous variables.
 
 ### Categorical Variable {#cat_var}
 
-Most epidemiological models will *require* use of categorical variables to define state, for example, the Susceptible, Infectious, and Recovered classes in the classic [SIR model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model). In general, for compartmental models, each set of compartments which describes an aspect of an individual (SIR describing infection status, for example), should be mapped to a single `individual::CategoricalVariable` in "individual". Note that multiple `individual::CategoricalVariable` objects can be instantiated to express more complex descriptions of state; if individuals can also be in a high risk or low risk group, a second object can be instantiated to represent risk status.
+Most epidemiological models will *require* use of categorical variables to define state, for example, the Susceptible, Infectious, and Recovered classes in the classic [SIR model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model). In general, for compartmental models, each set of compartments which describes an aspect of an individual, should be mapped to a single `individual::CategoricalVariable`. Note that multiple `individual::CategoricalVariable` objects can be instantiated to express more complex descriptions of state; if individuals can also be in a high risk or low risk group, a second object can be instantiated to represent risk status.
 
 There can be an unlimited number of categorical variable objects, but every individual can only take on a single value for each of them at any time. The allowable (categorical) state space for each individual is essentially a contingency table where the margins are given by the values for each `individual::CategoricalVariable`.
 
-`individual::CategoricalVariable` objects internally store state as a hash table of category values (with string keys), each of which contains a `individual::Bitset` telling us the indices of individuals in that state, making operations on `individual::CategoricalVariable` objects, or chains of operations extremely fast, and therefore should be the preferred variable type for discrete variables. However, cases in which discrete variables have a large number of values or when many values have few or no individuals in that "bin" should use the `individual::IntegerVariable` instead.
+`individual::CategoricalVariable` objects internally store state as a hash table of category values (with string keys), each of which contains a `individual::Bitset` telling us the indices of individuals in that state, making operations on `individual::CategoricalVariable` objects, or chains of operations extremely fast, and therefore should be the preferred variable type for discrete variables. However, cases in which discrete variables have a large number of values or when many values have few or no individuals in that category should use the `individual::IntegerVariable` instead.
 
 ### Integer Variable {#int_var}
 
@@ -61,7 +61,7 @@ An `individual::IntegerVariable` should be used for discrete variables that may 
 
 ### Double Variable {#dbl_var}
 
-A `individual::DoubleVariable` can be used for continuous variables that are represented as double precision floating-point numbers (hence, "double" variable). Such variables are internally stored as a vector of doubles of length equal to the number of individuals in the simulation. Examples of this variable type might include levels of immune response or concentration of some environmental pollutant in the blood.
+A `individual::DoubleVariable` can be used for continuous variables that are represented as double precision floating-point numbers (hence, "double"). Such variables are internally stored as a vector of doubles of length equal to the number of individuals in the simulation. Examples of this variable type might include levels of immune response or concentration of some environmental pollutant in the blood.
 
 ## Processes {#proc}
 
