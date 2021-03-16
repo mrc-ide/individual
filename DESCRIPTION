@@ -36,6 +36,7 @@ Suggests:
   mockcpp,
   rmarkdown,
   reshape2,
+  pkgdown,
   testthat (>= 2.1.0)
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
