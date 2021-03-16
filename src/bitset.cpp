@@ -80,6 +80,14 @@ void bitset_xor(
     const Rcpp::XPtr<individual_index_t> a,
     const Rcpp::XPtr<individual_index_t> b
     ) {
+    (*a) ^= (*b);
+}
+
+//[[Rcpp::export]]
+void bitset_set_difference(
+    const Rcpp::XPtr<individual_index_t> a,
+    const Rcpp::XPtr<individual_index_t> b
+    ) {
     (*a) &= ~(*b);
 }
 

@@ -73,9 +73,11 @@ public:
     bool operator!=(const IterableBitset&) const;
     IterableBitset operator&(const IterableBitset&) const;
     IterableBitset operator|(const IterableBitset&) const;
+    IterableBitset operator^(const IterableBitset&) const;
     IterableBitset operator~() const;
     IterableBitset& operator&=(const IterableBitset&);
     IterableBitset& operator|=(const IterableBitset&);
+    IterableBitset& operator^=(const IterableBitset&);
     iterator begin();
     const_iterator begin() const;
     const_iterator cbegin() const;
@@ -226,6 +228,11 @@ inline IterableBitset<A> IterableBitset<A>::operator |(const IterableBitset<A>& 
 }
 
 template<class A>
+inline IterableBitset<A> IterableBitset<A>::operator ^(const IterableBitset<A>& other) const {
+    return IterableBitset<A>(*this) ^= other;
+}
+
+template<class A>
 inline IterableBitset<A> IterableBitset<A>::operator ~() const {
     auto result = IterableBitset<A>(*this);
     for (auto i = 0u; i < result.bitmap.size(); ++i) {
@@ -263,6 +270,20 @@ inline IterableBitset<A>& IterableBitset<A>::operator |=(const IterableBitset<A>
     }
     return *this;
 }
+
+template<class A>
+inline IterableBitset<A>& IterableBitset<A>::operator ^=(const IterableBitset<A>& other) {
+    if (max_size() != other.max_size()) {
+        Rcpp::stop("Incompatible bitmap sizes");
+    }
+    n = 0;
+    for (auto i = 0u; i < bitmap.size(); ++i) {
+        bitmap[i] ^= other.bitmap[i];
+        n += popcount(bitmap[i]);
+    }
+    return *this;
+}
+
 
 template<class A>
 inline typename IterableBitset<A>::iterator IterableBitset<A>::begin() {

@@ -58,10 +58,17 @@ Bitset <- R6::R6Class(
     #' @description to "bitwise not" or complement a Bitset
     not = function() Bitset$new(from = bitset_not(self$.bitset)),
 
-    #' @description to "bitwise xor" or the set difference of this Bitset with another
-    #' (keep elements of this Bitset which are not in \code{other}).
+    #' @description to "bitwise xor" or get the symmetric difference of two Bitsets
+    #' (keep elements in either Bitset but not in their intersection)
     xor = function(other){
       bitset_xor(self$.bitset, other$.bitset)
+      self
+    },
+
+    #' @description Take the set difference of this Bitset with another
+    #' (keep elements of this Bitset which are not in \code{other}).
+    set_difference = function(other){
+      bitset_set_difference(self$.bitset, other$.bitset)
       self
     },
 

@@ -41,6 +41,10 @@ bitset_xor <- function(a, b) {
     invisible(.Call(`_individual_bitset_xor`, a, b))
 }
 
+bitset_set_difference <- function(a, b) {
+    invisible(.Call(`_individual_bitset_set_difference`, a, b))
+}
+
 bitset_sample <- function(b, rate) {
     invisible(.Call(`_individual_bitset_sample`, b, rate))
 }
