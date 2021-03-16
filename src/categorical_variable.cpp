@@ -49,6 +49,18 @@ int categorical_variable_get_size_of(
 }
 
 //[[Rcpp::export]]
+std::vector<std::string> categorical_variable_get_categories(
+    Rcpp::XPtr<CategoricalVariable> variable
+    ) {
+    std::vector<std::string> categories;
+    categories.reserve(variable->indices.size());
+    for (auto& it : variable->indices) {
+        categories.emplace_back(it.first);
+    }
+    return categories;
+}
+
+//[[Rcpp::export]]
 void categorical_variable_queue_update_vector(
     Rcpp::XPtr<CategoricalVariable> variable,
     const std::string& value,

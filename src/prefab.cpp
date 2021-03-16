@@ -32,11 +32,8 @@ Rcpp::XPtr<process_t> fixed_probability_multinomial_process_internal(
             bitset_sample_internal(leaving_individuals, rate);
 
             // empty bitsets to put them (their destinations)
-            std::vector<individual_index_t> destination_individuals;
             size_t n = destination_states.size();
-            for (size_t i=0; i<n; i++) {
-                destination_individuals.emplace_back(leaving_individuals.max_size());
-            }
+            std::vector<individual_index_t> destination_individuals(n, leaving_individuals.max_size());
 
             // random variate for each leaver to see where they go
             const auto random = Rcpp::runif(leaving_individuals.size());
@@ -81,11 +78,8 @@ Rcpp::XPtr<process_t> multi_probability_multinomial_process_internal(
             bitset_sample_multi_internal(leaving_individuals, rate_vector.begin(), rate_vector.end());
 
             // empty bitsets to put them (their destinations)
-            std::vector<individual_index_t> destination_individuals;
             size_t n = destination_states.size();
-            for(size_t i=0; i<n; i++) {
-                destination_individuals.emplace_back(leaving_individuals.max_size());
-            }
+            std::vector<individual_index_t> destination_individuals(n, leaving_individuals.max_size());
 
             // random variate for each leaver to see where they go
             const auto random = Rcpp::runif(leaving_individuals.size());

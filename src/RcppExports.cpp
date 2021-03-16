@@ -235,6 +235,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// categorical_variable_get_categories
+std::vector<std::string> categorical_variable_get_categories(Rcpp::XPtr<CategoricalVariable> variable);
+RcppExport SEXP _individual_categorical_variable_get_categories(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(categorical_variable_get_categories(variable));
+    return rcpp_result_gen;
+END_RCPP
+}
 // categorical_variable_queue_update_vector
 void categorical_variable_queue_update_vector(Rcpp::XPtr<CategoricalVariable> variable, const std::string& value, std::vector<size_t>& index);
 RcppExport SEXP _individual_categorical_variable_queue_update_vector(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
@@ -814,6 +825,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_categorical_variable_queue_update", (DL_FUNC) &_individual_categorical_variable_queue_update, 3},
     {"_individual_categorical_variable_get_index_of", (DL_FUNC) &_individual_categorical_variable_get_index_of, 2},
     {"_individual_categorical_variable_get_size_of", (DL_FUNC) &_individual_categorical_variable_get_size_of, 2},
+    {"_individual_categorical_variable_get_categories", (DL_FUNC) &_individual_categorical_variable_get_categories, 1},
     {"_individual_categorical_variable_queue_update_vector", (DL_FUNC) &_individual_categorical_variable_queue_update_vector, 3},
     {"_individual_categorical_variable_update", (DL_FUNC) &_individual_categorical_variable_update, 1},
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
