@@ -43,9 +43,7 @@ test_that("getting the size of CategoricalVariable category which does not exist
 test_that("can retrieve categories of CategoricalVariable", {
   values <- c("S","E","I","R")
   var <- CategoricalVariable$new(categories = values,initial_values = rep(values,2))
-  expect_length(
-    setdiff(categorical_variable_get_categories(var$.variable), values), 0 
-  )
+  expect_setequal(categorical_variable_get_categories(var$.variable), values)
 })
 
 test_that("getting variables works", {
