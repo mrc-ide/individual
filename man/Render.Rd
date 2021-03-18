@@ -2,13 +2,8 @@
 % Please edit documentation in R/render.R
 \name{Render}
 \alias{Render}
-\title{Class: Render
-Class to render output for the simulation}
+\title{Render}
 \description{
-Class: Render
-Class to render output for the simulation
-
-Class: Render
 Class to render output for the simulation
 }
 \section{Methods}{
@@ -34,12 +29,6 @@ renderers
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{timesteps}}{number of timesteps in the simulation}
-
-\item{\code{individuals}}{to render states for}
-
-\item{\code{renderers}}{additional renderers to execute. Renderers are functions
-which take a SimFrame as an argument and return a list of
-scalar outputs to store to the final render}
 }
 \if{html}{\out{</div>}}
 }
@@ -69,7 +58,7 @@ Update the render with new simulation data
 \if{html}{\out{<a id="method-to_dataframe"></a>}}
 \if{latex}{\out{\hypertarget{method-to_dataframe}{}}}
 \subsection{Method \code{to_dataframe()}}{
-Make a dataframe for the render
+Return the render as a \code{\link[base]{data.frame}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Render$to_dataframe()}\if{html}{\out{</div>}}
 }

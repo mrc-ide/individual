@@ -50,6 +50,19 @@ struct CategoricalVariable : public Variable {
         return result;
     }
 
+    virtual individual_index_t get_index_of(
+        const std::string category
+    ) const {
+        auto result = individual_index_t(size);
+        if (indices.find(category) == indices.end()) {
+            std::stringstream message;
+            message << "unknown category: " << category;
+            Rcpp::stop(message.str()); 
+        }
+        result |= indices.at(category);
+        return result;
+    }
+
     virtual int get_size_of(
         const std::vector<std::string> categories        
     ) const {
@@ -63,6 +76,20 @@ struct CategoricalVariable : public Variable {
                 result += indices.at(category).size();
             }            
         }
+        return result;
+    }
+
+    virtual int get_size_of(
+        const std::string category        
+    ) const {
+        int result{0};
+        if (indices.find(category) == indices.end()) {
+            std::stringstream message;
+            message << "unknown category: " << category;
+            Rcpp::stop(message.str());
+        } else {
+            result += indices.at(category).size();
+        }            
         return result;
     }
 

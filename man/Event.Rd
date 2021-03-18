@@ -32,7 +32,7 @@ Initialise an Event
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{name, }}{the name of the event}
+\item{\code{name}}{the name of the event}
 }
 \if{html}{\out{</div>}}
 }
@@ -49,7 +49,8 @@ Add an event listener
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{listener}}{the function to be executed on the event}
+\item{\code{listener}}{the function to be executed on the event, which takes a single
+argument giving the time step when this event is triggered.}
 }
 \if{html}{\out{</div>}}
 }
@@ -58,7 +59,7 @@ Add an event listener
 \if{html}{\out{<a id="method-schedule"></a>}}
 \if{latex}{\out{\hypertarget{method-schedule}{}}}
 \subsection{Method \code{schedule()}}{
-schedule this event to occur in the future
+Schedule this event to occur in the future
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$schedule(delay)}\if{html}{\out{</div>}}
 }
@@ -66,7 +67,7 @@ schedule this event to occur in the future
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{delay}}{the number of timesteps to wait before triggering the event,
+\item{\code{delay}}{the number of time steps to wait before triggering the event,
 can be a scalar or an vector of values for several times in the future}
 }
 \if{html}{\out{</div>}}

@@ -108,6 +108,28 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// bitset_xor
+void bitset_xor(const Rcpp::XPtr<individual_index_t> a, const Rcpp::XPtr<individual_index_t> b);
+RcppExport SEXP _individual_bitset_xor(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    bitset_xor(a, b);
+    return R_NilValue;
+END_RCPP
+}
+// bitset_set_difference
+void bitset_set_difference(const Rcpp::XPtr<individual_index_t> a, const Rcpp::XPtr<individual_index_t> b);
+RcppExport SEXP _individual_bitset_set_difference(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    bitset_set_difference(a, b);
+    return R_NilValue;
+END_RCPP
+}
 // bitset_sample
 void bitset_sample(const Rcpp::XPtr<individual_index_t> b, double rate);
 RcppExport SEXP _individual_bitset_sample(SEXP bSEXP, SEXP rateSEXP) {
@@ -210,6 +232,17 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
     Rcpp::traits::input_parameter< const std::vector<std::string>& >::type values(valuesSEXP);
     rcpp_result_gen = Rcpp::wrap(categorical_variable_get_size_of(variable, values));
+    return rcpp_result_gen;
+END_RCPP
+}
+// categorical_variable_get_categories
+std::vector<std::string> categorical_variable_get_categories(Rcpp::XPtr<CategoricalVariable> variable);
+RcppExport SEXP _individual_categorical_variable_get_categories(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(categorical_variable_get_categories(variable));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -621,13 +654,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // integer_variable_get_size_of_set
-int integer_variable_get_size_of_set(Rcpp::XPtr<IntegerVariable> variable, std::vector<int> values_set);
+int integer_variable_get_size_of_set(Rcpp::XPtr<IntegerVariable> variable, const std::vector<int> values_set);
 RcppExport SEXP _individual_integer_variable_get_size_of_set(SEXP variableSEXP, SEXP values_setSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< std::vector<int> >::type values_set(values_setSEXP);
+    Rcpp::traits::input_parameter< const std::vector<int> >::type values_set(values_setSEXP);
     rcpp_result_gen = Rcpp::wrap(integer_variable_get_size_of_set(variable, values_set));
     return rcpp_result_gen;
 END_RCPP
@@ -722,6 +755,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// infection_age_process_internal
+Rcpp::XPtr<process_t> infection_age_process_internal(Rcpp::XPtr<CategoricalVariable> state, const std::string susceptible, const std::string exposed, const std::string infectious, const Rcpp::XPtr<IntegerVariable> age, const int age_bins, const double p, const double dt, const Rcpp::NumericMatrix mixing);
+RcppExport SEXP _individual_infection_age_process_internal(SEXP stateSEXP, SEXP susceptibleSEXP, SEXP exposedSEXP, SEXP infectiousSEXP, SEXP ageSEXP, SEXP age_binsSEXP, SEXP pSEXP, SEXP dtSEXP, SEXP mixingSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type state(stateSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type susceptible(susceptibleSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type exposed(exposedSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type infectious(infectiousSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<IntegerVariable> >::type age(ageSEXP);
+    Rcpp::traits::input_parameter< const int >::type age_bins(age_binsSEXP);
+    Rcpp::traits::input_parameter< const double >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const double >::type dt(dtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix >::type mixing(mixingSEXP);
+    rcpp_result_gen = Rcpp::wrap(infection_age_process_internal(state, susceptible, exposed, infectious, age, age_bins, p, dt, mixing));
+    return rcpp_result_gen;
+END_RCPP
+}
 // execute_process
 void execute_process(Rcpp::XPtr<process_t> process, size_t timestep);
 RcppExport SEXP _individual_execute_process(SEXP processSEXP, SEXP timestepSEXP) {
@@ -762,6 +814,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_bitset_and", (DL_FUNC) &_individual_bitset_and, 2},
     {"_individual_bitset_not", (DL_FUNC) &_individual_bitset_not, 1},
     {"_individual_bitset_or", (DL_FUNC) &_individual_bitset_or, 2},
+    {"_individual_bitset_xor", (DL_FUNC) &_individual_bitset_xor, 2},
+    {"_individual_bitset_set_difference", (DL_FUNC) &_individual_bitset_set_difference, 2},
     {"_individual_bitset_sample", (DL_FUNC) &_individual_bitset_sample, 2},
     {"_individual_bitset_sample_vector", (DL_FUNC) &_individual_bitset_sample_vector, 2},
     {"_individual_bitset_to_vector", (DL_FUNC) &_individual_bitset_to_vector, 1},
@@ -771,6 +825,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_categorical_variable_queue_update", (DL_FUNC) &_individual_categorical_variable_queue_update, 3},
     {"_individual_categorical_variable_get_index_of", (DL_FUNC) &_individual_categorical_variable_get_index_of, 2},
     {"_individual_categorical_variable_get_size_of", (DL_FUNC) &_individual_categorical_variable_get_size_of, 2},
+    {"_individual_categorical_variable_get_categories", (DL_FUNC) &_individual_categorical_variable_get_categories, 1},
     {"_individual_categorical_variable_queue_update_vector", (DL_FUNC) &_individual_categorical_variable_queue_update_vector, 3},
     {"_individual_categorical_variable_update", (DL_FUNC) &_individual_categorical_variable_update, 1},
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
@@ -813,6 +868,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_fixed_probability_multinomial_process_internal", (DL_FUNC) &_individual_fixed_probability_multinomial_process_internal, 5},
     {"_individual_multi_probability_multinomial_process_internal", (DL_FUNC) &_individual_multi_probability_multinomial_process_internal, 5},
     {"_individual_multi_probability_bernoulli_process_internal", (DL_FUNC) &_individual_multi_probability_bernoulli_process_internal, 4},
+    {"_individual_infection_age_process_internal", (DL_FUNC) &_individual_infection_age_process_internal, 9},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},

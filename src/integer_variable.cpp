@@ -71,7 +71,7 @@ Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_range(
 // [[Rcpp::export]]
 int integer_variable_get_size_of_set(
     Rcpp::XPtr<IntegerVariable> variable,
-    std::vector<int> values_set
+    const std::vector<int> values_set
 ) {
     return variable->get_size_of_set(values_set);
 }

@@ -16,6 +16,7 @@ if possible becuase certain operations will be faster.
 \item \href{#method-new}{\code{CategoricalVariable$new()}}
 \item \href{#method-get_index_of}{\code{CategoricalVariable$get_index_of()}}
 \item \href{#method-get_size_of}{\code{CategoricalVariable$get_size_of()}}
+\item \href{#method-get_categories}{\code{CategoricalVariable$get_categories()}}
 \item \href{#method-queue_update}{\code{CategoricalVariable$queue_update()}}
 \item \href{#method-.update}{\code{CategoricalVariable$.update()}}
 \item \href{#method-clone}{\code{CategoricalVariable$clone()}}
@@ -45,7 +46,7 @@ individual}
 \if{html}{\out{<a id="method-get_index_of"></a>}}
 \if{latex}{\out{\hypertarget{method-get_index_of}{}}}
 \subsection{Method \code{get_index_of()}}{
-return a \code{\link[individual]{Bitset}} for individuals with the given `values`
+return a \code{\link[individual]{Bitset}} for individuals with the given \code{values}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$get_index_of(values)}\if{html}{\out{</div>}}
 }
@@ -62,7 +63,7 @@ return a \code{\link[individual]{Bitset}} for individuals with the given `values
 \if{html}{\out{<a id="method-get_size_of"></a>}}
 \if{latex}{\out{\hypertarget{method-get_size_of}{}}}
 \subsection{Method \code{get_size_of()}}{
-return the number of individuals with the given `values`
+return the number of individuals with the given \code{values}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$get_size_of(values)}\if{html}{\out{</div>}}
 }
@@ -74,6 +75,19 @@ return the number of individuals with the given `values`
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_categories"></a>}}
+\if{latex}{\out{\hypertarget{method-get_categories}{}}}
+\subsection{Method \code{get_categories()}}{
+return a character vector of possible values.
+Note that the order of the returned vector may not be the same order
+that was given when the variable was intitialized, due to the underlying
+unordered storage type.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$get_categories()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-queue_update"></a>}}

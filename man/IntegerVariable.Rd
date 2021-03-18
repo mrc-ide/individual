@@ -4,7 +4,7 @@
 \alias{IntegerVariable}
 \title{Integer Variable Class}
 \description{
-Represents a integer-valued variable for an individual.
+Represents a integer valued variable for an individual.
 This class is similar to \code{\link[individual]{CategoricalVariable}},
 but can be used for variables with unbounded ranges, or other situations where part
 of an individual's state is better represented by an integer, such as
@@ -34,8 +34,7 @@ Create a new IntegerVariable
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{initial_values}}{a vector of the initial value for each which will be coerced to integer type
-individual}
+\item{\code{initial_values}}{a vector of the initial values for each individual}
 }
 \if{html}{\out{</div>}}
 }
@@ -44,7 +43,7 @@ individual}
 \if{html}{\out{<a id="method-get_values"></a>}}
 \if{latex}{\out{\hypertarget{method-get_values}{}}}
 \subsection{Method \code{get_values()}}{
-get the variable values
+Get the variable values
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$get_values(index = NULL)}\if{html}{\out{</div>}}
 }
@@ -63,9 +62,9 @@ or integer vector, return values of those individuals.}
 \if{html}{\out{<a id="method-get_index_of"></a>}}
 \if{latex}{\out{\hypertarget{method-get_index_of}{}}}
 \subsection{Method \code{get_index_of()}}{
-return a bitset for individuals with some subset of values
+Return a \code{\link[individual]{Bitset}} for individuals with some subset of values
 Either search for indices corresponding to values in \code{set}, or
-for indices corresponding to values in range [a,b].
+for indices corresponding to values in range \eqn{[a,b]}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$get_index_of(set = NULL, a = NULL, b = NULL)}\if{html}{\out{</div>}}
 }
@@ -86,9 +85,9 @@ for indices corresponding to values in range [a,b].
 \if{html}{\out{<a id="method-get_size_of"></a>}}
 \if{latex}{\out{\hypertarget{method-get_size_of}{}}}
 \subsection{Method \code{get_size_of()}}{
-return the number of individuals with some subset of values
+Return the number of individuals with some subset of values
 Either search for indices corresponding to values in \code{set}, or
-for indices corresponding to values in range [a,b].
+for indices corresponding to values in range \eqn{[a,b]}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$get_size_of(set = NULL, a = NULL, b = NULL)}\if{html}{\out{</div>}}
 }
@@ -111,16 +110,20 @@ for indices corresponding to values in range [a,b].
 \subsection{Method \code{queue_update()}}{
 Queue an update for a variable. There are 4 types of variable update:
 
-1. Subset update. The index vector represents a subset of the variable to
-update. The value vector, of the same size, represents the new values for
-that subset
-2. Subset fill. The index vector represents a subset of the variable to
-update. The value vector, of size 1, will fill the specified subset
-3. Variable reset. The index vector is set to \code{NULL} and the value vector
-replaces all of the current values in the simulation. The value vector
-should match the size of the population.
-4. Variable fill. The index vector is set to \code{NULL} and the value vector,
-of size 1, is used to fill all of the variable values in the population.
+\enumerate{
+ \item{Subset update: }{The argument \code{index} represents a subset of the variable to
+update. The argument \code{values} should be a vector whose length matches the size of \code{index},
+which represents the new values for that subset.}
+ \item{Subset fill: }{The argument \code{index} represents a subset of the variable to
+update. The argument \code{values} should be a single number, which fills the specified subset.}
+ \item{Variable reset: }{The index vector is set to \code{NULL} and the argument \code{values}
+replaces all of the current values in the simulation. \code{values} should be a vector
+whose length should match the size of the population, which fills all the variable values in
+the population}
+ \item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
+should be a single number, which fills all of the variable values in 
+the population.}
+}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$queue_update(values, index = NULL)}\if{html}{\out{</div>}}
 }

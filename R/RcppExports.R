@@ -37,6 +37,14 @@ bitset_or <- function(a, b) {
     invisible(.Call(`_individual_bitset_or`, a, b))
 }
 
+bitset_xor <- function(a, b) {
+    invisible(.Call(`_individual_bitset_xor`, a, b))
+}
+
+bitset_set_difference <- function(a, b) {
+    invisible(.Call(`_individual_bitset_set_difference`, a, b))
+}
+
 bitset_sample <- function(b, rate) {
     invisible(.Call(`_individual_bitset_sample`, b, rate))
 }
@@ -71,6 +79,10 @@ categorical_variable_get_index_of <- function(variable, values) {
 
 categorical_variable_get_size_of <- function(variable, values) {
     .Call(`_individual_categorical_variable_get_size_of`, variable, values)
+}
+
+categorical_variable_get_categories <- function(variable) {
+    .Call(`_individual_categorical_variable_get_categories`, variable)
 }
 
 categorical_variable_queue_update_vector <- function(variable, value, index) {
@@ -235,6 +247,10 @@ multi_probability_multinomial_process_internal <- function(variable, source_stat
 
 multi_probability_bernoulli_process_internal <- function(variable, from, to, rate_variable) {
     .Call(`_individual_multi_probability_bernoulli_process_internal`, variable, from, to, rate_variable)
+}
+
+infection_age_process_internal <- function(state, susceptible, exposed, infectious, age, age_bins, p, dt, mixing) {
+    .Call(`_individual_infection_age_process_internal`, state, susceptible, exposed, infectious, age, age_bins, p, dt, mixing)
 }
 
 execute_process <- function(process, timestep) {

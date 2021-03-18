@@ -4,9 +4,11 @@
 \alias{Bitset}
 \title{A Bitset Class}
 \description{
-Allow fast integer set operations in R. WARNING: all operations
-(except `$not`) are in-place so please use `$copy` if you would like to
-perform an operation without destroying your current bitset.
+This is a data strucutre that compactly stores the presence of 
+integers in some finite set (\code{max_size}), and can 
+efficiently perform set operations (union, intersection, complement). 
+WARNING: all operations (except \code{$not}) are in-place so please use \code{$copy} 
+if you would like to perform an operation without destroying your current bitset.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -27,6 +29,8 @@ perform an operation without destroying your current bitset.
 \item \href{#method-or}{\code{Bitset$or()}}
 \item \href{#method-and}{\code{Bitset$and()}}
 \item \href{#method-not}{\code{Bitset$not()}}
+\item \href{#method-xor}{\code{Bitset$xor()}}
+\item \href{#method-set_difference}{\code{Bitset$set_difference()}}
 \item \href{#method-sample}{\code{Bitset$sample()}}
 \item \href{#method-copy}{\code{Bitset$copy()}}
 \item \href{#method-to_vector}{\code{Bitset$to_vector()}}
@@ -135,8 +139,31 @@ to "bitwise and" or intersect two Bitsets
 \if{latex}{\out{\hypertarget{method-not}{}}}
 \subsection{Method \code{not()}}{
 to "bitwise not" or complement a Bitset
+This method returns a new Bitset rather than doing in-place modification.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$not()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-xor"></a>}}
+\if{latex}{\out{\hypertarget{method-xor}{}}}
+\subsection{Method \code{xor()}}{
+to "bitwise xor" or get the symmetric difference of two Bitsets
+(keep elements in either Bitset but not in their intersection)
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$xor(other)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_difference"></a>}}
+\if{latex}{\out{\hypertarget{method-set_difference}{}}}
+\subsection{Method \code{set_difference()}}{
+Take the set difference of this Bitset with another
+(keep elements of this Bitset which are not in \code{other}).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$set_difference(other)}\if{html}{\out{</div>}}
 }
 
 }
@@ -144,7 +171,7 @@ to "bitwise not" or complement a Bitset
 \if{html}{\out{<a id="method-sample"></a>}}
 \if{latex}{\out{\hypertarget{method-sample}{}}}
 \subsection{Method \code{sample()}}{
-to sample a subset
+to sample a Bitset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$sample(rate)}\if{html}{\out{</div>}}
 }
@@ -152,7 +179,7 @@ to sample a subset
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{rate}}{the success rate for keeping each element, can be
+\item{\code{rate}}{the success probability for keeping each element, can be
 a single value for all elements or a vector with of unique
 probabilities for keeping each element}
 }
