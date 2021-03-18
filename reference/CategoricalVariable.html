@@ -152,6 +152,7 @@ if possible becuase certain operations will be faster.</p>
 <li><p><a href='#method-new'><code>CategoricalVariable$new()</code></a></p></li>
 <li><p><a href='#method-get_index_of'><code>CategoricalVariable$get_index_of()</code></a></p></li>
 <li><p><a href='#method-get_size_of'><code>CategoricalVariable$get_size_of()</code></a></p></li>
+<li><p><a href='#method-get_categories'><code>CategoricalVariable$get_categories()</code></a></p></li>
 <li><p><a href='#method-queue_update'><code>CategoricalVariable$queue_update()</code></a></p></li>
 <li><p><a href='#method-.update'><code>CategoricalVariable$.update()</code></a></p></li>
 <li><p><a href='#method-clone'><code>CategoricalVariable$clone()</code></a></p></li>
@@ -171,7 +172,7 @@ individual</p></dd>
 </dl><p></div></p>
 <p><hr>
 <a id="method-get_index_of"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_index_of()</code></h3>
-<p>return a <code><a href='Bitset.html'>Bitset</a></code> for individuals with the given `values`</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>return a <code><a href='Bitset.html'>Bitset</a></code> for individuals with the given <code>values</code></p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>CategoricalVariable</span><span class='op'>$</span><span class='fu'>get_index_of</span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -181,7 +182,7 @@ individual</p></dd>
 </dl><p></div></p>
 <p><hr>
 <a id="method-get_size_of"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_size_of()</code></h3>
-<p>return the number of individuals with the given `values`</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>return the number of individuals with the given <code>values</code></p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>CategoricalVariable</span><span class='op'>$</span><span class='fu'>get_size_of</span><span class='op'>(</span><span class='va'>values</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -189,6 +190,14 @@ individual</p></dd>
 <dt><code>values</code></dt><dd><p>the values to filter</p></dd>
 
 </dl><p></div></p>
+<p><hr>
+<a id="method-get_categories"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_categories()</code></h3>
+<p>return a character vector of possible values.
+Note that the order of the returned vector may not be the same order
+that was given when the variable was intitialized, due to the underlying
+unordered storage type.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>CategoricalVariable</span><span class='op'>$</span><span class='fu'>get_categories</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
+
 <p><hr>
 <a id="method-queue_update"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>queue_update()</code></h3>
 <p>queue an update for this variable</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>

@@ -158,7 +158,7 @@
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>name, </code></dt><dd><p>the name of the event</p></dd>
+<dt><code>name</code></dt><dd><p>the name of the event</p></dd>
 
 </dl><p></div></p>
 <p><hr>
@@ -168,17 +168,18 @@
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>listener</code></dt><dd><p>the function to be executed on the event</p></dd>
+<dt><code>listener</code></dt><dd><p>the function to be executed on the event, which takes a single
+argument giving the time step when this event is triggered.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-schedule"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>schedule()</code></h3>
-<p>schedule this event to occur in the future</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Schedule this event to occur in the future</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Event</span><span class='op'>$</span><span class='fu'>schedule</span><span class='op'>(</span><span class='va'>delay</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>delay</code></dt><dd><p>the number of timesteps to wait before triggering the event,
+<dt><code>delay</code></dt><dd><p>the number of time steps to wait before triggering the event,
 can be a scalar or an vector of values for several times in the future</p></dd>
 
 </dl><p></div></p>

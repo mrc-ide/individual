@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Integer Variable Class — IntegerVariable" />
-<meta property="og:description" content="Represents a integer-valued variable for an individual.
+<meta property="og:description" content="Represents a integer valued variable for an individual.
 This class is similar to CategoricalVariable,
 but can be used for variables with unbounded ranges, or other situations where part
 of an individual's state is better represented by an integer, such as
@@ -134,7 +134,7 @@ household or age bin." />
     </div>
 
     <div class="ref-description">
-    <p>Represents a integer-valued variable for an individual.
+    <p>Represents a integer valued variable for an individual.
 This class is similar to <code><a href='CategoricalVariable.html'>CategoricalVariable</a></code>,
 but can be used for variables with unbounded ranges, or other situations where part
 of an individual's state is better represented by an integer, such as
@@ -164,13 +164,12 @@ household or age bin.</p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>initial_values</code></dt><dd><p>a vector of the initial value for each which will be coerced to integer type
-individual</p></dd>
+<dt><code>initial_values</code></dt><dd><p>a vector of the initial values for each individual</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-get_values"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_values()</code></h3>
-<p>get the variable values</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Get the variable values</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>IntegerVariable</span><span class='op'>$</span><span class='fu'>get_values</span><span class='op'>(</span>index <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -182,9 +181,9 @@ or integer vector, return values of those individuals.</p></dd>
 </dl><p></div></p>
 <p><hr>
 <a id="method-get_index_of"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_index_of()</code></h3>
-<p>return a bitset for individuals with some subset of values
+<p>Return a <code><a href='Bitset.html'>Bitset</a></code> for individuals with some subset of values
 Either search for indices corresponding to values in <code>set</code>, or
-for indices corresponding to values in range [a,b].</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+for indices corresponding to values in range \([a,b]\).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>IntegerVariable</span><span class='op'>$</span><span class='fu'>get_index_of</span><span class='op'>(</span>set <span class='op'>=</span> <span class='cn'>NULL</span>, a <span class='op'>=</span> <span class='cn'>NULL</span>, b <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -198,9 +197,9 @@ for indices corresponding to values in range [a,b].</p><h4 class='hasAnchor' id=
 </dl><p></div></p>
 <p><hr>
 <a id="method-get_size_of"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_size_of()</code></h3>
-<p>return the number of individuals with some subset of values
+<p>Return the number of individuals with some subset of values
 Either search for indices corresponding to values in <code>set</code>, or
-for indices corresponding to values in range [a,b].</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+for indices corresponding to values in range \([a,b]\).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>IntegerVariable</span><span class='op'>$</span><span class='fu'>get_size_of</span><span class='op'>(</span>set <span class='op'>=</span> <span class='cn'>NULL</span>, a <span class='op'>=</span> <span class='cn'>NULL</span>, b <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -215,16 +214,21 @@ for indices corresponding to values in range [a,b].</p><h4 class='hasAnchor' id=
 <p><hr>
 <a id="method-queue_update"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>queue_update()</code></h3>
 <p>Queue an update for a variable. There are 4 types of variable update:</p>
-<p>1. Subset update. The index vector represents a subset of the variable to
-update. The value vector, of the same size, represents the new values for
-that subset
-2. Subset fill. The index vector represents a subset of the variable to
-update. The value vector, of size 1, will fill the specified subset
-3. Variable reset. The index vector is set to <code>NULL</code> and the value vector
-replaces all of the current values in the simulation. The value vector
-should match the size of the population.
-4. Variable fill. The index vector is set to <code>NULL</code> and the value vector,
-of size 1, is used to fill all of the variable values in the population.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<ol>
+<li><p>Subset update: The argument <code>index</code> represents a subset of the variable to
+update. The argument <code>values</code> should be a vector whose length matches the size of <code>index</code>,
+which represents the new values for that subset.</p></li>
+<li><p>Subset fill: The argument <code>index</code> represents a subset of the variable to
+update. The argument <code>values</code> should be a single number, which fills the specified subset.</p></li>
+<li><p>Variable reset: The index vector is set to <code>NULL</code> and the argument <code>values</code>
+replaces all of the current values in the simulation. <code>values</code> should be a vector
+whose length should match the size of the population, which fills all the variable values in
+the population</p></li>
+<li><p>Variable fill: The index vector is set to <code>NULL</code> and the argument <code>values</code>
+should be a single number, which fills all of the variable values in 
+the population.</p></li>
+</ol>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>IntegerVariable</span><span class='op'>$</span><span class='fu'>queue_update</span><span class='op'>(</span><span class='va'>values</span>, index <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>

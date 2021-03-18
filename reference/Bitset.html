@@ -40,9 +40,11 @@
 
 
 <meta property="og:title" content="A Bitset Class — Bitset" />
-<meta property="og:description" content="Allow fast integer set operations in R. WARNING: all operations
-(except `$not`) are in-place so please use `$copy` if you would like to
-perform an operation without destroying your current bitset." />
+<meta property="og:description" content="This is a data strucutre that compactly stores the presence of 
+integers in some finite set (max_size), and can 
+efficiently perform set operations (union, intersection, complement). 
+WARNING: all operations (except $not) are in-place so please use $copy 
+if you would like to perform an operation without destroying your current bitset." />
 
 
 
@@ -132,9 +134,11 @@ perform an operation without destroying your current bitset." />
     </div>
 
     <div class="ref-description">
-    <p>Allow fast integer set operations in R. WARNING: all operations
-(except `$not`) are in-place so please use `$copy` if you would like to
-perform an operation without destroying your current bitset.</p>
+    <p>This is a data strucutre that compactly stores the presence of 
+integers in some finite set (<code>max_size</code>), and can 
+efficiently perform set operations (union, intersection, complement). 
+WARNING: all operations (except <code>$not</code>) are in-place so please use <code>$copy</code> 
+if you would like to perform an operation without destroying your current bitset.</p>
     </div>
 
 
@@ -160,6 +164,8 @@ perform an operation without destroying your current bitset.</p>
 <li><p><a href='#method-or'><code>Bitset$or()</code></a></p></li>
 <li><p><a href='#method-and'><code>Bitset$and()</code></a></p></li>
 <li><p><a href='#method-not'><code>Bitset$not()</code></a></p></li>
+<li><p><a href='#method-xor'><code>Bitset$xor()</code></a></p></li>
+<li><p><a href='#method-set_difference'><code>Bitset$set_difference()</code></a></p></li>
 <li><p><a href='#method-sample'><code>Bitset$sample()</code></a></p></li>
 <li><p><a href='#method-copy'><code>Bitset$copy()</code></a></p></li>
 <li><p><a href='#method-to_vector'><code>Bitset$to_vector()</code></a></p></li>
@@ -224,17 +230,30 @@ perform an operation without destroying your current bitset.</p>
 </dl><p></div></p>
 <p><hr>
 <a id="method-not"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>not()</code></h3>
-<p>to "bitwise not" or complement a Bitset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>to "bitwise not" or complement a Bitset
+This method returns a new Bitset rather than doing in-place modification.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>not</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
+<a id="method-xor"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/Logic.html'>xor()</a></code></h3>
+<p>to "bitwise xor" or get the symmetric difference of two Bitsets
+(keep elements in either Bitset but not in their intersection)</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>xor</span><span class='op'>(</span><span class='va'>other</span><span class='op'>)</span></pre><p></div></p>
+
+<p><hr>
+<a id="method-set_difference"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>set_difference()</code></h3>
+<p>Take the set difference of this Bitset with another
+(keep elements of this Bitset which are not in <code>other</code>).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>set_difference</span><span class='op'>(</span><span class='va'>other</span><span class='op'>)</span></pre><p></div></p>
+
+<p><hr>
 <a id="method-sample"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/sample.html'>sample()</a></code></h3>
-<p>to sample a subset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>to sample a Bitset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>sample</span><span class='op'>(</span><span class='va'>rate</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>rate</code></dt><dd><p>the success rate for keeping each element, can be
+<dt><code>rate</code></dt><dd><p>the success probability for keeping each element, can be
 a single value for all elements or a vector with of unique
 probabilities for keeping each element</p></dd>
 
