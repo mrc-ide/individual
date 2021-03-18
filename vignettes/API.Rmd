@@ -140,8 +140,8 @@ Much like regular [Events](#event), previously scheduled targeted events can be 
 
 The code to define events is typically quite brief, although typically another process must be defined that queues them. A recovery event in an SIR model for example, might look like this, where `state` is a `individual::CategoricalVariable`:
 
-```{r,eval=FALSE}
-recovery_event <- TargetedEvent$new('recovery')
+```{r}
+recovery_event <- TargetedEvent$new(population_size = 100)
 recovery_event$add_listener(function(timestep, target) {
   state$queue_update('R', target)
 })
