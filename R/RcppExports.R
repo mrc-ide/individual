@@ -81,6 +81,10 @@ categorical_variable_get_size_of <- function(variable, values) {
     .Call(`_individual_categorical_variable_get_size_of`, variable, values)
 }
 
+categorical_variable_get_categories <- function(variable) {
+    .Call(`_individual_categorical_variable_get_categories`, variable)
+}
+
 categorical_variable_queue_update_vector <- function(variable, value, index) {
     invisible(.Call(`_individual_categorical_variable_queue_update_vector`, variable, value, index))
 }

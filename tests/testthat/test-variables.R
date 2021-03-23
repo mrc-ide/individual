@@ -40,6 +40,12 @@ test_that("getting the size of CategoricalVariable category which does not exist
   expect_error(state$get_size_of('X'))
 })
 
+test_that("can retrieve categories of CategoricalVariable", {
+  values <- c("S","E","I","R")
+  var <- CategoricalVariable$new(categories = values,initial_values = rep(values,2))
+  expect_setequal(categorical_variable_get_categories(var$.variable), values)
+})
+
 test_that("getting variables works", {
   size <- 10
   sequence <- DoubleVariable$new(seq_len(size))

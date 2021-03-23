@@ -31,6 +31,14 @@ CategoricalVariable <- R6::R6Class(
       categorical_variable_get_size_of(self$.variable, values)
     },
 
+    #' @description return a character vector of possible values.
+    #' Note that the order of the returned vector may not be the same order
+    #' that was given when the variable was intitialized, due to the underlying
+    #' unordered storage type. 
+    get_categories = function() {
+      categorical_variable_get_categories(self$.variable)
+    },
+
     #' @description queue an update for this variable
     #' @param values the new values
     #' @param index the indices of individuals whose value will be updated
