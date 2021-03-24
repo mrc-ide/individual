@@ -41,30 +41,25 @@ models. Even if a compartmental representation were available, there are many
 reasons why an individual-based representation is to be preferred. Synthetic data
 may need to include a individual level outcome data, which aggregated models by their very 
 nature are unable to provide. Other complexities, such as when events occur after
-a random delay whose distribution is different from a Geometric (or Exponential)
+a random delay whose distribution differs from a Geometric (or Exponential)
 one, mean even aggregated models will need to store individual completion times,
 necessitating more complex simulation algorithms and data structures; in such
 cases it is often more straightforward to adopt an individual-based representation
 from the start.
 
-In many cases, especially during epidemic scenarios, a variety of models must be quickly
-developed to be useful for informing policy. Even under normal research 
-settings, models should be easy to develop and fast to run, to facilitate the 
-evaluation of various hypotheses and comparison to data.
-
-
-
-
-
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
+`individual` is an R package which provides a set of useful primitive elements
+for specifying and simulating IBMs, with special attention to the types of models
+encountered in infectious disease epidemiology, although the software is generic.
+Users specify variables, one for each characteristic of an individual in the
+simulated population. The package provides efficient methods for finding
+individuals whose characteristics match conditions, who can be scheduled to 
+update all or some variables after an arbitrary delay. Models developed in `individual`
+are updated on a discrete time step, and individuals can interact in a completely
+general manner. While `individual` can represent almost any kind of IBM, it is
+designed to be used for the types of models encountered in epidemiology, 
+where individuals may interactions are structured by discrete variables, such as
+position on a network, and more efficient alternatives may exist for continuous
+space models or cellular automata.
 
 # Statement of need
 
@@ -78,6 +73,11 @@ and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and
 interfaces well with the implementations of physical units and astronomical
 coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and
 `astropy.coordinates`).
+
+In many cases, especially during epidemic scenarios, a variety of models must be quickly
+developed to be useful for informing policy. Even under normal research 
+settings, models should be easy to develop and fast to run, to facilitate the 
+evaluation of various hypotheses and comparison to data.
 
 `Gala` was designed to be used by both astronomical researchers and by
 students in courses on gravitational dynamics or astronomy. It has already been
