@@ -16,12 +16,9 @@ authors:
     orcid: 0000-0002-5781-9493
     affiliation: 2
 affiliations:
- - name:  MRC Centre for Global Infectious Disease Analysis, Abdul Latif Jameel 
- Institute for Disease and Emergency Analytics (J-IDEA), Imperial College 
- London, London, UK.
+ - name:  MRC Centre for Global Infectious Disease Analysis, Abdul Latif Jameel Institute for Disease and Emergency Analytics (J-IDEA), Imperial College London, London, UK.
    index: 1
- - name: Division of Epidemiology and Biostatistics, School of Public Health, 
- University of California, Berkeley, CA 94720, USA
+ - name: Division of Epidemiology and Biostatistics, School of Public Health, University of California, Berkeley, CA 94720, USA
    index: 2
 date: 13 August 2017
 bibliography: paper.bib
