@@ -52,16 +52,22 @@ for specifying and simulating IBMs, with special attention to the types of model
 encountered in infectious disease epidemiology, although the software is generic.
 Users specify variables, one for each characteristic of an individual in the
 simulated population. The package provides efficient methods for finding
-individuals whose characteristics match conditions, who can be scheduled to 
+subsets of individuals based on these variables, which can then be scheduled to 
 update all or some variables after an arbitrary delay. Models developed in `individual`
 are updated on a discrete time step, and individuals can interact in a completely
 general manner. While `individual` can represent almost any kind of IBM, it is
 designed to be used for the types of models encountered in epidemiology, 
-where individuals may interactions are structured by discrete variables, such as
+where individuals' interactions are structured by discrete variables, such as
 position on a network, and more efficient alternatives may exist for continuous
 space models or cellular automata.
 
 # Statement of need
+
+The `individual` package is written in the R language, which is a *lingua franca*
+in epidemiological applications. The package uses `Rcpp` [@Rcpp] to link to
+the C++ source code, which underlies the data structures exposed to the user. 
+The API for `individual` uses a `R6` [@R6] class-based design at the R level
+which users call to create, update, and query variables.
 
 `Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
 enables wrapping low-level languages (e.g., C) for speed without losing
