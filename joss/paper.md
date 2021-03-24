@@ -26,14 +26,32 @@ bibliography: paper.bib
 
 # Summary
 
-Simulation of individual-based models (IBM) is a crucial tool for many tasks 
-in public health, and especially in infectious disease epidemiology. Such models
-can help formalize theory, generate synthetic data, evaluate counterfactual 
-scenarios, forecast trends, and be used for statistical inference [@Tracy:2021]. 
+Complex stochastic models are a crucial tool for many tasks 
+in public health, and especially in infectious disease epidemiology [@Ganyani:2021]. 
+Such models can help formalize theory, generate synthetic data, evaluate counterfactual 
+scenarios, forecast trends, and be used for statistical inference. Individual-based
+models (IBMs) in particular are useful because of the relative ease with which individual
+level characteristics can be specified. Such characteristics may include age, 
+genetics, demographics, and personal behaviors which contribute to health outcomes 
+arising due to interactions with others [@Tracy:2018]. The specification of 
+such a population's characteristics, and the processes (such as disease transmission)
+which are a result of contact between individuals, may be cumbersome or practically
+impossible to represent in an "aggregated" manner such as compartmental mathematical
+models. Even if a compartmental representation were available, there are many 
+reasons why an individual-based representation is to be preferred. Synthetic data
+may need to include a individual level outcome data, which aggregated models by their very 
+nature are unable to provide. Other complexities, such as when events occur after
+a random delay whose distribution is different from a Geometric (or Exponential)
+one, mean even aggregated models will need to store individual completion times,
+necessitating more complex simulation algorithms and data structures; in such
+cases it is often more straightforward to adopt an individual-based representation
+from the start.
+
 In many cases, especially during epidemic scenarios, a variety of models must be quickly
 developed to be useful for informing policy. Even under normal research 
 settings, models should be easy to develop and fast to run, to facilitate the 
 evaluation of various hypotheses and comparison to data.
+
 
 
 
