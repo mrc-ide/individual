@@ -21,11 +21,6 @@ affiliations:
    index: 2
 date: 13 August 2017
 bibliography: paper.bib
-
-# Optional fields if submitting to a AAS journal too, see this blog post:
-# https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
-aas-doi: 10.3847/xxxxx <- update this with the DOI from AAS once you know it.
-aas-journal: Astrophysical Journal <- The name of the AAS journal.
 ---
 
 # Summary
@@ -69,7 +64,6 @@ A list of key references, including to other software addressing related needs. 
 Notes on what the paper should have are in the [review checklist](https://joss.readthedocs.io/en/latest/review_checklist.html) and [review criteria](https://joss.readthedocs.io/en/latest/review_criteria.html#the-joss-paper).
 
 This is what the paper should contain:
-
     1. Summary: Has a clear description of the high-level functionality and purpose of the software for a diverse, non-specialist audience been provided?
     2. A statement of need: Does the paper have a section titled ‘Statement of Need’ that clearly states what problems the software is designed to solve and who the target audience is?
     3. State of the field: Do the authors describe how this software compares to other commonly-used packages?
@@ -77,8 +71,6 @@ This is what the paper should contain:
     5. References: Is the list of references complete, and is everything cited appropriately that should be cited (e.g., papers, datasets, software)? Do references in the text use the proper citation syntax?
     
 Software docs should cover the following:
-
-
     1. A statement of need: Do the authors clearly state what problems the software is designed to solve and who the target audience is?
     2. Installation instructions: Is there a clearly-stated list of dependencies? Ideally these should be handled with an automated package management solution.
     3. Example usage: Do the authors include examples of how to use the software (ideally to solve real-world analysis problems).
