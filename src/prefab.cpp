@@ -25,11 +25,7 @@ Rcpp::XPtr<process_t> fixed_probability_multinomial_process_internal(
 
     // make pointer to lambda function and return XPtr to R
     return Rcpp::XPtr<process_t>(
-<<<<<<< HEAD
-        new process_t([variable,source_state,destination_states,rate,cdf](size_t t) -> void {      
-=======
         new process_t([variable,source_state,destination_states,rate,cdf](size_t t){
->>>>>>> 550e55df27e2e4c5debcb6dbbe0144e4ccb24355
 
             // sample leavers
             individual_index_t leaving_individuals(variable->get_index_of(source_state));
@@ -77,11 +73,7 @@ Rcpp::XPtr<process_t> multi_probability_multinomial_process_internal(
 
     // make pointer to lambda function and return XPtr to R
     return Rcpp::XPtr<process_t>(
-<<<<<<< HEAD
-        new process_t([variable,source_state,destination_states,rate_variable,cdf](size_t t) -> void {      
-=======
         new process_t([variable,source_state,destination_states,rate_variable,cdf](size_t t){
->>>>>>> 550e55df27e2e4c5debcb6dbbe0144e4ccb24355
 
             // sample leavers with their unique prob
             individual_index_t leaving_individuals(variable->get_index_of(source_state));
@@ -91,13 +83,8 @@ Rcpp::XPtr<process_t> multi_probability_multinomial_process_internal(
             // empty bitsets to put them (their destinations)
             std::vector<individual_index_t> destination_individuals;
             size_t n = destination_states.size();
-<<<<<<< HEAD
-            for(size_t i=0; i<n; i++) {
-                destination_individuals.emplace_back(variable->size);
-=======
             for (size_t i=0; i<n; i++) {
                 destination_individuals.emplace_back(leaving_individuals.max_size());
->>>>>>> 550e55df27e2e4c5debcb6dbbe0144e4ccb24355
             }
 
             // random variate for each leaver to see where they go
