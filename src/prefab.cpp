@@ -35,7 +35,7 @@ Rcpp::XPtr<process_t> fixed_probability_multinomial_process_internal(
             std::vector<individual_index_t> destination_individuals;
             size_t n = destination_states.size();
             for (size_t i=0; i<n; i++) {
-                destination_individuals.emplace_back(variable->size);
+                destination_individuals.emplace_back(leaving_individuals.max_size());
             }
 
             // random variate for each leaver to see where they go
