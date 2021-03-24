@@ -1,26 +1,24 @@
 ---
-title: 'Gala: A Python package for galactic dynamics'
+title: 'individual: An R package for individual based epidemiological models'
 tags:
-  - Python
-  - astronomy
-  - dynamics
-  - galactic dynamics
-  - milky way
+  - R
+  - epidemiology
+  - individual based
+  - agent based
+  - infectious disease
+  - simulation
 authors:
-  - name: Adrian M. Price-Whelan^[Custom footnotes for e.g. denoting who the corresponding author is can be included like this.]
+  - name: Giovanni D. Charles^[Custom footnotes for e.g. denoting who the corresponding author is can be included like this.]
     orcid: 0000-0003-0872-7098
-    affiliation: "1, 2" # (Multiple affiliations must be quoted)
-  - name: Author Without ORCID
+    affiliation: 1
+  - name: Sean L. Wu
+    orcid: 0000-0002-5781-9493
     affiliation: 2
-  - name: Author with no affiliation
-    affiliation: 3
 affiliations:
- - name: Lyman Spitzer, Jr. Fellow, Princeton University
+ - name:  MRC Centre for Global Infectious Disease Analysis, Abdul Latif Jameel Institute for Disease and Emergency Analytics (J-IDEA), Imperial College London, London, UK.
    index: 1
- - name: Institution Name
+ - name: Division of Epidemiology and Biostatistics, School of Public Health, University of California, Berkeley, CA 94720, USA
    index: 2
- - name: Independent Researcher
-   index: 3
 date: 13 August 2017
 bibliography: paper.bib
 
@@ -63,6 +61,32 @@ visualizations of textbook material [@Binney:2008]. The combination of speed,
 design, and support for Astropy functionality in `Gala` will enable exciting
 scientific explorations of forthcoming data releases from the *Gaia* mission
 [@gaia] by students and experts alike.
+
+# Main section
+
+A list of key references, including to other software addressing related needs. Note that the references should include full names of venues, e.g., journals and conferences, not abbreviations only understood in the context of a specific discipline. Mention (if applicable) a representative set of past or ongoing research projects using the software and recent scholarly publications enabled by it.
+
+Notes on what the paper should have are in the [review checklist](https://joss.readthedocs.io/en/latest/review_checklist.html) and [review criteria](https://joss.readthedocs.io/en/latest/review_criteria.html#the-joss-paper).
+
+This is what the paper should contain:
+
+    1. Summary: Has a clear description of the high-level functionality and purpose of the software for a diverse, non-specialist audience been provided?
+    2. A statement of need: Does the paper have a section titled ‘Statement of Need’ that clearly states what problems the software is designed to solve and who the target audience is?
+    3. State of the field: Do the authors describe how this software compares to other commonly-used packages?
+    4. Quality of writing: Is the paper well written (i.e., it does not require editing for structure, language, or writing quality)?
+    5. References: Is the list of references complete, and is everything cited appropriately that should be cited (e.g., papers, datasets, software)? Do references in the text use the proper citation syntax?
+    
+Software docs should cover the following:
+
+
+    1. A statement of need: Do the authors clearly state what problems the software is designed to solve and who the target audience is?
+    2. Installation instructions: Is there a clearly-stated list of dependencies? Ideally these should be handled with an automated package management solution.
+    3. Example usage: Do the authors include examples of how to use the software (ideally to solve real-world analysis problems).
+    4. Functionality documentation: Is the core functionality of the software documented to a satisfactory level (e.g., API method documentation)?
+    5. Automated tests: Are there automated tests or manual steps described so that the functionality of the software can be verified?
+    6. Community guidelines: Are there clear guidelines for third parties wishing to 1) Contribute to the software 2) Report issues or problems with the software 3) Seek support
+
+
 
 # Mathematics
 
