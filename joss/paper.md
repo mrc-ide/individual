@@ -7,6 +7,7 @@ tags:
   - agent based
   - infectious disease
   - simulation
+  - stochastic
 authors:
   - name: Giovanni D. Charles^[Custom footnotes for e.g. denoting who the corresponding author is can be included like this.]
     orcid: 0000-0003-0872-7098
@@ -15,15 +16,30 @@ authors:
     orcid: 0000-0002-5781-9493
     affiliation: 2
 affiliations:
- - name:  MRC Centre for Global Infectious Disease Analysis, Abdul Latif Jameel Institute for Disease and Emergency Analytics (J-IDEA), Imperial College London, London, UK.
+ - name:  MRC Centre for Global Infectious Disease Analysis, Abdul Latif Jameel 
+ Institute for Disease and Emergency Analytics (J-IDEA), Imperial College 
+ London, London, UK.
    index: 1
- - name: Division of Epidemiology and Biostatistics, School of Public Health, University of California, Berkeley, CA 94720, USA
+ - name: Division of Epidemiology and Biostatistics, School of Public Health, 
+ University of California, Berkeley, CA 94720, USA
    index: 2
 date: 13 August 2017
 bibliography: paper.bib
 ---
 
 # Summary
+
+Simulation of individual-based models (IBM) is a crucial tool for many tasks 
+in public health, and especially in infectious disease epidemiology. Such models
+can help formalize theory, generate synthetic data, evaluate counterfactual 
+scenarios, forecast trends, and be used for statistical inference [@Tracy:2021]. 
+In many cases, especially during epidemic scenarios, a variety of models must be quickly
+developed to be useful for informing policy. Even under normal research 
+settings, models should be easy to develop and fast to run, to facilitate the 
+evaluation of various hypotheses and comparison to data.
+
+
+
 
 The forces on stars, galaxies, and dark matter under external gravitational
 fields lead to the dynamical evolution of structures in the universe. The orbits
@@ -64,6 +80,7 @@ A list of key references, including to other software addressing related needs. 
 Notes on what the paper should have are in the [review checklist](https://joss.readthedocs.io/en/latest/review_checklist.html) and [review criteria](https://joss.readthedocs.io/en/latest/review_criteria.html#the-joss-paper).
 
 This is what the paper should contain:
+
     1. Summary: Has a clear description of the high-level functionality and purpose of the software for a diverse, non-specialist audience been provided?
     2. A statement of need: Does the paper have a section titled ‘Statement of Need’ that clearly states what problems the software is designed to solve and who the target audience is?
     3. State of the field: Do the authors describe how this software compares to other commonly-used packages?
@@ -71,14 +88,13 @@ This is what the paper should contain:
     5. References: Is the list of references complete, and is everything cited appropriately that should be cited (e.g., papers, datasets, software)? Do references in the text use the proper citation syntax?
     
 Software docs should cover the following:
+
     1. A statement of need: Do the authors clearly state what problems the software is designed to solve and who the target audience is?
     2. Installation instructions: Is there a clearly-stated list of dependencies? Ideally these should be handled with an automated package management solution.
     3. Example usage: Do the authors include examples of how to use the software (ideally to solve real-world analysis problems).
     4. Functionality documentation: Is the core functionality of the software documented to a satisfactory level (e.g., API method documentation)?
     5. Automated tests: Are there automated tests or manual steps described so that the functionality of the software can be verified?
     6. Community guidelines: Are there clear guidelines for third parties wishing to 1) Contribute to the software 2) Report issues or problems with the software 3) Seek support
-
-
 
 # Mathematics
 
