@@ -35,7 +35,7 @@ The "individual" package is designed for running big individual-based models. Bu
 
 ### Bitset {#bitset}
 
-The [bitset](https://en.wikipedia.org/wiki/Bit_array) data structure used to store categorical state information, `individual::Bitset` is able to preform set operations extremely quickly using [bitwise operations](https://en.wikipedia.org/wiki/Bitwise_operation). Taking advantage of these operations can lead to very fast processes, when you need to find some particular subset of individuals.
+The [bitset](https://en.wikipedia.org/wiki/Bit_array) data structure is used to record the presence or absence of an element in a finite set. `individual::Bitset` implements this data structure and is able to preform set operations extremely quickly using [bitwise operations](https://en.wikipedia.org/wiki/Bitwise_operation). Taking advantage of these operations can lead to very fast processes, when you need to find some particular subset of individuals.
 
 Let's take a look at the recovery process in `vignette("Tutorial")`. A crucial operation here is to get all infectious individuals who are not already scheduled for recovery. The object `I` is a bitset containing all those individuals currently infectious, and `already_scheduled` is another bitset containing those individuals scheduled for a recovery event. Using `already_scheduled$not()` returns a new bitset of those individuals *not* in the set of already scheduled persons. This is passed to the `I$and()`, which modifies `I` in-place so that the result is the intersection of currently infectious persons and persons who have not yet been scheduled for a recovery event, which is precisely the set of people we want.
 
@@ -61,7 +61,11 @@ infection_process <- function(t){
 }
 ```
 
-Bitsets offer methods to preform unions (`Bitset$or()`) and intersections (`Bitset$and()`) with other bitsets. These two methods modify the bitset in-place. The method `Bitset$not()` gives the complement of a bitset, and returns a new `individual::Bitset` object, leaving the original bitset intact. Insertion and removal of elements is also supported. Making good use of these bitset operations can help make processes in "individual" much faster.
+When creating a new Bitset, a user must specify the maximum size of the bitset. This is the maximum number of positive integers which the bitset can store. For example, if calling `Bitset$new(size = 100)`, the resulting object is able to store the presence or absence of integers between 1 and 100 (inclusive). Attempting to insert or remove elements outside of this range will result in an error.
+
+Bitsets offer methods to preform unions (`Bitset$or()`), intersections (`Bitset$and()`), symmetric set difference (also known as exclusive or, `Bitset$xor()`), and set difference (`Bitset$set_difference()`) with other bitsets. These methods modify the bitset in-place. The method `Bitset$not()` gives the complement of a bitset, and returns a new `individual::Bitset` object, leaving the original bitset intact. Because these set operations use bitwise operations directly rather than more expensive relational operators, computations with bitsets are extremely fast. Insertion and removal of elements are also supported.
+
+Because a bitset stores integers in some finite set, it can be returned as an integer vector by using `Bitset$to_vector()`. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model's dynamics require the frequent returning of integer vectors for computation and updating, an `individual::IntegerVector` object will be more appropriate, or if the variable's range is unbounded, or can take negative values. However, for most discrete variables with a finite range of values, and especially those which mirror compartments in mathematical models, bitset operations and `individual::CategoricalVariable` (which uses bitsets internally) should be preferred. Taking advantage of bitset operations can help make processes in "individual" much faster.
 
 ### Prefabs {#prefab}
 
