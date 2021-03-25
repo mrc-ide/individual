@@ -57,11 +57,25 @@ update all or some variables after an arbitrary delay. Models developed in `indi
 are updated on a discrete time step, and individuals can interact in a completely
 general manner. While `individual` can represent almost any kind of IBM, it is
 designed to be used for the types of models encountered in epidemiology, 
-where individuals' interactions are structured by discrete variables, such as
+where interactions between individuals are structured by discrete variables, such as
 position on a network, and more efficient alternatives may exist for continuous
 space models or cellular automata.
 
 # Statement of need
+
+In many applications, but especially epidemiology, individual-based models often
+need to balance comprehensibility and speed. A fast model whose code is only
+understood by the author can be difficult to use as a basis for scientific
+exploration, which necessitates the development of various similar models to
+test different hypotheses or explore sensitivity to certain assumptions. On the
+other hand a clear yet slow model can be practically unusable for tasks such as
+uncertainty quantification or statistical inference on model parameters. `individual`
+provides a toolkit for epidemiologists to write models which is general enough
+to cover nearly all models of practical interest using simple, standardized code which is
+fast enough to be useful for computation heavy applications.
+
+- say something about how writing models in "individual" looks a lot like how one
+conceptually thinks about models as defining state and processes/rules which update state?
 
 The `individual` package is written in the R language, which is a *lingua franca*
 in epidemiological applications. The package uses `Rcpp` [@Rcpp] to link to
@@ -69,30 +83,19 @@ the C++ source code, which underlies the data structures exposed to the user.
 The API for `individual` uses a `R6` [@R6] class-based design at the R level
 which users call to create, update, and query variables.
 
-`Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for `Gala` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and
-`astropy.coordinates`).
+Because in many epidemiological models the most important individual level
+characteristic can be represented as belonging to mutually exclusive 
+types in a finite set (such as susceptible or infectious), the software
+uses a fast bitset object at the C++ level to represent each individual's value.
+Bitwise operations at the R level implementing the various set operations 
+including union, intersection, set difference, symmetric difference and complement 
+allow users to write highly efficient R code for updating their model.
 
-In many cases, especially during epidemic scenarios, a variety of models must be quickly
-developed to be useful for informing policy. Even under normal research 
-settings, models should be easy to develop and fast to run, to facilitate the 
-evaluation of various hypotheses and comparison to data.
+`individual` also provides a C++ header-only interface which advanced users
+can link to from their R package. The C++ interface allows a user to interact
+with the C++ types directly, if the R interface remains too slow for their use case.
 
-`Gala` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in `Gala` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike.
+# State of the field
 
 # Main section
 
