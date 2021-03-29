@@ -22,7 +22,7 @@ Render <- R6::R6Class(
     #' Set a default value for a rendered output
     #' renderers
     #' @param name the variable to set a default for
-    #' @parm value  the defualt value to set for a variable
+    #' @parm value  the default value to set for a variable
     set_default = function(name, value) {
       if (name == 'timestep') {
         stop("Cannot set default value for variable 'timestep'")
