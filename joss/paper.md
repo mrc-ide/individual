@@ -97,6 +97,8 @@ with the C++ types directly, if the R interface remains too slow for their use c
 
 # State of the field
 
+TODO
+
 List of R packages to follow up on when comparing to existing software.
   - [https://cran.r-project.org/web/packages/hybridModels/index.html](https://cran.r-project.org/web/packages/hybridModels/index.html)
   - [https://siminf.org/](https://siminf.org/)
@@ -118,73 +120,95 @@ List of R packages to follow up on when comparing to existing software.
   - EpiModel [http://www.epimodel.org/](http://www.epimodel.org/) for networks
   - nosoi: just for pathogen transmission [https://slequime.github.io/nosoi/](https://slequime.github.io/nosoi/)
 
+# Overview
 
-# Main section
+The primitives in the `individual` package can be separated into variables,
+processes, events and rendering. Each primitive is designed to simplify and
+optimise a common challenge in infectious disease modelling. They are flexible
+enough to be extended by users and work alongside other packages in the
+modelling ecosystem.
 
-A list of key references, including to other software addressing related needs. Note that the references should include full names of venues, e.g., journals and conferences, not abbreviations only understood in the context of a specific discipline. Mention (if applicable) a representative set of past or ongoing research projects using the software and recent scholarly publications enabled by it.
+## Variables
 
-Notes on what the paper should have are in the [review checklist](https://joss.readthedocs.io/en/latest/review_checklist.html) and [review criteria](https://joss.readthedocs.io/en/latest/review_criteria.html#the-joss-paper).
+A variable represents an attribute of each individual in the model. While
+many variables will be dynamically updated throughout a simulation, they can
+also remain constant. `individual` currently provides variables for categorical,
+integer-based and Real-valued attributes. Example model variables could 
+include an individual's infection state, age or level of immune response.
 
-This is what the paper should contain:
+Variables expose methods for creating cohorts. Users can define
+cohorts by selecting ranges of attribute values, or combining other cohorts
+using efficient set operations. This simplifies much of the modelling code into 
+performant, vectorised operations.
 
-    1. Summary: Has a clear description of the high-level functionality and purpose of the software for a diverse, non-specialist audience been provided?
-    2. A statement of need: Does the paper have a section titled ‘Statement of Need’ that clearly states what problems the software is designed to solve and who the target audience is?
-    3. State of the field: Do the authors describe how this software compares to other commonly-used packages?
-    4. Quality of writing: Is the paper well written (i.e., it does not require editing for structure, language, or writing quality)?
-    5. References: Is the list of references complete, and is everything cited appropriately that should be cited (e.g., papers, datasets, software)? Do references in the text use the proper citation syntax?
-    
-Software docs should cover the following:
+Variables also enforce transactional updates. Every time step, users have access
+to variable data from the beginning of the time step. All changes are applied 
+once all of the updates for a time step have been calculated. This allows
+several processes to access the same variables without interfering with each
+other.
 
-    1. A statement of need: Do the authors clearly state what problems the software is designed to solve and who the target audience is?
-    2. Installation instructions: Is there a clearly-stated list of dependencies? Ideally these should be handled with an automated package management solution.
-    3. Example usage: Do the authors include examples of how to use the software (ideally to solve real-world analysis problems).
-    4. Functionality documentation: Is the core functionality of the software documented to a satisfactory level (e.g., API method documentation)?
-    5. Automated tests: Are there automated tests or manual steps described so that the functionality of the software can be verified?
-    6. Community guidelines: Are there clear guidelines for third parties wishing to 1) Contribute to the software 2) Report issues or problems with the software 3) Seek support
+## Processes
 
-# Mathematics
+Processes determine the model dynamics between time steps. Each process will
+update variables and schedule events to reflect some biological or
+interventional effect on each individual. Several processes can be combined to
+create complex disease transmission dynamics. For example, one process could
+govern the waning in each individual's immunity, while another could introduce 
+infection through contact with a disease vector.
 
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
+Users can define processes in either R or C++. Processes are implemented as
+closures in R, and a std::function in C++. This gives the user the flexibility
+to use other tools in their respective ecosystems, test their processes in
+isolation, and trade off between development speed for performance.
 
-Double dollars make self-standing equations:
+`individual` provides process generators for common infectious disease
+dynamics. Users can parameterise these generators with their model variables 
+to speed up development and reduce their code size. Current
+generators include an `infection_age_process`, a `bernoulli_process`, a
+`fixed_probability_multinomial_process` among others.
 
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
+## Events
 
-You can also use plain \LaTeX for equations
-\begin{equation}\label{eq:fourier}
-\hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx
-\end{equation}
-and refer to \autoref{eq:fourier} from text.
+In some cases, users would like processes to execute at specific time steps.
+Events provide that functionality. Events can be scheduled before or during
+model simulation, they can be pre-empted, and they can be targeted to a 
+cohort of individuals. Users can attach listeners to these events to define the
+change to model dynamics once they are triggered. Events are useful for
+modelling  interventions like vaccinations, or delayed biological events like
+incubation periods.
 
-# Citations
+Like processes, listeners can be defined in R or C++. `individual` also provides
+listener generators like `reschedule_listener` and `update_category_listener`.
 
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
+## Rendering
 
-If you want to cite a software repository URL (e.g. something on GitHub without a preferred
-citation) then you can do it with the example BibTeX entry below for @fidgit.
+The rendering primitives are used to record statistics from the simulation.
+The `Render` class combines statistics disparate processes into a dataframe
+for further analysis.
 
-For a quick reference, the following citation commands can be used:
-- `@author:2001`  ->  "Author et al. (2001)"
-- `[@author:2001]` -> "(Author et al., 2001)"
-- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
+## Simulation loop
 
-# Figures
+The simulation loop combines the primitives to run a discrete-time simulation
+and produce a dataframe of results. It executes processes, triggered listeners 
+and then variable updates for each time step.
 
-Figures can be included like this:
-![Caption for example figure.\label{fig:example}](figure.png)
-and referenced from text using \autoref{fig:example}.
+The simulation loop has predictable resolutions for conflicting variable update
+transactions. The user specifies the order in which processes and
+listeners (if triggered) are executed. Variable updates are executed in FIFO
+order with later updates overwriting earlier ones. This results in later
+processes and listeners taking precedence over earlier ones. Updates produced
+by listeners take precedence over any updates produced from processes.
 
-Figure sizes can be customized by adding an optional second parameter:
-![Caption for example figure.](figure.png){ width=20% }
+![A flow diagram for the simulation loop](sim_loop.png)
+
+# Example
+
+A simple SIR model
 
 # Acknowledgements
 
-We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
-Oh, and support from Kathryn Johnston during the genesis of this project.
+Pete Winskill, Richard Fitzjohn, Oliver Watson
+
+TODO
 
 # References
