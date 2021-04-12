@@ -52,8 +52,8 @@ for specifying and simulating IBMs, with special attention to the types of model
 encountered in infectious disease epidemiology, although the software is generic.
 Users specify variables, one for each characteristic of an individual in the
 simulated population. The package provides efficient methods for finding
-subsets of individuals based on these variables, which can then be scheduled to 
-update all or some variables after an arbitrary delay. Models developed in `individual`
+subsets of individuals based on these variables, or cohorts. Cohorts can then
+be targeted for variable updates or future events. Models developed in `individual`
 are updated on a discrete time step, and individuals can interact in a completely
 general manner. While `individual` can represent almost any kind of IBM, it is
 designed to be used for the types of models encountered in epidemiology, 
@@ -124,9 +124,11 @@ List of R packages to follow up on when comparing to existing software.
 
 The primitives in the `individual` package can be separated into variables,
 processes, events and rendering. Each primitive is designed to simplify and
-optimise a common challenge in infectious disease modelling. They are flexible
-enough to be extended by users and work alongside other packages in the
-modelling ecosystem.
+optimise a common challenge in the simulation of infectious disease models.
+
+The package is designed to allow models integrate easily with other R and C++
+packages. There is no compilation of model code, and primitives are made
+available through `R6` [@R6] or C++ classes.
 
 ## Variables
 
@@ -141,20 +143,22 @@ cohorts by selecting ranges of attribute values, or combining other cohorts
 using efficient set operations. This simplifies much of the modelling code into 
 performant, vectorised operations.
 
-Variables also enforce transactional updates. Every time step, users have access
-to variable data from the beginning of the time step. All changes are applied 
-once all of the updates for a time step have been calculated. This allows
-several processes to access the same variables without interfering with each
-other.
+In discrete time models, users often want to model processes which occur
+simultaneously each time step. They do not want variable updates from one
+process to affect variable accesses in another. Variables in `individual`
+achieve this with transactional updates. Every process has access to the
+same variable values from the previous time step. They are able to queue updates
+to a variable, but they are not applied until all processes have been run for
+the current time step.
 
 ## Processes
 
-Processes determine the model dynamics between time steps. Each process will
-update variables and schedule events to reflect some biological or
-interventional effect on each individual. Several processes can be combined to
-create complex disease transmission dynamics. For example, one process could
-govern the waning in each individual's immunity, while another could introduce 
-infection through contact with a disease vector.
+Processes determine the dynamics which update the model from one time step to
+the next. Each process will update variables and schedule events to reflect
+some biological or interventional effect on each individual. Several processes
+can be combined to create complex disease transmission dynamics. For example,
+one process could govern the waning in each individual's immunity, while another
+could introduce infection through contact with a disease vector.
 
 Users can define processes in either R or C++. Processes are implemented as
 closures in R, and a std::function in C++. This gives the user the flexibility
