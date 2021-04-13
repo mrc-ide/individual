@@ -134,9 +134,11 @@ available through `R6` [@R6] or C++ classes.
 
 A variable represents an attribute of each individual in the model. While
 many variables will be dynamically updated throughout a simulation, they can
-also remain constant. `individual` currently provides variables for categorical,
-integer-based and Real-valued attributes. Example model variables could 
-include an individual's infection state, age or level of immune response.
+also remain constant. `individual` currently provides a variety variables for
+suited for modelling seperate aspects of the model. Examples might include a
+categorical variable specifying each individual's health status, a Real valued
+variable giving their level of immune response, or an integer variable
+giving their position on a spatial network.
 
 Variables expose methods for creating cohorts. Users can define
 cohorts by selecting ranges of attribute values, or combining other cohorts
@@ -149,7 +151,9 @@ process to affect variable accesses in another. Variables in `individual`
 achieve this with transactional updates. Every process has access to the
 same variable values from the previous time step. They are able to queue updates
 to a variable, but they are not applied until all processes have been run for
-the current time step.
+the current time step. This means all agents update synchronously where
+conflicts, multiple updates scheduled for a single agent, are resolved by the
+process execution order.
 
 ## Processes
 
