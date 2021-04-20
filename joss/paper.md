@@ -77,6 +77,9 @@ fast enough to be useful for computation heavy applications.
 - say something about how writing models in "individual" looks a lot like how one
 conceptually thinks about models as defining state and processes/rules which update state?
 
+- say something about how it's great it's in R because we can use the 
+huge ecosystem of inference packages, etc? 
+
 The `individual` package is written in the R language, which is a *lingua franca*
 in epidemiological applications. The package uses `Rcpp` [@Rcpp] to link to
 the C++ source code, which underlies the data structures exposed to the user. 
@@ -97,7 +100,17 @@ with the C++ types directly, if the R interface remains too slow for their use c
 
 # State of the field
 
-TODO
+There are currently a variety of software libraries for epidemiological simulation,
+both in the R language and other programming languages. However, we are not yet aware
+of a similar package in any language written especially for epidemiologists which allows 
+simulation of generic infectious processes by providing users with a set of specialized 
+data types and methods without making assumptions about model structure (e.g. network, 
+metapopulation, lattice grid, etc).
+
+A wide variety of simulation software exist for generic agent-based models. Among the best
+known are Repast [@North:2013], Mesa [@Masad:2015], and NetLogo [@Wilensky:1999]
+
+Hladish:2012
 
 List of R packages to follow up on when comparing to existing software.
   - [https://cran.r-project.org/web/packages/hybridModels/index.html](https://cran.r-project.org/web/packages/hybridModels/index.html)
