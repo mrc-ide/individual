@@ -108,11 +108,19 @@ data types and methods without making assumptions about model structure (e.g. ne
 metapopulation, lattice grid, etc).
 
 A wide variety of simulation software exist for generic agent-based models. Among the best
-known are Repast [@North:2013], Mesa [@Masad:2015], and NetLogo [@Wilensky:1999]
+known are Repast [@North:2013], Mesa [@Masad:2015], and NetLogo [@Wilensky:1999].
 
-EpiFire [@Hladish:2012]
+Among software written specifically for R, there are several generic modeling platforms
+which support agent based models. For discrete event simulation simmeR [@Ucar:2017] 
+develops a similar `R6` interface with linked C++ but whose API is set up for
+modeling the types of sytstems commonly encountered in operations research, such as
+queueing processes, but would be difficult to use for epidemiological applications.
+SpaDES [@Mcintire:2021] also exists.
+
+EpiFire [@Hladish:2012] is a C++ library for network epidemic simulations.
 
 List of R packages to follow up on when comparing to existing software.
+
   - [https://cran.r-project.org/web/packages/hybridModels/index.html](https://cran.r-project.org/web/packages/hybridModels/index.html)
   
   - [https://siminf.org/](https://siminf.org/)
