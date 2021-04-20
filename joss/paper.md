@@ -110,27 +110,45 @@ metapopulation, lattice grid, etc).
 A wide variety of simulation software exist for generic agent-based models. Among the best
 known are Repast [@North:2013], Mesa [@Masad:2015], and NetLogo [@Wilensky:1999]
 
-Hladish:2012
+EpiFire [@Hladish:2012]
 
 List of R packages to follow up on when comparing to existing software.
   - [https://cran.r-project.org/web/packages/hybridModels/index.html](https://cran.r-project.org/web/packages/hybridModels/index.html)
+  
   - [https://siminf.org/](https://siminf.org/)
+  
   - SpaDES [https://spades.predictiveecology.org/](https://spades.predictiveecology.org/)
+  
   - simmeR [https://r-simmer.org/](https://r-simmer.org/)
+  
   - IBM for animal breeding [https://academic.oup.com/g3journal/article/11/2/jkaa017/6025179](https://academic.oup.com/g3journal/article/11/2/jkaa017/6025179)
+  
   - IBMs in R [https://cran.r-project.org/web/packages/ibm/index.html](https://cran.r-project.org/web/packages/ibm/index.html)  doesnt really have a unified API for users, but is a collection of examples?
+  
   - ibmcraftr [https://cran.r-project.org/web/packages/ibmcraftr/index.html](https://cran.r-project.org/web/packages/ibmcraftr/index.html) for CTMCs, basically
+  
   - IBMPopSim [https://github.com/DaphneGiorgi/IBMPopSim](https://github.com/DaphneGiorgi/IBMPopSim) compiles intensity functions on the fly into Rcpp and then runs. Different from us.
+  
   - Continuous and discrete time simulation and inference of SIR/SINR on networks [https://github.com/waleedalmutiry/EpiILMCT/](https://github.com/waleedalmutiry/EpiILMCT/) [https://github.com/waleedalmutiry/EpiILM](https://github.com/waleedalmutiry/EpiILM)
+  
   - stochastic leslie matrix models [https://mran.microsoft.com/snapshot/2017-05-24/web/packages/population/index.html](https://mran.microsoft.com/snapshot/2017-05-24/web/packages/population/index.html)
+  
   - fish ecosystem IBM [https://www.r-pkg.org/pkg/osmose](https://www.r-pkg.org/pkg/osmose)
+  
   - plant-plant interaction IBM [https://www.r-pkg.org/pkg/facilitation](https://www.r-pkg.org/pkg/facilitation)
+  
   - plant model [https://www.r-pkg.org/pkg/siplab](https://www.r-pkg.org/pkg/siplab)
+  
   - Interface to Repast [https://www.r-pkg.org/pkg/rrepast](https://www.r-pkg.org/pkg/rrepast)
+  
   - NetLogoR [https://www.r-pkg.org/pkg/NetLogoR](https://www.r-pkg.org/pkg/NetLogoR) netlogo, but in r
+  
       - [https://www.r-pkg.org/pkg/RNetLogo](https://www.r-pkg.org/pkg/RNetLogo) interface
+      
   - SimEcol [http://simecol.r-forge.r-project.org/](http://simecol.r-forge.r-project.org/)
+  
   - EpiModel [http://www.epimodel.org/](http://www.epimodel.org/) for networks
+  
   - nosoi: just for pathogen transmission [https://slequime.github.io/nosoi/](https://slequime.github.io/nosoi/)
 
 # Overview
