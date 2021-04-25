@@ -74,11 +74,20 @@ provides a toolkit for epidemiologists to write models which is general enough
 to cover nearly all models of practical interest using simple, standardized code which is
 fast enough to be useful for computation heavy applications.
 
+- one really cool thing about individual we should talk about is how users define
+variables rather than a type for a particular agent.
+
 - say something about how writing models in "individual" looks a lot like how one
 conceptually thinks about models as defining state and processes/rules which update state?
 
 - say something about how it's great it's in R because we can use the 
 huge ecosystem of inference packages, etc? 
+
+- arbitrary waiting time distributions possible, most models assume the rate or
+probability of occurrence of events is either constant or depends on time. In 
+`individual` it is possible for processes and events to not only depend on time
+and individual level attributes but also the time since an event was enabled
+(non-Markovian).
 
 The `individual` package is written in the R language, which is a *lingua franca*
 in epidemiological applications. The package uses `Rcpp` [@Rcpp] to link to
@@ -103,61 +112,103 @@ with the C++ types directly, if the R interface remains too slow for their use c
 There are currently a variety of software libraries for epidemiological simulation,
 both in the R language and other programming languages. However, we are not yet aware
 of a similar package in any language written especially for epidemiologists which allows 
-simulation of generic infectious processes by providing users with a set of specialized 
-data types and methods without making assumptions about model structure (e.g. network, 
-metapopulation, lattice grid, etc).
+simulation of generic individual-based infectious processes by providing users 
+with a set of specialized data types and methods without making assumptions about 
+model structure (e.g. network, metapopulation, lattice grid, etc).
 
 A wide variety of simulation software exist for generic agent-based models. Among the best
 known are Repast [@North:2013], Mesa [@Masad:2015], and NetLogo [@Wilensky:1999].
+
+In the Julia programming language, Agents.jl [@Vahdati:2019] provides an efficient
+platform for specifying and simulation agent-based models. Unlike `individual`,
+in Agents.jl a user specifies a custom type that defines a single agent, whereas
+in `individual` users define variables that implicitly specify the possible model
+states. Pathogen.jl is a recent software package for individual based simulation of SEIR, 
+SEI, SIR, and SI type epidemic models, where infection, incubation, and recovery 
+events may depend on specific characteristics of each individual (or pairs, in
+the case of infection). Nontheless it is restricted to these types of epidemic models,
+and does not support arbitrary waiting time distributions.
+
+Epi software not R:
+EpiFire [@Hladish:2012] is a C++ library for network epidemic simulations.
+Numerus Model Builder [@Getz:2018] and NOVA [@Salter:2013]
+EMOD [@Bershteyn:2018]
+SimpactCyan [@Liesenborgs:2019], for HIV epidemiology, continuous time discrete event
+using mNRM, so restricted to Markov processes.
+
+
+R/ABM:
+Several R packages provide interfaces to other software libraries.
+The nlrx package provides an R interface to NetLogo [@Salecker:2019] to set up reproducible
+experiements and focuses on sensitivity analysis, and RNetLogo is a more basic interface [@Thiele:2014].
+For the Repast library, RRepast provides a sophisticated interface [@Garcia:2016].
+
 
 Among software written specifically for R, there are several generic modeling platforms
 which support agent based models. For discrete event simulation simmeR [@Ucar:2017] 
 develops a similar `R6` interface with linked C++ but whose API is set up for
 modeling the types of sytstems commonly encountered in operations research, such as
 queueing processes, but would be difficult to use for epidemiological applications.
-SpaDES [@Mcintire:2021] also exists.
 
-EpiFire [@Hladish:2012] is a C++ library for network epidemic simulations.
+SpaDES [@Mcintire:2021] also exists.
+NetLogoR [@Bauduin:2019] is a translation of the NetLogo framework into R.
+
+
+
+ibm [@Oliveros:2016] provides examples of simple, extensible, individual based models
+in R but does not provide a generic interface. ibmcraftr [@Tun:2016] allows creation
+of discretized CTMC simulations in R.
+
+IBMPopSim [@Giorgi:2020] is a sophisticated R package that allows simulation of 
+general continuous time non-Markovian individual based models for demography, 
+based on a thinning (also known as uniformization or Jensen's method) algorithm to simulate exact trajectories. 
+However, it requires users to input C++ code as a string into the R interface 
+which are compiled to give the rate function for each event, meaning use of 
+other R packages to aid simulation is difficult.
+
+simecol [@Petzoldt:2007] provides classes to implement and distribute ecological
+models, but the focus is on structuring software projects to enhance reproducibility rather
+than providing tools for simulation. 
+
+R/EPI:
+There are a variety of packages in R designed to simulate epidemic processes on
+networks. The SimInf package [@Bauer:2016] is able to run very large CTMC simulations
+of epidemics on networks taking advantage of R's C interface to preform most computations in C.
+However it doesn't support arbitrary waiting times, continuous 
+or unbounded integer attributes for individuals, and has a highly structured API.
+The hybridModels package [@Fernando:2020] also implements network-structured
+CTMC models, but is fully implemented in R.
+
+EpiILMCT [@Almutiry:2020] and EpiILM [@Warriyar:2020] are R packages implementing 
+simulation and inference for continuous time models on networks or spatial grids,
+in continuous and discrete time, respectively, with computationally intensive routines
+coded in Fortran. However, rate functions for events have highly restricted functional
+forms and cannot interface with other R packages.
+
+EpiModel [@Jenness:2018] is perhaps the closest R software we have reviewed, allowing simulation
+of highly detailed discrete time models on networks, using functionality from the 
+statnet [@Handcock:statnet] project for network classes and algorithms.
+
+
+Why we're awesome:
+
+individual is great compared to non-R software because you can use anything else in R
+as part of your model, including R's support for rasters, networks, data tables, etc etc
+
+individual is great compared to R software because it allows execution of arbitrary
+R code within the updating processes, and provides an Rcpp interface for advanced users
+to link to for writing their own C++ process, potentially linking to outside C++ libraries.
+
 
 List of R packages to follow up on when comparing to existing software.
 
-  - [https://cran.r-project.org/web/packages/hybridModels/index.html](https://cran.r-project.org/web/packages/hybridModels/index.html)
-  
-  - [https://siminf.org/](https://siminf.org/)
-  
-  - SpaDES [https://spades.predictiveecology.org/](https://spades.predictiveecology.org/)
-  
-  - simmeR [https://r-simmer.org/](https://r-simmer.org/)
-  
-  - IBM for animal breeding [https://academic.oup.com/g3journal/article/11/2/jkaa017/6025179](https://academic.oup.com/g3journal/article/11/2/jkaa017/6025179)
-  
-  - IBMs in R [https://cran.r-project.org/web/packages/ibm/index.html](https://cran.r-project.org/web/packages/ibm/index.html)  doesnt really have a unified API for users, but is a collection of examples?
-  
-  - ibmcraftr [https://cran.r-project.org/web/packages/ibmcraftr/index.html](https://cran.r-project.org/web/packages/ibmcraftr/index.html) for CTMCs, basically
-  
-  - IBMPopSim [https://github.com/DaphneGiorgi/IBMPopSim](https://github.com/DaphneGiorgi/IBMPopSim) compiles intensity functions on the fly into Rcpp and then runs. Different from us.
-  
-  - Continuous and discrete time simulation and inference of SIR/SINR on networks [https://github.com/waleedalmutiry/EpiILMCT/](https://github.com/waleedalmutiry/EpiILMCT/) [https://github.com/waleedalmutiry/EpiILM](https://github.com/waleedalmutiry/EpiILM)
-  
-  - stochastic leslie matrix models [https://mran.microsoft.com/snapshot/2017-05-24/web/packages/population/index.html](https://mran.microsoft.com/snapshot/2017-05-24/web/packages/population/index.html)
-  
-  - fish ecosystem IBM [https://www.r-pkg.org/pkg/osmose](https://www.r-pkg.org/pkg/osmose)
-  
-  - plant-plant interaction IBM [https://www.r-pkg.org/pkg/facilitation](https://www.r-pkg.org/pkg/facilitation)
-  
-  - plant model [https://www.r-pkg.org/pkg/siplab](https://www.r-pkg.org/pkg/siplab)
-  
-  - Interface to Repast [https://www.r-pkg.org/pkg/rrepast](https://www.r-pkg.org/pkg/rrepast)
-  
-  - NetLogoR [https://www.r-pkg.org/pkg/NetLogoR](https://www.r-pkg.org/pkg/NetLogoR) netlogo, but in r
-  
-      - [https://www.r-pkg.org/pkg/RNetLogo](https://www.r-pkg.org/pkg/RNetLogo) interface
-      
-  - SimEcol [http://simecol.r-forge.r-project.org/](http://simecol.r-forge.r-project.org/)
-  
-  - EpiModel [http://www.epimodel.org/](http://www.epimodel.org/) for networks
-  
-  - nosoi: just for pathogen transmission [https://slequime.github.io/nosoi/](https://slequime.github.io/nosoi/)
+
+
+
+
+
+
+- nosoi: just for pathogen transmission [https://slequime.github.io/nosoi/](https://slequime.github.io/nosoi/)
 
 # Overview
 
