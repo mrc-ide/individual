@@ -74,21 +74,6 @@ provides a toolkit for epidemiologists to write models which is general enough
 to cover nearly all models of practical interest using simple, standardized code which is
 fast enough to be useful for computation heavy applications.
 
-- one really cool thing about individual we should talk about is how users define
-variables rather than a type for a particular agent.
-
-- say something about how writing models in "individual" looks a lot like how one
-conceptually thinks about models as defining state and processes/rules which update state?
-
-- say something about how it's great it's in R because we can use the 
-huge ecosystem of inference packages, etc? 
-
-- arbitrary waiting time distributions possible, most models assume the rate or
-probability of occurrence of events is either constant or depends on time. In 
-`individual` it is possible for processes and events to not only depend on time
-and individual level attributes but also the time since an event was enabled
-(non-Markovian).
-
 The `individual` package is written in the R language, which is a *lingua franca*
 in epidemiological applications. The package uses `Rcpp` [@Rcpp] to link to
 the C++ source code, which underlies the data structures exposed to the user. 
@@ -102,10 +87,25 @@ uses a fast bitset object at the C++ level to represent each individual's value.
 Bitwise operations at the R level implementing the various set operations 
 including union, intersection, set difference, symmetric difference and complement 
 allow users to write highly efficient R code for updating their model.
+This representation of discrete finite variables is (to our knowledge),
+novel for epidemiological simulation. While @Rizzi:2018 proposed using a bitset
+to represent each agent, the agents were still stored in an array.
+
+In contrast to other individual based modeling software, users define variables,
+one for each attribute of an individual, rather than defining a type for the 
+simulated individuals. Individual agents are only defined by their unique id,
+their position in bitset that defines membership to a finite variable, or the
+element of a vector of integers or floats for unbounded or real variables.
+This architecture is reminiscent of the entity component system design
+Each variable type (categorical, integer, or double) is managed by a data type with
+both an R and C++ interface.
 
 `individual` also provides a C++ header-only interface which advanced users
 can link to from their R package. The C++ interface allows a user to interact
 with the C++ types directly, if the R interface remains too slow for their use case.
+This means that users can link to other R packages that expose a C or C++ interface,
+significantly enhancing the extensibility of both `individual`'s R and C++ API.
+
 
 # State of the field
 
@@ -207,17 +207,8 @@ as part of your model, including R's support for rasters, networks, data tables,
 individual is great compared to R software because it allows execution of arbitrary
 R code within the updating processes, and provides an Rcpp interface for advanced users
 to link to for writing their own C++ process, potentially linking to outside C++ libraries.
-
-
-List of R packages to follow up on when comparing to existing software.
-
-
-
-
-
-
-
-- nosoi: just for pathogen transmission [https://slequime.github.io/nosoi/](https://slequime.github.io/nosoi/)
+We also don't have restrictions on the types of functions allowed for infection
+(e.g.; mass action).
 
 # Overview
 
@@ -254,6 +245,45 @@ the current time step. This means all agents update synchronously where
 conflicts, multiple updates scheduled for a single agent, are resolved by the
 process execution order.
 
+### Categorical Variable
+
+Most epidemiological models require the use of categorical variables, that is,
+an attribute for each individual taking a value in some discrete, finite set.
+Most well known compartmental models are represented solely in terms of 
+categorical variables, for example, the Susceptible, Infectious, and Recovered 
+classes in the classic SIR model.
+
+There can be an unlimited number of categorical variable objects, but every 
+individual can only take on a single value for each of them at any time. 
+When using multiple categorical variables, the allowed states for each
+individual is a contingency table whose margins are given by the set of states
+of each individual categorical variable. In this way, one could model, for 
+example, a SIR model where individuals are also partitioned by discrete age group
+with two categorical variable objects.
+
+In `individual` users may create a categorical variable corresponding to a set
+of mutually exclusive states in R using the `CategoricalVariable` `R6` class.
+The internal C++ API stores a bitset object for each value in the set of states.
+The class implements common set operations (union, intersection, complement,
+symmetric difference, set difference) as bitwise operations, making queries 
+to find some subset of individuals extremely fast.
+
+### Integer Variable
+
+For discrete variables with state spaces which are unbounded, or large enough
+to be impractical to store a bitset for each value, the `IntegerVariable` object
+stores state as a vector of integers of length equal to the size of the simulated
+population. This object supports finding and returning subsets of individuals
+as bitset objects which can be used with the set operations of `CategoricalVariable`.
+
+### Double Variable
+
+In certain cases, such as modeling of immunity or other values which are best
+represented as continuous quantities, a variable storing real valued quantities
+is needed. The `DoubleVariable` stores its state as a vector of double precision
+floating point values. Like `IntegerVariable`, it supports finding subsets of
+individuals in some interval and returning bitsets giving their indices.
+
 ## Processes
 
 Processes determine the dynamics which update the model from one time step to
@@ -273,6 +303,16 @@ dynamics. Users can parameterise these generators with their model variables
 to speed up development and reduce their code size. Current
 generators include an `infection_age_process`, a `bernoulli_process`, a
 `fixed_probability_multinomial_process` among others.
+
+Because processes can schedule variable updates or events depending on the state
+of variables in a completely general way, waiting times for events in 
+`individual` can follow any distribution with a computable hazard function.
+Distributions of time to event can depend on time, individual level attributes
+of multiple individuals, and the time elapsed since an event was enabled. In 
+fact enabling time dependency can be either implemented with a supplemental
+variable to explicitly track for each individual that elapsed time, or with
+a scheduled event, which can be cancled if interrupted prior to completion.
+Either way, `individual` can simulate general non-Markovian processes.
 
 ## Events
 
