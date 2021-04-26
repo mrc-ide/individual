@@ -109,6 +109,8 @@ with the C++ types directly, if the R interface remains too slow for their use c
 
 # State of the field
 
+## Non R Software
+
 There are currently a variety of software libraries for epidemiological simulation,
 both in the R language and other programming languages. However, we are not yet aware
 of a similar package in any language written especially for epidemiologists which allows 
@@ -118,44 +120,40 @@ model structure (e.g. network, metapopulation, lattice grid, etc).
 
 A wide variety of simulation software exist for generic agent-based models. Among the best
 known are Repast [@North:2013], Mesa [@Masad:2015], and NetLogo [@Wilensky:1999].
-
 In the Julia programming language, Agents.jl [@Vahdati:2019] provides an efficient
 platform for specifying and simulation agent-based models. Unlike `individual`,
 in Agents.jl a user specifies a custom type that defines a single agent, whereas
 in `individual` users define variables that implicitly specify the possible model
-states. Pathogen.jl is a recent software package for individual based simulation of SEIR, 
+states. Pathogen.jl is a package for individual based simulation of SEIR, 
 SEI, SIR, and SI type epidemic models, where infection, incubation, and recovery 
 events may depend on specific characteristics of each individual (or pairs, in
-the case of infection). Nontheless it is restricted to these types of epidemic models,
+the case of infection). Nonetheless it is restricted to these types of epidemic models,
 and does not support arbitrary waiting time distributions.
 
-Epi software not R:
-EpiFire [@Hladish:2012] is a C++ library for network epidemic simulations.
-Numerus Model Builder [@Getz:2018] and NOVA [@Salter:2013]
-EMOD [@Bershteyn:2018]
-SimpactCyan [@Liesenborgs:2019], for HIV epidemiology, continuous time discrete event
-using mNRM, so restricted to Markov processes.
-
+Various software libraries also exist specifically for epimiological simulation.
+EpiFire [@Hladish:2012] and SimpactCyan [@Liesenborgs:2019] are C++ libraries
+for simulation of epidemics on networks. The Numerus Model Builder [@Getz:2018] 
+and NOVA [@Salter:2013] platforms use a specialized scripting language for users
+to define models. EMOD [@Bershteyn:2018] is a highly successful and complex modeling 
+software in C++ which relies on JSON configuration files to interact with.
 
 ## R Software
 
-R/ABM:
+### General R Packages
+
 Several R packages provide interfaces to other software libraries.
 The nlrx package provides an R interface to NetLogo [@Salecker:2019] to set up reproducible
 experiements and focuses on sensitivity analysis, and RNetLogo is a more basic interface [@Thiele:2014].
 For the Repast library, RRepast provides a sophisticated interface [@Garcia:2016].
-
 
 Among software written specifically for R, there are several generic modeling platforms
 which support agent based models. For discrete event simulation simmeR [@Ucar:2017] 
 develops a similar `R6` interface with linked C++ but whose API is set up for
 modeling the types of sytstems commonly encountered in operations research, such as
 queueing processes, but would be difficult to use for epidemiological applications.
-
-SpaDES [@Mcintire:2021] also exists.
-NetLogoR [@Bauduin:2019] is a translation of the NetLogo framework into R.
-
-
+SpaDES [@Mcintire:2021] is a generic discrete event simulator designed for large
+ecological models on raster landscapes, but has a learning curve.
+For general models, NetLogoR [@Bauduin:2019] is a complete translation of NetLogo into R.
 
 ibm [@Oliveros:2016] provides examples of simple, extensible, individual based models
 in R but does not provide a generic interface. ibmcraftr [@Tun:2016] allows creation
@@ -172,7 +170,8 @@ simecol [@Petzoldt:2007] provides classes to implement and distribute ecological
 models, but the focus is on structuring software projects to enhance reproducibility rather
 than providing tools for simulation. 
 
-R/EPI:
+### Epidemiological R Packages
+
 There are a variety of packages in R designed to simulate epidemic processes on
 networks. The SimInf package [@Bauer:2016] is able to run very large CTMC simulations
 of epidemics on networks taking advantage of R's C interface to preform most computations in C.
@@ -190,7 +189,6 @@ in continuous and discrete time, respectively, with computationally intensive ro
 coded in Fortran. However, rate functions for events have highly restricted functional
 forms and cannot interface with other R packages.
 
-
 EpiModel [@Jenness:2018] is perhaps the closest R software we have reviewed, allowing simulation
 of highly detailed discrete time models on networks, using functionality from the 
 statnet [@Handcock:statnet] project for network classes and algorithms. However
@@ -200,7 +198,6 @@ of models (or vector borne diseases). In addition the C++ interface of `individu
 allows more straightforward manipulation of its underlying data structures, whereas
 the network package [@Butts:2008] which is the basis for EpiModel uses a less well
 documented C API.
-
 
 Why we're awesome:
 
