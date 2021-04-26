@@ -137,6 +137,8 @@ SimpactCyan [@Liesenborgs:2019], for HIV epidemiology, continuous time discrete 
 using mNRM, so restricted to Markov processes.
 
 
+## R Software
+
 R/ABM:
 Several R packages provide interfaces to other software libraries.
 The nlrx package provides an R interface to NetLogo [@Salecker:2019] to set up reproducible
@@ -177,7 +179,10 @@ of epidemics on networks taking advantage of R's C interface to preform most com
 However it doesn't support arbitrary waiting times, continuous 
 or unbounded integer attributes for individuals, and has a highly structured API.
 The hybridModels package [@Fernando:2020] also implements network-structured
-CTMC models, but is fully implemented in R.
+CTMC models, but is fully implemented in R. epinet [@Groendyke:2018] and EpiDynamics [@Baquero:2020]
+are other R packages with similar functionality. nosoi [@Lequime:2020] is an 
+agent-based simulation framework designed to simulate transmission chains to generate 
+synthetic data for phylogenetic analysis, with specialized data structures for this purpose.
 
 EpiILMCT [@Almutiry:2020] and EpiILM [@Warriyar:2020] are R packages implementing 
 simulation and inference for continuous time models on networks or spatial grids,
@@ -185,9 +190,16 @@ in continuous and discrete time, respectively, with computationally intensive ro
 coded in Fortran. However, rate functions for events have highly restricted functional
 forms and cannot interface with other R packages.
 
+
 EpiModel [@Jenness:2018] is perhaps the closest R software we have reviewed, allowing simulation
 of highly detailed discrete time models on networks, using functionality from the 
-statnet [@Handcock:statnet] project for network classes and algorithms.
+statnet [@Handcock:statnet] project for network classes and algorithms. However
+the simulation API requires some time to become familiar with, and due to the 
+focus on networks, `individual` can be easier to get started with for other types
+of models (or vector borne diseases). In addition the C++ interface of `individual`
+allows more straightforward manipulation of its underlying data structures, whereas
+the network package [@Butts:2008] which is the basis for EpiModel uses a less well
+documented C API.
 
 
 Why we're awesome:
