@@ -96,8 +96,6 @@ one for each attribute of an individual, rather than defining a type for the
 simulated individuals. Individual agents are only defined by their unique id,
 their position in bitset that defines membership to a finite variable, or the
 element of a vector of integers or floats for unbounded or real variables.
-There is no array or other data structure storing a vector of typed agents;
-each individual is defined by its position (id) in each variable. 
 This architecture is reminiscent of the entity component system design
 Each variable type (categorical, integer, or double) is managed by a data type with
 both an R and C++ interface.
