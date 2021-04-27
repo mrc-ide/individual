@@ -350,9 +350,130 @@ by listeners take precedence over any updates produced from processes.
 
 # Example
 
-A simple SIR model
+To demonstrate how to use `individual` we will build and simulate a simple SIR
+model. For details on the mathematical construction stochastic epidemic models,
+please consult @Allen:2017. This example follows the 
+[package vignette](https://mrc-ide.github.io/individual/articles/Tutorial.html).
 
-![A flow diagram for the simulation loop](sir.png)
+The epidemic will be simulated in a population of 1000, where 5 persons are 
+initially infectious, whose indices are randomly sampled. The effective contact
+rate $\beta$ will be a function of the deterministic $R_{0}$ and recovery rate 
+$\gamma$. We also specify `dt`, which is the size of the intended time step. 
+Because in `individual` all time steps are of unit duration, by adjusting transition
+rates appropriately by `dt` the unit time step can be scaled to any desired size.
+Because the maximum time is `tmax` the number of discrete time steps taken is 
+`tmax/dt`.
+
+```{.r}
+N <- 1e3 # population size
+I0 <- 5 # initial number of infectious individuals
+S0 <- N - I0 # initial number of susceptible individuals
+
+dt <- 0.1 # size of time step
+tmax <- 100 # maximum simulation time
+steps <- tmax/dt 
+
+gamma <- 1/10 # recovery rate
+R0 <- 2.5 
+beta <- R0 * gamma
+
+# sample who is initially infectious
+health_states <- c("S","I","R")
+health_states_t0 <- rep("S",N)
+health_states_t0[sample.int(n = N,size = I0)] <- "I"
+```
+
+Then the model's state is defined by a single `CategoricalVariable` object.
+
+```{.r}
+health <- CategoricalVariable$new(categories = health_states,initial_values = health_states_t0)
+```
+
+Next we define the infection process. This is a function that takes only a single 
+argument, `t`, the current time step (unused here, but can model time-dependent 
+processes, such as seasonality or school holiday). Within the function, we get 
+the current number of infectious individuals, then calculate the per-capita 
+force of infection on each susceptible person, $\lambda=\beta I/N$. Next we get 
+a `Bitset` containing those susceptible individuals and use the sample method to 
+randomly select those who will be infected on this time step. The probability is 
+given by $1-e^{-\lambda\Delta t}$. This is the same as the CDF of an exponential 
+random variate so we use the base R function `pexp` to compute that quantity. 
+Finally, we queue a state update for those individuals who were sampled.
+
+```{.r}
+infection_process <- function(t){
+  I <- health$get_size_of("I")
+  foi <- beta * I/N
+  S <- health$get_index_of("S")
+  S$sample(rate = pexp(q = foi * dt))
+  health$queue_update(value = "I",index = S)
+}
+```
+
+Now we need to model recovery. For geometrically distributed infectious periods, 
+we could use another process that randomly samples some individuals each time 
+step to recover, but we’ll use a `TargetedEvent` to illustrate their use. The 
+recovery event is quite simple. The “listener” which is a function 
+that is called when the event triggers, taking two arguments, the time step it 
+is called, and a `Bitset` of scheduled individuals. Those individuals are 
+scheduled for a state update.
+
+```{.r}
+recovery_event <- TargetedEvent$new(population_size = N)
+recovery_event$add_listener(function(t, target) {
+  health$queue_update("R", target)
+})
+```
+
+Finally, we need to define a recovery process that queues future recovery events. 
+We first get `Bitset` objects of those currently infectious individuals 
+and those who have already been scheduled for a recovery. Then, using bitwise 
+operations, we get the intersection of already infectious persons with persons 
+who have not been scheduled, precisely those who need to have recovery times 
+sampled and scheduled. We sample those times from `rgeom`, where the probability 
+for recovery is $1-e^{-\gamma\Delta t}$.
+
+We note at this point would be possible to queue the recovery event at the same 
+time the infection state update was made, but we separate event and process for 
+additional illustration of how the package works.
+
+```{.r}
+recovery_process <- function(t){
+  I <- health$get_index_of("I")
+  already_scheduled <- recovery_event$get_scheduled()
+  I$and(already_scheduled$not())
+  rec_times <- rgeom(n = I$size(),prob = pexp(q = gamma * dt)) + 1
+  recovery_event$schedule(target = I,delay = rec_times)
+}
+```
+
+The last thing to do before simulating the model is rendering output to plot. 
+We use a `Render` object which stores output from the model each time step. 
+
+```{.r}
+health_render <- Render$new(timesteps = steps)
+health_render_process <- categorical_count_renderer_process(
+  renderer = health_render,
+  variable = health,
+  categories = health_states
+)
+```
+
+Finally, the simulation can be run by passing objects to the `simulation_loop` function.
+
+```{.r}
+simulation_loop(
+  variables = list(health),
+  events = list(recovery_event),
+  processes = list(infection_process,recovery_process,health_render_process),
+  timesteps = steps
+)
+```
+
+By default, `Render` object return `data.frame` objects which can be easily
+plotted and analyzed.
+
+![A simulated SIR model trajectory](sir.png)
 
 # Acknowledgements
 
