@@ -92,6 +92,7 @@ public:
     void insert_safe(InputIterator, InputIterator);
     void insert(size_t);
     void insert_safe(size_t);
+    bool exists_elem(size_t);
     size_type size() const;
     size_type max_size() const;
     bool empty() const;
@@ -388,6 +389,16 @@ inline void IterableBitset<A>::insert_safe(size_t v) {
         Rcpp::stop("Insert out of range");
     }
     insert(v);
+}
+
+//' @title exists_elem
+//' @description check if an element exists
+template<class A>
+inline bool IterableBitset<A>::exists_elem(size_t v) {
+    if (v < 0 || v >= max_n) {
+        Rcpp::stop("Element out of range");
+    }
+    return exists(v);
 }
 
 template<class A>

@@ -163,6 +163,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// bitset_exists_vector
+Rcpp::LogicalVector bitset_exists_vector(const Rcpp::XPtr<individual_index_t> b, std::vector<size_t> v);
+RcppExport SEXP _individual_bitset_exists_vector(SEXP bSEXP, SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(bitset_exists_vector(b, v));
+    return rcpp_result_gen;
+END_RCPP
+}
 // filter_bitset_vector
 Rcpp::XPtr<individual_index_t> filter_bitset_vector(const Rcpp::XPtr<individual_index_t> b, std::vector<size_t> other);
 RcppExport SEXP _individual_filter_bitset_vector(SEXP bSEXP, SEXP otherSEXP) {
@@ -819,6 +831,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_bitset_sample", (DL_FUNC) &_individual_bitset_sample, 2},
     {"_individual_bitset_sample_vector", (DL_FUNC) &_individual_bitset_sample_vector, 2},
     {"_individual_bitset_to_vector", (DL_FUNC) &_individual_bitset_to_vector, 1},
+    {"_individual_bitset_exists_vector", (DL_FUNC) &_individual_bitset_exists_vector, 2},
     {"_individual_filter_bitset_vector", (DL_FUNC) &_individual_filter_bitset_vector, 2},
     {"_individual_filter_bitset_bitset", (DL_FUNC) &_individual_filter_bitset_bitset, 2},
     {"_individual_create_categorical_variable", (DL_FUNC) &_individual_create_categorical_variable, 2},

@@ -57,6 +57,10 @@ bitset_to_vector <- function(b) {
     .Call(`_individual_bitset_to_vector`, b)
 }
 
+bitset_exists_vector <- function(b, v) {
+    .Call(`_individual_bitset_exists_vector`, b, v)
+}
+
 filter_bitset_vector <- function(b, other) {
     .Call(`_individual_filter_bitset_vector`, b, other)
 }

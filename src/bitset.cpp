@@ -121,6 +121,23 @@ std::vector<size_t> bitset_to_vector(const Rcpp::XPtr<individual_index_t> b) {
     return result;
 }
 
+// [[Rcpp::export]]
+Rcpp::LogicalVector bitset_exists_vector(
+    const Rcpp::XPtr<individual_index_t> b,
+    std::vector<size_t> v
+) {
+    Rcpp::LogicalVector out(v.size());
+    decrement(v);
+    auto i = 0u;
+    for (auto value : v) {
+        if (b->exists_elem(value)) {
+            out[i] = TRUE;
+        } 
+        ++i;
+    }
+    return out;
+}
+
 //[[Rcpp::export]]
 Rcpp::XPtr<individual_index_t> filter_bitset_vector(
     const Rcpp::XPtr<individual_index_t> b,
