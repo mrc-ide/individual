@@ -11,7 +11,8 @@ Authors@R: c(
   person(
     given = "Sean L.",
     family = "Wu",
-    role = c('ctb'),
+    role = c('aut'),
+    comment = c(ORCID = "0000-0002-5781-9493"),
     email = 'slwood89@gmail.com'
   ),
   person(
