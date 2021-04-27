@@ -352,6 +352,8 @@ by listeners take precedence over any updates produced from processes.
 
 A simple SIR model
 
+![A flow diagram for the simulation loop](sir.png)
+
 # Acknowledgements
 
 Pete Winskill, Richard Fitzjohn, Oliver Watson
