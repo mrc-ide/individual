@@ -17,6 +17,18 @@ Render <- R6::R6Class(
       private$.timesteps = timesteps
       private$.vectors[['timestep']] <- seq_len(timesteps)
     },
+    
+    #' @description
+    #' Set a default value for a rendered output
+    #' renderers
+    #' @param name the variable to set a default for
+    #' @parm value  the default value to set for a variable
+    set_default = function(name, value) {
+      if (name == 'timestep') {
+        stop("Cannot set default value for variable 'timestep'")
+      }
+      private$.vectors[[name]] = rep(value, private$.timesteps)
+    },
 
     #' @description
     #' Update the render with new simulation data
