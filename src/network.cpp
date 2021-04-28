@@ -37,7 +37,7 @@ void network_get_contacts(
         return;
     }
 
-    // for each infected
+    // for each infected find their contacts with susceptibles
     for (auto i : *I) {
 
         // i's contacts (network C API assumes vertex IDs start at 1)

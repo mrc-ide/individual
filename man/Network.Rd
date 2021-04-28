@@ -4,7 +4,12 @@
 \alias{Network}
 \title{A static network class}
 \description{
-A thing
+This class maintains an individual level contact network, using a
+\code{\link[network]{network}} object to store and access edges. It only
+handles static networks but is able to quickly compute a vector of contacts,
+the number of infectious contacts on each susceptible. This vector can be used
+to compute the force of infection on those susceptible individuals. It is able
+to store both directed and undirected networks.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -19,7 +24,8 @@ A thing
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Network$new()}}
-\item \href{#method-insert}{\code{Network$insert()}}
+\item \href{#method-compute_contacts}{\code{Network$compute_contacts()}}
+\item \href{#method-get_contacts}{\code{Network$get_contacts()}}
 \item \href{#method-clone}{\code{Network$clone()}}
 }
 }
@@ -36,28 +42,38 @@ create a network
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{g}}{a \code{\link[network]{network}} object}
-
-\item{\code{n}}{the number of nodes (verticies)}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-insert"></a>}}
-\if{latex}{\out{\hypertarget{method-insert}{}}}
-\subsection{Method \code{insert()}}{
+\if{html}{\out{<a id="method-compute_contacts"></a>}}
+\if{latex}{\out{\hypertarget{method-compute_contacts}{}}}
+\subsection{Method \code{compute_contacts()}}{
 insert into the bitset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Network$insert(v)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Network$compute_contacts(S, I)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{v}}{an integer vector of elements to insert}
+\item{\code{S}}{a \code{\link{Bitset}} of susceptible individuals}
+
+\item{\code{I}}{a \code{\link{Bitset}} of infectious individuals}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_contacts"></a>}}
+\if{latex}{\out{\hypertarget{method-get_contacts}{}}}
+\subsection{Method \code{get_contacts()}}{
+insert into the bitset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Network$get_contacts()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
