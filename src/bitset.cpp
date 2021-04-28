@@ -130,7 +130,7 @@ Rcpp::LogicalVector bitset_exists_vector(
     decrement(v);
     auto i = 0u;
     for (auto value : v) {
-        if (b->exists_elem(value)) {
+        if (b->exists_safe(value)) {
             out[i] = TRUE;
         } 
         ++i;

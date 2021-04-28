@@ -25,6 +25,7 @@ if you would like to perform an operation without destroying your current bitset
 \item \href{#method-new}{\code{Bitset$new()}}
 \item \href{#method-insert}{\code{Bitset$insert()}}
 \item \href{#method-remove}{\code{Bitset$remove()}}
+\item \href{#method-exists}{\code{Bitset$exists()}}
 \item \href{#method-size}{\code{Bitset$size()}}
 \item \href{#method-or}{\code{Bitset$or()}}
 \item \href{#method-and}{\code{Bitset$and()}}
@@ -88,6 +89,27 @@ remove from the bitset
 \item{\code{v}}{an integer vector of elements (not indices) to remove}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-exists"></a>}}
+\if{latex}{\out{\hypertarget{method-exists}{}}}
+\subsection{Method \code{exists()}}{
+check if elements are in the Bitset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$exists(v)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{v}}{an integer vector of elements to check. If an element of \code{v} is 
+outside the maximum size of the Bitset this is considered an error.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+a logical vector the same length as \code{v}
 }
 }
 \if{html}{\out{<hr>}}

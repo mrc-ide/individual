@@ -241,6 +241,10 @@ integer_variable_update <- function(variable) {
     invisible(.Call(`_individual_integer_variable_update`, variable))
 }
 
+network_get_contacts <- function(g, contacts, S, I) {
+    invisible(.Call(`_individual_network_get_contacts`, g, contacts, S, I))
+}
+
 fixed_probability_multinomial_process_internal <- function(variable, source_state, destination_states, rate, destination_probabilities) {
     .Call(`_individual_fixed_probability_multinomial_process_internal`, variable, source_state, destination_states, rate, destination_probabilities)
 }

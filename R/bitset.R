@@ -40,6 +40,14 @@ Bitset <- R6::R6Class(
       self
     },
 
+    #' @description check if elements are in the Bitset 
+    #' @param v an integer vector of elements to check. If an element of \code{v} is 
+    #' outside the maximum size of the Bitset this is considered an error.
+    #' @return a logical vector the same length as \code{v}
+    exists = function(v) {
+      bitset_exists_vector(b = self$.bitset, v = as.integer(v))
+    },
+
     #' @description the number of elements in the set
     size = function() bitset_size(self$.bitset),
 

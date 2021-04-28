@@ -16,4 +16,10 @@ inline void decrement(std::vector<size_t>& x) {
     }
 }
 
+inline void decrement(Rcpp::IntegerVector& x) {
+    for (auto i = 0u; i < x.size(); ++i) {
+        --x[i];
+    }
+}
+
 #endif /* UTILS_H_ */
