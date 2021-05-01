@@ -1,10 +1,11 @@
 #' @title Bernoulli process
-#' @description Updates categorical variable from the \code{from} state to the \code{to}
-#' state with probability \code{rate}
+#' @description Simulate a process where individuals in a given \code{from} state
+#' advance to the \code{to} state each time step with probability \code{rate}.
 #' @param variable a categorical variable
 #' @param from a string representing the source category
 #' @param to a string representing the destination category
 #' @param rate the probability to move individuals between categories
+#' @return a function which can be passed as a process to \code{\link{simulation_loop}}
 #' @export
 bernoulli_process <- function(variable, from, to, rate) {
   stopifnot(inherits(variable, "CategoricalVariable"))
@@ -26,6 +27,7 @@ bernoulli_process <- function(variable, from, to, rate) {
 #' @param destination_states a vector of strings representing the destination states
 #' @param rate probability of individuals in source state to leave
 #' @param destination_probabilities probability vector of destination states
+#' @return a function which can be passed as a process to \code{\link{simulation_loop}}
 #' @export
 fixed_probability_multinomial_process <- function(variable, source_state, destination_states, rate, destination_probabilities) {
   stopifnot(length(destination_states) == length(destination_probabilities))
@@ -51,6 +53,7 @@ fixed_probability_multinomial_process <- function(variable, source_state, destin
 #' @param destination_states a vector of strings representing the destination states
 #' @param rate_variable \code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave
 #' @param destination_probabilities probability vector of destination states
+#' @return a function which can be passed as a process to \code{\link{simulation_loop}}
 #' @export
 multi_probability_multinomial_process <- function(variable, source_state, destination_states, rate_variable, destination_probabilities) {
   stopifnot(length(destination_states) == length(destination_probabilities))
@@ -76,6 +79,7 @@ multi_probability_multinomial_process <- function(variable, source_state, destin
 #' @param from a string representing the source state
 #' @param to a string representing the destination state
 #' @param rate_variable \code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave
+#' @return a function which can be passed as a process to \code{\link{simulation_loop}}
 #' @export
 multi_probability_bernoulli_process <- function(variable, from, to, rate_variable) {
   stopifnot(inherits(variable , "CategoricalVariable"))
@@ -105,6 +109,7 @@ multi_probability_bernoulli_process <- function(variable, from, to, rate_variabl
 #' @param p the probability of infection given a contact
 #' @param dt the size of the time step (in units relative to the contact rates in \code{mixing})
 #' @param mixing a mixing (contact) matrix between age groups 
+#' @return a function which can be passed as a process to \code{\link{simulation_loop}}
 #' @export
 infection_age_process <- function(state, susceptible, exposed, infectious, age, age_bins, p, dt, mixing) {
   stopifnot( all(dim(mixing) == age_bins) )
@@ -155,6 +160,7 @@ reschedule_listener <- function(event, delay) {
 #' @param renderer a \code{\link[individual]{Render}} object
 #' @param variable a \code{\link[individual]{CategoricalVariable}} object
 #' @param categories a character vector of categories to render
+#' @return a function which can be passed as a process to \code{\link{simulation_loop}}
 #' @export
 categorical_count_renderer_process <- function(renderer, variable, categories) {
   stopifnot(inherits(variable, "CategoricalVariable"))
