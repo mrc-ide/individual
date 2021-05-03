@@ -28,6 +28,9 @@ void network_get_contacts(
     Rcpp::XPtr<individual_index_t> S,
     Rcpp::XPtr<individual_index_t> I
 ) {
+    
+    // register C functions from "network"
+    register_functions_C();
   
     // zero out contacts
     std::fill(contacts->values.begin(), contacts->values.end(), 0);

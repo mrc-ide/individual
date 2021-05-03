@@ -10,9 +10,15 @@
 #include <network.h>
 #include <netregistration.h>
 
-SEXP get_out_neighborhood_C(SEXP g, int v) {
+// call before calling anything else in this header
+void register_functions_C() {
+  
+  netRegisterFunctions();
+  
+};
 
-  netRegisterFunctions(); // maybe move this to a seperate fn and call from C++ once?
+
+SEXP get_out_neighborhood_C(SEXP g, int v) {
 
   return netGetNeighborhood(g, v, "out", 1);
 
