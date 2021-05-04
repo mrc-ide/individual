@@ -34,7 +34,8 @@ IntegerVariable <- R6::R6Class(
 
     #' @description Return a \code{\link[individual]{Bitset}} for individuals with some subset of values
     #' Either search for indices corresponding to values in \code{set}, or
-    #' for indices corresponding to values in range \eqn{[a,b]}.
+    #' for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
+    #' or \code{a} and \code{b} must be provided as arguments.
     #' @param set a vector of values 
     #' @param a lower bound
     #' @param b upper bound
@@ -51,7 +52,8 @@ IntegerVariable <- R6::R6Class(
 
     #' @description Return the number of individuals with some subset of values
     #' Either search for indices corresponding to values in \code{set}, or
-    #' for indices corresponding to values in range \eqn{[a,b]}.
+    #' for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
+    #' or \code{a} and \code{b} must be provided as arguments.
     #' @param set a vector of values 
     #' @param a lower bound
     #' @param b upper bound

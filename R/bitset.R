@@ -1,7 +1,8 @@
 #' @title A Bitset Class
 #' @description This is a data strucutre that compactly stores the presence of 
 #' integers in some finite set (\code{max_size}), and can 
-#' efficiently perform set operations (union, intersection, complement). 
+#' efficiently perform set operations (union, intersection, complement, symmetric
+#' difference, set difference). 
 #' WARNING: all operations (except \code{$not}) are in-place so please use \code{$copy} 
 #' if you would like to perform an operation without destroying your current bitset.
 #' @export Bitset
@@ -16,11 +17,13 @@ Bitset <- R6::R6Class(
 
     #' @description create a bitset
     #' @param size the size of the bitset
-    #' @param from pointer to an existing IterableBitset to use
+    #' @param from pointer to an existing IterableBitset to use; if \code{NULL}
+    #' make empty bitset, otherwise copy existing bitset
     initialize = function(size, from = NULL) {
       if (is.null(from)) {
         self$.bitset <- create_bitset(size)
       } else {
+        stopifnot(inherits(from, "externalptr"))
         self$.bitset <- from
       }
       self$max_size <- bitset_max_size(self$.bitset)
@@ -40,42 +43,44 @@ Bitset <- R6::R6Class(
       self
     },
 
-    #' @description the number of elements in the set
+    #' @description get the number of elements in the set
     size = function() bitset_size(self$.bitset),
 
-    #' @description to "bitwise or" or union two Bitsets
-    #' @param other the other bitset to combine
+    #' @description to "bitwise or" or union two bitsets
+    #' @param other the other bitset
     or = function(other) {
       bitset_or(self$.bitset, other$.bitset)
       self
     },
 
-    #' @description to "bitwise and" or intersect two Bitsets
-    #' @param other the other bitset to combine
+    #' @description to "bitwise and" or intersect two bitsets
+    #' @param other the other bitset
     and = function(other) {
       bitset_and(self$.bitset, other$.bitset)
       self
     },
 
-    #' @description to "bitwise not" or complement a Bitset
-    #' This method returns a new Bitset rather than doing in-place modification.
+    #' @description to "bitwise not" or complement a bitset
+    #' This method returns a new bitset rather than doing in-place modification.
     not = function() Bitset$new(from = bitset_not(self$.bitset)),
 
-    #' @description to "bitwise xor" or get the symmetric difference of two Bitsets
-    #' (keep elements in either Bitset but not in their intersection)
+    #' @description to "bitwise xor" or get the symmetric difference of two bitset
+    #' (keep elements in either bitset but not in their intersection)
+    #' @param other the other bitset
     xor = function(other){
       bitset_xor(self$.bitset, other$.bitset)
       self
     },
 
-    #' @description Take the set difference of this Bitset with another
-    #' (keep elements of this Bitset which are not in \code{other}).
+    #' @description Take the set difference of this bitset with another
+    #' (keep elements of this bitset which are not in \code{other}).
+    #' @param other the other bitset
     set_difference = function(other){
       bitset_set_difference(self$.bitset, other$.bitset)
       self
     },
 
-    #' @description to sample a Bitset
+    #' @description sample a bitset
     #' @param rate the success probability for keeping each element, can be
     #' a single value for all elements or a vector with of unique
     #' probabilities for keeping each element
@@ -91,8 +96,8 @@ Bitset <- R6::R6Class(
     #' @description returns a copy the bitset
     copy = function() Bitset$new(from = bitset_copy(self$.bitset)),
 
-    #' @description return an integer vector representing the elements
-    #' which are set
+    #' @description return an integer vector of the elements
+    #' stored in this bitset
     to_vector = function() bitset_to_vector(self$.bitset)
   )
 )
