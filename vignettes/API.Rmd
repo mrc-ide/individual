@@ -49,7 +49,7 @@ There are 3 types of variable objects: `individual::CategoricalVariable` for dis
 
 ### Categorical Variable {#cat_var}
 
-Most epidemiological models will *require* use of categorical variables to define state, for example, the Susceptible, Infectious, and Recovered classes in the classic [SIR model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model). In general, for compartmental models, each set of compartments which describes an aspect of an individual should be mapped to a single `individual::CategoricalVariable`. For example, an SIR model which also classified individuals as belonging to high and low risk groups could be represented with two categorical variable objects.
+Most epidemiological models will *require* use of categorical variables to define state, for example, the Susceptible, Infectious, and Recovered classes in the classic [SIR model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model). In general, for compartmental models, each set of compartments which describes an aspect of an individual should be mapped to a single `individual::CategoricalVariable`. For example, a model which classifies individuals as in an SIR state _and_ in a high or low risk groups could be represented with two categorical variable objects
 
 There can be an unlimited number of categorical variable objects, but every individual can only take on a single value for each of them at any time. The allowable (categorical) state space for each individual is a contingency table where the margins are given by the values for each `individual::CategoricalVariable`.
 
@@ -185,5 +185,4 @@ simulation_loop <- function(
   }
 }
 ```
-
 
