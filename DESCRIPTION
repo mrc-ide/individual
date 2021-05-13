@@ -29,8 +29,7 @@ Remotes:
   mrc-ide/mockcpp
 Imports:
   R6,
-  Rcpp,
-  network
+  Rcpp
 Suggests:
   ggplot2,
   knitr,
@@ -45,6 +44,5 @@ VignetteBuilder: knitr
 LinkingTo:
   mockcpp,
   Rcpp,
-  testthat,
-  network
+  testthat
 RcppModules: individual_cpp

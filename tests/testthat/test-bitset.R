@@ -166,3 +166,10 @@ test_that("bitset filtering works for bitsets", {
   f <- Bitset$new(10)$insert(c(1, 3))
   expect_equal(filter_bitset(b, f)$to_vector(), c(1, 6))
 })
+
+test_that("testing for existence of elements in bitset works", {
+  b <- Bitset$new(10)$insert(5:7)
+  expect_equal(b$exists(v = c(1,5,10)),c(FALSE,TRUE,FALSE))
+  expect_equal(b$exists(5:7),rep(TRUE,3))
+  expect_equal(b$exists(c(1,2,10)),rep(FALSE,3))
+})

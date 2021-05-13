@@ -723,19 +723,6 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// network_get_contacts
-void network_get_contacts(SEXP g, Rcpp::XPtr<IntegerVariable> contacts, Rcpp::XPtr<individual_index_t> S, Rcpp::XPtr<individual_index_t> I);
-RcppExport SEXP _individual_network_get_contacts(SEXP gSEXP, SEXP contactsSEXP, SEXP SSEXP, SEXP ISEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type g(gSEXP);
-    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type contacts(contactsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type S(SSEXP);
-    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type I(ISEXP);
-    network_get_contacts(g, contacts, S, I);
-    return R_NilValue;
-END_RCPP
-}
 // fixed_probability_multinomial_process_internal
 Rcpp::XPtr<process_t> fixed_probability_multinomial_process_internal(Rcpp::XPtr<CategoricalVariable> variable, const std::string source_state, const std::vector<std::string> destination_states, const double rate, const std::vector<double> destination_probabilities);
 RcppExport SEXP _individual_fixed_probability_multinomial_process_internal(SEXP variableSEXP, SEXP source_stateSEXP, SEXP destination_statesSEXP, SEXP rateSEXP, SEXP destination_probabilitiesSEXP) {
@@ -891,7 +878,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_queue_fill", (DL_FUNC) &_individual_integer_variable_queue_fill, 2},
     {"_individual_integer_variable_queue_update", (DL_FUNC) &_individual_integer_variable_queue_update, 3},
     {"_individual_integer_variable_update", (DL_FUNC) &_individual_integer_variable_update, 1},
-    {"_individual_network_get_contacts", (DL_FUNC) &_individual_network_get_contacts, 4},
     {"_individual_fixed_probability_multinomial_process_internal", (DL_FUNC) &_individual_fixed_probability_multinomial_process_internal, 5},
     {"_individual_multi_probability_multinomial_process_internal", (DL_FUNC) &_individual_multi_probability_multinomial_process_internal, 5},
     {"_individual_multi_probability_bernoulli_process_internal", (DL_FUNC) &_individual_multi_probability_bernoulli_process_internal, 4},

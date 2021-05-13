@@ -15,6 +15,9 @@ multi_probability_bernoulli_process(variable, from, to, rate_variable)
 
 \item{rate_variable}{\code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave}
 }
+\value{
+a function which can be passed as a process to \code{\link{simulation_loop}}
+}
 \description{
 Simulates a Bernoulli process where all individuals
 in a given source state \code{from} sample whether or not 
