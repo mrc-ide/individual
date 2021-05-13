@@ -31,7 +31,7 @@ knitr::asis_output(
 
 ## Introduction {#intro}
 
-The "individual" package is designed for running big individual-based models. But if you find your model taking too long or consuming all of your memory, here are some things you can try to speed up your simulation.
+Individual is designed for running big individual-based models. But if you find your model taking too long or consuming all of your memory, here are some things you can try to speed up your simulation.
 
 ### Bitset {#bitset}
 
@@ -65,7 +65,7 @@ When creating a new Bitset, a user must specify the maximum size of the bitset. 
 
 Bitsets offer methods to preform unions (`Bitset$or()`), intersections (`Bitset$and()`), symmetric set difference (also known as exclusive or, `Bitset$xor()`), and set difference (`Bitset$set_difference()`) with other bitsets. These methods modify the bitset in-place. The method `Bitset$not()` gives the complement of a bitset, and returns a new `individual::Bitset` object, leaving the original bitset intact. Because these set operations use bitwise operations directly rather than more expensive relational operators, computations with bitsets are extremely fast. Insertion and removal of elements are also supported.
 
-Because a bitset stores integers in some finite set, it can be returned as an integer vector by using `Bitset$to_vector()`. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model's dynamics require the frequent returning of integer vectors for computation and updating, an `individual::IntegerVector` object will be more appropriate, or if the variable's range is unbounded, or can take negative values. However, for most discrete variables with a finite range of values, and especially those which mirror compartments in mathematical models, bitset operations and `individual::CategoricalVariable` (which uses bitsets internally) should be preferred. Taking advantage of bitset operations can help make processes in "individual" much faster.
+Because a bitset stores integers in some finite set, it can be returned as an integer vector by using `Bitset$to_vector()`. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model's dynamics require the frequent returning of integer vectors, an `individual::IntegerVector` object will be more appropriate. However, for most discrete variables with a finite range of values, and especially those which mirror compartments in mathematical models, bitset operations and `individual::CategoricalVariable` (which uses bitsets internally) should be preferred. Taking advantage of bitset operations can help make processes in "individual" much faster.
 
 ### Prefabs {#prefab}
 
@@ -107,7 +107,7 @@ These are the basic steps to add C++ processes to your R package:
   
 4. Write your process!
 
-Processes in C++ are of type `process_t`, defined in `common_types.h`. Types for listeners for `individual::Event` and `individual::TargetedEvent` are `listener_t` and `targeted_listener_t`, defined in `Event.h`. Below is how the C++ implementation of
+Processes in C++ are of type `process_t`, defined in `inst/include/common_types.h`. Types for listeners for `individual::Event` and `individual::TargetedEvent` are `listener_t` and `targeted_listener_t`, defined in `inst/include/Event.h`. Below is how the C++ implementation of
 `multi_probability_bernoulli_process` is coded.
 
 Note that the return type is a `Rcpp::XPtr` [(see here)](https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1XPtr.html) to a `process_t`, which is implemented as a `std::function` [(see here)](http://www.cplusplus.com/reference/functional/function/) object, a C++ class that can

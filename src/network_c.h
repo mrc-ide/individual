@@ -16,4 +16,6 @@ void register_functions_C();
 // get out neighborhood of a vertex v in a graph g
 SEXP get_out_neighborhood_C(SEXP g, int v);
 
+// get out neighborhood
+
 #endif

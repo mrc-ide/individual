@@ -37,7 +37,7 @@ knitr::asis_output(
  
 ## Introduction {#intro}
 
-This package defines a set of useful primitives for structuring and simulating individual based mechanistic models, with special emphasis on infectious disease modelling. *Structuring* means that the package lets you specify the state space of the model and transition rules for how state changes over time, and *simulating* means that the package defines a principled way to put state and transitions together to update state over a time step, and draw trajectories from the individual based model. Generically, transitions are any rules that change state, and in "individual" come in two forms: [processes](#proc) and [events](#event). The simulation updates over a discrete-time step, but the size of time step is left unspecified and can be arbitrarily small.
+This package defines a set of useful primitives for structuring and simulating individual based mechanistic models, with special emphasis on infectious disease modelling. *Structuring* means that the package lets you specify the state space of the model and transition rules for how state changes over time, and *simulating* means that the package defines a principled way to put state and transitions together to update state over a time step. Transitions are any functions that change state, and in "individual" come in two forms: [processes](#proc), which occur each time step and [events](#event), which are scheduled. The simulation updates over a discrete time step of unit length.
 
 This vignette provides a description of the various primitive elements provided by the "individual" package for modelling and explains how they work together. Please see the `vignette("Tutorial")` for a practical example.
 
@@ -49,15 +49,15 @@ There are 3 types of variable objects: `individual::CategoricalVariable` for dis
 
 ### Categorical Variable {#cat_var}
 
-Most epidemiological models will *require* use of categorical variables to define state, for example, the Susceptible, Infectious, and Recovered classes in the classic [SIR model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model). In general, for compartmental models, each set of compartments which describes an aspect of an individual, should be mapped to a single `individual::CategoricalVariable`. Note that multiple `individual::CategoricalVariable` objects can be instantiated to express more complex descriptions of state; if individuals can also be in a high risk or low risk group, a second object can be instantiated to represent risk status.
+Most epidemiological models will *require* use of categorical variables to define state, for example, the Susceptible, Infectious, and Recovered classes in the classic [SIR model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model). In general, for compartmental models, each set of compartments which describes an aspect of an individual should be mapped to a single `individual::CategoricalVariable`. For example, a model which classifies individuals as in an SIR state _and_ in a high or low risk groups could be represented with two categorical variable objects
 
-There can be an unlimited number of categorical variable objects, but every individual can only take on a single value for each of them at any time. The allowable (categorical) state space for each individual is essentially a contingency table where the margins are given by the values for each `individual::CategoricalVariable`.
+There can be an unlimited number of categorical variable objects, but every individual can only take on a single value for each of them at any time. The allowable (categorical) state space for each individual is a contingency table where the margins are given by the values for each `individual::CategoricalVariable`.
 
-`individual::CategoricalVariable` objects internally store state as a hash table of category values (with string keys), each of which contains a `individual::Bitset` telling us the indices of individuals in that state, making operations on `individual::CategoricalVariable` objects, or chains of operations extremely fast, and therefore should be the preferred variable type for discrete variables. However, cases in which discrete variables have a large number of values or when many values have few or no individuals in that category should use the `individual::IntegerVariable` instead.
+`individual::CategoricalVariable` objects internally store state as a hash table of category values (with string keys), each of which contains a `individual::Bitset` recording the individuals in that state, making operations on `individual::CategoricalVariable` objects, or chains of operations extremely fast, and therefore should be the preferred variable type for discrete variables. However, cases in which discrete variables have a large number of values or when many values have few or no individuals in that category should use the `individual::IntegerVariable` instead.
 
 ### Integer Variable {#int_var}
 
-An `individual::IntegerVariable` should be used for discrete variables that may either be technically unbounded, or whose set of possible values is so large that a `individual::CategoricalVariable` is impractical. `individual::IntegerVariable` objects internally stores state as a vector of integers of length equal to the number of individuals in the simulation, to be contrasted with the hash table used in `individual::CategoricalVariable`. Examples of this variable type might include household for a model that simulated transmission of disease between a community of households, or age group for an age-structured model.
+An `individual::IntegerVariable` should be used for discrete variables that may either be technically unbounded, or whose set of possible values is so large that a `individual::CategoricalVariable` is impractical. `individual::IntegerVariable` objects internally stores state as a vector of integers of length equal to the number of individuals in the simulation, to be contrasted with the hash table and bitsets used in `individual::CategoricalVariable`. Examples of this variable type might include household for a model that simulated transmission of disease between a community of households, or age group for an age-structured model.
 
 ### Double Variable {#dbl_var}
 
@@ -67,7 +67,7 @@ A `individual::DoubleVariable` can be used for continuous variables that are rep
 
 In "individual", processes are functions which are called on each time step with a single argument, `t`, the current time step of the simulation. Processes are how most of the dynamics of a model are specified, and are implemented as [closures](http://adv-r.had.co.nz/Functional-programming.html#closures), which are functions that are able to access data not included in the list of function arguments.
 
-An illustrative example can be found in the provided `individual::bernoulli_process`, which moves individuals from one value (source) of a `individual::CategoricalVariable` to another (destination) at a constant probability (such that the dwell time in the "from" state follows a [geometric distribution](https://en.wikipedia.org/wiki/Geometric_distribution)). 
+An illustrative example can be found in the provided `individual::bernoulli_process`, which moves individuals from one value (source) of a `individual::CategoricalVariable` to another (destination) at a constant probability (such that the dwell time in the `from` state follows a [geometric distribution](https://en.wikipedia.org/wiki/Geometric_distribution)). 
 
 ```{r, eval=FALSE}
 bernoulli_process <- function(variable, from, to, rate) {
@@ -80,7 +80,7 @@ bernoulli_process <- function(variable, from, to, rate) {
 }
 ```
 
-We can test empirically that dwell times do indeed follow a geometric distribution (and demonstrate uses of `individual::IntegerVariable` objects) by modifying slightly the function to take `int_variable`, an object of class `individual::IntegerVariable`. Each time the returned function closure is called it randomly samples a subset of individuals to move to the destination state, and records the time step at which those individuals move in the `individual::IntegerVariable`. We run the simple "simulation" loop until there are no more individuals left in the source state, and compare the dwell times in the source state to the results of `stats::rgeom`, and see that they are from the same distribution, using `stats::chisq.test` for comparison of discrete distributions.
+We can test empirically that dwell times do indeed follow a geometric distribution (and demonstrate uses of `individual::IntegerVariable` objects) by modifying slightly the function to take `int_variable`, an object of class `individual::IntegerVariable`. Each time the returned function closure is called it randomly samples a subset of individuals to move to the destination state, and records the time step at which those individuals move in the `individual::IntegerVariable`. We run the simple simulation loop until there are no more individuals left in the source state, and compare the dwell times in the source state to the results of `stats::rgeom`, and see that they are from the same distribution, using `stats::chisq.test` for comparison of discrete distributions.
 
 ```{r}
 bernoulli_process_time <- function(variable, int_variable, from, to, rate) {
@@ -108,13 +108,13 @@ while (state$get_size_of('S') > 0) {
 times <- time$get_values()
 chisq.test(times, rgeom(n,prob = 0.1),simulate.p.value = T)
 ```
-By using `individual::IntegerVariable` and `individual::DoubleVariable` objects to modify the probability with which individuals move between states, as well as counters for recording previous state transitions and times, fairly complex dynamics can be specified from simple building blocks. Several "prefab" functions are provided to make function closures corresponding to state transition processes common in epidemiological models.
+By using `individual::IntegerVariable` and `individual::DoubleVariable` objects to modify the probability with which individuals move between states, as well as counters for recording previous state transitions and times, complex dynamics can be specified from simple building blocks. Several "prefab" functions are provided to make function closures corresponding to state transition processes common in epidemiological models.
 
 ### Render {#rend}
 
-During each time step we often want to record (render) certain output from the simulation. Because rendering output occurs each time step, they are called as other processes during the simulation loop (this is another way we could have implemented the time counters in [Processes](#proc)).
+During each time step we often want to record (render) certain output from the simulation. Because rendering output occurs each time step, they are called as other processes during the simulation loop (this is another way we could have implemented the time counters in the previous example).
 
-In "individual", rendering output is handled by `individual::Render` class objects, which build up the recorded data and can return a long `base::data.frame` object for plotting and analysis. A `individual::Render` object is then stored in a function closure that is called each time step like other processes, and into which data may be recorded. Please note that the function closure must also store any variable objects whose values should be tracked, such as the prefab rendering process `individual::categorical_count_renderer_process`, taking a `individual::Render` object as the first argument and a `individual::CategoricalVariable` object as the second.
+In "individual", rendering output is handled by `individual::Render` class objects, which build up the recorded data and can return a `base::data.frame` object for plotting and analysis. A `individual::Render` object is then stored in a function closure that is called each time step like other processes, and into which data may be recorded. Please note that the function closure must also store any variable objects whose values should be tracked, such as the prefab rendering process `individual::categorical_count_renderer_process`, taking a `individual::Render` object as the first argument and a `individual::CategoricalVariable` object as the second.
 
 ```{r,eval=FALSE}
 categorical_count_renderer_process <- function(renderer, variable, categories) {
@@ -149,7 +149,15 @@ recovery_event$add_listener(function(timestep, target) {
 
 ## Simulate {#sim}
 
-Using a combination of [variables](#var), [processes](#proc), and [events](#events), highly complex individual based models can be specified, and simulated with the function `individual::simulation_loop`, which defines the order in which state updates are preformed. It is possible to create conflicts between different processes, for example, if a single individual is subject to a death process and infection process, it is possible for both death and infection state changes to be scheduled for that individual during a time step. When processes or events create conflicting state updates, the *last* update will take precedence. 
+Using a combination of [variables](#var), [processes](#proc), and [events](#events), highly complex individual based models can be specified, and simulated with the function `individual::simulation_loop`, which defines the order in which state updates are preformed. 
+
+It is possible to create conflicts between different processes, for example, if a single individual is subject to a death process and infection process, then both death and infection state changes could be scheduled for that individual during a time step. When processes or events create conflicting state updates, the *last* update will take precedence. Another way to make sure conflicts do not exist is to ensure only a single process is called for each state which samples each individual's update among all possible updates which could happen for those individuals, so that conflicting updates cannot be scheduled for individuals in a state.
+
+```{r, echo=FALSE, fig.cap="Simulation loop flowchart", out.width = "100%", fig.align='center'}
+knitr::include_graphics("sim_loop.png")
+```
+
+The equivalent code used in the simulation loop is below.
 
 ```{r, class.source="bg-primary", class.output="bg-primary",eval=FALSE}
 simulation_loop <- function(
@@ -177,5 +185,4 @@ simulation_loop <- function(
   }
 }
 ```
-
 

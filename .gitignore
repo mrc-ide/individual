@@ -19,3 +19,5 @@ docs/
 .vscode
 doc
 Meta
+/doc/
+/Meta/

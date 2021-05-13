@@ -1,4 +1,4 @@
-test_that("Network object computes proper contact vector on random graph", {
+test_that("Network object computes proper contact vector on unweighted random graph", {
     
     N <- 50
 
@@ -55,4 +55,3 @@ test_that("Network object computes proper contact vector on random graph", {
         contacts_comp$get_values()
     )
 })
-
