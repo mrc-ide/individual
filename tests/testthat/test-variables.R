@@ -47,8 +47,10 @@ test_that("can retrieve categories of CategoricalVariable", {
 })
 
 test_that("Queuing invalid category errors", {
-  variable <- CategoricalVariable$new(categories = c("dog", "cat"), initial_values = "dog")
-  expect_error(variable$queue_update("hat", Bitset$new(1)$insert(1)), "hat is not a valid category")
+  population <- 10
+  state <- CategoricalVariable$new(c('S', 'I', 'R'), rep('S', population))
+  expect_error(variable$queue_update("X", Bitset$new(1)$insert(1)),
+               '*')
 })
 
 test_that("getting variables works", {

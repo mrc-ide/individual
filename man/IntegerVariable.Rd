@@ -64,7 +64,8 @@ or integer vector, return values of those individuals.}
 \subsection{Method \code{get_index_of()}}{
 Return a \code{\link[individual]{Bitset}} for individuals with some subset of values
 Either search for indices corresponding to values in \code{set}, or
-for indices corresponding to values in range \eqn{[a,b]}.
+for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
+or \code{a} and \code{b} must be provided as arguments.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$get_index_of(set = NULL, a = NULL, b = NULL)}\if{html}{\out{</div>}}
 }
@@ -87,7 +88,8 @@ for indices corresponding to values in range \eqn{[a,b]}.
 \subsection{Method \code{get_size_of()}}{
 Return the number of individuals with some subset of values
 Either search for indices corresponding to values in \code{set}, or
-for indices corresponding to values in range \eqn{[a,b]}.
+for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
+or \code{a} and \code{b} must be provided as arguments.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$get_size_of(set = NULL, a = NULL, b = NULL)}\if{html}{\out{</div>}}
 }
