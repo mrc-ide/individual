@@ -45,6 +45,9 @@ CategoricalVariable <- R6::R6Class(
     #' to the one specified in \code{values}. This may be either a vector of integers or
     #' a \code{\link[individual]{Bitset}}.
     queue_update = function(value, index) {
+      if(!any(value %in% self$get_categories())){
+        stop("Invalid category input")
+      }
       if (inherits(index, "Bitset")) {
         categorical_variable_queue_update(self$.variable, value, index$.bitset)        
       } else {

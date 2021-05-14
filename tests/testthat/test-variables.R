@@ -46,6 +46,11 @@ test_that("can retrieve categories of CategoricalVariable", {
   expect_setequal(categorical_variable_get_categories(var$.variable), values)
 })
 
+test_that("Queuing invalid category errors", {
+  variable <- CategoricalVariable$new(categories = c("dog", "cat"), initial_values = "dog")
+  expect_error(variable$queue_update("hat", Bitset$new(1)$insert(1)), "hat is not a valid category")
+})
+
 test_that("getting variables works", {
   size <- 10
   sequence <- DoubleVariable$new(seq_len(size))
