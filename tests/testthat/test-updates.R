@@ -80,7 +80,7 @@ test_that("Queuing non numeric values errors gracefully", {
   sequence <- DoubleVariable$new(seq_len(size))
   expect_error(sequence$queue_update(c(1, "A"), 1:2),
                '*'
-               )
+  )
 })
 
 test_that("updating the complete variable vector works", {

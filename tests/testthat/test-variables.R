@@ -50,7 +50,8 @@ test_that("Queuing invalid category errors", {
   population <- 10
   state <- CategoricalVariable$new(c('S', 'I', 'R'), rep('S', population))
   expect_error(variable$queue_update("X", Bitset$new(1)$insert(1)),
-               '*')
+               '*'
+  )
 })
 
 test_that("getting variables works", {
