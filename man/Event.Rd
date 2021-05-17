@@ -29,13 +29,6 @@ Initialise an Event
 \if{html}{\out{<div class="r">}}\preformatted{Event$new()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{name}}{the name of the event}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_listener"></a>}}
@@ -68,7 +61,8 @@ Schedule this event to occur in the future
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{delay}}{the number of time steps to wait before triggering the event,
-can be a scalar or an vector of values for several times in the future}
+can be a scalar or an vector of values for events that should be triggered
+multiple times.}
 }
 \if{html}{\out{</div>}}
 }
