@@ -35,6 +35,9 @@ infection_age_process(
 
 \item{mixing}{a mixing (contact) matrix between age groups}
 }
+\value{
+a function which can be passed as a process to \code{\link{simulation_loop}}
+}
 \description{
 Simulates infection for age-structured models, where
 individuals contact each other at a rate given by some mixing (contact) matrix.

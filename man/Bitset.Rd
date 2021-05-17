@@ -6,7 +6,8 @@
 \description{
 This is a data strucutre that compactly stores the presence of 
 integers in some finite set (\code{max_size}), and can 
-efficiently perform set operations (union, intersection, complement). 
+efficiently perform set operations (union, intersection, complement, symmetric
+difference, set difference). 
 WARNING: all operations (except \code{$not}) are in-place so please use \code{$copy} 
 if you would like to perform an operation without destroying your current bitset.
 }
@@ -51,7 +52,8 @@ create a bitset
 \describe{
 \item{\code{size}}{the size of the bitset}
 
-\item{\code{from}}{pointer to an existing IterableBitset to use}
+\item{\code{from}}{pointer to an existing IterableBitset to use; if \code{NULL}
+make empty bitset, otherwise copy existing bitset}
 }
 \if{html}{\out{</div>}}
 }
@@ -94,7 +96,7 @@ remove from the bitset
 \if{html}{\out{<a id="method-size"></a>}}
 \if{latex}{\out{\hypertarget{method-size}{}}}
 \subsection{Method \code{size()}}{
-the number of elements in the set
+get the number of elements in the set
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$size()}\if{html}{\out{</div>}}
 }
@@ -104,7 +106,7 @@ the number of elements in the set
 \if{html}{\out{<a id="method-or"></a>}}
 \if{latex}{\out{\hypertarget{method-or}{}}}
 \subsection{Method \code{or()}}{
-to "bitwise or" or union two Bitsets
+to "bitwise or" or union two bitsets
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$or(other)}\if{html}{\out{</div>}}
 }
@@ -112,7 +114,7 @@ to "bitwise or" or union two Bitsets
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{other}}{the other bitset to combine}
+\item{\code{other}}{the other bitset}
 }
 \if{html}{\out{</div>}}
 }
@@ -121,7 +123,7 @@ to "bitwise or" or union two Bitsets
 \if{html}{\out{<a id="method-and"></a>}}
 \if{latex}{\out{\hypertarget{method-and}{}}}
 \subsection{Method \code{and()}}{
-to "bitwise and" or intersect two Bitsets
+to "bitwise and" or intersect two bitsets
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$and(other)}\if{html}{\out{</div>}}
 }
@@ -129,7 +131,7 @@ to "bitwise and" or intersect two Bitsets
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{other}}{the other bitset to combine}
+\item{\code{other}}{the other bitset}
 }
 \if{html}{\out{</div>}}
 }
@@ -138,8 +140,8 @@ to "bitwise and" or intersect two Bitsets
 \if{html}{\out{<a id="method-not"></a>}}
 \if{latex}{\out{\hypertarget{method-not}{}}}
 \subsection{Method \code{not()}}{
-to "bitwise not" or complement a Bitset
-This method returns a new Bitset rather than doing in-place modification.
+to "bitwise not" or complement a bitset
+This method returns a new bitset rather than doing in-place modification.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$not()}\if{html}{\out{</div>}}
 }
@@ -149,29 +151,43 @@ This method returns a new Bitset rather than doing in-place modification.
 \if{html}{\out{<a id="method-xor"></a>}}
 \if{latex}{\out{\hypertarget{method-xor}{}}}
 \subsection{Method \code{xor()}}{
-to "bitwise xor" or get the symmetric difference of two Bitsets
-(keep elements in either Bitset but not in their intersection)
+to "bitwise xor" or get the symmetric difference of two bitset
+(keep elements in either bitset but not in their intersection)
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$xor(other)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{other}}{the other bitset}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_difference"></a>}}
 \if{latex}{\out{\hypertarget{method-set_difference}{}}}
 \subsection{Method \code{set_difference()}}{
-Take the set difference of this Bitset with another
-(keep elements of this Bitset which are not in \code{other}).
+Take the set difference of this bitset with another
+(keep elements of this bitset which are not in \code{other}).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$set_difference(other)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{other}}{the other bitset}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sample"></a>}}
 \if{latex}{\out{\hypertarget{method-sample}{}}}
 \subsection{Method \code{sample()}}{
-to sample a Bitset
+sample a bitset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$sample(rate)}\if{html}{\out{</div>}}
 }
@@ -200,8 +216,8 @@ returns a copy the bitset
 \if{html}{\out{<a id="method-to_vector"></a>}}
 \if{latex}{\out{\hypertarget{method-to_vector}{}}}
 \subsection{Method \code{to_vector()}}{
-return an integer vector representing the elements
-which are set
+return an integer vector of the elements
+stored in this bitset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$to_vector()}\if{html}{\out{</div>}}
 }
