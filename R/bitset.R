@@ -88,6 +88,7 @@ Bitset <- R6::R6Class(
       if (length(rate) == 1) {
         bitset_sample(self$.bitset, rate)
       } else {
+        stopifnot(all(is.finite(rate)))
         bitset_sample_vector(self$.bitset, rate)
       }      
       self
