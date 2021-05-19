@@ -105,6 +105,11 @@ both an R and C++ interface. Because of this general design, the package is not
 restricted to particular mathematical forms for infection (or any other) events,
 nor restricted to any particular conception of space (*e.g.* a network).
 
+Based on our review of existing software below, no other library exists which
+provides users with a set of primitive elements for defining epidemiological
+models without making assumptions about the type of model being simulated
+(e.g.; compartmental, network, etc).
+
 `individual` also provides a C++ header-only interface which advanced users
 can link to from their R package. The C++ interface allows a user to interact
 with the C++ types directly, if the R interface remains too slow for their use case.
