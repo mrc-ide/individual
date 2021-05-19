@@ -105,6 +105,11 @@ both an R and C++ interface. Because of this general design, the package is not
 restricted to particular mathematical forms for infection (or any other) events,
 nor restricted to any particular conception of space (*e.g.* a network).
 
+Based on our review of existing software below, no other library exists which
+provides users with a set of primitive elements for defining epidemiological
+models without making assumptions about the type of model being simulated
+(e.g.; compartmental, network, etc).
+
 `individual` also provides a C++ header-only interface which advanced users
 can link to from their R package. The C++ interface allows a user to interact
 with the C++ types directly, if the R interface remains too slow for their use case.
@@ -184,8 +189,11 @@ synthetic data for phylogenetic analysis, with specialized data structures for t
 EpiILMCT [@Almutiry:2020] and EpiILM [@Warriyar:2020] are R packages implementing 
 simulation and inference for continuous time models on networks or spatial grids,
 in continuous and discrete time, respectively, with computationally intensive routines
-coded in Fortran. However, rate functions for events have highly restricted functional
-forms and cannot interface with other R packages.
+coded in Fortran. The SPARSEMODr [@Mihaljevic:2021] package has similar capabilities, albeit
+programmed in C++. Both projects however restrict the transmission
+term (force of infection) to common mathematical forms (frequency and density-dependent),
+whereas `individual` makes no assumptions about how transition probabilities for individuals
+are calculated.
 
 EpiModel [@Jenness:2018] is perhaps the closest R software we have reviewed, allowing simulation
 of highly detailed discrete time models on networks, using functionality from the 
