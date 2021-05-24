@@ -36,6 +36,7 @@ struct EventBase {
     }
 
     virtual bool should_trigger() = 0;
+    virtual ~EventBase() {};
 };
 
 struct Event : public EventBase {
@@ -64,6 +65,8 @@ struct Event : public EventBase {
     virtual void clear_schedule() {
         simple_schedule.clear();
     }
+
+    virtual ~Event() {};
 };
 
 struct TargetedEvent : public EventBase {
@@ -155,6 +158,8 @@ struct TargetedEvent : public EventBase {
         }
         return scheduled;
     }
+
+    virtual ~TargetedEvent() {};
 };
 
 #endif /* INST_INCLUDE_SCHEDULER_H_ */
