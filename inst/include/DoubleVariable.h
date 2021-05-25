@@ -56,11 +56,13 @@ struct DoubleVariable : public Variable {
     ) const {
         
         auto result = individual_index_t(size);
-        for(size_t it = 0; it < values.size(); it++) {
-            if( !(values[it] < a) && !(b < values[it]) ) {
-                result.insert(it);
+        auto i = 0u;
+        std::for_each(values.begin(), values.end(), [&](const double v) -> void {
+            if( !(v < a) && !(b < v) ) {
+                result.insert(i);
             }
-        }
+            ++i;
+        });
         
         return result;
 
@@ -71,12 +73,9 @@ struct DoubleVariable : public Variable {
         const double a, const double b
     ) const {
         
-        int result{0};
-        for(size_t it = 0; it < values.size(); it++) {
-            if( !(values[it] < a) && !(b < values[it]) ) {
-                result += 1;
-            }
-        }
+        int result = std::count_if(values.begin(), values.end(), [&](const double v) -> bool {
+            return !(v < a) && !(b < v);
+        });
 
         return result;
 

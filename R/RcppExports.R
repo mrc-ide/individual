@@ -117,6 +117,10 @@ double_variable_get_size_of_range <- function(variable, a, b) {
     .Call(`_individual_double_variable_get_size_of_range`, variable, a, b)
 }
 
+double_variable_get_size_of_range_old <- function(variable, a, b) {
+    .Call(`_individual_double_variable_get_size_of_range_old`, variable, a, b)
+}
+
 double_variable_queue_fill <- function(variable, value) {
     invisible(.Call(`_individual_double_variable_queue_fill`, variable, value))
 }
