@@ -90,7 +90,7 @@ struct IntegerVariable : public Variable {
     }
     
     // get number of individuals whose value is in some set
-    virtual size_t get_size_of_set(
+    virtual size_t get_size_of_set_vector(
             const std::vector<int> values_set
     ) const {
         
@@ -104,7 +104,7 @@ struct IntegerVariable : public Variable {
     }
 
     // get number of individuals with a particular value
-    virtual size_t get_size_of_set(
+    virtual size_t get_size_of_set_scalar(
         const int value
     ) const {
 
