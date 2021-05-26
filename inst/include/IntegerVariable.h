@@ -47,14 +47,12 @@ struct IntegerVariable : public Variable {
     ) const {
     
         auto result = individual_index_t(size);
-        auto i = 0u;
-        std::for_each(values.begin(), values.end(), [&](const int v) -> void {
-            auto findit = std::find(values_set.begin(), values_set.end(), v);
+        for (auto i = 0u; i < values.size(); ++i) {
+            auto findit = std::find(values_set.begin(), values_set.end(), values[i]);
             if(findit != values_set.end()){
                 result.insert(i);
             }
-            ++i;
-        });
+        }
 
         return result;
     }
@@ -65,13 +63,11 @@ struct IntegerVariable : public Variable {
     ) const {
 
         auto result = individual_index_t(size);
-        auto i = 0u;
-        std::for_each(values.begin(), values.end(), [&](const int v) -> void {
-            if ( v == value ) {
+        for (auto i = 0u; i < values.size(); ++i) {
+            if ( values[i] == value ) {
                 result.insert(i);
             }
-            ++i;
-        });
+        }
 
         return result;
  
@@ -83,24 +79,22 @@ struct IntegerVariable : public Variable {
     ) const {
         
         auto result = individual_index_t(size);
-        auto i = 0u;
-        std::for_each(values.begin(), values.end(), [&](const int v) -> void {
-            if ( !(v < a) && !(b < v) ) {
+        for (auto i = 0u; i < values.size(); ++i) {
+            if ( !(values[i] < a) && !(b < values[i]) ) {
                 result.insert(i);
             }
-            ++i;
-        });
+        }
         
         return result;
 
     }
     
     // get number of individuals whose value is in some set
-    virtual int get_size_of_set(
+    virtual size_t get_size_of_set(
             const std::vector<int> values_set
     ) const {
         
-        int result = std::count_if(values.begin(), values.end(), [&](const int v) -> bool {
+        size_t result = std::count_if(values.begin(), values.end(), [&](const int v) -> bool {
             auto findit = std::find(values_set.begin(), values_set.end(), v);
             return findit != values_set.end();
         });
@@ -110,20 +104,20 @@ struct IntegerVariable : public Variable {
     }
 
     // get number of individuals with a particular value
-    virtual int get_size_of_set(
+    virtual size_t get_size_of_set(
         const int value
     ) const {
 
-        int result = std::count(values.begin(), values.end(), value);
+        size_t result = std::count(values.begin(), values.end(), value);
         return result;
  
     }
 
     // get number of individuals whose value is in some [a,b]
-    virtual int get_size_of_range(
+    virtual size_t get_size_of_range(
         const int a, const int b
     ) const {
-        int result = std::count_if(values.begin(), values.end(), [&](const int v) -> bool {
+        size_t result = std::count_if(values.begin(), values.end(), [&](const int v) -> bool {
             return !(v < a) && !(b < v);
         });
 
