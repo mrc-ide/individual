@@ -30,41 +30,38 @@ Complex stochastic models are a crucial tool for many tasks
 in public health, and especially in infectious disease epidemiology [@Ganyani:2021]. 
 Such models can help formalize theory, generate synthetic data, evaluate counterfactual 
 scenarios, forecast trends, and be used for statistical inference. Individual-based
-models (IBMs) are particularly useful because of the ease with which individual
-level characteristics can be specified. Individual level heterogeneity in characteristics
-such as age, genetics, demographics, and personal behaviors all contribute to
-epidemiological outcomes, both from internal processes and interaction with 
-others [@Tracy:2018]. Specification of a population's characteristics, and the 
-processes (such as disease transmission) which are a result of contact between individuals,
-and which may depend upon any number of individual characteristics can be cumbersome 
-or practically impossible to represent in an "aggregated" manner such as compartmental 
-mathematical models. Even if a compartmental representation were available, there are many 
+models (IBMs) are a way to design disaggregated simulation models, usually contrasted
+with mathematical or equation-based models, which may model a density or concentration
+of individuals, or otherwise lump individuals with similar attributes together in some
+way [@Shalizi:2006]. For modeling finite numbers of individuals with significant between-individual
+heterogeneity in characteristics, where both within and between individual dynamics
+depend upon such characteristic in potentially complex ways, IBMs are a natural modeling
+choice where a representation using mathematical models (especially compartmental models) would be cumbersome
+or impossible [@Willem:2017]. Even if an aggregated representation were feasible, there are many 
 reasons why an individual-based representation is to be preferred. Synthetic data
 may need to include a individual level outcome data, which aggregated models by their very 
-nature are unable to provide. Other complexities, such as when events occur after
-a random delay whose distribution differs from a geometric (or exponential)
+nature are unable to provide [@Tracy:2018]. Other complexities, such as when events occur after
+a random delay whose distribution differs from a Markovian
 one, mean even aggregated models will need to store individual completion times,
 necessitating more complex simulation algorithms and data structures; in such
 cases it is often more straightforward to adopt an individual-based representation
 from the start.
 
 `individual` is an R package which provides a set of useful primitive elements
-for specifying and simulating IBMs, with special attention to the types of models
-encountered in infectious disease epidemiology, although the software is generic.
-Users specify variables, one for each characteristic of an individual in the
-simulated population. The package provides efficient methods for finding
+for specifying their model, with special attention to the types of models
+encountered in infectious disease epidemiology. Users build models using data 
+structures exposed by the package to specify variables
+for each individual in the simulated population. The package provides efficient methods for finding
 subsets of individuals based on these variables, or cohorts. Cohorts can then
-be targeted for variable updates or future events. Models developed in `individual`
-are updated on a discrete time step, and individuals can interact in a completely
-general manner. While `individual` can represent almost any kind of IBM, it is
-designed to be used for the types of models encountered in epidemiology, 
-where interactions between individuals are structured by discrete variables, such as
-position on a network, and more efficient alternatives may exist for continuous
-space models or cellular automata.
+be targeted for variable updates or scheduled for events. These data structures
+are designed to provide an intuitive way for users to turn their conceptual
+model of a system into executable code, which is fast and memory efficient. Variable
+updates queued during a time step are executed at the end of a discrete time step,
+and the code places no restrictions on how individuals are allowed to interact.
 
 # Statement of need
 
-In many applications, but especially epidemiology, individual-based models often
+In many applications, but especially epidemiology, individual-based models 
 need to balance comprehensibility and speed. A fast model whose code is only
 understood by the author can be difficult to use as a basis for scientific
 exploration, which necessitates the development of various similar models to
@@ -90,7 +87,7 @@ complement, symmetric difference, set difference) which are implemented as bitwi
 operations in the C++ source code. This lets users write clear, highly efficient
 code for updating their model, fully in R. This representation of categorical 
 variables is (to our knowledge), novel for epidemiological simulation. 
-While @Rizzi:2018 proposed using a bitset to represent each agent, the agents 
+While @Rizzi:2018 proposed using a bitset to represent each individual, the agents 
 were still stored as types an array.
 
 In contrast to other individual based modelling software, where users must
