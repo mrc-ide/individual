@@ -28,7 +28,7 @@ bibliography: paper.bib
 
 Complex stochastic models are a crucial tool for many tasks 
 in public health, and especially in infectious disease epidemiology [@Ganyani:2021]. 
-Such models can help formalize theory, generate synthetic data, evaluate counterfactual 
+Such models can formalize theory, generate synthetic data, evaluate counterfactual 
 scenarios, forecast trends, and be used for statistical inference. Individual-based
 models (IBMs) are a way to design disaggregated simulation models, usually contrasted
 with mathematical or equation-based models, which may model a density or concentration
@@ -47,17 +47,17 @@ necessitating more complex simulation algorithms and data structures; in such
 cases it is often more straightforward to adopt an individual-based representation
 from the start.
 
-"individual" is an R package which provides a set of useful primitive elements
-for specifying their model, with special attention to the types of models
-encountered in infectious disease epidemiology. Users build models using data 
+"individual" is an R package which provides users a set of useful primitive elements
+for specifying their model, with special attention given to the types of models
+encountered in infectious disease epidemiology. Users build models with data 
 structures exposed by the package to specify variables
 for each individual in the simulated population. The package provides efficient methods for finding
 subsets of individuals based on these variables, or cohorts. Cohorts can then
-be targeted for variable updates or scheduled for events. These data structures
-are designed to provide an intuitive way for users to turn their conceptual
-model of a system into executable code, which is fast and memory efficient. Variable
-updates queued during a time step are executed at the end of a discrete time step,
+be targeted for variable updates or scheduled for events.
+Variable updates queued during a time step are executed at the end of a discrete time step,
 and the code places no restrictions on how individuals are allowed to interact.
+These data structures are designed to provide an intuitive way for users to turn their conceptual
+model of a system into executable code, which is fast and memory efficient.
 
 # Statement of need
 
@@ -68,7 +68,7 @@ exploration, which necessitates the development of various similar models to
 test different hypotheses or explore sensitivity to certain assumptions. On the
 other hand a clear yet slow model can be practically unusable for tasks such as
 uncertainty quantification or statistical inference on model parameters. individual
-provides a toolkit for epidemiologists to write models which is general enough
+provides a toolkit for epidemiologists to write models that is general enough
 to cover nearly all models of practical interest using simple, standardized code which is
 fast enough to be useful for computation heavy applications.
 
@@ -76,26 +76,26 @@ Based on our review of existing software below, no other library exists in
 the R language which provides users with a set of primitive elements for defining 
 epidemiological models without making strong restrictions upon the type of model 
 being simulated (e.g.; compartmental, network, etc), or limiting users to particular
-mathematical forms for transition probabilities for infection probabilities.
+mathematical forms for transition probabilities.
 
 # Design Principles
 
 The individual package is written in the R language, which is a *lingua franca*
 in epidemiology. The package uses `Rcpp` [@Rcpp] to link to C++ source code, 
 which underlies the data structures exposed to the user. 
-The API for individual uses a `R6` [@R6] class-based design at the R level
+The API for individual uses `R6` [@R6] classes at the R level
 which users call to create, update, and query variables.
 
-Because in many epidemiological models the most important individual level
-state variable can be represented as belonging to mutually exclusive 
-types in a finite set, individual uses a bitset programmed in C++ to store these data.
+Because in many epidemiological models the most important part of an individual's state
+can be represented as mutually exclusive classes in a finite set,
+individual uses a bitset programmed in C++ to store these data.
 At the R level users can call various set operations (union, intersection,
 complement, symmetric difference, set difference) which are implemented as bitwise
-operations in the C++ source code. This lets users write clear, highly efficient
+operations in the C++ source. This lets users write clear, highly efficient
 code for updating their model, fully in R. 
 
 In contrast to other individual based modeling software, where users focus on
-defining a type to contain each simulated individual's characteristic in the population,
+defining a type for simulated individuals,
 in individual users instead define variables, one for each characteristic. 
 Individual agents are only defined by their their position in each bitset which defines 
 membership in a variable, or position in a vector of integers or floats 
@@ -103,7 +103,7 @@ for unbounded or floating point variables.
 This design is similar to a component system, a design pattern to help
 decouple complicated types [@Nystrom:2014]. 
 Therefore, state is represented in a disaggregated manner, and preforming
-operations to find and interact with cohorts of individuals benefits fast bitwise operators.
+operations to find and interact with cohorts of individuals benefits from fast bitwise operators.
 This representation of state is (to our knowledge), novel for epidemiological simulation. 
 While @Rizzi:2018 proposed using a bitset to represent the state of each
 simulated individual, the population was still stored as types in an array.
@@ -218,7 +218,7 @@ modeling processes which can cause the same variable to change state. Update con
 in individual are solved by transactional updates. Each process has access to
 all variables and may queue updates, but variable updates are not applied until
 all processes have run for the current time step. This means all individuals update
-synchronously where conflicts, multiple updates scheduled for a single agent, are resolved by
+synchronously where conflicts (multiple updates scheduled for a single agent) are resolved by
 process execution order.
 
 ## Processes
