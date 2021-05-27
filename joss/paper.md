@@ -26,26 +26,6 @@ bibliography: paper.bib
 
 # Summary
 
-Complex stochastic models are a crucial tool for many tasks 
-in public health, and especially in infectious disease epidemiology [@Ganyani:2021]. 
-Such models can help formalize theory, generate synthetic data, evaluate counterfactual 
-scenarios, forecast trends, and be used for statistical inference. Individual-based
-models (IBMs) are a way to design disaggregated simulation models, usually contrasted
-with mathematical or equation-based models, which may model a density or concentration
-of individuals, or otherwise lump individuals with similar attributes together in some
-way [@Shalizi:2006]. For modeling finite numbers of individuals with significant between-individual
-heterogeneity in characteristics, where both within and between individual dynamics
-depend upon such characteristic in potentially complex ways, IBMs are a natural modeling
-choice where a representation using mathematical models (especially compartmental models) would be cumbersome
-or impossible [@Willem:2017]. Even if an aggregated representation were feasible, there are many 
-reasons why an individual-based representation is to be preferred. Synthetic data
-may need to include a individual level outcome data, which aggregated models by their very 
-nature are unable to provide [@Tracy:2018]. Other complexities, such as when events occur after
-a random delay whose distribution differs from a Markovian
-one, mean even aggregated models will need to store individual completion times,
-necessitating more complex simulation algorithms and data structures; in such
-cases it is often more straightforward to adopt an individual-based representation
-from the start.
 
 `individual` is an R package which provides a set of useful primitive elements
 for specifying their model, with special attention to the types of models
