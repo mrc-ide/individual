@@ -47,7 +47,7 @@ necessitating more complex simulation algorithms and data structures; in such
 cases it is often more straightforward to adopt an individual-based representation
 from the start.
 
-"individual" is an R package which provides users a set of useful primitive elements
+`individual` is an R package which provides users a set of useful primitive elements
 for specifying their model, with special attention given to the types of models
 encountered in infectious disease epidemiology. Users build models with data 
 structures exposed by the package to specify variables
@@ -67,7 +67,7 @@ understood by the author can be difficult to use as a basis for scientific
 exploration, which necessitates the development of various similar models to
 test different hypotheses or explore sensitivity to certain assumptions. On the
 other hand a clear yet slow model can be practically unusable for tasks such as
-uncertainty quantification or statistical inference on model parameters. individual
+uncertainty quantification or statistical inference on model parameters. `individual`
 provides a toolkit for epidemiologists to write models that is general enough
 to cover nearly all models of practical interest using simple, standardized code which is
 fast enough to be useful for computation heavy applications.
@@ -80,15 +80,15 @@ mathematical forms for transition probabilities.
 
 # Design Principles
 
-The individual package is written in the R language, which is a *lingua franca*
+The `individual` package is written in the R language, which is a *lingua franca*
 in epidemiology. The package uses `Rcpp` [@Rcpp] to link to C++ source code, 
 which underlies the data structures exposed to the user. 
-The API for individual uses `R6` [@R6] classes at the R level
+The API for `individual` uses `R6` [@R6] classes at the R level
 which users call to create, update, and query variables.
 
 Because in many epidemiological models the most important part of an individual's state
 can be represented as mutually exclusive classes in a finite set,
-individual uses a bitset programmed in C++ to store these data.
+`individual` uses a bitset programmed in C++ to store these data.
 At the R level users can call various set operations (union, intersection,
 complement, symmetric difference, set difference) which are implemented as bitwise
 operations in the C++ source. This lets users write clear, highly efficient
@@ -96,7 +96,7 @@ code for updating their model, fully in R.
 
 In contrast to other individual based modeling software, where users focus on
 defining a type for simulated individuals,
-in individual users instead define variables, one for each characteristic. 
+in `individual` users instead define variables, one for each characteristic. 
 Individual agents are only defined by their their position in each bitset which defines 
 membership in a variable, or position in a vector of integers or floats 
 for unbounded or floating point variables.
@@ -108,11 +108,11 @@ This representation of state is (to our knowledge), novel for epidemiological si
 While @Rizzi:2018 proposed using a bitset to represent the state of each
 simulated individual, the population was still stored as types in an array.
 
-individual also provides a C++ header-only interface which advanced users
+`individual` also provides a C++ header-only interface which advanced users
 can link to from their R package. The C++ interface allows a user to interact
 with the C++ types directly, if the R interface remains too slow for their use case.
 This means that users can link to other R packages that expose a C or C++ interface,
-significantly enhancing the extensibility of individual's R and C++ API.
+significantly enhancing the extensibility of `individual`'s R and C++ API.
 
 # State of the field
 
@@ -188,13 +188,13 @@ limiting generalizability.
 EpiModel [@Jenness:2018] is perhaps the most relevant R software we have reviewed, 
 allowing simulation of highly detailed discrete time models on networks, relying on the 
 statnet [@Handcock:statnet] project for classes and algorithms. However due to its 
-focus on directly transmitted diseases, individual may be more generic for other
+focus on directly transmitted diseases, `individual` may be more generic for other
 epidemiological sitautions (such as vector borne diseases).
 In addition it does not offer an interface for compiled code.
 
 # Overview
 
-The primitives in the individual package can be separated into variables,
+The primitives in the `individual` package can be separated into variables,
 processes, events and rendering. Each primitive is designed to simplify and
 optimise a common challenge in the simulation of infectious disease models.
 
@@ -213,9 +213,9 @@ cohorts by selecting ranges of attribute values, or combining other cohorts
 using efficient set operations. This simplifies much of the modelling code into 
 performant, vectorised operations.
 
-Because individual updates on a discrete time step, care must be taken when
+Because `individual` updates on a discrete time step, care must be taken when
 modeling processes which can cause the same variable to change state. Update conflicts
-in individual are solved by transactional updates. Each process has access to
+in `individual` are solved by transactional updates. Each process has access to
 all variables and may queue updates, but variable updates are not applied until
 all processes have run for the current time step. This means all individuals update
 synchronously where conflicts (multiple updates scheduled for a single agent) are resolved by
@@ -235,7 +235,7 @@ closures in R, and a `std::function` in C++. This gives users the flexibility
 to use tools in their respective ecosystems, test their processes in
 isolation, and trade off between development speed and performance.
 
-individual provides process generators for common infectious disease
+`individual` provides process generators for common infectious disease
 dynamics. Users can parameterise these generators with their model variables 
 to speed up development and reduce their code size. Current
 generators include an `infection_age_process`, a `bernoulli_process`, a
@@ -247,7 +247,7 @@ individual can follow any distribution.
 Waiting time distributions can therefore depend on time, individual level attributes
 of multiple individuals, and the time elapsed since an event was enabled.
 Therefore, a very general class of non-Markovian processes can be simulated
-in individual.
+in `individual`.
 
 ## Events
 
@@ -259,7 +259,7 @@ change to model dynamics once they are triggered. Events are useful for
 modelling interventions like vaccinations, or delayed biological events like
 incubation periods.
 
-Like processes, listeners can be defined in R or C++. individual also provides
+Like processes, listeners can be defined in R or C++. `individual` also provides
 listener generators like `reschedule_listener` and `update_category_listener`.
 
 ## Rendering
@@ -285,7 +285,7 @@ by listeners take precedence over any updates produced from processes.
 
 # Example
 
-To demonstrate how to use individual we will build and simulate a simple SIR
+To demonstrate how to use `individual` we will build and simulate a simple SIR
 model. For details on the mathematical construction stochastic epidemic models,
 please consult @Allen:2017. This example follows the 
 [package vignette](https://mrc-ide.github.io/individual/articles/Tutorial.html).
@@ -294,7 +294,7 @@ The epidemic will be simulated in a population of 1000, where 5 persons are
 initially infectious, whose indices are randomly sampled. The effective contact
 rate $\beta$ will be a function of the deterministic $R_{0}$ and recovery rate 
 $\gamma$. We also specify `dt`, which is the size of the intended time step. 
-Because in individual all time steps are of unit duration, by adjusting transition
+Because in `individual` all time steps are of unit duration, by adjusting transition
 rates appropriately by `dt` the unit time step can be scaled to any desired size.
 Because the maximum time is `tmax` the number of discrete time steps taken is 
 `tmax/dt`.
@@ -409,6 +409,16 @@ By default, `Render` object return `data.frame` objects which can be easily
 plotted and analyzed.
 
 ![A simulated SIR model trajectory](sir.png)
+
+# Licensing and Availability
+
+`individual` is licensed under MIT License, with all
+source code stored at [GitHub](https://github.com/mrc-ide/individual).
+Requests, suggestions, and bug reports are encouraged via
+filing an [issue](hhttps://github.com/mrc-ide/individual/issues).
+A general guide on how to contribute to `individual` is available at
+the [package's website](https://mrc-ide.github.io/individual/articles/Contributing.html).
+
 
 # Acknowledgements
 
