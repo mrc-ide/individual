@@ -47,7 +47,7 @@ necessitating more complex simulation algorithms and data structures; in such
 cases it is often more straightforward to adopt an individual-based representation
 from the start.
 
-`individual` is an R package which provides a set of useful primitive elements
+"individual" is an R package which provides a set of useful primitive elements
 for specifying their model, with special attention to the types of models
 encountered in infectious disease epidemiology. Users build models using data 
 structures exposed by the package to specify variables
@@ -67,51 +67,52 @@ understood by the author can be difficult to use as a basis for scientific
 exploration, which necessitates the development of various similar models to
 test different hypotheses or explore sensitivity to certain assumptions. On the
 other hand a clear yet slow model can be practically unusable for tasks such as
-uncertainty quantification or statistical inference on model parameters. `individual`
+uncertainty quantification or statistical inference on model parameters. individual
 provides a toolkit for epidemiologists to write models which is general enough
 to cover nearly all models of practical interest using simple, standardized code which is
 fast enough to be useful for computation heavy applications.
 
-The `individual` package is written in the R language, which is a *lingua franca*
-in epidemiological applications. The package uses `Rcpp` [@Rcpp] to link to
-the C++ source code, which underlies the data structures exposed to the user. 
-The API for `individual` uses a `R6` [@R6] class-based design at the R level
+Based on our review of existing software below, no other library exists in
+the R language which provides users with a set of primitive elements for defining 
+epidemiological models without making strong restrictions upon the type of model 
+being simulated (e.g.; compartmental, network, etc), or limiting users to particular
+mathematical forms for transition probabilities for infection probabilities.
+
+# Design Principles
+
+The individual package is written in the R language, which is a *lingua franca*
+in epidemiology. The package uses `Rcpp` [@Rcpp] to link to C++ source code, 
+which underlies the data structures exposed to the user. 
+The API for individual uses a `R6` [@R6] class-based design at the R level
 which users call to create, update, and query variables.
 
 Because in many epidemiological models the most important individual level
-characteristic can be represented as belonging to mutually exclusive 
-types in a finite set (such as susceptible or infectious), the software
-uses a fast bitset object at the C++ level to represent these types of categorical
-variables. At the R level users can call various set operations (union, intersection,
+state variable can be represented as belonging to mutually exclusive 
+types in a finite set, individual uses a bitset programmed in C++ to store these data.
+At the R level users can call various set operations (union, intersection,
 complement, symmetric difference, set difference) which are implemented as bitwise
 operations in the C++ source code. This lets users write clear, highly efficient
-code for updating their model, fully in R. This representation of categorical 
-variables is (to our knowledge), novel for epidemiological simulation. 
-While @Rizzi:2018 proposed using a bitset to represent each individual, the agents 
-were still stored as types an array.
+code for updating their model, fully in R. 
 
-In contrast to other individual based modelling software, where users must
-define a type for the simulated individuals, in `individual`, users define a
-variable for each characteristic in the population. Individual agents are only defined by their unique id,
-their position in each bitset which defines membership to a categorical variable, 
-or the element of a vector of integers or floats for unbounded or real variables.
-This architecture is similar to a component system, a design pattern to help
-decouple complicated types [@Nystrom:2014]. Each variable type users can
-create (categorical, integer, or double) is managed by a data type with
-both an R and C++ interface. Because of this general design, the package is not
-restricted to particular mathematical forms for infection (or any other) events,
-nor restricted to any particular conception of space (*e.g.* a network).
+In contrast to other individual based modeling software, where users focus on
+defining a type to contain each simulated individual's characteristic in the population,
+in individual users instead define variables, one for each characteristic. 
+Individual agents are only defined by their their position in each bitset which defines 
+membership in a variable, or position in a vector of integers or floats 
+for unbounded or floating point variables.
+This design is similar to a component system, a design pattern to help
+decouple complicated types [@Nystrom:2014]. 
+Therefore, state is represented in a disaggregated manner, and preforming
+operations to find and interact with cohorts of individuals benefits fast bitwise operators.
+This representation of state is (to our knowledge), novel for epidemiological simulation. 
+While @Rizzi:2018 proposed using a bitset to represent the state of each
+simulated individual, the population was still stored as types in an array.
 
-Based on our review of existing software below, no other library exists which
-provides users with a set of primitive elements for defining epidemiological
-models without making assumptions about the type of model being simulated
-(e.g.; compartmental, network, etc).
-
-`individual` also provides a C++ header-only interface which advanced users
+individual also provides a C++ header-only interface which advanced users
 can link to from their R package. The C++ interface allows a user to interact
 with the C++ types directly, if the R interface remains too slow for their use case.
 This means that users can link to other R packages that expose a C or C++ interface,
-significantly enhancing the extensibility of both `individual`'s R and C++ API.
+significantly enhancing the extensibility of individual's R and C++ API.
 
 # State of the field
 
@@ -120,26 +121,24 @@ both in R and other programming languages. However, we are not yet aware
 of a similar package written especially for epidemiology which allows 
 simulation of generic infectious processes by providing users 
 with a set of specialized data types and methods without making assumptions about 
-model structure (e.g. network, metapopulation, lattice grid, etc).
+model structure (e.g. network, metapopulation, lattice grid, etc). Additionally,
+none of the reviewed software used bitset objects to optimize certain operations.
 
 ## Non R Software
 
 A wide variety of simulation software exist for generic agent-based models. Among the best
 known are Repast [@North:2013], Mesa [@Masad:2015], and NetLogo [@Wilensky:1999].
 In the Julia programming language, Agents.jl [@Vahdati:2019] provides an efficient
-platform for specifying and simulation agent-based models. Unlike `individual`,
-in Agents.jl a user specifies a custom type that defines a single agent, whereas
-in `individual` users define variables that implicitly specify the possible model
-states.
+platform for specifying and simulation agent-based models.
 
-Various software libraries also exist specifically for epimiological simulation.
+Various software libraries also exist specifically for epidemiological simulation.
 EpiFire [@Hladish:2012] and SimpactCyan [@Liesenborgs:2019] are C++ libraries
-for simulation of epidemics on networks. The Numerus Model Builder [@Getz:2018] 
-and NOVA [@Salter:2013] platforms use a specialized scripting language for users
-to define models. EMOD [@Bershteyn:2018] is a highly successful and complex modeling 
+for simulation of epidemics on networks. Numerus Model Builder [@Getz:2018] 
+and NOVA [@Salter:2013] use a domain specific language to define models. 
+EMOD [@Bershteyn:2018] is a highly successful and complex modeling 
 software in C++ which relies on JSON configuration files to interact with.
 Pathogen.jl [@Angevaare:2020] is a package for individual based simulation of common
-compartmental models (SEIR, SEI, SIR, SI).
+compartmental models.
 
 ## R Software
 
@@ -147,61 +146,55 @@ compartmental models (SEIR, SEI, SIR, SI).
 
 Several R packages provide interfaces to other software libraries.
 The nlrx package provides an R interface to NetLogo [@Salecker:2019] to set up reproducible
-experiements and focuses on sensitivity analysis, and RNetLogo is a more basic interface [@Thiele:2014].
+experiments and focuses on sensitivity analysis, and RNetLogo is a more basic interface [@Thiele:2014].
+NetLogoR [@Bauduin:2019] is a complete translation of NetLogo into R.
 For the Repast library, RRepast provides a sophisticated interface [@Garcia:2016].
 
 Generic individual based simulation packages in R include the simmeR package for 
-discrete event simulation [@Ucar:2017]develops a similar `R6` interface with linked 
-C++ but is designed to consider queueing type processes rather than epidemiological
-simulation. SpaDES [@Mcintire:2021] is a complex generic discrete event simulator designed for large
-ecological models on raster landscapes. Finally NetLogoR [@Bauduin:2019] is a complete translation of NetLogo into R.
+discrete event simulation [@Ucar:2017] which also utilizes a `R6` interface to 
+lined C++ but is specialized for queueing type models.
+SpaDES [@Mcintire:2021] is a generic discrete event simulator designed for
+ecological models on raster landscapes. 
+IBMPopSim [@Giorgi:2020] is a sophisticated R package for simulation of 
+continuous time individual based models, but requires uses to input C++ code
+as a string which is then compiled, making it difficult to interface with the
+existing R ecosystem.
 
-IBMPopSim [@Giorgi:2020] is a sophisticated R package that allows simulation of 
-general continuous time individual based models for demography, 
-based on a thinning (uniformization) algorithm to simulate exact trajectories. 
-However, it requires users to input C++ code as a string into the R interface 
-which are compiled to give the rate function for each event, meaning use of 
-other R packages to aid simulation is difficult. ibm [@Oliveros:2016] provides 
-examples of simple, extensible, individual based models
+ibm [@Oliveros:2016] provides examples of individual based models
 in R but does not provide a generic interface. ibmcraftr [@Tun:2016] allows creation
-of discretized CTMC simulations in R.
+of stochastic simulations in R.
 
 simecol [@Petzoldt:2007] provides classes to implement and distribute ecological
-models, but the focus is on structuring software projects to enhance reproducibility rather
+models, but focuses on structuring software projects for reproducibility rather
 than providing tools for simulation. 
 
 ### Epidemiological R Packages
 
 There are a variety of packages in R designed to simulate epidemic processes on
-networks. The SimInf package [@Bauer:2016] is able to run very large CTMC simulations
-of epidemics on networks taking advantage of R's C interface to preform most computations in C.
-However it doesn't support arbitrary waiting times, continuous 
-or unbounded integer attributes for individuals, and has a highly structured API.
-The hybridModels package [@Fernando:2020] has similar capabilities but is fully implemented 
-in R. epinet [@Groendyke:2018] and EpiDynamics [@Baquero:2020]
+networks. SimInf [@Bauer:2016] is able to run very large simulations taking advantage
+of R's C interface to preform most computations in C, but has many constraints on
+the model dynamics. hybridModels [@Fernando:2020] has similar capabilities but is 
+fully implemented in R. epinet [@Groendyke:2018] and EpiDynamics [@Baquero:2020]
 are other R packages with similar functionality. nosoi [@Lequime:2020] is an 
-agent-based simulation framework designed to simulate transmission chains to generate 
+agent-based simulation framework designed to simulate transmission to generate 
 synthetic data for phylogenetic analysis, with specialized data structures for this purpose.
 
-EpiILMCT [@Almutiry:2020] and EpiILM [@Warriyar:2020] are R packages implementing 
-simulation and inference for continuous time models on networks or spatial grids,
-in continuous and discrete time, respectively, with computationally intensive routines
-coded in Fortran. The SPARSEMODr [@Mihaljevic:2021] package has similar capabilities, albeit
-programmed in C++. Both projects however restrict the transmission
+EpiILMCT [@Almutiry:2020] and EpiILM [@Warriyar:2020] also simulate epidemics on
+networks, relying on a FORTRAN backend. SPARSEMODr [@Mihaljevic:2021] has similar capabilities,
+although with a C++ backend. These packages however restrict the transmission
 term (force of infection) to common mathematical forms (frequency and density-dependent),
-whereas `individual` makes no assumptions about how transition probabilities for individuals
-are calculated.
+limiting generalizability.
 
-EpiModel [@Jenness:2018] is perhaps the closest R software we have reviewed, allowing simulation
-of highly detailed discrete time models on networks, using functionality from the 
-statnet [@Handcock:statnet] project for network classes and algorithms. However due to its 
-focus on networks, `individual` may be easier to get started with for other types
-of models (or vector borne diseases). In addition it does not offer an interface
-for compiled code.
+EpiModel [@Jenness:2018] is perhaps the most relevant R software we have reviewed, 
+allowing simulation of highly detailed discrete time models on networks, relying on the 
+statnet [@Handcock:statnet] project for classes and algorithms. However due to its 
+focus on directly transmitted diseases, individual may be more generic for other
+epidemiological sitautions (such as vector borne diseases).
+In addition it does not offer an interface for compiled code.
 
 # Overview
 
-The primitives in the `individual` package can be separated into variables,
+The primitives in the individual package can be separated into variables,
 processes, events and rendering. Each primitive is designed to simplify and
 optimise a common challenge in the simulation of infectious disease models.
 
@@ -213,7 +206,7 @@ available through `R6` [@R6] or C++ classes.
 
 A variable represents an attribute of each individual in the model. While
 many variables will be dynamically updated throughout a simulation, they can
-also remain constant. `individual` currently provides a variety variables for
+also remain constant. individual currently provides a variety variables for
 suited for modelling seperate aspects of the model. Examples might include a
 categorical variable specifying each individual's health status, a Real valued
 variable giving their level of immune response, or an integer variable
@@ -226,7 +219,7 @@ performant, vectorised operations.
 
 In discrete time models, users often want to model processes which occur
 simultaneously each time step. They do not want variable updates from one
-process to affect variable accesses in another. Variables in `individual`
+process to affect variable accesses in another. Variables in individual
 achieve this with transactional updates. Every process has access to the
 same variable values from the previous time step. They are able to queue updates
 to a variable, but they are not applied until all processes have been run for
@@ -250,7 +243,7 @@ of each individual categorical variable. In this way, one could model, for
 example, a SIR model where individuals are also partitioned by discrete age group
 with two categorical variable objects.
 
-In `individual` users may create a categorical variable corresponding to a set
+In individual users may create a categorical variable corresponding to a set
 of mutually exclusive states in R using the `CategoricalVariable` `R6` class.
 The internal C++ API stores a bitset object for each value in the set of states.
 The class implements common set operations (union, intersection, complement,
@@ -287,7 +280,7 @@ closures in R, and a std::function in C++. This gives the user the flexibility
 to use other tools in their respective ecosystems, test their processes in
 isolation, and trade off between development speed for performance.
 
-`individual` provides process generators for common infectious disease
+individual provides process generators for common infectious disease
 dynamics. Users can parameterise these generators with their model variables 
 to speed up development and reduce their code size. Current
 generators include an `infection_age_process`, a `bernoulli_process`, a
@@ -295,13 +288,13 @@ generators include an `infection_age_process`, a `bernoulli_process`, a
 
 Because processes can schedule variable updates or events depending on the state
 of variables in a completely general way, waiting times for events in 
-`individual` can follow any distribution with a computable hazard function.
+individual can follow any distribution with a computable hazard function.
 Distributions of time to event can depend on time, individual level attributes
 of multiple individuals, and the time elapsed since an event was enabled. In 
 fact enabling time dependency can be either implemented with a supplemental
 variable to explicitly track for each individual that elapsed time, or with
 a scheduled event, which can be cancled if interrupted prior to completion.
-Either way, `individual` can simulate general non-Markovian processes.
+Either way, individual can simulate general non-Markovian processes.
 
 ## Events
 
@@ -313,7 +306,7 @@ change to model dynamics once they are triggered. Events are useful for
 modelling  interventions like vaccinations, or delayed biological events like
 incubation periods.
 
-Like processes, listeners can be defined in R or C++. `individual` also provides
+Like processes, listeners can be defined in R or C++. individual also provides
 listener generators like `reschedule_listener` and `update_category_listener`.
 
 ## Rendering
@@ -339,7 +332,7 @@ by listeners take precedence over any updates produced from processes.
 
 # Example
 
-To demonstrate how to use `individual` we will build and simulate a simple SIR
+To demonstrate how to use individual we will build and simulate a simple SIR
 model. For details on the mathematical construction stochastic epidemic models,
 please consult @Allen:2017. This example follows the 
 [package vignette](https://mrc-ide.github.io/individual/articles/Tutorial.html).
@@ -348,7 +341,7 @@ The epidemic will be simulated in a population of 1000, where 5 persons are
 initially infectious, whose indices are randomly sampled. The effective contact
 rate $\beta$ will be a function of the deterministic $R_{0}$ and recovery rate 
 $\gamma$. We also specify `dt`, which is the size of the intended time step. 
-Because in `individual` all time steps are of unit duration, by adjusting transition
+Because in individual all time steps are of unit duration, by adjusting transition
 rates appropriately by `dt` the unit time step can be scaled to any desired size.
 Because the maximum time is `tmax` the number of discrete time steps taken is 
 `tmax/dt`.
