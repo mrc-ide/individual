@@ -58,10 +58,14 @@ IntegerVariable <- R6::R6Class(
     #' @param a lower bound
     #' @param b upper bound
     get_size_of = function(set = NULL, a = NULL, b = NULL) {        
-        if(!is.null(set)) {
-            return(integer_variable_get_size_of_set(self$.variable, set))
+        if (!is.null(set)) {
+            if (length(set) > 1) {
+              return(integer_variable_get_size_of_set_vector(self$.variable, set))  
+            } else {
+              return(integer_variable_get_size_of_set_scalar(self$.variable, set))
+            }
         }
-        if(!is.null(a) & !is.null(b)) {
+        if (!is.null(a) & !is.null(b)) {
             stopifnot(a < b)
             return(integer_variable_get_size_of_range(self$.variable, a, b))           
         }

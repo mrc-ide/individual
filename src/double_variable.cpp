@@ -56,7 +56,7 @@ Rcpp::XPtr<individual_index_t> double_variable_get_index_of_range(
 }
 
 // [[Rcpp::export]]
-int double_variable_get_size_of_range(
+size_t double_variable_get_size_of_range(
     Rcpp::XPtr<DoubleVariable> variable,
     const double a,
     const double b

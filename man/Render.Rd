@@ -48,6 +48,8 @@ renderers
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{name}}{the variable to set a default for}
+
+\item{\code{value}}{the default value to set for a variable}
 }
 \if{html}{\out{</div>}}
 }
