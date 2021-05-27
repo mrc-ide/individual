@@ -21,7 +21,6 @@ affiliations:
  - name: Division of Epidemiology and Biostatistics, School of Public Health, University of California, Berkeley, CA 94720, USA
    index: 2
 date: 13 August 2017
-bibliography: paper.bib
 ---
 
 # Summary
