@@ -176,7 +176,7 @@ of R's C interface to preform most computations in C, but has many constraints o
 the model dynamics. hybridModels [@Fernando:2020] has similar capabilities but is 
 fully implemented in R. epinet [@Groendyke:2018] and EpiDynamics [@Baquero:2020]
 are other R packages with similar functionality. nosoi [@Lequime:2020] is an 
-agent-based simulation framework designed to simulate transmission to generate 
+agent-based simulation framework designed to generate 
 synthetic data for phylogenetic analysis, with specialized data structures for this purpose.
 
 EpiILMCT [@Almutiry:2020] and EpiILM [@Warriyar:2020] also simulate epidemics on
