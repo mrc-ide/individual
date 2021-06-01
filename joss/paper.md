@@ -33,9 +33,9 @@ scenarios, forecast trends, and be used for statistical inference. Individual-ba
 models (IBMs) are a way to design disaggregated simulation models, usually contrasted
 with mathematical or equation-based models, which may model a density or concentration
 of individuals, or otherwise lump individuals with similar attributes together in some
-way [@Shalizi:2006]. For modeling finite numbers of individuals with significant between-individual
-heterogeneity in characteristics, which both within and between individual dynamics
-could depend on in potentially complex ways, IBMs are a natural modeling
+way [@Shalizi:2006]. For modeling finite numbers of individuals with significant
+heterogeneity in characteristics, and dynamics which could depend on such 
+characteristics in complex ways, IBMs are a natural modeling
 choice whereas a representation using mathematical models (especially compartmental models) would be cumbersome
 or impossible [@Willem:2017]. Even if an aggregated representation were feasible, there are many 
 reasons why an individual-based representation is to be preferred. Synthetic data
