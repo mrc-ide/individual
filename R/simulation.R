@@ -36,7 +36,7 @@ simulation_loop <- function(
   events = list(),
   processes = list(),
   timesteps
-  ) {
+) {
   if (timesteps <= 0) {
     stop('End timestep must be > 0')
   }
@@ -44,15 +44,12 @@ simulation_loop <- function(
     for (process in processes) {
       execute_any_process(process, t)
     }
-    for (event in events) {
-      event$.process()
-    }
-    for (variable in variables) {
-      variable$.update()
-    }
-    for (event in events) {
-      event$.tick()
-    }
+
+    invisible(lapply(events, process_events))
+    
+    invisible(lapply(variables, update_variables))
+    
+    invisible(lapply(events, tick_events))
   }
 }
 
@@ -65,5 +62,45 @@ execute_any_process <- function(p, t) {
     execute_process(p, t)
   } else {
     p(t)
+  }
+}
+
+
+#' Update variables
+#' 
+#' Recursive approach to updating all variables in nested list.
+#'
+#' @inheritParams simulation_loop
+update_variables <- function(variables){
+  if("R6" %in% class(variables)){
+    variables$.update()
+  } else {
+    lapply(variables, update_variables)
+  }
+}
+
+#' Process events
+#' 
+#' Recursive approach to processing all events in nested list.
+#'
+#' @inheritParams simulation_loop
+process_events <- function(events){
+  if("R6" %in% class(events)){
+    events$.process()
+  } else {
+    lapply(events, process_events)
+  }
+}
+
+#' Tick events
+#' 
+#' Recursive approach to ticking all events in nested list.
+#'
+#' @inheritParams simulation_loop
+tick_events <- function(events){
+  if("R6" %in% class(events)){
+    events$.tick()
+  } else {
+    lapply(events, tick_events)
   }
 }
