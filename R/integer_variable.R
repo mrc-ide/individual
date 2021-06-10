@@ -39,9 +39,13 @@ IntegerVariable <- R6::R6Class(
     #' @param set a vector of values 
     #' @param a lower bound
     #' @param b upper bound
-    get_index_of = function(set = NULL, a = NULL, b = NULL) {        
+    get_index_of = function(set = NULL, a = NULL, b = NULL) {
         if(!is.null(set)) {
-            return(Bitset$new(from = integer_variable_get_index_of_set(self$.variable, set)))
+            if (length(set) > 1) {
+              return(Bitset$new(from = integer_variable_get_index_of_set_vector(self$.variable, set)))
+            } else {
+              return(Bitset$new(from = integer_variable_get_index_of_set_scalar(self$.variable, set)))
+            }
         }
         if(!is.null(a) & !is.null(b)) {
             stopifnot(a < b)

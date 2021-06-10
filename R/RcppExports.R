@@ -209,8 +209,12 @@ integer_variable_get_values_at_index_vector <- function(variable, index) {
     .Call(`_individual_integer_variable_get_values_at_index_vector`, variable, index)
 }
 
-integer_variable_get_index_of_set <- function(variable, values_set) {
-    .Call(`_individual_integer_variable_get_index_of_set`, variable, values_set)
+integer_variable_get_index_of_set_vector <- function(variable, values_set) {
+    .Call(`_individual_integer_variable_get_index_of_set_vector`, variable, values_set)
+}
+
+integer_variable_get_index_of_set_scalar <- function(variable, values_set) {
+    .Call(`_individual_integer_variable_get_index_of_set_scalar`, variable, values_set)
 }
 
 integer_variable_get_index_of_range <- function(variable, a, b) {
