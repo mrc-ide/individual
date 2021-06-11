@@ -628,15 +628,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// integer_variable_get_index_of_set
-Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_set(Rcpp::XPtr<IntegerVariable> variable, std::vector<int> values_set);
-RcppExport SEXP _individual_integer_variable_get_index_of_set(SEXP variableSEXP, SEXP values_setSEXP) {
+// integer_variable_get_index_of_set_vector
+Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_set_vector(Rcpp::XPtr<IntegerVariable> variable, std::vector<int> values_set);
+RcppExport SEXP _individual_integer_variable_get_index_of_set_vector(SEXP variableSEXP, SEXP values_setSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
     Rcpp::traits::input_parameter< std::vector<int> >::type values_set(values_setSEXP);
-    rcpp_result_gen = Rcpp::wrap(integer_variable_get_index_of_set(variable, values_set));
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_index_of_set_vector(variable, values_set));
+    return rcpp_result_gen;
+END_RCPP
+}
+// integer_variable_get_index_of_set_scalar
+Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_set_scalar(Rcpp::XPtr<IntegerVariable> variable, const int values_set);
+RcppExport SEXP _individual_integer_variable_get_index_of_set_scalar(SEXP variableSEXP, SEXP values_setSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const int >::type values_set(values_setSEXP);
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_index_of_set_scalar(variable, values_set));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -870,7 +882,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_get_values", (DL_FUNC) &_individual_integer_variable_get_values, 1},
     {"_individual_integer_variable_get_values_at_index", (DL_FUNC) &_individual_integer_variable_get_values_at_index, 2},
     {"_individual_integer_variable_get_values_at_index_vector", (DL_FUNC) &_individual_integer_variable_get_values_at_index_vector, 2},
-    {"_individual_integer_variable_get_index_of_set", (DL_FUNC) &_individual_integer_variable_get_index_of_set, 2},
+    {"_individual_integer_variable_get_index_of_set_vector", (DL_FUNC) &_individual_integer_variable_get_index_of_set_vector, 2},
+    {"_individual_integer_variable_get_index_of_set_scalar", (DL_FUNC) &_individual_integer_variable_get_index_of_set_scalar, 2},
     {"_individual_integer_variable_get_index_of_range", (DL_FUNC) &_individual_integer_variable_get_index_of_range, 3},
     {"_individual_integer_variable_get_size_of_set_vector", (DL_FUNC) &_individual_integer_variable_get_size_of_set_vector, 2},
     {"_individual_integer_variable_get_size_of_set_scalar", (DL_FUNC) &_individual_integer_variable_get_size_of_set_scalar, 2},
