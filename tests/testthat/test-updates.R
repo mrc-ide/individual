@@ -65,11 +65,6 @@ test_that("updating variables with silly indices errors gracefully", {
   )
 
   expect_error(
-    sequence$queue_update("A", 10),
-    class = "Rcpp::not_compatible"
-  )
-
-  expect_error(
     sequence$queue_update(11, -1:3),
     '*' # invalid index
   )
@@ -77,6 +72,14 @@ test_that("updating variables with silly indices errors gracefully", {
   expect_error(
     sequence$queue_update(11, 9:15),
     '*' # out of bounds
+  )
+})
+
+test_that("Queuing non numeric values errors gracefully", {
+  size <- 10
+  sequence <- DoubleVariable$new(seq_len(size))
+  expect_error(sequence$queue_update(c(1, "A"), 1:2),
+               '*'
   )
 })
 
@@ -201,11 +204,6 @@ test_that("updating IntegerVariable with silly indices errors gracefully", {
   )
 
   expect_error(
-    sequence$queue_update("A", 10),
-    class = "Rcpp::not_compatible"
-  )
-
-  expect_error(
     sequence$queue_update(11, -1:3),
     '*' # invalid index
   )
@@ -213,6 +211,14 @@ test_that("updating IntegerVariable with silly indices errors gracefully", {
   expect_error(
     sequence$queue_update(11, 9:15),
     '*' # out of bounds
+  )
+})
+
+test_that("Queuing non numeric value for IntgerVariable errors gracefully", {
+  size <- 10
+  sequence <- IntegerVariable$new(seq_len(size))
+  expect_error(sequence$queue_update(c(1, "A"), 1:2),
+               '*'
   )
 })
 

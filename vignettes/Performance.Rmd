@@ -31,11 +31,11 @@ knitr::asis_output(
 
 ## Introduction {#intro}
 
-The "individual" package is designed for running big individual-based models. But if you find your model taking too long or consuming all of your memory, here are some things you can try to speed up your simulation.
+Individual is designed for running big individual-based models. But if you find your model taking too long or consuming all of your memory, here are some things you can try to speed up your simulation.
 
 ### Bitset {#bitset}
 
-The [bitset](https://en.wikipedia.org/wiki/Bit_array) data structure used to store categorical state information, `individual::Bitset` is able to preform set operations extremely quickly using [bitwise operations](https://en.wikipedia.org/wiki/Bitwise_operation). Taking advantage of these operations can lead to very fast processes, when you need to find some particular subset of individuals.
+The [bitset](https://en.wikipedia.org/wiki/Bit_array) data structure is used to record the presence or absence of an element in a finite set. `individual::Bitset` implements this data structure and is able to preform set operations extremely quickly using [bitwise operations](https://en.wikipedia.org/wiki/Bitwise_operation). Taking advantage of these operations can lead to very fast processes, when you need to find some particular subset of individuals.
 
 Let's take a look at the recovery process in `vignette("Tutorial")`. A crucial operation here is to get all infectious individuals who are not already scheduled for recovery. The object `I` is a bitset containing all those individuals currently infectious, and `already_scheduled` is another bitset containing those individuals scheduled for a recovery event. Using `already_scheduled$not()` returns a new bitset of those individuals *not* in the set of already scheduled persons. This is passed to the `I$and()`, which modifies `I` in-place so that the result is the intersection of currently infectious persons and persons who have not yet been scheduled for a recovery event, which is precisely the set of people we want.
 
@@ -61,7 +61,35 @@ infection_process <- function(t){
 }
 ```
 
-Bitsets offer methods to preform unions (`Bitset$or()`) and intersections (`Bitset$and()`) with other bitsets. These two methods modify the bitset in-place. The method `Bitset$not()` gives the complement of a bitset, and returns a new `individual::Bitset` object, leaving the original bitset intact. Insertion and removal of elements is also supported. Making good use of these bitset operations can help make processes in "individual" much faster.
+When creating a new Bitset, a user must specify the maximum size of the bitset. This is the maximum number of positive integers which the bitset can store. For example, if calling `Bitset$new(size = 100)`, the resulting object is able to store the presence or absence of integers between 1 and 100 (inclusive). Attempting to insert or remove elements outside of this range will result in an error.
+
+Bitsets offer methods to preform unions (`Bitset$or()`), intersections (`Bitset$and()`), symmetric set difference (also known as exclusive or, `Bitset$xor()`), and set difference (`Bitset$set_difference()`) with other bitsets. These methods modify the bitset in-place. The method `Bitset$not()` gives the complement of a bitset, and returns a new `individual::Bitset` object, leaving the original bitset intact. Because these set operations use bitwise operations directly rather than more expensive relational operators, computations with bitsets are extremely fast. Taking advantage of bitset operations can help make processes in "individual" much faster.
+
+This can be seen when implementing a common pattern in epidemiological models: sampling success or failure for a bitset of individuals, and then generating two bitsets to hold individuals sampled one way or the other. A first method might use `individual::filter_bitset`.
+
+```{r,eval=FALSE}
+n <- 1e4
+bset <- Bitset$new(n)$insert(1:n)
+probs <- runif(n)
+
+keep <- probs >= 0.5
+
+stay <- filter_bitset(bitset = bset,other = which(keep))
+leave <- filter_bitset(bitset = bset,other = which(!keep))
+```
+
+This pattern is almost always slower than using the sample method with a set difference:
+
+```{r,eval=FALSE}
+stay <- bset$copy()
+stay$sample(rate = probs)
+
+leave <- bset$copy()$set_difference(stay)
+```
+
+In both instances the original bitset object `bset` is not modified. The latter pattern can be made even faster if the original may be modified by directly taking the set difference with it. For models with large population sizes, the speed differences can be substantial. 
+
+Because a bitset stores integers in some finite set, it can be returned as an integer vector by using `Bitset$to_vector()`. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model's dynamics require the frequent returning of integer vectors, an `individual::IntegerVector` object will be more appropriate. However, for most discrete variables, and especially those which mirror compartments in mathematical models, bitset operations and `individual::CategoricalVariable` (which uses bitsets internally) should be preferred.
 
 ### Prefabs {#prefab}
 
@@ -93,17 +121,18 @@ These are the basic steps to add C++ processes to your R package:
 1. Run `usethis::use_rcpp` to set your package up for C++ development.
 2. Add `individual` to the `LinkingTo` section of your package DESCRIPTION.
 3. If you package is named `mypackage`, create a header file containing `#include<individual.h>` in any of these locations:
-  ```
-  src/mypackage_types.h
-  src/mypackage_types.hpp
-  inst/include/mypackage_types.h
-  inst/include/mypackage_types.hpp
-  ```
-  Then this header file will be automatically included in `RcppExports.cpp`. For more information, see section "2.5 Types in Generated Code" in the [Rcpp Attributes vignette](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf).
+    ```{cpp, eval=FALSE}
+    src/mypackage_types.h
+    src/mypackage_types.hpp
+    inst/include/mypackage_types.h
+    inst/include/mypackage_types.hpp
+    ```
+    Then this header file will be automatically included in `RcppExports.cpp`. For more information, see section "2.5 Types in Generated Code" in the [Rcpp Attributes vignette](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf).
   
-4. Write your process!
+4. Create a file `src/Makecars` containing the line `CXX_STD = CXX14`. Because `individual` uses C++14 features, when compiling your package against it you must let the compiler know it should use the C++14 standard, otherwise it will not be able to compile. 
+5. Write your process!
 
-Processes in C++ are of type `process_t`, defined in `common_types.h`. Types for listeners for `individual::Event` and `individual::TargetedEvent` are `listener_t` and `targeted_listener_t`, defined in `Event.h`. Below is how the C++ implementation of
+Processes in C++ are of type `process_t`, defined in `inst/include/common_types.h`. Types for listeners for `individual::Event` and `individual::TargetedEvent` are `listener_t` and `targeted_listener_t`, defined in `inst/include/Event.h`. Below is how the C++ implementation of
 `multi_probability_bernoulli_process` is coded.
 
 Note that the return type is a `Rcpp::XPtr` [(see here)](https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1XPtr.html) to a `process_t`, which is implemented as a `std::function` [(see here)](http://www.cplusplus.com/reference/functional/function/) object, a C++ class that can

@@ -23,6 +23,9 @@ multi_probability_multinomial_process(
 
 \item{destination_probabilities}{probability vector of destination states}
 }
+\value{
+a function which can be passed as a process to \code{\link{simulation_loop}}
+}
 \description{
 Simulates a two-stage process where all individuals
 in a given \code{source_state} sample whether to leave or not with a

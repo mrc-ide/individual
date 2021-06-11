@@ -65,6 +65,7 @@ DoubleVariable <- R6::R6Class(
     #' fill options. If using indices, this may be either a vector of integers or
     #' a \code{\link[individual]{Bitset}}.
     queue_update = function(values, index = NULL) {
+      stopifnot(is.numeric(values))
       if(is.null(index)){
         if(length(values) == 1){
           double_variable_queue_fill(

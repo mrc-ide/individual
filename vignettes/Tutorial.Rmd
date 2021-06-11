@@ -37,7 +37,7 @@ The [Susceptible-Infectious-Recovered (SIR) model](https://en.wikipedia.org/wiki
 
 ### Specification {#spec}
 
-To start, we should define some constants. The epidemic will be simulated in a population of 1000, where 5 persons are initially infectious, whose indices are randomly sampled. The effective contact rate $\beta$ will be a function of the deterministic $R_{0}$ and recovery rate $\gamma$. We also specify `dt`, which is the size of the time step $(\Delta t)$. Because "individual" does not specify the size of the time step, by adjusting transition probabilities appropriately we can scale the model to any desired `dt`. If the maximum time is `tmax` then the number of discrete time steps with some resolution is `tmax/dt`.
+To start, we should define some constants. The epidemic will be simulated in a population of 1000, where 5 persons are initially infectious, whose indices are randomly sampled. The effective contact rate $\beta$ will be a function of the deterministic $R_{0}$ and recovery rate $\gamma$. We also specify `dt`, which is the size of the time step $(\Delta t)$. Because individual's time steps are all of unit length, we scale transition probabilities by `dt` to create models with different sized steps, interpreting the discrete time model as a discretization of a continuous time model. If the maximum time is `tmax` then the overall number of time steps is `tmax/dt`.
 
 ```{r}
 N <- 1e3

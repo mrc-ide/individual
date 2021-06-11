@@ -13,6 +13,9 @@ categorical_count_renderer_process(renderer, variable, categories)
 
 \item{categories}{a character vector of categories to render}
 }
+\value{
+a function which can be passed as a process to \code{\link{simulation_loop}}
+}
 \description{
 Renders the number of individuals in each category
 }

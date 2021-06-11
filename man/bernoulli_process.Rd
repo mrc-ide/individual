@@ -15,7 +15,10 @@ bernoulli_process(variable, from, to, rate)
 
 \item{rate}{the probability to move individuals between categories}
 }
+\value{
+a function which can be passed as a process to \code{\link{simulation_loop}}
+}
 \description{
-Updates categorical variable from the \code{from} state to the \code{to}
-state with probability \code{rate}
+Simulate a process where individuals in a given \code{from} state
+advance to the \code{to} state each time step with probability \code{rate}.
 }

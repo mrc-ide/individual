@@ -10,6 +10,7 @@ Class to render output for the simulation
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Render$new()}}
+\item \href{#method-set_default}{\code{Render$set_default()}}
 \item \href{#method-render}{\code{Render$render()}}
 \item \href{#method-to_dataframe}{\code{Render$to_dataframe()}}
 \item \href{#method-clone}{\code{Render$clone()}}
@@ -29,6 +30,26 @@ renderers
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{timesteps}}{number of timesteps in the simulation}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_default"></a>}}
+\if{latex}{\out{\hypertarget{method-set_default}{}}}
+\subsection{Method \code{set_default()}}{
+Set a default value for a rendered output
+renderers
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Render$set_default(name, value)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{name}}{the variable to set a default for}
+
+\item{\code{value}}{the default value to set for a variable}
 }
 \if{html}{\out{</div>}}
 }

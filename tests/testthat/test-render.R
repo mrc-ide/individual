@@ -39,3 +39,15 @@ test_that("Prefab state counts work correctly", {
   )
   expect_mapequal(rendered, expected)
 })
+
+test_that("Render default works", {
+  render <- Render$new(3)
+  render$set_default('human_S_count', 100)
+  render$render('human_S_count', 10, 2)
+  true_render <- data.frame(
+    timestep = c(1, 2, 3),
+    human_S_count = c(100, 10, 100)
+  )
+  rendered <- render$to_dataframe()
+  expect_mapequal(true_render, rendered)
+})

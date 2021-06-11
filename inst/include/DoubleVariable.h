@@ -56,9 +56,9 @@ struct DoubleVariable : public Variable {
     ) const {
         
         auto result = individual_index_t(size);
-        for(size_t it = 0; it < values.size(); it++) {
-            if( !(values[it] < a) && !(b < values[it]) ) {
-                result.insert(it);
+        for (auto i = 0u; i < values.size(); ++i) {
+            if( !(values[i] < a) && !(b < values[i]) ) {
+                result.insert(i);
             }
         }
         
@@ -67,16 +67,13 @@ struct DoubleVariable : public Variable {
     }
 
     // get indices of individuals whose value is in some [a,b]
-    virtual int get_size_of_range(
+    virtual size_t get_size_of_range(
         const double a, const double b
     ) const {
         
-        int result{0};
-        for(size_t it = 0; it < values.size(); it++) {
-            if( !(values[it] < a) && !(b < values[it]) ) {
-                result += 1;
-            }
-        }
+        size_t result = std::count_if(values.begin(), values.end(), [&](const double v) -> bool {
+            return !(v < a) && !(b < v);
+        });
 
         return result;
 

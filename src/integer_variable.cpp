@@ -46,9 +46,20 @@ std::vector<int> integer_variable_get_values_at_index_vector(
 }
 
 // [[Rcpp::export]]
-Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_set(
+Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_set_vector(
     Rcpp::XPtr<IntegerVariable> variable,
     std::vector<int> values_set
+) {
+    return Rcpp::XPtr<individual_index_t>(
+        new individual_index_t(variable->get_index_of_set(values_set)),
+        true
+    );
+}
+
+// [[Rcpp::export]]
+Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_set_scalar(
+        Rcpp::XPtr<IntegerVariable> variable,
+        const int values_set
 ) {
     return Rcpp::XPtr<individual_index_t>(
         new individual_index_t(variable->get_index_of_set(values_set)),
@@ -69,15 +80,23 @@ Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_range(
 }
 
 // [[Rcpp::export]]
-int integer_variable_get_size_of_set(
+size_t integer_variable_get_size_of_set_vector(
     Rcpp::XPtr<IntegerVariable> variable,
     const std::vector<int> values_set
 ) {
-    return variable->get_size_of_set(values_set);
+    return variable->get_size_of_set_vector(values_set);
 }
 
 // [[Rcpp::export]]
-int integer_variable_get_size_of_range(
+size_t integer_variable_get_size_of_set_scalar(
+        Rcpp::XPtr<IntegerVariable> variable,
+        const int value
+) {
+    return variable->get_size_of_set_scalar(value);
+}
+
+// [[Rcpp::export]]
+size_t integer_variable_get_size_of_range(
     Rcpp::XPtr<IntegerVariable> variable,
     const int a,
     const int b

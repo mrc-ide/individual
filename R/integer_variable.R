@@ -34,13 +34,18 @@ IntegerVariable <- R6::R6Class(
 
     #' @description Return a \code{\link[individual]{Bitset}} for individuals with some subset of values
     #' Either search for indices corresponding to values in \code{set}, or
-    #' for indices corresponding to values in range \eqn{[a,b]}.
+    #' for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
+    #' or \code{a} and \code{b} must be provided as arguments.
     #' @param set a vector of values 
     #' @param a lower bound
     #' @param b upper bound
-    get_index_of = function(set = NULL, a = NULL, b = NULL) {        
+    get_index_of = function(set = NULL, a = NULL, b = NULL) {
         if(!is.null(set)) {
-            return(Bitset$new(from = integer_variable_get_index_of_set(self$.variable, set)))
+            if (length(set) > 1) {
+              return(Bitset$new(from = integer_variable_get_index_of_set_vector(self$.variable, set)))
+            } else {
+              return(Bitset$new(from = integer_variable_get_index_of_set_scalar(self$.variable, set)))
+            }
         }
         if(!is.null(a) & !is.null(b)) {
             stopifnot(a < b)
@@ -51,15 +56,20 @@ IntegerVariable <- R6::R6Class(
 
     #' @description Return the number of individuals with some subset of values
     #' Either search for indices corresponding to values in \code{set}, or
-    #' for indices corresponding to values in range \eqn{[a,b]}.
+    #' for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
+    #' or \code{a} and \code{b} must be provided as arguments.
     #' @param set a vector of values 
     #' @param a lower bound
     #' @param b upper bound
     get_size_of = function(set = NULL, a = NULL, b = NULL) {        
-        if(!is.null(set)) {
-            return(integer_variable_get_size_of_set(self$.variable, set))
+        if (!is.null(set)) {
+            if (length(set) > 1) {
+              return(integer_variable_get_size_of_set_vector(self$.variable, set))  
+            } else {
+              return(integer_variable_get_size_of_set_scalar(self$.variable, set))
+            }
         }
-        if(!is.null(a) & !is.null(b)) {
+        if (!is.null(a) & !is.null(b)) {
             stopifnot(a < b)
             return(integer_variable_get_size_of_range(self$.variable, a, b))           
         }
@@ -87,6 +97,7 @@ IntegerVariable <- R6::R6Class(
     #' fill options. If using indices, this may be either a vector of integers or
     #' a \code{\link[individual]{Bitset}}.
     queue_update = function(values, index = NULL) {
+      stopifnot(is.numeric(values))
       if(is.null(index)){
         if(length(values) == 1){
           integer_variable_queue_fill(

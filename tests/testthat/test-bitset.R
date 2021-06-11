@@ -166,3 +166,10 @@ test_that("bitset filtering works for bitsets", {
   f <- Bitset$new(10)$insert(c(1, 3))
   expect_equal(filter_bitset(b, f)$to_vector(), c(1, 6))
 })
+
+test_that("bitset throws error when given bad input probabilities in sample", {
+  b <- Bitset$new(10)$insert(1:10)
+  expect_error(
+    b$sample(rate = c(rep(0.1,9),NA))
+  )
+})

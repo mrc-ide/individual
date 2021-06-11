@@ -9,7 +9,6 @@ Event <- R6::R6Class(
     .listeners = list(),
 
     #' @description Initialise an Event
-    #' @param name the name of the event
     initialize = function() {
       self$.event <- create_event()
     },
@@ -23,7 +22,8 @@ Event <- R6::R6Class(
 
     #' @description Schedule this event to occur in the future
     #' @param delay the number of time steps to wait before triggering the event,
-    #' can be a scalar or an vector of values for several times in the future
+    #' can be a scalar or an vector of values for events that should be triggered
+    #' multiple times.
     schedule = function(delay) event_schedule(self$.event, delay),
 
     #' @description Stop a future event from triggering
