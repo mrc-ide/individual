@@ -12,3 +12,4 @@ docs
 ^doc$
 ^Meta$
 codecov.yml
+tests/performance
