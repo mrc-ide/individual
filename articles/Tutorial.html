@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -98,7 +98,7 @@
 <div id="spec" class="section level3">
 <h3 class="hasAnchor">
 <a href="#spec" class="anchor"></a>Specification</h3>
-<p>To start, we should define some constants. The epidemic will be simulated in a population of 1000, where 5 persons are initially infectious, whose indices are randomly sampled. The effective contact rate <span class="math inline">\(\beta\)</span> will be a function of the deterministic <span class="math inline">\(R_{0}\)</span> and recovery rate <span class="math inline">\(\gamma\)</span>. We also specify <code>dt</code>, which is the size of the time step <span class="math inline">\((\Delta t)\)</span>. Because “individual” does not specify the size of the time step, by adjusting transition probabilities appropriately we can scale the model to any desired <code>dt</code>. If the maximum time is <code>tmax</code> then the number of discrete time steps with some resolution is <code>tmax/dt</code>.</p>
+<p>To start, we should define some constants. The epidemic will be simulated in a population of 1000, where 5 persons are initially infectious, whose indices are randomly sampled. The effective contact rate <span class="math inline">\(\beta\)</span> will be a function of the deterministic <span class="math inline">\(R_{0}\)</span> and recovery rate <span class="math inline">\(\gamma\)</span>. We also specify <code>dt</code>, which is the size of the time step <span class="math inline">\((\Delta t)\)</span>. Because individual’s time steps are all of unit length, we scale transition probabilities by <code>dt</code> to create models with different sized steps, interpreting the discrete time model as a discretization of a continuous time model. If the maximum time is <code>tmax</code> then the overall number of time steps is <code>tmax/dt</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">1e3</span>
 <span class="va">I0</span> <span class="op">&lt;-</span> <span class="fl">5</span>
@@ -202,7 +202,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Giovanni Charles.</p>
+  <p>Developed by Giovanni Charles, Sean L. Wu.</p>
 </div>
 
 <div class="pkgdown">

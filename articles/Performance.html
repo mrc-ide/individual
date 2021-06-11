@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -94,11 +94,11 @@
 <div id="intro" class="section level2">
 <h2 class="hasAnchor">
 <a href="#intro" class="anchor"></a>Introduction</h2>
-<p>The “individual” package is designed for running big individual-based models. But if you find your model taking too long or consuming all of your memory, here are some things you can try to speed up your simulation.</p>
+<p>Individual is designed for running big individual-based models. But if you find your model taking too long or consuming all of your memory, here are some things you can try to speed up your simulation.</p>
 <div id="bitset" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bitset" class="anchor"></a>Bitset</h3>
-<p>The <a href="https://en.wikipedia.org/wiki/Bit_array">bitset</a> data structure used to store categorical state information, <code><a href="../reference/Bitset.html">individual::Bitset</a></code> is able to preform set operations extremely quickly using <a href="https://en.wikipedia.org/wiki/Bitwise_operation">bitwise operations</a>. Taking advantage of these operations can lead to very fast processes, when you need to find some particular subset of individuals.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Bit_array">bitset</a> data structure is used to record the presence or absence of an element in a finite set. <code><a href="../reference/Bitset.html">individual::Bitset</a></code> implements this data structure and is able to preform set operations extremely quickly using <a href="https://en.wikipedia.org/wiki/Bitwise_operation">bitwise operations</a>. Taking advantage of these operations can lead to very fast processes, when you need to find some particular subset of individuals.</p>
 <p>Let’s take a look at the recovery process in <code><a href="../articles/Tutorial.html">vignette("Tutorial")</a></code>. A crucial operation here is to get all infectious individuals who are not already scheduled for recovery. The object <code>I</code> is a bitset containing all those individuals currently infectious, and <code>already_scheduled</code> is another bitset containing those individuals scheduled for a recovery event. Using <code>already_scheduled$not()</code> returns a new bitset of those individuals <em>not</em> in the set of already scheduled persons. This is passed to the <code>I$and()</code>, which modifies <code>I</code> in-place so that the result is the intersection of currently infectious persons and persons who have not yet been scheduled for a recovery event, which is precisely the set of people we want.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">recovery_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">{</span>
@@ -117,7 +117,26 @@
   <span class="va">S</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span>rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">foi</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span>
   <span class="va">health</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>value <span class="op">=</span> <span class="st">"I"</span>,index <span class="op">=</span> <span class="va">S</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p>Bitsets offer methods to preform unions (<code>Bitset$or()</code>) and intersections (<code>Bitset$and()</code>) with other bitsets. These two methods modify the bitset in-place. The method <code>Bitset$not()</code> gives the complement of a bitset, and returns a new <code><a href="../reference/Bitset.html">individual::Bitset</a></code> object, leaving the original bitset intact. Insertion and removal of elements is also supported. Making good use of these bitset operations can help make processes in “individual” much faster.</p>
+<p>When creating a new Bitset, a user must specify the maximum size of the bitset. This is the maximum number of positive integers which the bitset can store. For example, if calling <code>Bitset$new(size = 100)</code>, the resulting object is able to store the presence or absence of integers between 1 and 100 (inclusive). Attempting to insert or remove elements outside of this range will result in an error.</p>
+<p>Bitsets offer methods to preform unions (<code>Bitset$or()</code>), intersections (<code>Bitset$and()</code>), symmetric set difference (also known as exclusive or, <code>Bitset$xor()</code>), and set difference (<code>Bitset$set_difference()</code>) with other bitsets. These methods modify the bitset in-place. The method <code>Bitset$not()</code> gives the complement of a bitset, and returns a new <code><a href="../reference/Bitset.html">individual::Bitset</a></code> object, leaving the original bitset intact. Because these set operations use bitwise operations directly rather than more expensive relational operators, computations with bitsets are extremely fast. Taking advantage of bitset operations can help make processes in “individual” much faster.</p>
+<p>This can be seen when implementing a common pattern in epidemiological models: sampling success or failure for a bitset of individuals, and then generating two bitsets to hold individuals sampled one way or the other. A first method might use <code><a href="../reference/filter_bitset.html">individual::filter_bitset</a></code>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e4</span>
+<span class="va">bset</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Bitset.html">Bitset</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">$</span><span class="fu">insert</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">)</span>
+<span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>
+
+<span class="va">keep</span> <span class="op">&lt;-</span> <span class="va">probs</span> <span class="op">&gt;=</span> <span class="fl">0.5</span>
+
+<span class="va">stay</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_bitset.html">filter_bitset</a></span><span class="op">(</span>bitset <span class="op">=</span> <span class="va">bset</span>,other <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">keep</span><span class="op">)</span><span class="op">)</span>
+<span class="va">leave</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_bitset.html">filter_bitset</a></span><span class="op">(</span>bitset <span class="op">=</span> <span class="va">bset</span>,other <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="op">!</span><span class="va">keep</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>This pattern is almost always slower than using the sample method with a set difference:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">stay</span> <span class="op">&lt;-</span> <span class="va">bset</span><span class="op">$</span><span class="fu">copy</span><span class="op">(</span><span class="op">)</span>
+<span class="va">stay</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span>rate <span class="op">=</span> <span class="va">probs</span><span class="op">)</span>
+
+<span class="va">leave</span> <span class="op">&lt;-</span> <span class="va">bset</span><span class="op">$</span><span class="fu">copy</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">set_difference</span><span class="op">(</span><span class="va">stay</span><span class="op">)</span></code></pre></div>
+<p>In both instances the original bitset object <code>bset</code> is not modified. The latter pattern can be made even faster if the original may be modified by directly taking the set difference with it. For models with large population sizes, the speed differences can be substantial.</p>
+<p>Because a bitset stores integers in some finite set, it can be returned as an integer vector by using <code>Bitset$to_vector()</code>. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model’s dynamics require the frequent returning of integer vectors, an <code>individual::IntegerVector</code> object will be more appropriate. However, for most discrete variables, and especially those which mirror compartments in mathematical models, bitset operations and <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> (which uses bitsets internally) should be preferred.</p>
 </div>
 <div id="prefab" class="section level3">
 <h3 class="hasAnchor">
@@ -152,49 +171,50 @@
 <p>Unfortunately, we don’t have a prefab for every situation. Please feel free to write one of your own!</p>
 <p>These are the basic steps to add C++ processes to your R package:</p>
 <ol style="list-style-type: decimal">
-<li>Run <code>usethis::use_rcpp</code> to set your package up for C++ development.</li>
-<li>Add <code>individual</code> to the <code>LinkingTo</code> section of your package DESCRIPTION.</li>
-<li>If you package is named <code>mypackage</code>, create a header file containing <code>#include&lt;individual.h&gt;</code> in any of these locations:</li>
-</ol>
-<pre><code>src/mypackage_types.h
-src/mypackage_types.hpp
-inst/include/mypackage_types.h
-inst/include/mypackage_types.hpp</code></pre>
+<li><p>Run <code>usethis::use_rcpp</code> to set your package up for C++ development.</p></li>
+<li><p>Add <code>individual</code> to the <code>LinkingTo</code> section of your package DESCRIPTION.</p></li>
+<li>
+<p>If you package is named <code>mypackage</code>, create a header file containing <code>#include&lt;individual.h&gt;</code> in any of these locations:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1"></a>src/mypackage_types.h</span>
+<span id="cb5-2"><a href="#cb5-2"></a>src/mypackage_types.hpp</span>
+<span id="cb5-3"><a href="#cb5-3"></a>inst/include/mypackage_types.h</span>
+<span id="cb5-4"><a href="#cb5-4"></a>inst/include/mypackage_types.hpp</span></code></pre></div>
 <p>Then this header file will be automatically included in <code>RcppExports.cpp</code>. For more information, see section “2.5 Types in Generated Code” in the <a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf">Rcpp Attributes vignette</a>.</p>
-<ol start="4" style="list-style-type: decimal">
-<li>Write your process!</li>
+</li>
+<li><p>Create a file <code>src/Makecars</code> containing the line <code>CXX_STD = CXX14</code>. Because <code>individual</code> uses C++14 features, when compiling your package against it you must let the compiler know it should use the C++14 standard, otherwise it will not be able to compile.</p></li>
+<li><p>Write your process!</p></li>
 </ol>
-<p>Processes in C++ are of type <code>process_t</code>, defined in <code>common_types.h</code>. Types for listeners for <code><a href="../reference/Event.html">individual::Event</a></code> and <code><a href="../reference/TargetedEvent.html">individual::TargetedEvent</a></code> are <code>listener_t</code> and <code>targeted_listener_t</code>, defined in <code>Event.h</code>. Below is how the C++ implementation of <code>multi_probability_bernoulli_process</code> is coded.</p>
+<p>Processes in C++ are of type <code>process_t</code>, defined in <code>inst/include/common_types.h</code>. Types for listeners for <code><a href="../reference/Event.html">individual::Event</a></code> and <code><a href="../reference/TargetedEvent.html">individual::TargetedEvent</a></code> are <code>listener_t</code> and <code>targeted_listener_t</code>, defined in <code>inst/include/Event.h</code>. Below is how the C++ implementation of <code>multi_probability_bernoulli_process</code> is coded.</p>
 <p>Note that the return type is a <code>Rcpp::XPtr</code> <a href="https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1XPtr.html">(see here)</a> to a <code>process_t</code>, which is implemented as a <code>std::function</code> <a href="http://www.cplusplus.com/reference/functional/function/">(see here)</a> object, a C++ class that can hold any callable type. The <code>Rcpp::XPtr</code> is initialized with a pointer to a <code>process_t</code> object, which itself holds a C++ <a href="https://en.cppreference.com/w/cpp/language/lambda">lambda function</a>, basically a function closure.</p>
 <p>The lambda function captures the input arguments by value, and takes a single argument when called <code>t</code>, giving the current time step (just like process functions in R). Sampling those individuals to change state is implemented with the C++ API for these objects.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1"></a><span class="pp">#include </span><span class="im">&lt;individual.h&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>Rcpp::XPtr&lt;<span class="dt">process_t</span>&gt; multi_probability_bernoulli_process_cpp(</span>
-<span id="cb4-6"><a href="#cb4-6"></a>    Rcpp::XPtr&lt;CategoricalVariable&gt; variable,</span>
-<span id="cb4-7"><a href="#cb4-7"></a>    <span class="at">const</span> <span class="bu">std::</span>string from,</span>
-<span id="cb4-8"><a href="#cb4-8"></a>    <span class="at">const</span> <span class="bu">std::</span>string to,</span>
-<span id="cb4-9"><a href="#cb4-9"></a>    <span class="at">const</span> Rcpp::XPtr&lt;DoubleVariable&gt; rate_variable</span>
-<span id="cb4-10"><a href="#cb4-10"></a>){</span>
-<span id="cb4-11"><a href="#cb4-11"></a></span>
-<span id="cb4-12"><a href="#cb4-12"></a>    <span class="co">// make pointer to lambda function and return XPtr to R</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a>    <span class="cf">return</span> Rcpp::XPtr&lt;<span class="dt">process_t</span>&gt;(</span>
-<span id="cb4-14"><a href="#cb4-14"></a>        <span class="kw">new</span> <span class="dt">process_t</span>([variable,rate_variable,from,to](<span class="dt">size_t</span> t){      </span>
-<span id="cb4-15"><a href="#cb4-15"></a></span>
-<span id="cb4-16"><a href="#cb4-16"></a>            <span class="co">// sample leavers with their unique prob</span></span>
-<span id="cb4-17"><a href="#cb4-17"></a>            <span class="dt">individual_index_t</span> leaving_individuals(variable-&gt;get_index_of(<span class="bu">std::</span>vector&lt;<span class="bu">std::</span>string&gt;{from}));</span>
-<span id="cb4-18"><a href="#cb4-18"></a>            <span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; rate_vector = rate_variable-&gt;get_values(leaving_individuals);</span>
-<span id="cb4-19"><a href="#cb4-19"></a>            bitset_sample_multi_internal(leaving_individuals, rate_vector.begin(), rate_vector.end());</span>
-<span id="cb4-20"><a href="#cb4-20"></a></span>
-<span id="cb4-21"><a href="#cb4-21"></a>            variable-&gt;queue_update(to, leaving_individuals);</span>
-<span id="cb4-22"><a href="#cb4-22"></a></span>
-<span id="cb4-23"><a href="#cb4-23"></a>        }),</span>
-<span id="cb4-24"><a href="#cb4-24"></a>        <span class="kw">true</span></span>
-<span id="cb4-25"><a href="#cb4-25"></a>    ); </span>
-<span id="cb4-26"><a href="#cb4-26"></a>};</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1"></a><span class="pp">#include </span><span class="im">&lt;individual.h&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>Rcpp::XPtr&lt;<span class="dt">process_t</span>&gt; multi_probability_bernoulli_process_cpp(</span>
+<span id="cb6-6"><a href="#cb6-6"></a>    Rcpp::XPtr&lt;CategoricalVariable&gt; variable,</span>
+<span id="cb6-7"><a href="#cb6-7"></a>    <span class="at">const</span> <span class="bu">std::</span>string from,</span>
+<span id="cb6-8"><a href="#cb6-8"></a>    <span class="at">const</span> <span class="bu">std::</span>string to,</span>
+<span id="cb6-9"><a href="#cb6-9"></a>    <span class="at">const</span> Rcpp::XPtr&lt;DoubleVariable&gt; rate_variable</span>
+<span id="cb6-10"><a href="#cb6-10"></a>){</span>
+<span id="cb6-11"><a href="#cb6-11"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a>    <span class="co">// make pointer to lambda function and return XPtr to R</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a>    <span class="cf">return</span> Rcpp::XPtr&lt;<span class="dt">process_t</span>&gt;(</span>
+<span id="cb6-14"><a href="#cb6-14"></a>        <span class="kw">new</span> <span class="dt">process_t</span>([variable,rate_variable,from,to](<span class="dt">size_t</span> t){      </span>
+<span id="cb6-15"><a href="#cb6-15"></a></span>
+<span id="cb6-16"><a href="#cb6-16"></a>            <span class="co">// sample leavers with their unique prob</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a>            <span class="dt">individual_index_t</span> leaving_individuals(variable-&gt;get_index_of(<span class="bu">std::</span>vector&lt;<span class="bu">std::</span>string&gt;{from}));</span>
+<span id="cb6-18"><a href="#cb6-18"></a>            <span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; rate_vector = rate_variable-&gt;get_values(leaving_individuals);</span>
+<span id="cb6-19"><a href="#cb6-19"></a>            bitset_sample_multi_internal(leaving_individuals, rate_vector.begin(), rate_vector.end());</span>
+<span id="cb6-20"><a href="#cb6-20"></a></span>
+<span id="cb6-21"><a href="#cb6-21"></a>            variable-&gt;queue_update(to, leaving_individuals);</span>
+<span id="cb6-22"><a href="#cb6-22"></a></span>
+<span id="cb6-23"><a href="#cb6-23"></a>        }),</span>
+<span id="cb6-24"><a href="#cb6-24"></a>        <span class="kw">true</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a>    ); </span>
+<span id="cb6-26"><a href="#cb6-26"></a>};</span></code></pre></div>
 <p>The exported function can be used normally in R when creating the list of processes:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">processes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
   <span class="fu">multi_probability_bernoulli_process_cpp</span><span class="op">(</span><span class="va">state</span>, <span class="st">"I"</span>, <span class="st">"R"</span>, <span class="va">prob</span><span class="op">)</span>,
   <span class="va">other_process_1</span>,
@@ -216,7 +236,7 @@ inst/include/mypackage_types.hpp</code></pre>
 
 
       <footer><div class="copyright">
-  <p>Developed by Giovanni Charles.</p>
+  <p>Developed by Giovanni Charles, Sean L. Wu.</p>
 </div>
 
 <div class="pkgdown">

@@ -40,8 +40,8 @@
 
 
 <meta property="og:title" content="Bernoulli process — bernoulli_process" />
-<meta property="og:description" content="Updates categorical variable from the from state to the to
-state with probability rate" />
+<meta property="og:description" content="Simulate a process where individuals in a given from state
+advance to the to state each time step with probability rate." />
 
 
 
@@ -73,7 +73,7 @@ state with probability rate" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -131,8 +131,8 @@ state with probability rate" />
     </div>
 
     <div class="ref-description">
-    <p>Updates categorical variable from the <code>from</code> state to the <code>to</code>
-state with probability <code>rate</code></p>
+    <p>Simulate a process where individuals in a given <code>from</code> state
+advance to the <code>to</code> state each time step with probability <code>rate</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>bernoulli_process</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>from</span>, <span class='va'>to</span>, <span class='va'>rate</span><span class='op'>)</span></pre>
@@ -158,6 +158,9 @@ state with probability <code>rate</code></p>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a function which can be passed as a process to <code><a href='simulation_loop.html'>simulation_loop</a></code></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -170,7 +173,7 @@ state with probability <code>rate</code></p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Giovanni Charles.</p>
+  <p>Developed by Giovanni Charles, Sean L. Wu.</p>
 </div>
 
 <div class="pkgdown">

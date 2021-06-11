@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -156,11 +156,6 @@
 <p>Initialise an Event</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Event</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
-<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
-<p><div class="arguments"></p><dl>
-<dt><code>name</code></dt><dd><p>the name of the event</p></dd>
-
-</dl><p></div></p>
 <p><hr>
 <a id="method-add_listener"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>add_listener()</code></h3>
 <p>Add an event listener</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
@@ -180,7 +175,8 @@ argument giving the time step when this event is triggered.</p></dd>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>delay</code></dt><dd><p>the number of time steps to wait before triggering the event,
-can be a scalar or an vector of values for several times in the future</p></dd>
+can be a scalar or an vector of values for events that should be triggered
+multiple times.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
@@ -236,7 +232,7 @@ can be a scalar or an vector of values for several times in the future</p></dd>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Giovanni Charles.</p>
+  <p>Developed by Giovanni Charles, Sean L. Wu.</p>
 </div>
 
 <div class="pkgdown">
