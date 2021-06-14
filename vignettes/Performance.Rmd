@@ -89,7 +89,7 @@ leave <- bset$copy()$set_difference(stay)
 
 In both instances the original bitset object `bset` is not modified. The latter pattern can be made even faster if the original may be modified by directly taking the set difference with it. For models with large population sizes, the speed differences can be substantial. 
 
-Because a bitset stores integers in some finite set, it can be returned as an integer vector by using `Bitset$to_vector()`. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model's dynamics require the frequent returning of integer vectors, an `individual::IntegerVector` object will be more appropriate. However, for most discrete variables, and especially those which mirror compartments in mathematical models, bitset operations and `individual::CategoricalVariable` (which uses bitsets internally) should be preferred.
+Because a bitset stores integers in some finite set, it can be returned as an integer vector by using `Bitset$to_vector()`. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model's dynamics require the frequent returning of integer vectors, an `individual::IntegerVariable` object will be more appropriate. However, for most discrete variables, and especially those which mirror compartments in mathematical models, bitset operations and `individual::CategoricalVariable` (which uses bitsets internally) should be preferred.
 
 ### Prefabs {#prefab}
 
