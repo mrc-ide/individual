@@ -1,5 +1,5 @@
 Package: individual
-Title: A package for specifying and simulating individial based models
+Title: Framework for Specifying and Simulating Individual Based Models
 Version: 0.1.1
 Authors@R: c(
   person(
@@ -16,17 +16,31 @@ Authors@R: c(
     email = 'slwood89@gmail.com'
   ),
   person(
+    given = "Pete",
+    family = "Winskill",
+    role = c('aut'),
+    email = 'p.winskill@imperial.ac.uk'
+  ),
+  person(
     given = "Imperial College of Science, Technology and Medicine",
     family = "",
     role = c('cph'),
     email = 'giovanni.charles10@imperial.ac.uk'
   ))
-Description: This package gives you useful primitives for structuring and simulating individual based epidemiological models.
+Description: A framework which provides users a set of useful primitive elements for
+  specifying individual based simulation models, with special attention models for
+  infectious disease epidemiology. Users build models by specifying variables for
+  each characteristic of individuals in the simulated population by using data
+  structures exposed by the package. The package provides efficient methods for
+  finding subsets of individuals based on these variables, or cohorts. Cohorts can
+  then be targeted for variable updates or scheduled for events. Variable updates
+  queued during a time step are executed at the end of a discrete time step, and
+  the code places no restrictions on how individuals are allowed to interact.
+  These data structures are designed to provide an intuitive way for users to turn
+  their conceptual model of a system into executable code, which is fast and
+  memory efficient.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
-Remotes:
-  mrc-ide/mockcpp
 Imports:
   R6,
   Rcpp
@@ -34,7 +48,6 @@ Suggests:
   ggplot2,
   knitr,
   mockery,
-  mockcpp,
   rmarkdown,
   reshape2,
   pkgdown,
@@ -42,7 +55,6 @@ Suggests:
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 LinkingTo:
-  mockcpp,
   Rcpp,
   testthat
 RcppModules: individual_cpp
