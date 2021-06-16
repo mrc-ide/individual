@@ -94,6 +94,16 @@ Bitset <- R6::R6Class(
       }      
       self
     },
+    
+    #' @description keep N random items in the bitset
+    #' @param N the number of items in the bitset to keep. The selection of
+    #' these N items is random. \code{N} should be >= 0 and < bitset size.
+    random_subset = function(N) {
+      stopifnot(is.finite(N))
+      stopifnot(N < bitset_size(self$.bitset))
+      bitset_random_subset(self$.bitset, as.integer(N))
+      self
+    },
 
     #' @description returns a copy the bitset
     copy = function() Bitset$new(from = bitset_copy(self$.bitset)),

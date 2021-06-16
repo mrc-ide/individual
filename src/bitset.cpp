@@ -155,3 +155,11 @@ Rcpp::XPtr<individual_index_t> filter_bitset_bitset(
         true
     );
 }
+
+//[[Rcpp::export]]
+void bitset_random_subset(
+        const Rcpp::XPtr<individual_index_t> b,
+        const size_t N
+) {
+    bitset_random_subset_internal(*b, N);
+}
