@@ -136,7 +136,7 @@
 
 <span class="va">leave</span> <span class="op">&lt;-</span> <span class="va">bset</span><span class="op">$</span><span class="fu">copy</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">set_difference</span><span class="op">(</span><span class="va">stay</span><span class="op">)</span></code></pre></div>
 <p>In both instances the original bitset object <code>bset</code> is not modified. The latter pattern can be made even faster if the original may be modified by directly taking the set difference with it. For models with large population sizes, the speed differences can be substantial.</p>
-<p>Because a bitset stores integers in some finite set, it can be returned as an integer vector by using <code>Bitset$to_vector()</code>. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model’s dynamics require the frequent returning of integer vectors, an <code>individual::IntegerVector</code> object will be more appropriate. However, for most discrete variables, and especially those which mirror compartments in mathematical models, bitset operations and <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> (which uses bitsets internally) should be preferred.</p>
+<p>Because a bitset stores integers in some finite set, it can be returned as an integer vector by using <code>Bitset$to_vector()</code>. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model’s dynamics require the frequent returning of integer vectors, an <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> object will be more appropriate. However, for most discrete variables, and especially those which mirror compartments in mathematical models, bitset operations and <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> (which uses bitsets internally) should be preferred.</p>
 </div>
 <div id="prefab" class="section level3">
 <h3 class="hasAnchor">
@@ -179,7 +179,7 @@
 <span id="cb5-2"><a href="#cb5-2"></a>src/mypackage_types.hpp</span>
 <span id="cb5-3"><a href="#cb5-3"></a>inst/include/mypackage_types.h</span>
 <span id="cb5-4"><a href="#cb5-4"></a>inst/include/mypackage_types.hpp</span></code></pre></div>
-<p>Then this header file will be automatically included in <code>RcppExports.cpp</code>. For more information, see section “2.5 Types in Generated Code” in the <a href="https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf">Rcpp Attributes vignette</a>.</p>
+<p>Then this header file will be automatically included in <code>RcppExports.cpp</code>. For more information, see section “2.5 Types in Generated Code” in the <a href="https://CRAN.R-project.org/package=Rcpp/vignettes/Rcpp-attributes.pdf">Rcpp Attributes vignette</a>.</p>
 </li>
 <li><p>Create a file <code>src/Makecars</code> containing the line <code>CXX_STD = CXX14</code>. Because <code>individual</code> uses C++14 features, when compiling your package against it you must let the compiler know it should use the C++14 standard, otherwise it will not be able to compile.</p></li>
 <li><p>Write your process!</p></li>
@@ -236,7 +236,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Giovanni Charles, Sean L. Wu.</p>
+  <p>Developed by Giovanni Charles, Sean L. Wu, Pete Winskill.</p>
 </div>
 
 <div class="pkgdown">
