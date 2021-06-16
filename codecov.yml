@@ -6,7 +6,3 @@ coverage:
     patch:
       default:
         target: 90
-
-ignore:
-  - "inst/testcpp/*"
-  - "inst/testcpp/**/*"

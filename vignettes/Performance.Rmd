@@ -89,7 +89,7 @@ leave <- bset$copy()$set_difference(stay)
 
 In both instances the original bitset object `bset` is not modified. The latter pattern can be made even faster if the original may be modified by directly taking the set difference with it. For models with large population sizes, the speed differences can be substantial. 
 
-Because a bitset stores integers in some finite set, it can be returned as an integer vector by using `Bitset$to_vector()`. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model's dynamics require the frequent returning of integer vectors, an `individual::IntegerVector` object will be more appropriate. However, for most discrete variables, and especially those which mirror compartments in mathematical models, bitset operations and `individual::CategoricalVariable` (which uses bitsets internally) should be preferred.
+Because a bitset stores integers in some finite set, it can be returned as an integer vector by using `Bitset$to_vector()`. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model's dynamics require the frequent returning of integer vectors, an `individual::IntegerVariable` object will be more appropriate. However, for most discrete variables, and especially those which mirror compartments in mathematical models, bitset operations and `individual::CategoricalVariable` (which uses bitsets internally) should be preferred.
 
 ### Prefabs {#prefab}
 
@@ -127,7 +127,7 @@ These are the basic steps to add C++ processes to your R package:
     inst/include/mypackage_types.h
     inst/include/mypackage_types.hpp
     ```
-    Then this header file will be automatically included in `RcppExports.cpp`. For more information, see section "2.5 Types in Generated Code" in the [Rcpp Attributes vignette](https://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf).
+    Then this header file will be automatically included in `RcppExports.cpp`. For more information, see section "2.5 Types in Generated Code" in the [Rcpp Attributes vignette](https://CRAN.R-project.org/package=Rcpp/vignettes/Rcpp-attributes.pdf).
   
 4. Create a file `src/Makecars` containing the line `CXX_STD = CXX14`. Because `individual` uses C++14 features, when compiling your package against it you must let the compiler know it should use the C++14 standard, otherwise it will not be able to compile. 
 5. Write your process!
