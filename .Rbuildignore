@@ -13,3 +13,4 @@ docs
 ^Meta$
 codecov.yml
 tests/performance
+joss
