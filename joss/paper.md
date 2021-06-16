@@ -423,6 +423,4 @@ the [package's website](https://mrc-ide.github.io/individual/articles/Contributi
 
 Pete Winskill, Richard Fitzjohn, Oliver Watson
 
-TODO
-
 # References
