@@ -1,5 +1,5 @@
 CXX_STD = CXX14
 
 strippedLib: $(SHLIB)
-	if test -e "/usr/bin/strip"; then /usr/bin/strip --strip-debug $(SHLIB); fi
+	if test -e "/usr/bin/strip"; then /usr/bin/strip -S $(SHLIB); fi
 .phony: strippedLib
