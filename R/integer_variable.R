@@ -4,6 +4,7 @@
 #' but can be used for variables with unbounded ranges, or other situations where part
 #' of an individual's state is better represented by an integer, such as
 #' household or age bin.
+#' @importFrom R6 R6Class
 #' @export
 IntegerVariable <- R6::R6Class(
   'IntegerVariable',

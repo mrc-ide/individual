@@ -1,5 +1,6 @@
 #' @title Render
 #' @description Class to render output for the simulation
+#' @importFrom R6 R6Class
 #' @export
 Render <- R6::R6Class(
   'Render',

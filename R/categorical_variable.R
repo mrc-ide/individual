@@ -4,6 +4,7 @@
 #' a finite set, such as infection, health, or behavioral state. It should
 #' be used in preference to \code{\link[individual]{IntegerVariable}}
 #' if possible becuase certain operations will be faster.
+#' @importFrom R6 R6Class
 #' @export
 CategoricalVariable <- R6::R6Class(
   'CategoricalVariable',

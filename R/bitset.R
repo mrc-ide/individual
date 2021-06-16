@@ -5,6 +5,7 @@
 #' difference, set difference). 
 #' WARNING: all operations (except \code{$not}) are in-place so please use \code{$copy} 
 #' if you would like to perform an operation without destroying your current bitset.
+#' @importFrom R6 R6Class
 #' @export Bitset
 Bitset <- R6::R6Class(
   'Bitset',
