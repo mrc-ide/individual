@@ -174,30 +174,33 @@ test_that("bitset throws error when given bad input probabilities in sample", {
   )
 })
 
-test_that("bitset random_subset behaves properly when given an empty bitset", {
+test_that("bitset choose behaves properly when given an empty bitset", {
   b <- Bitset$new(10)
   expect_error(
-    b$random_subset(5)
+    b$choose(5)
   )
   expect_error(
-    b$random_subset(-1)
+    b$choose(-1)
   )
   expect_error(
-    b$random_subset(100)
+    b$choose(100)
   )
   expect_error(
-    b$random_subset(Inf)
+    b$choose(Inf)
   )
 })
 
-test_that("bitset random_subset behaves properly when given a bitset with elements", {
+test_that("bitset choose behaves properly when given a bitset with elements", {
   
   b <- Bitset$new(10)$insert(1:8)
-  expect_equal(b$random_subset(5)$size(), 5)
+  expect_equal(b$copy()$or(b$copy()$choose(5))$to_vector(), b$to_vector()) # check that b$choose is a subset of b
   
   b <- Bitset$new(10)$insert(1:8)
-  expect_equal(b$random_subset(0)$size(), 0)
+  expect_equal(b$choose(5)$size(), 5)
   
   b <- Bitset$new(10)$insert(1:8)
-  expect_error(b$random_subset(8))
+  expect_equal(b$choose(0)$size(), 0)
+  
+  b <- Bitset$new(10)$insert(1:8)
+  expect_error(b$choose(8))
 })

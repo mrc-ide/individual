@@ -157,9 +157,9 @@ Rcpp::XPtr<individual_index_t> filter_bitset_bitset(
 }
 
 //[[Rcpp::export]]
-void bitset_random_subset(
+void bitset_choose(
         const Rcpp::XPtr<individual_index_t> b,
-        const size_t N
+        const size_t k
 ) {
-    bitset_random_subset_internal(*b, N);
+    bitset_choose_internal(*b, k);
 }

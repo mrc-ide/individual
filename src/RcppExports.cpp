@@ -187,14 +187,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// bitset_random_subset
-void bitset_random_subset(const Rcpp::XPtr<individual_index_t> b, const size_t N);
-RcppExport SEXP _individual_bitset_random_subset(SEXP bSEXP, SEXP NSEXP) {
+// bitset_choose
+void bitset_choose(const Rcpp::XPtr<individual_index_t> b, const size_t k);
+RcppExport SEXP _individual_bitset_choose(SEXP bSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
-    Rcpp::traits::input_parameter< const size_t >::type N(NSEXP);
-    bitset_random_subset(b, N);
+    Rcpp::traits::input_parameter< const size_t >::type k(kSEXP);
+    bitset_choose(b, k);
     return R_NilValue;
 END_RCPP
 }
@@ -856,7 +856,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_bitset_to_vector", (DL_FUNC) &_individual_bitset_to_vector, 1},
     {"_individual_filter_bitset_vector", (DL_FUNC) &_individual_filter_bitset_vector, 2},
     {"_individual_filter_bitset_bitset", (DL_FUNC) &_individual_filter_bitset_bitset, 2},
-    {"_individual_bitset_random_subset", (DL_FUNC) &_individual_bitset_random_subset, 2},
+    {"_individual_bitset_choose", (DL_FUNC) &_individual_bitset_choose, 2},
     {"_individual_create_categorical_variable", (DL_FUNC) &_individual_create_categorical_variable, 2},
     {"_individual_categorical_variable_queue_update", (DL_FUNC) &_individual_categorical_variable_queue_update, 3},
     {"_individual_categorical_variable_get_index_of", (DL_FUNC) &_individual_categorical_variable_get_index_of, 2},

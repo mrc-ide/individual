@@ -33,7 +33,7 @@ if you would like to perform an operation without destroying your current bitset
 \item \href{#method-xor}{\code{Bitset$xor()}}
 \item \href{#method-set_difference}{\code{Bitset$set_difference()}}
 \item \href{#method-sample}{\code{Bitset$sample()}}
-\item \href{#method-random_subset}{\code{Bitset$random_subset()}}
+\item \href{#method-choose}{\code{Bitset$choose()}}
 \item \href{#method-copy}{\code{Bitset$copy()}}
 \item \href{#method-to_vector}{\code{Bitset$to_vector()}}
 \item \href{#method-clone}{\code{Bitset$clone()}}
@@ -204,19 +204,20 @@ probabilities for keeping each element}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-random_subset"></a>}}
-\if{latex}{\out{\hypertarget{method-random_subset}{}}}
-\subsection{Method \code{random_subset()}}{
-keep N random items in the bitset
+\if{html}{\out{<a id="method-choose"></a>}}
+\if{latex}{\out{\hypertarget{method-choose}{}}}
+\subsection{Method \code{choose()}}{
+choose k random items in the bitset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$random_subset(N)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$choose(k)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{N}}{the number of items in the bitset to keep. The selection of
-these N items is random. \code{N} should be >= 0 and < bitset size.}
+\item{\code{k}}{the number of items in the bitset to keep. The selection of
+these k items from N total items in the bitset is random, and
+k should be chosen such that 0 <= k < N.}
 }
 \if{html}{\out{</div>}}
 }

@@ -437,13 +437,13 @@ inline IterableBitset<A> filter_bitset(
 //' @description retain N items in the bitset. This function
 //' modifies the bitset.
 template<class A>
-inline void bitset_random_subset_internal(
+inline void bitset_choose_internal(
     IterableBitset<A>& b,
-    const size_t N
+    const size_t k
 ){
   auto to_remove = Rcpp::sample(
     b.size(),
-    b.size() - N,
+    b.size() - k,
     false, // replacement
     R_NilValue, // evenly distributed
     false // one based
