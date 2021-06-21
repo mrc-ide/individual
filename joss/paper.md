@@ -118,45 +118,18 @@ significantly enhancing the extensibility of `individual`'s API.
 # State of the field
 
 There are many software libraries for epidemiological simulation,
-both in R and other programming languages. However, R lacks package written for
+both in R and other programming languages. However, R lacks packages written for
 the simulation of generic infectious processes, without making assumptions about 
 model structure (e.g.; network, metapopulation, lattice grid, etc). Additionally,
 none of the reviewed software used bitsets for speed improvements.
 
-## Non R Software
-
-A wide variety of simulation software exist for generic agent-based models. Among the best
-known are Repast [@North:2013], Mesa [@Masad:2015], and NetLogo [@Wilensky:1999].
-In the Julia programming language, Agents.jl [@Vahdati:2019] provides an efficient
-platform for specifying and simulation agent-based models.
-
-Various software libraries also exist specifically for epidemiological simulation.
-EpiFire [@Hladish:2012] and SimpactCyan [@Liesenborgs:2019] are C++ libraries
-for simulation of epidemics on networks. Other software provide alternative
-interfaces for client models, including [@Getz:2018], [@Salter:2013],
-[@Bershteyn:2018], [@Angevaare:2020].
-
-## R Software
-
 ### General R Packages
-
-Several R packages provide interfaces to other software libraries.
-The nlrx and NetLogoR packages provide an R interfaces to NetLogo [@Salecker:2019],
-[@Thiele:2014].
-Whereas NetLogoR [@Bauduin:2019] is a complete translation of NetLogo into R.
-RRepast provides a sophisticated interface [@Garcia:2016]. Finally, simecol
-[@Petzoldt:2007] provides classes and methods to enhance reproducibility of
-ecological models.
 
 Generic individual based simulation packages in R include
 IBMPopSim [@Giorgi:2020], ibm [@Oliveros:2016] and ibmcraftr [@Tun:2016].
 IBMPopSim is the most sophisticated, but requires users to input C++ code
 as a string which is then compiled, making it difficult to interface with the
 existing R ecosystem.
-
-Generic discrete event simulation packages, like simmeR [@Ucar:2017] and SpaDES
-[@Mcintire:2021] are specialized for queueing type models and ecological models
-on raster landscapes. 
 
 ### Epidemiological R Packages
 
@@ -171,8 +144,8 @@ hybridModels [@Fernando:2020], similarly provides tools for generic IBM
 modelling in R. However, it is fully implemented in R, limiting the scope for
 scale and optimisation.
 
-Other packages in R are more specialised and limit user models to common forms.
-These include SimInf [@Bauer:2016], nosoi [@Lequime:2020],
+Other epidemiology packages in R are more specialised and restrict user models to 
+common forms. These include SimInf [@Bauer:2016], nosoi [@Lequime:2020],
 SPARSEMODr [@Mihaljevic:2021], EpiILMCT [@Almutiry:2020] and
 EpiILM [@Warriyar:2020].
 
