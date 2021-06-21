@@ -33,6 +33,7 @@ if you would like to perform an operation without destroying your current bitset
 \item \href{#method-xor}{\code{Bitset$xor()}}
 \item \href{#method-set_difference}{\code{Bitset$set_difference()}}
 \item \href{#method-sample}{\code{Bitset$sample()}}
+\item \href{#method-choose}{\code{Bitset$choose()}}
 \item \href{#method-copy}{\code{Bitset$copy()}}
 \item \href{#method-to_vector}{\code{Bitset$to_vector()}}
 \item \href{#method-clone}{\code{Bitset$clone()}}
@@ -198,6 +199,25 @@ sample a bitset
 \item{\code{rate}}{the success probability for keeping each element, can be
 a single value for all elements or a vector with of unique
 probabilities for keeping each element}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-choose"></a>}}
+\if{latex}{\out{\hypertarget{method-choose}{}}}
+\subsection{Method \code{choose()}}{
+choose k random items in the bitset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$choose(k)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{k}}{the number of items in the bitset to keep. The selection of
+these k items from N total items in the bitset is random, and
+k should be chosen such that 0 <= k < N.}
 }
 \if{html}{\out{</div>}}
 }

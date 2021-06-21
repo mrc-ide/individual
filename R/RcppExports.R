@@ -65,6 +65,10 @@ filter_bitset_bitset <- function(b, other) {
     .Call(`_individual_filter_bitset_bitset`, b, other)
 }
 
+bitset_choose <- function(b, k) {
+    invisible(.Call(`_individual_bitset_choose`, b, k))
+}
+
 create_categorical_variable <- function(categories, values) {
     .Call(`_individual_create_categorical_variable`, categories, values)
 }
