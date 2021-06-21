@@ -9,7 +9,7 @@ tags:
   - simulation
   - stochastic
 authors:
-  - name: Giovanni D. Charles^[Custom footnotes for e.g. denoting who the corresponding author is can be included like this.]
+  - name: Giovanni D. Charles
     orcid: 0000-0003-0872-7098
     affiliation: 1
   - name: Sean L. Wu
@@ -373,7 +373,7 @@ plotted and analyzed.
 `individual` is licensed under the MIT License, with all
 source code stored at [GitHub](https://github.com/mrc-ide/individual).
 Requests, suggestions, and bug reports are encouraged via
-filing an [issue](hhttps://github.com/mrc-ide/individual/issues).
+filing an [issue](https://github.com/mrc-ide/individual/issues).
 A general guide on how to contribute to `individual` is available at
 the [package's website](https://mrc-ide.github.io/individual/articles/Contributing.html).
 
