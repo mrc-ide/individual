@@ -9,7 +9,7 @@ tags:
   - simulation
   - stochastic
 authors:
-  - name: Giovanni D. Charles^[Custom footnotes for e.g. denoting who the corresponding author is can be included like this.]
+  - name: Giovanni D. Charles
     orcid: 0000-0003-0872-7098
     affiliation: 1
   - name: Sean L. Wu
@@ -117,78 +117,37 @@ significantly enhancing the extensibility of `individual`'s API.
 
 # State of the field
 
-There are currently a variety of software libraries for epidemiological simulation,
-both in R and other programming languages. However, we are not yet aware
-of a similar package written especially for epidemiology which allows 
-simulation of generic infectious processes by providing users 
-with a set of specialized data types and methods without making assumptions about 
+There are many software libraries for epidemiological simulation,
+both in R and other programming languages. However, R lacks packages written for
+the simulation of generic infectious processes, without making assumptions about 
 model structure (e.g.; network, metapopulation, lattice grid, etc). Additionally,
-none of the reviewed software used bitset objects to optimize certain operations.
-
-## Non R Software
-
-A wide variety of simulation software exist for generic agent-based models. Among the best
-known are Repast [@North:2013], Mesa [@Masad:2015], and NetLogo [@Wilensky:1999].
-In the Julia programming language, Agents.jl [@Vahdati:2019] provides an efficient
-platform for specifying and simulation agent-based models.
-
-Various software libraries also exist specifically for epidemiological simulation.
-EpiFire [@Hladish:2012] and SimpactCyan [@Liesenborgs:2019] are C++ libraries
-for simulation of epidemics on networks. Numerus Model Builder [@Getz:2018] 
-and NOVA [@Salter:2013] use a domain specific language to define models. 
-EMOD [@Bershteyn:2018] is a highly successful and complex modeling 
-software in C++ which relies on JSON configuration files to interact with.
-Pathogen.jl [@Angevaare:2020] is a package for individual based simulation of common
-compartmental models.
-
-## R Software
+none of the reviewed software used bitsets for speed improvements.
 
 ### General R Packages
 
-Several R packages provide interfaces to other software libraries.
-The nlrx package provides an R interface to NetLogo [@Salecker:2019] to set up reproducible
-experiments and focuses on sensitivity analysis, and RNetLogo is a more basic interface [@Thiele:2014].
-NetLogoR [@Bauduin:2019] is a complete translation of NetLogo into R.
-For the Repast library, RRepast provides a sophisticated interface [@Garcia:2016].
-Finally, simecol [@Petzoldt:2007] provides classes and methods to enhance
-reproducibility of ecological models.
-
-Generic individual based simulation packages in R include the simmeR package for 
-discrete event simulation [@Ucar:2017] which also utilizes a `R6` interface to 
-lined C++ but is specialized for queueing type models.
-SpaDES [@Mcintire:2021] is a generic discrete event simulator designed for
-ecological models on raster landscapes. 
-IBMPopSim [@Giorgi:2020] is a sophisticated R package for simulation of 
-continuous time individual based models, but requires uses to input C++ code
+Generic individual based simulation packages in R include
+IBMPopSim [@Giorgi:2020], ibm [@Oliveros:2016] and ibmcraftr [@Tun:2016].
+IBMPopSim is the most sophisticated, but requires users to input C++ code
 as a string which is then compiled, making it difficult to interface with the
 existing R ecosystem.
 
-Other packages include ibm [@Oliveros:2016] which gives examples of individual based models
-in R but does not provide a generic interface, and ibmcraftr [@Tun:2016].
-
 ### Epidemiological R Packages
 
-There are a variety of packages in R designed to simulate epidemic processes on
-networks. SimInf [@Bauer:2016] is able to run very large simulations taking advantage
-of R's C interface to preform most computations in C, but has many constraints on
-the model dynamics. hybridModels [@Fernando:2020] has similar capabilities but is 
-fully implemented in R. epinet [@Groendyke:2018] and EpiDynamics [@Baquero:2020]
-are other R packages with similar functionality. nosoi [@Lequime:2020] is an 
-agent-based simulation framework designed to generate 
-synthetic data for phylogenetic analysis, with specialized data structures for this purpose.
+EpiModel [@Jenness:2018] allows the simulation of highly detailed discrete time
+models on networks, relying on the statnet [@Handcock:statnet] project for
+classes and algorithms. However due to its focus on directly transmitted
+diseases, `individual` may be more generic for other epidemiological sitautions
+(such as vector borne diseases). In addition it does not offer an interface for
+compiled code.
 
-EpiILMCT [@Almutiry:2020] and EpiILM [@Warriyar:2020] also simulate epidemics on
-networks, relying on a FORTRAN backend. SPARSEMODr [@Mihaljevic:2021] has similar capabilities,
-although with a C++ backend. These packages however restrict the transmission
-term (force of infection) to common mathematical forms,
-limiting generalizability.
+hybridModels [@Fernando:2020], similarly provides tools for generic IBM
+modelling in R. However, it is fully implemented in R, limiting the scope for
+scale and optimisation.
 
-EpiModel [@Jenness:2018] is perhaps the most relevant R software we have reviewed, 
-allowing simulation of highly detailed discrete time models on networks, relying on the 
-statnet [@Handcock:statnet] project for classes and algorithms. However due to its 
-focus on directly transmitted diseases, `individual` may be more generic for other
-epidemiological sitautions (such as vector borne diseases).
-In addition it does not offer an interface for compiled code.
+Other epidemiology packages in R are more specialised and restrict user models to 
+common forms. These include SimInf [@Bauer:2016], nosoi [@Lequime:2020],
+SPARSEMODr [@Mihaljevic:2021], EpiILMCT [@Almutiry:2020] and
+EpiILM [@Warriyar:2020].
 
 # Overview
 
@@ -414,7 +373,7 @@ plotted and analyzed.
 `individual` is licensed under the MIT License, with all
 source code stored at [GitHub](https://github.com/mrc-ide/individual).
 Requests, suggestions, and bug reports are encouraged via
-filing an [issue](hhttps://github.com/mrc-ide/individual/issues).
+filing an [issue](https://github.com/mrc-ide/individual/issues).
 A general guide on how to contribute to `individual` is available at
 the [package's website](https://mrc-ide.github.io/individual/articles/Contributing.html).
 
