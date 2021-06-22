@@ -29,9 +29,9 @@ bibliography: paper.bib
 `individual` is an R package which provides users a set of useful primitive elements
 for specifying individual based models (IBMs), with special attention to models
 for infectious disease epidemiology. 
-Users build models by specifying variables for each variable describing individuals 
-in the simulated population using data structures exposed by the package.
-The package provides efficient methods for finding
+Users build models by specifying variables for each characteristic describing individuals 
+in the simulated population using data structures from the package.
+`individual` provides efficient methods for finding
 subsets of individuals based on these variables, or cohorts. Cohorts can then
 be targeted for variable updates or scheduled for events.
 Variable updates queued during a time step are executed at the end of a discrete time step,
@@ -41,12 +41,12 @@ model of a system into executable code, which is fast and memory efficient.
 
 # Statement of need
 
-Complex stochastic models are a crucial tool for many tasks 
+Complex stochastic models are crucial for many tasks 
 in infectious disease epidemiology [@Ganyani:2021].
 Such models can formalize theory, generate synthetic data, evaluate counterfactual 
 scenarios, forecast trends, and be used for statistical inference. IBMs are a way to 
 design disaggregated simulation models, usually contrasted
-with mathematical, which may model a density or concentration
+with mathematical models, which may model a density or concentration
 of individuals, or otherwise lump individuals with similar attributes together in some
 way [@Shalizi:2006]. For modeling finite numbers of individuals with significant
 between-individual heterogeneity and complex dynamics, IBMs are a natural modeling
@@ -78,7 +78,7 @@ There are many software libraries for epidemiological simulation,
 both in R and other programming languages. However, based on our review of
 existing software, no other library exists in
 the R language which provides users with a set of primitive elements for defining 
-epidemiological models without imposing strong restrictions upon the type allowed
+epidemiological models without imposing strong restrictions upon the type of allowed
 models (e.g.; compartmental, network, etc.), or limiting users to particular
 mathematical forms for model dynamics.
 
@@ -111,8 +111,8 @@ EpiILM [@Warriyar:2020].
 # Design Principles
 
 Because in many epidemiological models the most important representation of state
-is a finite set of mutually exclusive values (such as Susceptible, Infectious, Recovered
-from the SIR model [@Allen2017]), `individual` uses a bitset to store these data.
+is a finite set of mutually exclusive values, such as Susceptible, Infectious, Recovered
+from the SIR model [@Allen:2017], `individual` uses a bitset to store these data.
 At the R level users can call set operations (union, intersection,
 complement, symmetric difference, set difference) which are implemented as bitwise
 operations in the C++ source. This lets users write clear, highly efficient
@@ -127,11 +127,11 @@ This design is similar to a component system, a design pattern to help
 decouple complicated types [@Nystrom:2014]. 
 Because of this disaggregated representation of state, preforming
 operations to find and schedule cohorts of individuals benefits from fast bitwise operators.
-This representation of state is (to our knowledge), novel for epidemiological simulation. 
+This state representation is (to our knowledge), novel for epidemiological simulation. 
 While @Rizzi:2018 proposed using a bitset to represent the state of each
 simulated individual, the population was still stored as types in an array.
 
-The package uses `Rcpp` [@Rcpp] to link to C++ source code, 
+`individual` uses `Rcpp` [@Rcpp] to link to C++ source code, 
 which underlies the data structures exposed to the user. 
 The API for `individual` uses `R6` [@R6] classes at the R level
 which users call to create, update, and query variables.
