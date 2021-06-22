@@ -111,8 +111,8 @@ EpiILM [@Warriyar:2020].
 # Design Principles
 
 Because in many epidemiological models the most important representation of state
-is a finite set of mutually exclusive values, such as Susceptible, Infectious, Recovered
-from the SIR model [@Allen:2017], `individual` uses a bitset to store these data.
+is a finite set of mutually exclusive values, such as the Susceptible, Infectious, Recovered
+classes from the well-known SIR model [@Allen:2017], `individual` uses a bitset to store these data.
 At the R level users can call set operations (union, intersection,
 complement, symmetric difference, set difference) which are implemented as bitwise
 operations in the C++ source. This lets users write clear, highly efficient
