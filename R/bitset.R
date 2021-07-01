@@ -117,8 +117,16 @@ Bitset <- R6::R6Class(
 #' @export
 filter_bitset = function(bitset, other) {
   if ( inherits(other, "Bitset")) {
-    return(Bitset$new(from = filter_bitset_bitset(bitset$.bitset, other$.bitset)))
+    if (other$size() > 0) {
+      return(Bitset$new(from = filter_bitset_bitset(bitset$.bitset, other$.bitset)))  
+    } else {
+      return(Bitset$new(size = bitset$max_size))
+    }
   } else {
-    return(Bitset$new(from = filter_bitset_vector(bitset$.bitset, as.integer(other))))
+    if (length(other) > 0) {
+      return(Bitset$new(from = filter_bitset_vector(bitset$.bitset, as.integer(other))))  
+    } else {
+      return(Bitset$new(size = bitset$max_size))
+    }
   }
 }
