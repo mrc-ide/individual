@@ -6,7 +6,7 @@
 #' if possible becuase certain operations will be faster.
 #' @importFrom R6 R6Class
 #' @export
-CategoricalVariable <- R6::R6Class(
+CategoricalVariable <- R6Class(
   'CategoricalVariable',
   public = list(
 
