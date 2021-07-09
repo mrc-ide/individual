@@ -2,7 +2,7 @@
 #' @description Represents a continuous variable for an individual.
 #' @importFrom R6 R6Class
 #' @export
-DoubleVariable <- R6::R6Class(
+DoubleVariable <- R6Class(
   'DoubleVariable',
   public = list(
     .variable = NULL,

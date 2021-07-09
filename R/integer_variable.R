@@ -6,7 +6,7 @@
 #' household or age bin.
 #' @importFrom R6 R6Class
 #' @export
-IntegerVariable <- R6::R6Class(
+IntegerVariable <- R6Class(
   'IntegerVariable',
   public = list(
 

@@ -56,7 +56,7 @@ Rcpp::XPtr<process_t> fixed_probability_multinomial_process_internal(
         }),
         true
     ); 
-};
+}
 
 
 // [[Rcpp::export]]
@@ -105,7 +105,7 @@ Rcpp::XPtr<process_t> multi_probability_multinomial_process_internal(
         }),
         true
     ); 
-};
+}
 
 // [[Rcpp::export]]
 Rcpp::XPtr<process_t> multi_probability_bernoulli_process_internal(
@@ -129,7 +129,7 @@ Rcpp::XPtr<process_t> multi_probability_bernoulli_process_internal(
         }),
         true
     ); 
-};
+}
 
 // [[Rcpp::export]]
 Rcpp::XPtr<process_t> infection_age_process_internal(

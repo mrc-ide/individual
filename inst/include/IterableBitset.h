@@ -433,6 +433,35 @@ inline IterableBitset<A> filter_bitset(
     return result;
 }
 
+//' @title randomly keep N items in the bitset
+//' @description retain N items in the bitset. This function
+//' modifies the bitset.
+template<class A>
+inline void bitset_choose_internal(
+    IterableBitset<A>& b,
+    const size_t k
+){
+  auto to_remove = Rcpp::sample(
+    b.size(),
+    b.size() - k,
+    false, // replacement
+    R_NilValue, // evenly distributed
+    false // one based
+  );
+  std::sort(to_remove.begin(), to_remove.end());
+  auto bitset_i = 0u;
+  auto bitset_it = b.cbegin();
+  for (auto i : to_remove) {
+    while(bitset_i != i) {
+      ++bitset_i;
+      ++bitset_it;
+    }
+    b.erase(*bitset_it);
+    ++bitset_i;
+    ++bitset_it;
+  }
+}
+
 //' @title sample the bitset
 //' @description retain a subset of values contained in this bitset, 
 //' where each element has probability 'rate' to remain. 

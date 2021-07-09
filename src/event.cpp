@@ -115,7 +115,7 @@ void process_listener(
 ) {
     size_t t = event->t;
     (*listener)(t);
-};
+}
 
 // [[Rcpp::export]]
 void process_targeted_listener(

@@ -6,8 +6,8 @@
 #' WARNING: all operations (except \code{$not}) are in-place so please use \code{$copy} 
 #' if you would like to perform an operation without destroying your current bitset.
 #' @importFrom R6 R6Class
-#' @export Bitset
-Bitset <- R6::R6Class(
+#' @export
+Bitset <- R6Class(
   'Bitset',
   public = list(
     #' @field .bitset a pointer to the underlying IterableBitset
@@ -94,6 +94,17 @@ Bitset <- R6::R6Class(
       }      
       self
     },
+    
+    #' @description choose k random items in the bitset
+    #' @param k the number of items in the bitset to keep. The selection of
+    #' these k items from N total items in the bitset is random, and
+    #' k should be chosen such that 0 <= k < N.
+    choose = function(k) {
+      stopifnot(is.finite(k))
+      stopifnot(k < bitset_size(self$.bitset))
+      bitset_choose(self$.bitset, as.integer(k))
+      self
+    },
 
     #' @description returns a copy the bitset
     copy = function() Bitset$new(from = bitset_copy(self$.bitset)),
@@ -117,8 +128,16 @@ Bitset <- R6::R6Class(
 #' @export
 filter_bitset = function(bitset, other) {
   if ( inherits(other, "Bitset")) {
-    return(Bitset$new(from = filter_bitset_bitset(bitset$.bitset, other$.bitset)))
+    if (other$size() > 0) {
+      return(Bitset$new(from = filter_bitset_bitset(bitset$.bitset, other$.bitset)))  
+    } else {
+      return(Bitset$new(size = bitset$max_size))
+    }
   } else {
-    return(Bitset$new(from = filter_bitset_vector(bitset$.bitset, as.integer(other))))
+    if (length(other) > 0) {
+      return(Bitset$new(from = filter_bitset_vector(bitset$.bitset, as.integer(other))))  
+    } else {
+      return(Bitset$new(size = bitset$max_size))
+    }
   }
 }

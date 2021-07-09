@@ -1,8 +1,9 @@
 #' @title TargetedEvent Class
 #' @description Describes a targeted event in the simulation
 #' This is useful for events which are triggered for a sub-population.
+#' @importFrom R6 R6Class
 #' @export
-TargetedEvent <- R6::R6Class(
+TargetedEvent <- R6Class(
   'TargetedEvent',
   inherit = Event,
   public = list(
