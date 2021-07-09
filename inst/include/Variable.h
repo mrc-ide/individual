@@ -9,6 +9,7 @@
 
 struct Variable {
     virtual void update() = 0;
+    virtual ~Variable() {};
 };
 
 #endif /* INST_INCLUDE_VARIABLE_H_ */

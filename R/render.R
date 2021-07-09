@@ -2,7 +2,7 @@
 #' @description Class to render output for the simulation
 #' @importFrom R6 R6Class
 #' @export
-Render <- R6::R6Class(
+Render <- R6Class(
   'Render',
   private = list(
     .vectors = list(),
