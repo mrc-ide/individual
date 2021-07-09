@@ -169,6 +169,7 @@ if you would like to perform an operation without destroying your current bitset
 <li><p><a href='#method-xor'><code>Bitset$xor()</code></a></p></li>
 <li><p><a href='#method-set_difference'><code>Bitset$set_difference()</code></a></p></li>
 <li><p><a href='#method-sample'><code>Bitset$sample()</code></a></p></li>
+<li><p><a href='#method-choose'><code>Bitset$choose()</code></a></p></li>
 <li><p><a href='#method-copy'><code>Bitset$copy()</code></a></p></li>
 <li><p><a href='#method-to_vector'><code>Bitset$to_vector()</code></a></p></li>
 <li><p><a href='#method-clone'><code>Bitset$clone()</code></a></p></li>
@@ -269,6 +270,18 @@ This method returns a new bitset rather than doing in-place modification.</p><h4
 <dt><code>rate</code></dt><dd><p>the success probability for keeping each element, can be
 a single value for all elements or a vector with of unique
 probabilities for keeping each element</p></dd>
+
+</dl><p></div></p>
+<p><hr>
+<a id="method-choose"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/Special.html'>choose()</a></code></h3>
+<p>choose k random items in the bitset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>choose</span><span class='op'>(</span><span class='va'>k</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>k</code></dt><dd><p>the number of items in the bitset to keep. The selection of
+these k items from N total items in the bitset is random, and
+k should be chosen such that 0 &lt;= k &lt; N.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
