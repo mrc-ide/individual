@@ -32,6 +32,9 @@ struct IntegerVariable : public Variable {
     
     // get value of individuals
     virtual std::vector<int> get_values(const individual_index_t& index) {
+        if (size != index.max_size()) {
+            Rcpp::stop("incompatible size bitset used to get values from IntegerVariable");
+        }
         auto result = std::vector<int>(index.size());
         auto result_i = 0u;
         for (auto i : index) {
