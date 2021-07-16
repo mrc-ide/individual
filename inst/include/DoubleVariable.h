@@ -31,6 +31,9 @@ struct DoubleVariable : public Variable {
     }
 
     virtual std::vector<double> get_values(const individual_index_t& index) {
+        if (size != index.max_size()) {
+            Rcpp::stop("incompatible size bitset used to get values from DoubleVariable");
+        }
         auto result = std::vector<double>(index.size());
         auto result_i = 0u;
         for (auto i : index) {
