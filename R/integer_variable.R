@@ -117,6 +117,7 @@ IntegerVariable <- R6Class(
           index <- index$to_vector()
         }
         if (length(index) != 0) {
+          stopifnot(all(index > 0))
           integer_variable_queue_update(
             self$.variable,
             values,
