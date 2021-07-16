@@ -48,7 +48,7 @@ public:
     public:
         using difference_type = allocator_type::difference_type;
         using value_type = allocator_type::value_type;
-        using reference = const allocator_type::reference;
+        using reference = allocator_type::reference;
         using pointer = const allocator_type::pointer;
         using iterator_category = std::forward_iterator_tag;
 
