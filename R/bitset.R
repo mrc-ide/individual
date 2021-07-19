@@ -91,18 +91,20 @@ Bitset <- R6Class(
       } else {
         stopifnot(all(is.finite(rate)))
         bitset_sample_vector(self$.bitset, rate)
-      }      
+      }
       self
     },
     
     #' @description choose k random items in the bitset
     #' @param k the number of items in the bitset to keep. The selection of
     #' these k items from N total items in the bitset is random, and
-    #' k should be chosen such that 0 <= k < N.
+    #' k should be chosen such that 0 <= k <= N.
     choose = function(k) {
       stopifnot(is.finite(k))
-      stopifnot(k < bitset_size(self$.bitset))
-      bitset_choose(self$.bitset, as.integer(k))
+      stopifnot(k <= bitset_size(self$.bitset))
+      if (k < self$max_size) {
+        bitset_choose(self$.bitset, as.integer(k))
+      }
       self
     },
 
