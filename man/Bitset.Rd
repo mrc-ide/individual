@@ -217,7 +217,7 @@ choose k random items in the bitset
 \describe{
 \item{\code{k}}{the number of items in the bitset to keep. The selection of
 these k items from N total items in the bitset is random, and
-k should be chosen such that 0 <= k < N.}
+k should be chosen such that 0 <= k <= N.}
 }
 \if{html}{\out{</div>}}
 }

@@ -209,5 +209,5 @@ test_that("bitset choose behaves properly when given a bitset with elements", {
   expect_equal(b$choose(0)$size(), 0)
   
   b <- Bitset$new(10)$insert(1:8)
-  expect_error(b$choose(8))
+  expect_error(b$choose(10))
 })
