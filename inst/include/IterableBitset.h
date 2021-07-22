@@ -449,7 +449,7 @@ inline void bitset_choose_internal(
     false // one based
   );
   std::sort(to_remove.begin(), to_remove.end());
-  auto bitset_i = 0u;
+  auto bitset_i = 0;
   auto bitset_it = b.cbegin();
   for (auto i : to_remove) {
     while(bitset_i != i) {
