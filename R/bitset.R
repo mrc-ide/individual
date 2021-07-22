@@ -102,6 +102,7 @@ Bitset <- R6Class(
     choose = function(k) {
       stopifnot(is.finite(k))
       stopifnot(k <= bitset_size(self$.bitset))
+      stopifnot(k >= 0)
       if (k < self$max_size) {
         bitset_choose(self$.bitset, as.integer(k))
       }
