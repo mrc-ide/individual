@@ -157,6 +157,11 @@ Requests, suggestions, and bug reports are encouraged via
 filing an [issue](https://github.com/mrc-ide/individual/issues).
 A general guide on how to contribute to `individual` is available at
 the [package's website](https://mrc-ide.github.io/individual/articles/Contributing.html).
+The automated test coverage can be found at
+[codecov.io](https://app.codecov.io/gh/mrc-ide/individual/). Example code can
+be found in the
+[tutorial section](https://mrc-ide.github.io/individual/articles/Tutorial.html)
+of the package documentation.
 
 
 # Acknowledgements
