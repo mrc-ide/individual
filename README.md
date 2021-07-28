@@ -1,5 +1,6 @@
 <!-- badges: start -->
-[![R build status](https://github.com/mrc-ide/individaul/workflows/R-CMD-check/badge.svg)](https://github.com/mrc-ide/individual/actions)
+[![R build status](https://github.com/mrc-ide/individual/workflows/R-CMD-check/badge.svg)](https://github.com/mrc-ide/individual/actions)
+[![codecov.io](https://codecov.io/github/mrc-ide/individual/coverage.svg)](https://codecov.io/github/mrc-ide/individual)
 <!-- badges: end -->
 
 # Individual
