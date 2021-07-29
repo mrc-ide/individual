@@ -191,3 +191,27 @@ test_that("getting size of a interval of IntegerVariable values which do not exi
   b <- -40
   expect_equal(intvar$get_size_of(a = a, b = b), 0)
 })
+
+test_that("using a, b in IntegerVariable size and index methods works", {
+  intvar <- IntegerVariable$new(rep(1:10,each=3))
+  a <- 5
+  b <- 5
+  expect_equal(intvar$get_size_of(a = a, b = b), 3)
+  expect_error(intvar$get_size_of(a = 7,b = 4))
+  
+  expect_equal(intvar$get_index_of(a = a, b = b)$to_vector(), c(13, 14, 15))
+  expect_error(intvar$get_index_of(a = 7,b = 4))
+})
+
+test_that("getting values from IntegerVariable with bitset of incompatible size fails", {
+  x <- IntegerVariable$new(initial_values = 1:100)
+  b <- Bitset$new(1000)$insert(90:110)
+  expect_error(x$get_values(b))
+})
+
+test_that("getting values from DoubleVariable with bitset of incompatible size fails", {
+  x <- DoubleVariable$new(initial_values = 1:100)
+  b <- Bitset$new(1000)$insert(90:110)
+  expect_error(x$get_values(b))
+})
+
