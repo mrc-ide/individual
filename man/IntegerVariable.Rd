@@ -73,7 +73,7 @@ or \code{a} and \code{b} must be provided as arguments.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{set}}{a vector of values}
+\item{\code{set}}{a vector of values (providing \code{set} means \code{a,b} are ignored)}
 
 \item{\code{a}}{lower bound}
 
@@ -97,7 +97,7 @@ or \code{a} and \code{b} must be provided as arguments.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{set}}{a vector of values}
+\item{\code{set}}{a vector of values (providing \code{set} means \code{a,b} are ignored)}
 
 \item{\code{a}}{lower bound}
 
