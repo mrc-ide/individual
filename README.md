@@ -1,6 +1,8 @@
 <!-- badges: start -->
 [![R build status](https://github.com/mrc-ide/individual/workflows/R-CMD-check/badge.svg)](https://github.com/mrc-ide/individual/actions)
 [![codecov.io](https://codecov.io/github/mrc-ide/individual/coverage.svg)](https://codecov.io/github/mrc-ide/individual)
+[![CRAN](https://www.r-pkg.org/badges/version/individual)](https://cran.r-project.org/package=individual)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
 # Individual
@@ -103,6 +105,3 @@ contribute :)
  - EpiILMCT
  - EpiILM
  - SPARSEMODr
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
