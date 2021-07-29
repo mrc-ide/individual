@@ -6,6 +6,7 @@ Authors@R: c(
     given = "Giovanni",
     family = "Charles",
     role = c('aut', 'cre'),
+    comment = c(ORCID = "0000-0002-7024-1200"),
     email = 'giovanni.charles@gmail.com'
   ),
   person(
@@ -16,9 +17,10 @@ Authors@R: c(
     email = 'slwood89@gmail.com'
   ),
   person(
-    given = "Pete",
+    given = "Peter",
     family = "Winskill",
     role = c('aut'),
+    comment = c(ORCID = "0000-0003-3001-4959"),
     email = 'p.winskill@imperial.ac.uk'
   ),
   person(
@@ -41,6 +43,8 @@ Description: A framework which provides users a set of useful primitive elements
   memory efficient.
 License: MIT + file LICENSE
 Encoding: UTF-8
+URL: https://github.com/mrc-ide/individual, https://mrc-ide.github.io/individual/
+BugReports: https://github.com/mrc-ide/individual/issues
 Imports:
   R6,
   Rcpp
