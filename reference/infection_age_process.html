@@ -8,6 +8,13 @@
 
 <title>Infection process for age-structured models — infection_age_process • individual</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -47,6 +54,7 @@ $$\lambda_{i} = p \sum\limits_{j} C_{i,j} \left( \frac{I_{j}}{N_{j}} \right)  $$
 Where \(C\) is the matrix of contact rates, \(p\) is the probability of infection
 per contact. The per-capita probability of infection for susceptible individuals is then:
 $$1 - e^{-\lambda_{i} \Delta t}$$" />
+<meta property="og:image" content="/logo.png" />
 
 
 
@@ -78,7 +86,7 @@ $$1 - e^{-\lambda_{i} \Delta t}$$" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -116,7 +124,12 @@ $$1 - e^{-\lambda_{i} \Delta t}$$" />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/mrc-ide/individual/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -131,7 +144,7 @@ $$1 - e^{-\lambda_{i} \Delta t}$$" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Infection process for age-structured models</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/mrc-ide/individual/blob/master/R/prefab.R'><code>R/prefab.R</code></a></small>
     <div class="hidden name"><code>infection_age_process.Rd</code></div>
     </div>
 
@@ -213,7 +226,7 @@ $$1 - e^{-\lambda_{i} \Delta t}$$</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Giovanni Charles, Sean L. Wu, Pete Winskill.</p>
+  <p>Developed by Giovanni Charles, Sean L. Wu, Peter Winskill.</p>
 </div>
 
 <div class="pkgdown">

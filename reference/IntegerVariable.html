@@ -8,6 +8,13 @@
 
 <title>Integer Variable Class — IntegerVariable • individual</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -45,6 +52,7 @@ This class is similar to CategoricalVariable,
 but can be used for variables with unbounded ranges, or other situations where part
 of an individual's state is better represented by an integer, such as
 household or age bin." />
+<meta property="og:image" content="/logo.png" />
 
 
 
@@ -76,7 +84,7 @@ household or age bin." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -114,7 +122,12 @@ household or age bin." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/mrc-ide/individual/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -129,7 +142,7 @@ household or age bin." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Integer Variable Class</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/mrc-ide/individual/blob/master/R/integer_variable.R'><code>R/integer_variable.R</code></a></small>
     <div class="hidden name"><code>IntegerVariable.Rd</code></div>
     </div>
 
@@ -189,7 +202,7 @@ or <code>a</code> and <code>b</code> must be provided as arguments.</p><h4 class
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>set</code></dt><dd><p>a vector of values</p></dd>
+<dt><code>set</code></dt><dd><p>a vector of values (providing <code>set</code> means <code>a,b</code> are ignored)</p></dd>
 
 <dt><code>a</code></dt><dd><p>lower bound</p></dd>
 
@@ -206,7 +219,7 @@ or <code>a</code> and <code>b</code> must be provided as arguments.</p><h4 class
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>set</code></dt><dd><p>a vector of values</p></dd>
+<dt><code>set</code></dt><dd><p>a vector of values (providing <code>set</code> means <code>a,b</code> are ignored)</p></dd>
 
 <dt><code>a</code></dt><dd><p>lower bound</p></dd>
 
@@ -272,7 +285,7 @@ a <code><a href='Bitset.html'>Bitset</a></code>.</p></dd>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Giovanni Charles, Sean L. Wu, Pete Winskill.</p>
+  <p>Developed by Giovanni Charles, Sean L. Wu, Peter Winskill.</p>
 </div>
 
 <div class="pkgdown">

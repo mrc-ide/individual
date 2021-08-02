@@ -8,6 +8,13 @@
 
 <title>A Bitset Class — Bitset • individual</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -46,6 +53,7 @@ efficiently perform set operations (union, intersection, complement, symmetric
 difference, set difference). 
 WARNING: all operations (except $not) are in-place so please use $copy 
 if you would like to perform an operation without destroying your current bitset." />
+<meta property="og:image" content="/logo.png" />
 
 
 
@@ -77,7 +85,7 @@ if you would like to perform an operation without destroying your current bitset
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -115,7 +123,12 @@ if you would like to perform an operation without destroying your current bitset
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/mrc-ide/individual/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -130,7 +143,7 @@ if you would like to perform an operation without destroying your current bitset
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>A Bitset Class</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/mrc-ide/individual/blob/master/R/bitset.R'><code>R/bitset.R</code></a></small>
     <div class="hidden name"><code>Bitset.Rd</code></div>
     </div>
 
@@ -281,7 +294,7 @@ probabilities for keeping each element</p></dd>
 <p><div class="arguments"></p><dl>
 <dt><code>k</code></dt><dd><p>the number of items in the bitset to keep. The selection of
 these k items from N total items in the bitset is random, and
-k should be chosen such that 0 &lt;= k &lt; N.</p></dd>
+k should be chosen such that 0 &lt;= k &lt;= N.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
@@ -319,7 +332,7 @@ stored in this bitset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Giovanni Charles, Sean L. Wu, Pete Winskill.</p>
+  <p>Developed by Giovanni Charles, Sean L. Wu, Peter Winskill.</p>
 </div>
 
 <div class="pkgdown">
