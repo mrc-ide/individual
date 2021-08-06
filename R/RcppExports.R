@@ -57,6 +57,10 @@ bitset_to_vector <- function(b) {
     .Call(`_individual_bitset_to_vector`, b)
 }
 
+bitset_to_vector_call_internal <- function(b) {
+    .Call(`_individual_bitset_to_vector_call_internal`, b)
+}
+
 filter_bitset_vector <- function(b, other) {
     .Call(`_individual_filter_bitset_vector`, b, other)
 }
@@ -213,6 +217,10 @@ integer_variable_get_values_at_index_vector <- function(variable, index) {
     .Call(`_individual_integer_variable_get_values_at_index_vector`, variable, index)
 }
 
+integer_variable_get_values_at_index_vector_no_convert <- function(variable, index) {
+    .Call(`_individual_integer_variable_get_values_at_index_vector_no_convert`, variable, index)
+}
+
 integer_variable_get_index_of_set_vector <- function(variable, values_set) {
     .Call(`_individual_integer_variable_get_index_of_set_vector`, variable, values_set)
 }
@@ -243,6 +251,10 @@ integer_variable_queue_fill <- function(variable, value) {
 
 integer_variable_queue_update <- function(variable, value, index) {
     invisible(.Call(`_individual_integer_variable_queue_update`, variable, value, index))
+}
+
+integer_variable_queue_update_bitset <- function(variable, value, index) {
+    invisible(.Call(`_individual_integer_variable_queue_update_bitset`, variable, value, index))
 }
 
 integer_variable_update <- function(variable) {

@@ -13,6 +13,16 @@
 #include <Rcpp.h>
 #include <queue>
 
+struct IntegerVariable;
+
+
+//' @title a variable object for signed integers
+//' @description This class provides functionality for variables which takes values
+//' in the signed integers. It inherits from Variable.
+//' It contains the following data members:
+//'     * updates: a priority queue of pairs of values and indices to update
+//'     * size: the number of elements stored (size of population)
+//'     * values: a vector of values
 struct IntegerVariable : public Variable {
 
     using update_t = std::pair<std::vector<int>, std::vector<size_t>>;
@@ -20,113 +30,20 @@ struct IntegerVariable : public Variable {
     size_t size;
     std::vector<int> values;
 
-    // constructor
-    IntegerVariable(const std::vector<int>& values)
-        : size(values.size()), values(values)
-    {}
+    IntegerVariable(const std::vector<int>& values);
+    virtual ~IntegerVariable() {};
 
-    // get all values
-    virtual std::vector<int>& get_values() {
-        return values;
-    }
+    virtual std::vector<int> get_values() const;
+    virtual std::vector<int> get_values(const individual_index_t& index) const;
+    virtual std::vector<int> get_values(const std::vector<size_t>& index) const;
+
+    virtual individual_index_t get_index_of_set(const std::vector<int> values_set) const;
+    virtual individual_index_t get_index_of_set(const int value) const;
+    virtual individual_index_t get_index_of_range(const int a, const int b) const;
     
-    // get value of individuals
-    virtual std::vector<int> get_values(const individual_index_t& index) {
-        if (size != index.max_size()) {
-            Rcpp::stop("incompatible size bitset used to get values from IntegerVariable");
-        }
-        auto result = std::vector<int>(index.size());
-        auto result_i = 0u;
-        for (auto i : index) {
-            result[result_i] = values[i];
-            ++result_i;
-        }
-        return result;
-    }
-
-    // get indices of individuals whose value is in some set
-    virtual individual_index_t get_index_of_set(
-        const std::vector<int> values_set
-    ) const {
-    
-        auto result = individual_index_t(size);
-        for (auto i = 0u; i < values.size(); ++i) {
-            auto findit = std::find(values_set.begin(), values_set.end(), values[i]);
-            if(findit != values_set.end()){
-                result.insert(i);
-            }
-        }
-
-        return result;
-    }
-
-    // get indices of individuals with a particular value
-    virtual individual_index_t get_index_of_set(
-        const int value
-    ) const {
-
-        auto result = individual_index_t(size);
-        for (auto i = 0u; i < values.size(); ++i) {
-            if ( values[i] == value ) {
-                result.insert(i);
-            }
-        }
-
-        return result;
- 
-    }
-
-    // get indices of individuals whose value is in some [a,b]
-    virtual individual_index_t get_index_of_range(
-        const int a, const int b
-    ) const {
-        
-        auto result = individual_index_t(size);
-        for (auto i = 0u; i < values.size(); ++i) {
-            if ( !(values[i] < a) && !(b < values[i]) ) {
-                result.insert(i);
-            }
-        }
-        
-        return result;
-
-    }
-    
-    // get number of individuals whose value is in some set
-    virtual size_t get_size_of_set_vector(
-            const std::vector<int> values_set
-    ) const {
-        
-        size_t result = std::count_if(values.begin(), values.end(), [&](const int v) -> bool {
-            auto findit = std::find(values_set.begin(), values_set.end(), v);
-            return findit != values_set.end();
-        });
-        
-        return result;
-        
-    }
-
-    // get number of individuals with a particular value
-    virtual size_t get_size_of_set_scalar(
-        const int value
-    ) const {
-
-        size_t result = std::count(values.begin(), values.end(), value);
-        return result;
- 
-    }
-
-    // get number of individuals whose value is in some [a,b]
-    virtual size_t get_size_of_range(
-        const int a, const int b
-    ) const {
-        size_t result = std::count_if(values.begin(), values.end(), [&](const int v) -> bool {
-            return !(v < a) && !(b < v);
-        });
-
-        return result;
-
-    }
+    virtual size_t get_size_of_set_vector(const std::vector<int> values_set) const;
+    virtual size_t get_size_of_set_scalar(const int value) const;
+    virtual size_t get_size_of_range(const int a, const int b) const;
 
     // queue variable update
     virtual void queue_update(
@@ -183,8 +100,122 @@ struct IntegerVariable : public Variable {
         }
     }
 
-
 };
+
+
+// constructor
+inline IntegerVariable::IntegerVariable(const std::vector<int>& values)
+    : size(values.size()), values(values)
+{}
+
+// get all values
+inline std::vector<int> IntegerVariable::get_values() const {
+    return values;
+}
+
+// get value of individuals
+inline std::vector<int> IntegerVariable::get_values(const individual_index_t& index) const {
+    if (size != index.max_size()) {
+        Rcpp::stop("incompatible size bitset used to get values from IntegerVariable");
+    }
+    auto result = std::vector<int>(index.size());
+    auto result_i = 0u;
+    for (auto i : index) {
+        result[result_i] = values[i];
+        ++result_i;
+    }
+    return result;
+}
+
+inline std::vector<int> IntegerVariable::get_values(const std::vector<size_t>& index) const {
+    if (size != index.max_size()) {
+        Rcpp::stop("incompatible size vector used to get values from IntegerVariable");
+    }
+    auto result = std::vector<int>(index.size());
+    for (auto i = 0u; i < index.size(); ++i) {
+        result[i] = values[index[i]];
+    }
+    return result;
+}
+
+// get indices of individuals whose value is in some set
+inline individual_index_t IntegerVariable::get_index_of_set(
+    const std::vector<int> values_set
+) const {
+    
+    auto result = individual_index_t(size);
+    for (auto i = 0u; i < values.size(); ++i) {
+        auto findit = std::find(values_set.begin(), values_set.end(), values[i]);
+        if(findit != values_set.end()){
+            result.insert(i);
+        }
+    }
+    
+    return result;
+}
+
+// get indices of individuals with a particular value
+inline individual_index_t IntegerVariable::get_index_of_set(
+    const int value
+) const {
+    
+    auto result = individual_index_t(size);
+    for (auto i = 0u; i < values.size(); ++i) {
+        if ( values[i] == value ) {
+            result.insert(i);
+        }
+    }
+    
+    return result;
+}
+
+// get indices of individuals whose value is in some [a,b]
+inline individual_index_t IntegerVariable::get_index_of_range(
+        const int a, const int b
+) const {
+    
+    auto result = individual_index_t(size);
+    for (auto i = 0u; i < values.size(); ++i) {
+        if ( !(values[i] < a) && !(b < values[i]) ) {
+            result.insert(i);
+        }
+    }
+    
+    return result;
+}
+
+// get number of individuals whose value is in some set
+inline size_t IntegerVariable::get_size_of_set_vector(
+        const std::vector<int> values_set
+) const {
+    
+    size_t result = std::count_if(values.begin(), values.end(), [&](const int v) -> bool {
+        auto findit = std::find(values_set.begin(), values_set.end(), v);
+        return findit != values_set.end();
+    });
+    
+    return result;
+}
+
+// get number of individuals with a particular value
+inline size_t IntegerVariable::get_size_of_set_scalar(
+        const int value
+) const {
+    
+    size_t result = std::count(values.begin(), values.end(), value);
+    return result;
+}
+
+// get number of individuals whose value is in some [a,b]
+inline size_t IntegerVariable::get_size_of_range(
+        const int a, const int b
+) const {
+    size_t result = std::count_if(values.begin(), values.end(), [&](const int v) -> bool {
+        return !(v < a) && !(b < v);
+    });
+    
+    return result;
+}
 
 
 #endif /* INST_INCLUDE_INTEGER_VARIABLE_H_ */

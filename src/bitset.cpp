@@ -122,6 +122,11 @@ std::vector<size_t> bitset_to_vector(const Rcpp::XPtr<individual_index_t> b) {
 }
 
 //[[Rcpp::export]]
+std::vector<size_t> bitset_to_vector_call_internal(const Rcpp::XPtr<individual_index_t> b) {
+    return bitset_to_vector_internal(*b);
+}
+
+//[[Rcpp::export]]
 Rcpp::XPtr<individual_index_t> filter_bitset_vector(
     const Rcpp::XPtr<individual_index_t> b,
     std::vector<size_t> other

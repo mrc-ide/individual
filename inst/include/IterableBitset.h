@@ -405,6 +405,26 @@ inline bool IterableBitset<A>::empty() const {
     return n == 0;
 }
 
+//' @title bitset to vector
+//' @description return a vector of unsigned ints indicating which bits are set
+template<class A>
+inline std::vector<size_t> bitset_to_vector_internal(
+  const IterableBitset<A>& b,
+  const bool addone = true
+) {
+  auto offset = 0u;
+  if (addone) {
+    offset = 1u;
+  }
+  auto result = std::vector<size_t>(b.size());
+  auto i = 0u;
+  for (auto v : b) {
+    result[i] = v + offset;
+    ++i;
+  }
+  return result;
+}
+
 //' @title filter the bitset
 //' @description keep only the i-th values of the source bitset for i in this iterator
 template<class A, class InputIterator>

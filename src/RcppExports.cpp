@@ -9,6 +9,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // create_bitset
 Rcpp::XPtr<individual_index_t> create_bitset(size_t size);
 RcppExport SEXP _individual_create_bitset(SEXP sizeSEXP) {
@@ -160,6 +165,17 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
     rcpp_result_gen = Rcpp::wrap(bitset_to_vector(b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bitset_to_vector_call_internal
+std::vector<size_t> bitset_to_vector_call_internal(const Rcpp::XPtr<individual_index_t> b);
+RcppExport SEXP _individual_bitset_to_vector_call_internal(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(bitset_to_vector_call_internal(b));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -639,6 +655,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// integer_variable_get_values_at_index_vector_no_convert
+std::vector<int> integer_variable_get_values_at_index_vector_no_convert(Rcpp::XPtr<IntegerVariable> variable, std::vector<size_t> index);
+RcppExport SEXP _individual_integer_variable_get_values_at_index_vector_no_convert(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_values_at_index_vector_no_convert(variable, index));
+    return rcpp_result_gen;
+END_RCPP
+}
 // integer_variable_get_index_of_set_vector
 Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_set_vector(Rcpp::XPtr<IntegerVariable> variable, std::vector<int> values_set);
 RcppExport SEXP _individual_integer_variable_get_index_of_set_vector(SEXP variableSEXP, SEXP values_setSEXP) {
@@ -733,6 +761,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const std::vector<int> >::type value(valueSEXP);
     Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
     integer_variable_queue_update(variable, value, index);
+    return R_NilValue;
+END_RCPP
+}
+// integer_variable_queue_update_bitset
+void integer_variable_queue_update_bitset(Rcpp::XPtr<IntegerVariable> variable, const std::vector<int> value, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_integer_variable_queue_update_bitset(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<int> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    integer_variable_queue_update_bitset(variable, value, index);
     return R_NilValue;
 END_RCPP
 }
@@ -854,6 +894,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_bitset_sample", (DL_FUNC) &_individual_bitset_sample, 2},
     {"_individual_bitset_sample_vector", (DL_FUNC) &_individual_bitset_sample_vector, 2},
     {"_individual_bitset_to_vector", (DL_FUNC) &_individual_bitset_to_vector, 1},
+    {"_individual_bitset_to_vector_call_internal", (DL_FUNC) &_individual_bitset_to_vector_call_internal, 1},
     {"_individual_filter_bitset_vector", (DL_FUNC) &_individual_filter_bitset_vector, 2},
     {"_individual_filter_bitset_bitset", (DL_FUNC) &_individual_filter_bitset_bitset, 2},
     {"_individual_bitset_choose", (DL_FUNC) &_individual_bitset_choose, 2},
@@ -894,6 +935,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_get_values", (DL_FUNC) &_individual_integer_variable_get_values, 1},
     {"_individual_integer_variable_get_values_at_index", (DL_FUNC) &_individual_integer_variable_get_values_at_index, 2},
     {"_individual_integer_variable_get_values_at_index_vector", (DL_FUNC) &_individual_integer_variable_get_values_at_index_vector, 2},
+    {"_individual_integer_variable_get_values_at_index_vector_no_convert", (DL_FUNC) &_individual_integer_variable_get_values_at_index_vector_no_convert, 2},
     {"_individual_integer_variable_get_index_of_set_vector", (DL_FUNC) &_individual_integer_variable_get_index_of_set_vector, 2},
     {"_individual_integer_variable_get_index_of_set_scalar", (DL_FUNC) &_individual_integer_variable_get_index_of_set_scalar, 2},
     {"_individual_integer_variable_get_index_of_range", (DL_FUNC) &_individual_integer_variable_get_index_of_range, 3},
@@ -902,6 +944,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_get_size_of_range", (DL_FUNC) &_individual_integer_variable_get_size_of_range, 3},
     {"_individual_integer_variable_queue_fill", (DL_FUNC) &_individual_integer_variable_queue_fill, 2},
     {"_individual_integer_variable_queue_update", (DL_FUNC) &_individual_integer_variable_queue_update, 3},
+    {"_individual_integer_variable_queue_update_bitset", (DL_FUNC) &_individual_integer_variable_queue_update_bitset, 3},
     {"_individual_integer_variable_update", (DL_FUNC) &_individual_integer_variable_update, 1},
     {"_individual_fixed_probability_multinomial_process_internal", (DL_FUNC) &_individual_fixed_probability_multinomial_process_internal, 5},
     {"_individual_multi_probability_multinomial_process_internal", (DL_FUNC) &_individual_multi_probability_multinomial_process_internal, 5},

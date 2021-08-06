@@ -45,6 +45,15 @@ std::vector<int> integer_variable_get_values_at_index_vector(
     return variable->get_values(bitmap);
 }
 
+//[[Rcpp::export]]
+std::vector<int> integer_variable_get_values_at_index_vector_no_convert(
+        Rcpp::XPtr<IntegerVariable> variable,
+        std::vector<size_t> index
+) {
+    decrement(index);
+    return variable->get_values(index);
+}
+
 // [[Rcpp::export]]
 Rcpp::XPtr<individual_index_t> integer_variable_get_index_of_set_vector(
     Rcpp::XPtr<IntegerVariable> variable,
@@ -121,6 +130,16 @@ void integer_variable_queue_update(
 ) {
     decrement(index);
     variable->queue_update(value, index);
+}
+
+//[[Rcpp::export]]
+void integer_variable_queue_update_bitset(
+        Rcpp::XPtr<IntegerVariable> variable,
+        const std::vector<int> value,
+        Rcpp::XPtr<individual_index_t> index
+) {
+    auto index_vec = bitset_to_vector_internal(*index, false);
+    variable->queue_update(value, index_vec);
 }
 
 //[[Rcpp::export]]
