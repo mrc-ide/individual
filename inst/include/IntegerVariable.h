@@ -37,11 +37,11 @@ struct IntegerVariable : public Variable {
     virtual std::vector<int> get_values(const individual_index_t& index) const;
     virtual std::vector<int> get_values(const std::vector<size_t>& index) const;
 
-    virtual individual_index_t get_index_of_set(const std::vector<int> values_set) const;
+    virtual individual_index_t get_index_of_set(const std::vector<int>& values_set) const;
     virtual individual_index_t get_index_of_set(const int value) const;
     virtual individual_index_t get_index_of_range(const int a, const int b) const;
     
-    virtual size_t get_size_of_set_vector(const std::vector<int> values_set) const;
+    virtual size_t get_size_of_set_vector(const std::vector<int>& values_set) const;
     virtual size_t get_size_of_set_scalar(const int value) const;
     virtual size_t get_size_of_range(const int a, const int b) const;
 
@@ -88,7 +88,7 @@ inline std::vector<int> IntegerVariable::get_values(const std::vector<size_t>& i
 
 // get indices of individuals whose value is in some set
 inline individual_index_t IntegerVariable::get_index_of_set(
-    const std::vector<int> values_set
+    const std::vector<int>& values_set
 ) const {
     
     auto result = individual_index_t(size);
@@ -134,7 +134,7 @@ inline individual_index_t IntegerVariable::get_index_of_range(
 
 // get number of individuals whose value is in some set
 inline size_t IntegerVariable::get_size_of_set_vector(
-        const std::vector<int> values_set
+        const std::vector<int>& values_set
 ) const {
     
     size_t result = std::count_if(values.begin(), values.end(), [&](const int v) -> bool {
