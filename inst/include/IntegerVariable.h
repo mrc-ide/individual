@@ -31,7 +31,7 @@ struct IntegerVariable : public Variable {
     std::vector<int> values;
 
     IntegerVariable(const std::vector<int>& values);
-    virtual ~IntegerVariable() {};
+    virtual ~IntegerVariable();
 
     virtual std::vector<int> get_values() const;
     virtual std::vector<int> get_values(const individual_index_t& index) const;
@@ -51,10 +51,11 @@ struct IntegerVariable : public Variable {
 };
 
 
-// constructor
 inline IntegerVariable::IntegerVariable(const std::vector<int>& values)
     : size(values.size()), values(values)
 {}
+
+inline IntegerVariable::~IntegerVariable() {};
 
 // get all values
 inline std::vector<int> IntegerVariable::get_values() const {
