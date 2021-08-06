@@ -45,60 +45,8 @@ struct IntegerVariable : public Variable {
     virtual size_t get_size_of_set_scalar(const int value) const;
     virtual size_t get_size_of_range(const int a, const int b) const;
 
-    // queue variable update
-    virtual void queue_update(
-        const std::vector<int>& values,
-        const std::vector<size_t>& index
-    ) {
-        if (values.size() > 1 && values.size() < size && values.size() != index.size()) {
-            Rcpp::stop("Mismatch between value and index length");
-        }
-        for (auto i : index) {
-            if (i < 0 || i >= size) {
-                Rcpp::stop("Index out of bounds");
-            }
-        }
-        updates.push({ values, index });
-    }
-
-    // update
-    virtual void update() override {
-        while(updates.size() > 0) {
-            const auto& update = updates.front();
-            const auto& values = update.first;
-            const auto& index = update.second;
-            if (values.size() == 0) {
-                return;
-            }
-
-            auto vector_replacement = (index.size() == 0);
-            auto value_fill = (values.size() == 1);
-
-            auto& to_update = this->values;
-
-            if (vector_replacement) {
-                // For a full vector replacement
-                if (value_fill) {
-                    to_update = std::vector<int>(size, values[0]);
-                } else {
-                    to_update = values;
-                }
-            } else {
-                if (value_fill) {
-                    // For a fill update
-                    for (auto i : index) {
-                        to_update[i] = values[0];
-                    }
-                } else {
-                    // Subset assignment
-                    for (auto i = 0u; i < index.size(); ++i) {
-                        to_update[index[i]] = values[i];
-                    }
-                }
-            }
-            updates.pop();
-        }
-    }
+    virtual void queue_update(const std::vector<int>& values, const std::vector<size_t>& index);
+    virtual void update() override;
 
 };
 
@@ -215,6 +163,62 @@ inline size_t IntegerVariable::get_size_of_range(
     });
     
     return result;
+}
+
+
+// queue variable update
+inline void IntegerVariable::queue_update(
+        const std::vector<int>& values,
+        const std::vector<size_t>& index
+) {
+    if (values.size() > 1 && values.size() < size && values.size() != index.size()) {
+        Rcpp::stop("Mismatch between value and index length");
+    }
+    for (auto i : index) {
+        if (i < 0 || i >= size) {
+            Rcpp::stop("Index out of bounds");
+        }
+    }
+    updates.push({ values, index });
+}
+
+// update
+inline void IntegerVariable::update() {
+    while(updates.size() > 0) {
+        const auto& update = updates.front();
+        const auto& values = update.first;
+        const auto& index = update.second;
+        if (values.size() == 0) {
+            return;
+        }
+        
+        auto vector_replacement = (index.size() == 0);
+        auto value_fill = (values.size() == 1);
+        
+        auto& to_update = this->values;
+        
+        if (vector_replacement) {
+            // For a full vector replacement
+            if (value_fill) {
+                to_update = std::vector<int>(size, values[0]);
+            } else {
+                to_update = values;
+            }
+        } else {
+            if (value_fill) {
+                // For a fill update
+                for (auto i : index) {
+                    to_update[i] = values[0];
+                }
+            } else {
+                // Subset assignment
+                for (auto i = 0u; i < index.size(); ++i) {
+                    to_update[index[i]] = values[i];
+                }
+            }
+        }
+        updates.pop();
+    }
 }
 
 
