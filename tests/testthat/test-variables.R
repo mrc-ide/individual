@@ -79,6 +79,13 @@ test_that("getting variables at an index works", {
   expect_equal(sequence$get_values(NULL), 1:10)
   expect_error(sequence_2$get_values(5:15))
   expect_equal(sequence_2$get_values(5:10), 15:20)
+  
+  sequence <- IntegerVariable$new(seq_len(size))
+  sequence_2 <- IntegerVariable$new(seq_len(size) + 10)
+  
+  expect_equal(sequence$get_values(NULL), 1:10)
+  expect_error(sequence_2$get_values(5:15))
+  expect_equal(sequence_2$get_values(5:10), 15:20)
 })
 
 test_that("getting indices of DoubleVariable in a range works", {

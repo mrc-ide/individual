@@ -80,7 +80,7 @@ inline std::vector<int> IntegerVariable::get_values(const std::vector<size_t>& i
     
     auto result = std::vector<int>(index.size());
     for (auto i = 0u; i < index.size(); ++i) {
-        result[i] = values[index[i]];
+        result[i] = values.at(index[i]);
     }
     return result;
 }
@@ -223,32 +223,34 @@ inline void IntegerVariable::queue_update(
 inline void IntegerVariable::update() {
     while(updates.size() > 0) {
         const auto& update = updates.front();
-        const auto& new_values = update.first;
+        const auto& values = update.first;
         const auto& index = update.second;
-        if (new_values.size() == 0) {
+        if (values.size() == 0) {
             return;
         }
         
         auto vector_replacement = (index.size() == 0);
-        auto value_fill = (new_values.size() == 1);
+        auto value_fill = (values.size() == 1);
+        
+        auto& to_update = this->values;
         
         if (vector_replacement) {
             // For a full vector replacement
             if (value_fill) {
-                std::fill(values.begin(), values.end(), new_values[0]);
+                std::fill(to_update.begin(), to_update.end(), values[0]);
             } else {
-                values = new_values;
+                to_update = values;
             }
         } else {
             if (value_fill) {
                 // For a fill update
                 for (auto i : index) {
-                    values[i] = new_values[0];
+                    to_update[i] = values[0];
                 }
             } else {
                 // Subset assignment
                 for (auto i = 0u; i < index.size(); ++i) {
-                    values[index[i]] = new_values[i];
+                    to_update[index[i]] = values[i];
                 }
             }
         }
