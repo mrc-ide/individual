@@ -133,6 +133,10 @@ double_variable_queue_update <- function(variable, value, index) {
     invisible(.Call(`_individual_double_variable_queue_update`, variable, value, index))
 }
 
+double_variable_queue_update_bitset <- function(variable, value, index) {
+    invisible(.Call(`_individual_double_variable_queue_update_bitset`, variable, value, index))
+}
+
 double_variable_update <- function(variable) {
     invisible(.Call(`_individual_double_variable_update`, variable))
 }
@@ -215,10 +219,6 @@ integer_variable_get_values_at_index <- function(variable, index) {
 
 integer_variable_get_values_at_index_vector <- function(variable, index) {
     .Call(`_individual_integer_variable_get_values_at_index_vector`, variable, index)
-}
-
-integer_variable_get_values_at_index_vector_no_convert <- function(variable, index) {
-    .Call(`_individual_integer_variable_get_values_at_index_vector_no_convert`, variable, index)
 }
 
 integer_variable_get_index_of_set_vector <- function(variable, values_set) {

@@ -84,56 +84,6 @@ IntegerVariable <- R6Class(
       }
       stop("please provide a set of values to check, or both bounds of range [a,b]")    
     },
-
-    #' @description Queue an update for a variable. There are 4 types of variable update:
-    #'
-    #' \enumerate{
-    #'  \item{Subset update: }{The argument \code{index} represents a subset of the variable to
-    #' update. The argument \code{values} should be a vector whose length matches the size of \code{index},
-    #' which represents the new values for that subset.}
-    #'  \item{Subset fill: }{The argument \code{index} represents a subset of the variable to
-    #' update. The argument \code{values} should be a single number, which fills the specified subset.}
-    #'  \item{Variable reset: }{The index vector is set to \code{NULL} and the argument \code{values}
-    #' replaces all of the current values in the simulation. \code{values} should be a vector
-    #' whose length should match the size of the population, which fills all the variable values in
-    #' the population}
-    #'  \item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
-    #' should be a single number, which fills all of the variable values in 
-    #' the population.}
-    #' }
-    #' @param values a vector or scalar of values to assign at the index
-    #' @param index is the index at which to apply the change, use \code{NULL} for the
-    #' fill options. If using indices, this may be either a vector of integers or
-    #' a \code{\link[individual]{Bitset}}.
-    queue_update = function(values, index = NULL) {
-      stopifnot(is.numeric(values))
-      if(is.null(index)){
-        if(length(values) == 1){
-          integer_variable_queue_fill(
-            self$.variable,
-            values
-          )
-        } else {
-          integer_variable_queue_update(
-            self$.variable,
-            values,
-            numeric(0)
-          )
-        }
-      } else {
-        if (inherits(index, 'Bitset')) {
-          index <- index$to_vector()
-        }
-        if (length(index) != 0) {
-          stopifnot(all(index > 0))
-          integer_variable_queue_update(
-            self$.variable,
-            values,
-            index
-          )
-        }
-      }
-    },
     
     #' @description Queue an update for a variable. There are 4 types of variable update:
     #'
@@ -155,7 +105,7 @@ IntegerVariable <- R6Class(
     #' @param index is the index at which to apply the change, use \code{NULL} for the
     #' fill options. If using indices, this may be either a vector of integers or
     #' a \code{\link[individual]{Bitset}}.
-    queue_update_bitset = function(values, index = NULL) {
+    queue_update = function(values, index = NULL) {
       stopifnot(is.numeric(values))
       if(is.null(index)){
         if(length(values) == 1){

@@ -18,7 +18,6 @@ household or age bin.
 \item \href{#method-get_index_of}{\code{IntegerVariable$get_index_of()}}
 \item \href{#method-get_size_of}{\code{IntegerVariable$get_size_of()}}
 \item \href{#method-queue_update}{\code{IntegerVariable$queue_update()}}
-\item \href{#method-queue_update_bitset}{\code{IntegerVariable$queue_update_bitset()}}
 \item \href{#method-.update}{\code{IntegerVariable$.update()}}
 \item \href{#method-clone}{\code{IntegerVariable$clone()}}
 }
@@ -129,42 +128,6 @@ the population.}
 }
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$queue_update(values, index = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{values}}{a vector or scalar of values to assign at the index}
-
-\item{\code{index}}{is the index at which to apply the change, use \code{NULL} for the
-fill options. If using indices, this may be either a vector of integers or
-a \code{\link[individual]{Bitset}}.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-queue_update_bitset"></a>}}
-\if{latex}{\out{\hypertarget{method-queue_update_bitset}{}}}
-\subsection{Method \code{queue_update_bitset()}}{
-Queue an update for a variable. There are 4 types of variable update:
-
-\enumerate{
- \item{Subset update: }{The argument \code{index} represents a subset of the variable to
-update. The argument \code{values} should be a vector whose length matches the size of \code{index},
-which represents the new values for that subset.}
- \item{Subset fill: }{The argument \code{index} represents a subset of the variable to
-update. The argument \code{values} should be a single number, which fills the specified subset.}
- \item{Variable reset: }{The index vector is set to \code{NULL} and the argument \code{values}
-replaces all of the current values in the simulation. \code{values} should be a vector
-whose length should match the size of the population, which fills all the variable values in
-the population}
- \item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
-should be a single number, which fills all of the variable values in 
-the population.}
-}
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$queue_update_bitset(values, index = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

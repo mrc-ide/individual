@@ -17,9 +17,9 @@
 struct DoubleVariable;
 
 
-//' @title a variable object for signed integers
+//' @title a variable object for double precision floats
 //' @description This class provides functionality for variables which takes values
-//' in the signed integers. It inherits from Variable.
+//' in the real numbers. It inherits from Variable.
 //' It contains the following data members:
 //'     * updates: a priority queue of pairs of values and indices to update
 //'     * size: the number of elements stored (size of population)
