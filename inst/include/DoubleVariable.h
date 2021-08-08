@@ -14,44 +14,29 @@
 #include <queue>
 #include <sstream>
 
+struct DoubleVariable;
+
+
+//' @title a variable object for signed integers
+//' @description This class provides functionality for variables which takes values
+//' in the signed integers. It inherits from Variable.
+//' It contains the following data members:
+//'     * updates: a priority queue of pairs of values and indices to update
+//'     * size: the number of elements stored (size of population)
+//'     * values: a vector of values
 struct DoubleVariable : public Variable {
 
     using update_t = std::pair<std::vector<double>, std::vector<size_t>>;
     std::queue<update_t> updates;
     size_t size;
     std::vector<double> values;
+    
+    DoubleVariable(const std::vector<double>& values);
+    virtual ~DoubleVariable();
 
-    DoubleVariable(const std::vector<double>& values)
-        : size(values.size()), values(values)
-    {}
-
-
-    virtual std::vector<double>& get_values() {
-        return values;
-    }
-
-    virtual std::vector<double> get_values(const individual_index_t& index) {
-        if (size != index.max_size()) {
-            Rcpp::stop("incompatible size bitset used to get values from DoubleVariable");
-        }
-        auto result = std::vector<double>(index.size());
-        auto result_i = 0u;
-        for (auto i : index) {
-            result[result_i] = values[i];
-            ++result_i;
-        }
-        return result;
-    }
-
-    virtual std::vector<double> get_values(const std::vector<size_t>& index) {
-        auto result = std::vector<double>(index.size());
-        auto result_i = 0u;
-        for (auto i : index) {
-            result[result_i] = values.at(i);
-            ++result_i;
-        }
-        return result;
-    }
+    virtual std::vector<double> get_values() const;
+    virtual std::vector<double> get_values(const individual_index_t& index) const;
+    virtual std::vector<double> get_values(const std::vector<size_t>& index) const;
 
     // get indices of individuals whose value is in some [a,b]
     virtual individual_index_t get_index_of_range(
@@ -135,5 +120,39 @@ struct DoubleVariable : public Variable {
         }
     }
 };
+
+
+inline DoubleVariable::DoubleVariable(const std::vector<double>& values)
+    : size(values.size()), values(values)
+{}
+
+inline DoubleVariable::~DoubleVariable() {};
+
+inline std::vector<double> DoubleVariable::get_values() const {
+    return values;
+}
+
+inline std::vector<double> DoubleVariable::get_values(const individual_index_t& index) const {
+    if (size != index.max_size()) {
+        Rcpp::stop("incompatible size bitset used to get values from DoubleVariable");
+    }
+    auto result = std::vector<double>(index.size());
+    auto result_i = 0u;
+    for (auto i : index) {
+        result[result_i] = values[i];
+        ++result_i;
+    }
+    return result;
+}
+
+inline std::vector<double> DoubleVariable::get_values(const std::vector<size_t>& index) const {
+    auto result = std::vector<double>(index.size());
+    auto result_i = 0u;
+    for (auto i : index) {
+        result[result_i] = values.at(i);
+        ++result_i;
+    }
+    return result;
+}
 
 #endif /* INST_INCLUDE_DOUBLE_VARIABLE_H_ */

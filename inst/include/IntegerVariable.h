@@ -77,9 +77,7 @@ inline std::vector<int> IntegerVariable::get_values(const individual_index_t& in
 }
 
 inline std::vector<int> IntegerVariable::get_values(const std::vector<size_t>& index) const {
-    if (size != index.max_size()) {
-        Rcpp::stop("incompatible size vector used to get values from IntegerVariable");
-    }
+    
     auto result = std::vector<int>(index.size());
     for (auto i = 0u; i < index.size(); ++i) {
         result[i] = values[index[i]];
@@ -184,43 +182,80 @@ inline void IntegerVariable::queue_update(
 }
 
 // update
+// inline void IntegerVariable::update() {
+//     while(updates.size() > 0) {
+//         const auto& update = updates.front();
+//         const auto& values = update.first;
+//         const auto& index = update.second;
+//         if (values.size() == 0) {
+//             return;
+//         }
+//         
+//         auto vector_replacement = (index.size() == 0);
+//         auto value_fill = (values.size() == 1);
+//         
+//         auto& to_update = this->values;
+//         
+//         if (vector_replacement) {
+//             // For a full vector replacement
+//             if (value_fill) {
+//                 to_update = std::vector<int>(size, values[0]);
+//             } else {
+//                 to_update = values;
+//             }
+//         } else {
+//             if (value_fill) {
+//                 // For a fill update
+//                 for (auto i : index) {
+//                     to_update[i] = values[0];
+//                 }
+//             } else {
+//                 // Subset assignment
+//                 for (auto i = 0u; i < index.size(); ++i) {
+//                     to_update[index[i]] = values[i];
+//                 }
+//             }
+//         }
+//         updates.pop();
+//     }
+// }
+
 inline void IntegerVariable::update() {
     while(updates.size() > 0) {
         const auto& update = updates.front();
-        const auto& values = update.first;
+        const auto& new_values = update.first;
         const auto& index = update.second;
-        if (values.size() == 0) {
+        if (new_values.size() == 0) {
             return;
         }
         
         auto vector_replacement = (index.size() == 0);
-        auto value_fill = (values.size() == 1);
-        
-        auto& to_update = this->values;
+        auto value_fill = (new_values.size() == 1);
         
         if (vector_replacement) {
             // For a full vector replacement
             if (value_fill) {
-                to_update = std::vector<int>(size, values[0]);
+                std::fill(values.begin(), values.end(), new_values[0]);
             } else {
-                to_update = values;
+                values = new_values;
             }
         } else {
             if (value_fill) {
                 // For a fill update
                 for (auto i : index) {
-                    to_update[i] = values[0];
+                    values[i] = new_values[0];
                 }
             } else {
                 // Subset assignment
                 for (auto i = 0u; i < index.size(); ++i) {
-                    to_update[index[i]] = values[i];
+                    values[index[i]] = new_values[i];
                 }
             }
         }
         updates.pop();
     }
 }
+
 
 
 #endif /* INST_INCLUDE_INTEGER_VARIABLE_H_ */
