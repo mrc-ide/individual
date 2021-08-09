@@ -12,7 +12,6 @@
 #include "common_types.h"
 #include <Rcpp.h>
 #include <queue>
-#include <sstream>
 
 struct DoubleVariable;
 
@@ -53,10 +52,12 @@ inline DoubleVariable::DoubleVariable(const std::vector<double>& values)
 
 inline DoubleVariable::~DoubleVariable() {};
 
+//' @title get all values
 inline std::vector<double> DoubleVariable::get_values() const {
     return values;
 }
 
+//' @title get values at index given by a bitset
 inline std::vector<double> DoubleVariable::get_values(const individual_index_t& index) const {
     if (size != index.max_size()) {
         Rcpp::stop("incompatible size bitset used to get values from DoubleVariable");
@@ -70,6 +71,7 @@ inline std::vector<double> DoubleVariable::get_values(const individual_index_t& 
     return result;
 }
 
+//' @title get values at index given by a vector
 inline std::vector<double> DoubleVariable::get_values(const std::vector<size_t>& index) const {
     
     auto result = std::vector<double>(index.size());
@@ -79,7 +81,7 @@ inline std::vector<double> DoubleVariable::get_values(const std::vector<size_t>&
     return result;
 }
 
-// get indices of individuals whose value is in some [a,b]
+//' @title return bitset giving index of individuals whose value is in some range [a,b]
 inline individual_index_t DoubleVariable::get_index_of_range(
         const double a, const double b
 ) const {
@@ -95,7 +97,7 @@ inline individual_index_t DoubleVariable::get_index_of_range(
     
 }
 
-// get indices of individuals whose value is in some [a,b]
+//' @title return number of individuals whose value is in some range [a,b]
 inline size_t DoubleVariable::get_size_of_range(
         const double a, const double b
 ) const {
@@ -108,6 +110,7 @@ inline size_t DoubleVariable::get_size_of_range(
     
 }
 
+//' @title queue a state update for some subset of individuals
 inline void DoubleVariable::queue_update(
         const std::vector<double>& values,
         const std::vector<size_t>& index
@@ -123,6 +126,7 @@ inline void DoubleVariable::queue_update(
     updates.push({ values, index });
 }
 
+//' @title apply all queued state updates in LIFO order
 inline void DoubleVariable::update() {
     while(updates.size() > 0) {
         const auto& update = updates.front();

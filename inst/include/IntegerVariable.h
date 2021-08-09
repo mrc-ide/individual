@@ -57,12 +57,12 @@ inline IntegerVariable::IntegerVariable(const std::vector<int>& values)
 
 inline IntegerVariable::~IntegerVariable() {};
 
-// get all values
+//' @title get all values
 inline std::vector<int> IntegerVariable::get_values() const {
     return values;
 }
 
-// get value of individuals
+//' @title get values at index given by a bitset
 inline std::vector<int> IntegerVariable::get_values(const individual_index_t& index) const {
     if (size != index.max_size()) {
         Rcpp::stop("incompatible size bitset used to get values from IntegerVariable");
@@ -76,6 +76,7 @@ inline std::vector<int> IntegerVariable::get_values(const individual_index_t& in
     return result;
 }
 
+//' @title get values at index given by a vector
 inline std::vector<int> IntegerVariable::get_values(const std::vector<size_t>& index) const {
     
     auto result = std::vector<int>(index.size());
@@ -85,7 +86,7 @@ inline std::vector<int> IntegerVariable::get_values(const std::vector<size_t>& i
     return result;
 }
 
-// get indices of individuals whose value is in some set
+//' @title return bitset giving index of individuals whose value is in a finite set
 inline individual_index_t IntegerVariable::get_index_of_set(
     const std::vector<int>& values_set
 ) const {
@@ -101,7 +102,7 @@ inline individual_index_t IntegerVariable::get_index_of_set(
     return result;
 }
 
-// get indices of individuals with a particular value
+//' @title return bitset giving index of individuals whose value is equal to a specific scalar
 inline individual_index_t IntegerVariable::get_index_of_set(
     const int value
 ) const {
@@ -116,7 +117,7 @@ inline individual_index_t IntegerVariable::get_index_of_set(
     return result;
 }
 
-// get indices of individuals whose value is in some [a,b]
+//' @title return bitset giving index of individuals whose value is in some range [a,b]
 inline individual_index_t IntegerVariable::get_index_of_range(
         const int a, const int b
 ) const {
@@ -131,7 +132,7 @@ inline individual_index_t IntegerVariable::get_index_of_range(
     return result;
 }
 
-// get number of individuals whose value is in some set
+//' @title return number of individuals whose value is in a finite set
 inline size_t IntegerVariable::get_size_of_set_vector(
         const std::vector<int>& values_set
 ) const {
@@ -144,7 +145,7 @@ inline size_t IntegerVariable::get_size_of_set_vector(
     return result;
 }
 
-// get number of individuals with a particular value
+//' @title return number of individuals whose value is equal to a specific scalar
 inline size_t IntegerVariable::get_size_of_set_scalar(
         const int value
 ) const {
@@ -153,7 +154,7 @@ inline size_t IntegerVariable::get_size_of_set_scalar(
     return result;
 }
 
-// get number of individuals whose value is in some [a,b]
+//' @title return number of individuals whose value is in some range [a,b]
 inline size_t IntegerVariable::get_size_of_range(
         const int a, const int b
 ) const {
@@ -164,8 +165,7 @@ inline size_t IntegerVariable::get_size_of_range(
     return result;
 }
 
-
-// queue variable update
+//' @title queue a state update for some subset of individuals
 inline void IntegerVariable::queue_update(
         const std::vector<int>& values,
         const std::vector<size_t>& index
@@ -181,45 +181,7 @@ inline void IntegerVariable::queue_update(
     updates.push({ values, index });
 }
 
-// update
-// inline void IntegerVariable::update() {
-//     while(updates.size() > 0) {
-//         const auto& update = updates.front();
-//         const auto& values = update.first;
-//         const auto& index = update.second;
-//         if (values.size() == 0) {
-//             return;
-//         }
-//         
-//         auto vector_replacement = (index.size() == 0);
-//         auto value_fill = (values.size() == 1);
-//         
-//         auto& to_update = this->values;
-//         
-//         if (vector_replacement) {
-//             // For a full vector replacement
-//             if (value_fill) {
-//                 to_update = std::vector<int>(size, values[0]);
-//             } else {
-//                 to_update = values;
-//             }
-//         } else {
-//             if (value_fill) {
-//                 // For a fill update
-//                 for (auto i : index) {
-//                     to_update[i] = values[0];
-//                 }
-//             } else {
-//                 // Subset assignment
-//                 for (auto i = 0u; i < index.size(); ++i) {
-//                     to_update[index[i]] = values[i];
-//                 }
-//             }
-//         }
-//         updates.pop();
-//     }
-// }
-
+//' @title apply all queued state updates in LIFO order
 inline void IntegerVariable::update() {
     while(updates.size() > 0) {
         const auto& update = updates.front();
@@ -257,7 +219,5 @@ inline void IntegerVariable::update() {
         updates.pop();
     }
 }
-
-
 
 #endif /* INST_INCLUDE_INTEGER_VARIABLE_H_ */
