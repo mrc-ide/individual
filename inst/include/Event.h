@@ -36,7 +36,7 @@ struct EventBase {
     }
 
     virtual bool should_trigger() = 0;
-    virtual ~EventBase() {};
+    virtual ~EventBase() = default;
 };
 
 struct Event : public EventBase {

@@ -31,7 +31,7 @@ struct CategoricalVariable : public Variable {
     std::queue<update_t> updates;
 
     CategoricalVariable(const std::vector<std::string> categories, const std::vector<std::string> values);
-    virtual ~CategoricalVariable();
+    virtual ~CategoricalVariable() = default;
 
     virtual individual_index_t get_index_of(const std::vector<std::string> categories) const;
     virtual individual_index_t get_index_of(const std::string category) const;
@@ -58,7 +58,7 @@ inline CategoricalVariable::CategoricalVariable(
     }
 }
 
-inline CategoricalVariable::~CategoricalVariable() {};
+// inline CategoricalVariable::~CategoricalVariable() {};
 
 //' @title return bitset giving index of individuals whose value is in a set of categories
 inline individual_index_t CategoricalVariable::get_index_of(

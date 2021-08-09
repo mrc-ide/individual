@@ -31,7 +31,7 @@ struct DoubleVariable : public Variable {
     std::vector<double> values;
     
     DoubleVariable(const std::vector<double>& values);
-    virtual ~DoubleVariable();
+    virtual ~DoubleVariable() = default;
 
     virtual std::vector<double> get_values() const;
     virtual std::vector<double> get_values(const individual_index_t& index) const;
@@ -50,7 +50,7 @@ inline DoubleVariable::DoubleVariable(const std::vector<double>& values)
     : size(values.size()), values(values)
 {}
 
-inline DoubleVariable::~DoubleVariable() {};
+// inline DoubleVariable::~DoubleVariable() {};
 
 //' @title get all values
 inline std::vector<double> DoubleVariable::get_values() const {
