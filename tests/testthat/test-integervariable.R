@@ -24,6 +24,14 @@ test_that("getting variables at an index works", {
   expect_equal(sequence_2$get_values(5:10), 15:20)
 })
 
+test_that("getting values with incompatible index fails", {
+  x <- IntegerVariable$new(initial_values = 1:100)
+  b <- Bitset$new(1000)$insert(90:110)
+  expect_error(x$get_values(b))
+  expect_error(x$get_values(90:110))
+  expect_error(x$get_values(-5:2))
+})
+
 test_that("getting a set of IntegerVariable indices which exist works", {
   
   vals <- 5:10

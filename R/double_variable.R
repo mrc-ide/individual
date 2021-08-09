@@ -23,6 +23,7 @@ DoubleVariable <- R6Class(
         return(double_variable_get_values(self$.variable))
       }
       if (is.numeric(index)) {
+        stopifnot(all(index > 0))
         return(double_variable_get_values_at_index_vector(self$.variable, index))
       }
       double_variable_get_values_at_index(self$.variable, index$.bitset)
