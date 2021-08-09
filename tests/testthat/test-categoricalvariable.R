@@ -26,6 +26,10 @@ test_that("getting a non registered state index fails", {
     state$get_index_of('R'),
     '*'
   )
+  expect_error(
+    state$get_index_of(c('R', 'S')),
+    '*'
+  )
 })
 
 test_that("getting the size of CategoricalVariable category works", {

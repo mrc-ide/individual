@@ -12,72 +12,31 @@
 #include "common_types.h"
 #include <Rcpp.h>
 #include <queue>
-#include <sstream>
 
+struct CategoricalVariable;
+
+
+//' @title a variable object for categorical variables
+//' @description This class provides functionality for variables which takes values
+//' in a discrete finite set. It inherits from Variable.
+//' It contains the following data members:
+//'     * indices: an unordered_map mapping strings to bitsets
+//'     * size: size of the populations
+//'     * updates: a priority queue of pairs of values and indices to update
 struct CategoricalVariable : public Variable {
+    
     named_array_t<individual_index_t> indices;
-
     size_t size;
-
     using update_t = std::pair<std::string, individual_index_t>;
     std::queue<update_t> updates;
 
-    CategoricalVariable(
-        const std::vector<std::string> categories, 
-        const std::vector<std::string> values
-    ) : size(values.size())
-    {
-        for (auto& category : categories) {
-            indices.insert({ category, individual_index_t(size) });
-        }
-        for (auto i = 0u; i < size; ++i) {
-            indices.at(values[i]).insert(i);
-        }
-    }
+    CategoricalVariable(const std::vector<std::string> categories, const std::vector<std::string> values);
+    virtual ~CategoricalVariable();
 
-    virtual individual_index_t get_index_of(
-        const std::vector<std::string> categories
-    ) const {
-        auto result = individual_index_t(size);
-        for (auto& category : categories) {
-            if (indices.find(category) == indices.end()) {
-                std::stringstream message;
-                message << "unknown category: " << category;
-                Rcpp::stop(message.str());
-            }
-            result |= indices.at(category);
-        }
-        return result;
-    }
+    virtual individual_index_t get_index_of(const std::vector<std::string> categories) const;
+    virtual individual_index_t get_index_of(const std::string category) const;
 
-    virtual individual_index_t get_index_of(
-        const std::string category
-    ) const {
-        auto result = individual_index_t(size);
-        if (indices.find(category) == indices.end()) {
-            std::stringstream message;
-            message << "unknown category: " << category;
-            Rcpp::stop(message.str()); 
-        }
-        result |= indices.at(category);
-        return result;
-    }
-
-    virtual int get_size_of(
-        const std::vector<std::string> categories        
-    ) const {
-        int result{0};
-        for (const auto& category : categories) {
-            if (indices.find(category) == indices.end()) {
-                std::stringstream message;
-                message << "unknown category: " << category;
-                Rcpp::stop(message.str());
-            } else {
-                result += indices.at(category).size();
-            }            
-        }
-        return result;
-    }
+    virtual int get_size_of(const std::vector<std::string> categories) const;
 
     virtual int get_size_of(
         const std::string category        
@@ -117,5 +76,68 @@ struct CategoricalVariable : public Variable {
         }
     }
 };
+
+
+inline CategoricalVariable::CategoricalVariable(
+    const std::vector<std::string> categories, 
+    const std::vector<std::string> values
+) : size(values.size())
+{
+    for (auto& category : categories) {
+        indices.insert({ category, individual_index_t(size) });
+    }
+    for (auto i = 0u; i < size; ++i) {
+        indices.at(values[i]).insert(i);
+    }
+}
+
+inline CategoricalVariable::~CategoricalVariable() {};
+
+//' @title return bitset giving index of individuals whose value is in a set of categories
+inline individual_index_t CategoricalVariable::get_index_of(
+        const std::vector<std::string> categories
+) const {
+    auto result = individual_index_t(size);
+    for (auto& category : categories) {
+        if (indices.find(category) == indices.end()) {
+            std::stringstream message;
+            message << "unknown category: " << category;
+            Rcpp::stop(message.str());
+        }
+        result |= indices.at(category);
+    }
+    return result;
+}
+
+//' @title return bitset giving index of individuals whose value is equal to some category
+inline individual_index_t CategoricalVariable::get_index_of(
+        const std::string category
+) const {
+    auto result = individual_index_t(size);
+    if (indices.find(category) == indices.end()) {
+        std::stringstream message;
+        message << "unknown category: " << category;
+        Rcpp::stop(message.str()); 
+    }
+    result |= indices.at(category);
+    return result;
+}
+
+//' @title return number of individuals whose value is in a set of categories
+inline int CategoricalVariable::get_size_of(
+        const std::vector<std::string> categories        
+) const {
+    int result{0};
+    for (const auto& category : categories) {
+        if (indices.find(category) == indices.end()) {
+            std::stringstream message;
+            message << "unknown category: " << category;
+            Rcpp::stop(message.str());
+        } else {
+            result += indices.at(category).size();
+        }            
+    }
+    return result;
+}
 
 #endif /* INST_INCLUDE_CATEGORICAL_VARIABLE_H_ */
