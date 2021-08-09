@@ -112,17 +112,6 @@ void bitset_sample_vector(
 
 //[[Rcpp::export]]
 std::vector<size_t> bitset_to_vector(const Rcpp::XPtr<individual_index_t> b) {
-    auto result = std::vector<size_t>(b->size());
-    auto i = 0u;
-    for (auto v : *b) {
-        result[i] = v + 1;
-        ++i;
-    }
-    return result;
-}
-
-//[[Rcpp::export]]
-std::vector<size_t> bitset_to_vector_call_internal(const Rcpp::XPtr<individual_index_t> b) {
     return bitset_to_vector_internal(*b);
 }
 

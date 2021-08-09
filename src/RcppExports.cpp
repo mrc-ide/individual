@@ -168,17 +168,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// bitset_to_vector_call_internal
-std::vector<size_t> bitset_to_vector_call_internal(const Rcpp::XPtr<individual_index_t> b);
-RcppExport SEXP _individual_bitset_to_vector_call_internal(SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(bitset_to_vector_call_internal(b));
-    return rcpp_result_gen;
-END_RCPP
-}
 // filter_bitset_vector
 Rcpp::XPtr<individual_index_t> filter_bitset_vector(const Rcpp::XPtr<individual_index_t> b, std::vector<size_t> other);
 RcppExport SEXP _individual_filter_bitset_vector(SEXP bSEXP, SEXP otherSEXP) {
@@ -894,7 +883,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_bitset_sample", (DL_FUNC) &_individual_bitset_sample, 2},
     {"_individual_bitset_sample_vector", (DL_FUNC) &_individual_bitset_sample_vector, 2},
     {"_individual_bitset_to_vector", (DL_FUNC) &_individual_bitset_to_vector, 1},
-    {"_individual_bitset_to_vector_call_internal", (DL_FUNC) &_individual_bitset_to_vector_call_internal, 1},
     {"_individual_filter_bitset_vector", (DL_FUNC) &_individual_filter_bitset_vector, 2},
     {"_individual_filter_bitset_bitset", (DL_FUNC) &_individual_filter_bitset_bitset, 2},
     {"_individual_bitset_choose", (DL_FUNC) &_individual_bitset_choose, 2},

@@ -36,7 +36,6 @@ if you would like to perform an operation without destroying your current bitset
 \item \href{#method-choose}{\code{Bitset$choose()}}
 \item \href{#method-copy}{\code{Bitset$copy()}}
 \item \href{#method-to_vector}{\code{Bitset$to_vector()}}
-\item \href{#method-to_vector_internal}{\code{Bitset$to_vector_internal()}}
 \item \href{#method-clone}{\code{Bitset$clone()}}
 }
 }
@@ -241,17 +240,6 @@ return an integer vector of the elements
 stored in this bitset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Bitset$to_vector()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_vector_internal"></a>}}
-\if{latex}{\out{\hypertarget{method-to_vector_internal}{}}}
-\subsection{Method \code{to_vector_internal()}}{
-return an integer vector of the elements
-stored in this bitset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$to_vector_internal()}\if{html}{\out{</div>}}
 }
 
 }

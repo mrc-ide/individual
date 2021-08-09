@@ -22,6 +22,9 @@ test_that("getting variables at an index works", {
   expect_equal(sequence$get_values(NULL), 1:10)
   expect_error(sequence_2$get_values(5:15))
   expect_equal(sequence_2$get_values(5:10), 15:20)
+  
+  b <- Bitset$new(size)$insert(5:10)
+  expect_equal(sequence_2$get_values(b), 15:20)
 })
 
 test_that("getting indices of DoubleVariable in a range works", {
@@ -34,6 +37,9 @@ test_that("getting indices of DoubleVariable in a range works", {
   
   expect_length(empty$to_vector(), 0)
   expect_equal(full$to_vector(), match_full)
+  
+  expect_error(var$get_size_of(a = 50,b = 10))
+  expect_error(var$get_size_of(a = 0,b = -5))
 })
 
 test_that("getting size of DoubleVariable in a range works", {
@@ -48,8 +54,10 @@ test_that("getting size of DoubleVariable in a range works", {
   expect_equal(full, match_full)
 })
 
-test_that("getting values from DoubleVariable with bitset of incompatible size fails", {
+test_that("getting values from DoubleVariable with incompatible index fails", {
   x <- DoubleVariable$new(initial_values = 1:100)
   b <- Bitset$new(1000)$insert(90:110)
   expect_error(x$get_values(b))
+  expect_error(x$get_values(90:110))
+  expect_error(x$get_values(-5:2))
 })
