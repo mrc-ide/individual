@@ -36,45 +36,12 @@ struct CategoricalVariable : public Variable {
     virtual individual_index_t get_index_of(const std::vector<std::string> categories) const;
     virtual individual_index_t get_index_of(const std::string category) const;
 
-    virtual int get_size_of(const std::vector<std::string> categories) const;
+    virtual size_t get_size_of(const std::vector<std::string> categories) const;
+    virtual size_t get_size_of(const std::string category) const;
 
-    virtual int get_size_of(
-        const std::string category        
-    ) const {
-        int result{0};
-        if (indices.find(category) == indices.end()) {
-            std::stringstream message;
-            message << "unknown category: " << category;
-            Rcpp::stop(message.str());
-        } else {
-            result += indices.at(category).size();
-        }            
-        return result;
-    }
-
-    virtual void queue_update(
-        const std::string category,
-        const individual_index_t& index
-    ) {
-        updates.push({ category, index });
-    }
-
-    virtual void update() override {
-        while(updates.size() > 0) {
-            auto& next = updates.front();
-            auto inverse_update = ~next.second;
-            for (auto& entry : indices) {
-                if (entry.first == next.first) {
-                    // destination state
-                    entry.second |= next.second;
-                } else {
-                    // other state
-                    entry.second &= inverse_update;
-                }
-            }
-            updates.pop();
-        }
-    }
+    virtual void queue_update(const std::string category, const individual_index_t& index);
+    virtual void update() override;
+    
 };
 
 
@@ -113,21 +80,19 @@ inline individual_index_t CategoricalVariable::get_index_of(
 inline individual_index_t CategoricalVariable::get_index_of(
         const std::string category
 ) const {
-    auto result = individual_index_t(size);
     if (indices.find(category) == indices.end()) {
         std::stringstream message;
         message << "unknown category: " << category;
         Rcpp::stop(message.str()); 
     }
-    result |= indices.at(category);
-    return result;
+    return individual_index_t(indices.at(category));
 }
 
 //' @title return number of individuals whose value is in a set of categories
-inline int CategoricalVariable::get_size_of(
+inline size_t CategoricalVariable::get_size_of(
         const std::vector<std::string> categories        
 ) const {
-    int result{0};
+    size_t result{0};
     for (const auto& category : categories) {
         if (indices.find(category) == indices.end()) {
             std::stringstream message;
@@ -138,6 +103,47 @@ inline int CategoricalVariable::get_size_of(
         }            
     }
     return result;
+}
+
+//' @title return number of individuals whose value is equal to some category
+inline size_t CategoricalVariable::get_size_of(
+        const std::string category        
+) const {
+    size_t result{0};
+    if (indices.find(category) == indices.end()) {
+        std::stringstream message;
+        message << "unknown category: " << category;
+        Rcpp::stop(message.str());
+    } else {
+        result += indices.at(category).size();
+    }            
+    return result;
+}
+
+//' @title queue a state update for some subset of individuals
+inline void CategoricalVariable::queue_update(
+        const std::string category,
+        const individual_index_t& index
+) {
+    updates.push({ category, index });
+}
+
+//' @title apply all queued state updates in LIFO order
+inline void CategoricalVariable::update() {
+    while(updates.size() > 0) {
+        auto& next = updates.front();
+        auto inverse_update = ~next.second;
+        for (auto& entry : indices) {
+            if (entry.first == next.first) {
+                // destination state
+                entry.second |= next.second;
+            } else {
+                // other state
+                entry.second &= inverse_update;
+            }
+        }
+        updates.pop();
+    }
 }
 
 #endif /* INST_INCLUDE_CATEGORICAL_VARIABLE_H_ */
