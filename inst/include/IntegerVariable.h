@@ -55,8 +55,6 @@ inline IntegerVariable::IntegerVariable(const std::vector<int>& values)
     : size(values.size()), values(values)
 {}
 
-// inline IntegerVariable::~IntegerVariable() {};
-
 //' @title get all values
 inline std::vector<int> IntegerVariable::get_values() const {
     return values;

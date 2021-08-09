@@ -50,8 +50,6 @@ inline DoubleVariable::DoubleVariable(const std::vector<double>& values)
     : size(values.size()), values(values)
 {}
 
-// inline DoubleVariable::~DoubleVariable() {};
-
 //' @title get all values
 inline std::vector<double> DoubleVariable::get_values() const {
     return values;

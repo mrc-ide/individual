@@ -58,8 +58,6 @@ inline CategoricalVariable::CategoricalVariable(
     }
 }
 
-// inline CategoricalVariable::~CategoricalVariable() {};
-
 //' @title return bitset giving index of individuals whose value is in a set of categories
 inline individual_index_t CategoricalVariable::get_index_of(
         const std::vector<std::string> categories
