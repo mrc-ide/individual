@@ -383,7 +383,7 @@ inline void IterableBitset<A>::insert(size_t v) {
 
 template<class A>
 inline void IterableBitset<A>::insert_safe(size_t v) {
-    if (v < 0 || v >= max_n) {
+    if (v >= max_n) {
         Rcpp::stop("Insert out of range");
     }
     insert(v);
