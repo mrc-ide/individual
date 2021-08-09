@@ -126,7 +126,7 @@ inline void CategoricalVariable::queue_update(
     updates.push({ category, index });
 }
 
-//' @title apply all queued state updates in LIFO order
+//' @title apply all queued state updates in FIFO order
 inline void CategoricalVariable::update() {
     while(updates.size() > 0) {
         auto& next = updates.front();

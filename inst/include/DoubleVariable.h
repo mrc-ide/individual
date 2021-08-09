@@ -124,7 +124,7 @@ inline void DoubleVariable::queue_update(
     updates.push({ values, index });
 }
 
-//' @title apply all queued state updates in LIFO order
+//' @title apply all queued state updates in FIFO order
 inline void DoubleVariable::update() {
     while(updates.size() > 0) {
         const auto& update = updates.front();
