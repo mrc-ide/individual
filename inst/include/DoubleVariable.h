@@ -119,7 +119,7 @@ inline void DoubleVariable::queue_update(
         Rcpp::stop("Mismatch between value and index length");
     }
     for (auto i : index) {
-        if (i < 0 || i >= size) {
+        if (i >= size) {
             Rcpp::stop("Index out of bounds");
         }
     }
