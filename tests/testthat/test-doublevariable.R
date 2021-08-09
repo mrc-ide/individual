@@ -61,3 +61,42 @@ test_that("getting values from DoubleVariable with incompatible index fails", {
   expect_error(x$get_values(90:110))
   expect_error(x$get_values(-5:2))
 })
+
+test_that("queueing updates with bad inputs fails or does nothing", {
+  x <- DoubleVariable$new(initial_values = 1:10)
+  x$queue_update(values = numeric(0), index = 1:10)
+  x$.update()
+  expect_equal(x$get_values(), 1:10)
+  
+  x$queue_update(values = numeric(0), index = Bitset$new(10)$insert(1:3))
+  x$.update()
+  expect_equal(x$get_values(), 1:10)
+  
+  x$queue_update(values = 10, index = Bitset$new(0))
+  x$.update()
+  expect_equal(x$get_values(), 1:10)
+  
+  x$queue_update(values = 10, index = integer(0))
+  x$.update()
+  expect_equal(x$get_values(), 1:10)
+  
+  expect_error(x$queue_update(values = 10, index = -5:-3))
+  
+  x$queue_update(values = 10, index = Bitset$new(100))
+  x$.update()
+  expect_equal(x$get_values(), 1:10)
+  
+  expect_error(x$queue_update(values = 10, index = Bitset$new(100)$insert(1:50)))
+})
+
+test_that("get size of method fails correctly with bad inputs", {
+  x <- DoubleVariable$new(initial_values = 1:10)
+  expect_error(x$get_size_of(a = 5))
+  expect_error(x$get_size_of(b = 5))
+})
+
+test_that("get index of method fails correctly with bad inputs", {
+  x <- DoubleVariable$new(initial_values = 1:10)
+  expect_error(x$get_index_of(a = 5))
+  expect_error(x$get_index_of(b = 5))
+})

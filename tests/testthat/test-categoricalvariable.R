@@ -4,6 +4,12 @@ test_that("getting the state works", {
   expect_setequal(state$get_index_of('S')$to_vector(), seq(10))
 })
 
+test_that("stores categories", {
+  population <- 10
+  state <- CategoricalVariable$new(c('S', 'I', 'R'), rep('S', population))
+  expect_length(setdiff(state$get_categories(), c('S', 'I', 'R')), 0)
+})
+
 test_that("Getting multiple states works", {
   state <- CategoricalVariable$new(
     c('S', 'I', 'R'),
@@ -14,6 +20,15 @@ test_that("Getting multiple states works", {
     state$get_index_of(c('S', 'R'))$to_vector(),
     c(seq(10), seq(20) + 110)
   )
+  
+  expect_equal(state$get_size_of(c('S', 'I')), 110)
+  
+  expect_setequal(
+    state$get_index_of(c('S'))$to_vector(),
+    seq(10)
+  )
+  
+  expect_equal(state$get_size_of(c('S')), 10)
 })
 
 test_that("getting a non registered state index fails", {

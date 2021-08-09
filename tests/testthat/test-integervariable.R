@@ -32,6 +32,7 @@ test_that("getting values with incompatible index fails", {
   expect_error(x$get_values(-5:2))
 })
 
+
 test_that("getting a set of IntegerVariable indices which exist works", {
   
   vals <- 5:10
@@ -117,7 +118,7 @@ test_that("getting size of a interval of IntegerVariable values which do not exi
   a <- -50
   b <- -40
   expect_equal(intvar$get_size_of(a = a, b = b), 0)
-})
+})+
 
 test_that("using a, b in IntegerVariable size and index methods works", {
   intvar <- IntegerVariable$new(rep(1:10,each=3))
@@ -134,4 +135,49 @@ test_that("getting values from IntegerVariable with bitset of incompatible size 
   x <- IntegerVariable$new(initial_values = 1:100)
   b <- Bitset$new(1000)$insert(90:110)
   expect_error(x$get_values(b))
+})
+
+test_that("queueing updates with bad inputs fails or does nothing", {
+  x <- IntegerVariable$new(initial_values = 1:10)
+  x$queue_update(values = numeric(0), index = 1:10)
+  x$.update()
+  expect_equal(x$get_values(), 1:10)
+  
+  x$queue_update(values = numeric(0), index = Bitset$new(10)$insert(1:3))
+  x$.update()
+  expect_equal(x$get_values(), 1:10)
+  
+  x$queue_update(values = 10, index = Bitset$new(0))
+  x$.update()
+  expect_equal(x$get_values(), 1:10)
+  
+  x$queue_update(values = 10, index = integer(0))
+  x$.update()
+  expect_equal(x$get_values(), 1:10)
+  
+  expect_error(x$queue_update(values = 10, index = -5:-3))
+  
+  x$queue_update(values = 10, index = Bitset$new(100))
+  x$.update()
+  expect_equal(x$get_values(), 1:10)
+  
+  expect_error(x$queue_update(values = 10, index = Bitset$new(100)$insert(1:50)))
+})
+
+test_that("get size of method fails correctly with bad inputs", {
+  x <- IntegerVariable$new(initial_values = 1:10)
+  expect_error(x$get_size_of(a = 5))
+  expect_error(x$get_size_of(b = 5))
+  # ignore other inputs if provide set
+  expect_equal(x$get_size_of(set = 5), x$get_size_of(set = 5,a = 1))
+  expect_equal(x$get_size_of(set = 5), x$get_size_of(set = 5,b = 4))
+})
+
+test_that("get index of method fails correctly with bad inputs", {
+  x <- IntegerVariable$new(initial_values = 1:10)
+  expect_error(x$get_index_of(a = 5))
+  expect_error(x$get_index_of(b = 5))
+  # ignore other inputs if provide set
+  expect_equal(x$get_index_of(set = 5)$to_vector(), x$get_index_of(set = 5,a = 1)$to_vector())
+  expect_equal(x$get_index_of(set = 5)$to_vector(), x$get_index_of(set = 5,b = 4)$to_vector())
 })

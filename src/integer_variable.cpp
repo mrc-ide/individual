@@ -127,6 +127,9 @@ void integer_variable_queue_update_bitset(
         const std::vector<int> value,
         Rcpp::XPtr<individual_index_t> index
 ) {
+    if (index->max_size() != variable->size) {
+        Rcpp::stop("incompatible size bitset used to queue update for IntegerVariable");
+    }
     auto index_vec = bitset_to_vector_internal(*index, false);
     variable->queue_update(value, index_vec);
 }
