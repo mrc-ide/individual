@@ -116,7 +116,7 @@ inline size_t CategoricalVariable::get_size_of(
         Rcpp::stop(message.str());
     } else {
         result += indices.at(category).size();
-    }            
+    }
     return result;
 }
 

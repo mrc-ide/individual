@@ -10,7 +10,6 @@
 
 #include <cmath>
 #include <Rcpp.h>
-#include <bitset>
 
 template<class A>
 class IterableBitset;
