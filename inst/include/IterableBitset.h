@@ -10,7 +10,6 @@
 
 #include <cmath>
 #include <Rcpp.h>
-#include <bitset>
 
 template<class A>
 class IterableBitset;
@@ -384,7 +383,7 @@ inline void IterableBitset<A>::insert(size_t v) {
 
 template<class A>
 inline void IterableBitset<A>::insert_safe(size_t v) {
-    if (v < 0 || v >= max_n) {
+    if (v >= max_n) {
         Rcpp::stop("Insert out of range");
     }
     insert(v);
@@ -403,6 +402,26 @@ inline typename IterableBitset<A>::size_type IterableBitset<A>::max_size() const
 template<class A>
 inline bool IterableBitset<A>::empty() const {
     return n == 0;
+}
+
+//' @title bitset to vector
+//' @description return a vector of unsigned ints indicating which bits are set
+template<class A>
+inline std::vector<size_t> bitset_to_vector_internal(
+  const IterableBitset<A>& b,
+  const bool addone = true
+) {
+  auto offset = 0u;
+  if (addone) {
+    offset = 1u;
+  }
+  auto result = std::vector<size_t>(b.size());
+  auto i = 0u;
+  for (auto v : b) {
+    result[i] = v + offset;
+    ++i;
+  }
+  return result;
 }
 
 //' @title filter the bitset

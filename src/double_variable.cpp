@@ -83,6 +83,19 @@ void double_variable_queue_update(
 }
 
 //[[Rcpp::export]]
+void double_variable_queue_update_bitset(
+        Rcpp::XPtr<DoubleVariable> variable,
+        const std::vector<double> value,
+        Rcpp::XPtr<individual_index_t> index
+) {
+    if (index->max_size() != variable->size) {
+        Rcpp::stop("incompatible size bitset used to queue update for DoubleVariable");
+    }
+    auto index_vec = bitset_to_vector_internal(*index, false);
+    variable->queue_update(value, index_vec);
+}
+
+//[[Rcpp::export]]
 void double_variable_update(Rcpp::XPtr<DoubleVariable> variable) {
     variable->update();
 }

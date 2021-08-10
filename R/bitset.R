@@ -115,6 +115,7 @@ Bitset <- R6Class(
     #' @description return an integer vector of the elements
     #' stored in this bitset
     to_vector = function() bitset_to_vector(self$.bitset)
+    
   )
 )
 

@@ -36,13 +36,11 @@ std::vector<int> integer_variable_get_values_at_index(
 
 //[[Rcpp::export]]
 std::vector<int> integer_variable_get_values_at_index_vector(
-    Rcpp::XPtr<IntegerVariable> variable,
-    std::vector<size_t> index
-    ) {
+        Rcpp::XPtr<IntegerVariable> variable,
+        std::vector<size_t> index
+) {
     decrement(index);
-    auto bitmap = individual_index_t(variable->size);
-    bitmap.insert_safe(index.begin(), index.end());
-    return variable->get_values(bitmap);
+    return variable->get_values(index);
 }
 
 // [[Rcpp::export]]
@@ -121,6 +119,19 @@ void integer_variable_queue_update(
 ) {
     decrement(index);
     variable->queue_update(value, index);
+}
+
+//[[Rcpp::export]]
+void integer_variable_queue_update_bitset(
+        Rcpp::XPtr<IntegerVariable> variable,
+        const std::vector<int> value,
+        Rcpp::XPtr<individual_index_t> index
+) {
+    if (index->max_size() != variable->size) {
+        Rcpp::stop("incompatible size bitset used to queue update for IntegerVariable");
+    }
+    auto index_vec = bitset_to_vector_internal(*index, false);
+    variable->queue_update(value, index_vec);
 }
 
 //[[Rcpp::export]]

@@ -9,6 +9,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // create_bitset
 Rcpp::XPtr<individual_index_t> create_bitset(size_t size);
 RcppExport SEXP _individual_create_bitset(SEXP sizeSEXP) {
@@ -406,6 +411,18 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// double_variable_queue_update_bitset
+void double_variable_queue_update_bitset(Rcpp::XPtr<DoubleVariable> variable, const std::vector<double> value, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_double_variable_queue_update_bitset(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    double_variable_queue_update_bitset(variable, value, index);
+    return R_NilValue;
+END_RCPP
+}
 // double_variable_update
 void double_variable_update(Rcpp::XPtr<DoubleVariable> variable);
 RcppExport SEXP _individual_double_variable_update(SEXP variableSEXP) {
@@ -736,6 +753,18 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// integer_variable_queue_update_bitset
+void integer_variable_queue_update_bitset(Rcpp::XPtr<IntegerVariable> variable, const std::vector<int> value, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_integer_variable_queue_update_bitset(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<int> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    integer_variable_queue_update_bitset(variable, value, index);
+    return R_NilValue;
+END_RCPP
+}
 // integer_variable_update
 void integer_variable_update(Rcpp::XPtr<IntegerVariable> variable);
 RcppExport SEXP _individual_integer_variable_update(SEXP variableSEXP) {
@@ -873,6 +902,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_double_variable_get_size_of_range", (DL_FUNC) &_individual_double_variable_get_size_of_range, 3},
     {"_individual_double_variable_queue_fill", (DL_FUNC) &_individual_double_variable_queue_fill, 2},
     {"_individual_double_variable_queue_update", (DL_FUNC) &_individual_double_variable_queue_update, 3},
+    {"_individual_double_variable_queue_update_bitset", (DL_FUNC) &_individual_double_variable_queue_update_bitset, 3},
     {"_individual_double_variable_update", (DL_FUNC) &_individual_double_variable_update, 1},
     {"_individual_create_event", (DL_FUNC) &_individual_create_event, 0},
     {"_individual_create_targeted_event", (DL_FUNC) &_individual_create_targeted_event, 1},
@@ -902,6 +932,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_get_size_of_range", (DL_FUNC) &_individual_integer_variable_get_size_of_range, 3},
     {"_individual_integer_variable_queue_fill", (DL_FUNC) &_individual_integer_variable_queue_fill, 2},
     {"_individual_integer_variable_queue_update", (DL_FUNC) &_individual_integer_variable_queue_update, 3},
+    {"_individual_integer_variable_queue_update_bitset", (DL_FUNC) &_individual_integer_variable_queue_update_bitset, 3},
     {"_individual_integer_variable_update", (DL_FUNC) &_individual_integer_variable_update, 1},
     {"_individual_fixed_probability_multinomial_process_internal", (DL_FUNC) &_individual_fixed_probability_multinomial_process_internal, 5},
     {"_individual_multi_probability_multinomial_process_internal", (DL_FUNC) &_individual_multi_probability_multinomial_process_internal, 5},
