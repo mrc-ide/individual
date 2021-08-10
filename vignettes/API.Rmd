@@ -45,7 +45,7 @@ This vignette provides a description of the various primitive elements provided 
 
 In "individual", variables are how one defines state, and represent any attribute of an individual. While many variables will be dynamically updated throughout a simulation, they don't have to be. Specifying a baseline characteristic for each individual that doesn't change over a simulation will still be specified using a variable object.
 
-There are 3 types of variable objects: `individual::CategoricalVariable` for discrete variables taking values in a finite set, `individual::IntegerVariable` for discrete integer variables, and `individual::DoubleVariable` for continuous variables.
+There are 3 types of variable objects: `individual::CategoricalVariable` can represent a set of mutually exclusive categories, `individual::IntegerVariable` for representing integers, and `individual::DoubleVariable` for continuous values (real numbers).
 
 ### Categorical Variable {#cat_var}
 
