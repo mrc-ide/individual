@@ -129,6 +129,10 @@ double_variable_queue_update <- function(variable, value, index) {
     invisible(.Call(`_individual_double_variable_queue_update`, variable, value, index))
 }
 
+double_variable_queue_update_bitset <- function(variable, value, index) {
+    invisible(.Call(`_individual_double_variable_queue_update_bitset`, variable, value, index))
+}
+
 double_variable_update <- function(variable) {
     invisible(.Call(`_individual_double_variable_update`, variable))
 }
@@ -243,6 +247,10 @@ integer_variable_queue_fill <- function(variable, value) {
 
 integer_variable_queue_update <- function(variable, value, index) {
     invisible(.Call(`_individual_integer_variable_queue_update`, variable, value, index))
+}
+
+integer_variable_queue_update_bitset <- function(variable, value, index) {
+    invisible(.Call(`_individual_integer_variable_queue_update_bitset`, variable, value, index))
 }
 
 integer_variable_update <- function(variable) {

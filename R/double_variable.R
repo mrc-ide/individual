@@ -23,6 +23,7 @@ DoubleVariable <- R6Class(
         return(double_variable_get_values(self$.variable))
       }
       if (is.numeric(index)) {
+        stopifnot(all(index > 0))
         return(double_variable_get_values_at_index_vector(self$.variable, index))
       }
       double_variable_get_values_at_index(self$.variable, index$.bitset)
@@ -82,15 +83,22 @@ DoubleVariable <- R6Class(
         }
       } else {
         if (inherits(index, 'Bitset')) {
-          index <- index$to_vector()
-        }
-        if (length(index) != 0) {
-          stopifnot(all(index > 0))
-          double_variable_queue_update(
-            self$.variable,
-            values,
-            index
-          )
+          if (index$size() > 0){
+            double_variable_queue_update_bitset(
+              self$.variable,
+              values,
+              index$.bitset
+            )
+          }
+        } else {
+          if (length(index) != 0) {
+            stopifnot(all(index > 0))
+            double_variable_queue_update(
+              self$.variable,
+              values,
+              index
+            )
+          }
         }
       }
     },

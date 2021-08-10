@@ -27,6 +27,7 @@ IntegerVariable <- R6Class(
         return(integer_variable_get_values(self$.variable))
       }
       if (is.numeric(index)) {
+        stopifnot(all(index > 0))
         return(integer_variable_get_values_at_index_vector(self$.variable, index))
       }
       integer_variable_get_values_at_index(self$.variable, index$.bitset)
@@ -84,7 +85,7 @@ IntegerVariable <- R6Class(
       }
       stop("please provide a set of values to check, or both bounds of range [a,b]")    
     },
-
+    
     #' @description Queue an update for a variable. There are 4 types of variable update:
     #'
     #' \enumerate{
@@ -122,16 +123,24 @@ IntegerVariable <- R6Class(
         }
       } else {
         if (inherits(index, 'Bitset')) {
-          index <- index$to_vector()
+          if (index$size() > 0) {
+            integer_variable_queue_update_bitset(
+              self$.variable,
+              values,
+              index$.bitset
+            )
+          }
+        } else {
+          if (length(index) > 0) {
+            stopifnot(all(index > 0))
+            integer_variable_queue_update(
+              self$.variable,
+              values,
+              index
+            )
+          }          
         }
-        if (length(index) != 0) {
-          stopifnot(all(index > 0))
-          integer_variable_queue_update(
-            self$.variable,
-            values,
-            index
-          )
-        }
+
       }
     },
 
