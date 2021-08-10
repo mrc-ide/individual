@@ -2,6 +2,8 @@
 
   * Added a `NEWS.md` file to track changes to the package.
   * Add Mac OS files to .gitignore
+  * Update pkgdown reference organization.
+  * Update [R-CMD-check workflow](https://github.com/r-lib/actions/tree/master/examples#standard-ci-workflow).
 
 # individual 0.1.5
 
