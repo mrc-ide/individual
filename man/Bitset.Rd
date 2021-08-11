@@ -198,7 +198,7 @@ sample a bitset
 \describe{
 \item{\code{rate}}{the success probability for keeping each element, can be
 a single value for all elements or a vector with of unique
-probabilities for keeping each element}
+probabilities for keeping each element.}
 }
 \if{html}{\out{</div>}}
 }
@@ -217,7 +217,7 @@ choose k random items in the bitset
 \describe{
 \item{\code{k}}{the number of items in the bitset to keep. The selection of
 these k items from N total items in the bitset is random, and
-k should be chosen such that 0 <= k <= N.}
+k should be chosen such that \eqn{0 \le k \le N}.}
 }
 \if{html}{\out{</div>}}
 }

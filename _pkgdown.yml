@@ -1,1 +1,26 @@
 destination: docs
+reference:
+- title: "Variables"
+  desc: >
+    Variables are how individual represents state, and operations to find subsets
+    of individuals based on values of their variable(s) return bitsets.
+- contents: 
+  - CategoricalVariable
+  - IntegerVariable
+  - DoubleVariable
+  - Bitset
+  - filter_bitset
+- title: "Events & Rendering"
+  desc: "Classes for events and rendering output."
+- contents:
+  - Event
+  - TargetedEvent
+  - Render
+- title: "Prefabs"
+  desc: "Optimized processes and event listeners."
+- contents:
+  - ends_with("process")
+  - ends_with("listener")
+- title: "Simulation"
+- contents:
+  - simulation_loop
