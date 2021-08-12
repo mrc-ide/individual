@@ -85,6 +85,9 @@ bitset class implemented in C++. Additionally, the software makes no assumptions
 on the types of models that may be simulated (*e.g.* mass action, network),
 and updates are performed on a discrete time step.
 
+We hope our software is useful to infectious disease modellers, ecologists, and
+others who are interested in individual-based modeling in R.
+
 ## Contributing
 
 Thank you! Please refer to the vignette on `vignette("Contributing")` for info on how to
