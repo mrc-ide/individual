@@ -30,7 +30,7 @@ For bug reports please include:
 
 ## Git
 
-We use on this project. Which means we use `master`, `dev`, `feat/*`, `bug/*`, `hotfix/*` and `release/*` branches. Please refer to [this post](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) for more information of each type of branch. NOTE: `bug/*` branches are `feat/*` branches which fix a bug.
+We use Git on this project. Which means we use `master`, `dev`, `feat/*`, `bug/*`, `hotfix/*` and `release/*` branches. Please refer to [this post](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) for more information of each type of branch. NOTE: `bug/*` branches are `feat/*` branches which fix a bug.
 
 Practically speaking, *all* new code contributions should be feature branches. You should branch off of the `dev` branch into one called `feat/[your feature name here]`. When we consider pull requests from forked repositories to the mrc-ide/individual repository, we will expect this convention.
 
