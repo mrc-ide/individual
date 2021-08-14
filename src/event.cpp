@@ -40,7 +40,7 @@ void targeted_event_clear_schedule_vector(
     ) {
     decrement(target);
     auto bitmap = individual_index_t(event->size);
-    bitmap.insert(target.cbegin(), target.cend());
+    bitmap.insert_safe(target.cbegin(), target.cend());
     event->clear_schedule(bitmap);
 }
 
@@ -80,7 +80,7 @@ void targeted_event_schedule_vector(
     double delay) {
     decrement(target);
     auto bitmap = individual_index_t(event->size);
-    bitmap.insert(target.begin(), target.end());
+    bitmap.insert_safe(target.cbegin(), target.cend());
     event->schedule(bitmap, delay);
 }
 

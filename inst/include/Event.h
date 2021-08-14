@@ -17,21 +17,18 @@
 using listener_t = std::function<void (size_t)>;
 using targeted_listener_t = std::function<void (size_t, const individual_index_t&)>;
 
-inline double round_double(double x) {
+inline size_t round_double(double x) {
     if (x < 0.0) {
         Rcpp::stop("delay must be >= 0");
     } else {
-        return std::round(x);
+        return static_cast<size_t>(std::round(x));
     }
 }
 
 inline std::vector<size_t> round_delay(const std::vector<double>& delay) {
     auto rounded = std::vector<size_t>(delay.size());
     for (auto i = 0u; i < delay.size(); ++i) {
-        if (delay[i] < 0) {
-            Rcpp::stop("delay must be >= 0");
-        }
-        rounded[i] = static_cast<size_t>(round_double(delay[i]));
+        rounded[i] = round_double(delay[i]);
     }
     return rounded;
 }
@@ -166,7 +163,7 @@ struct TargetedEvent : public EventBase {
     virtual void schedule(
         const individual_index_t& target,
         double delay) {
-        schedule(target, static_cast<size_t>(round_double(delay)));
+        schedule(target, round_double(delay));
     }
 
     virtual void schedule(
