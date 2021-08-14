@@ -222,6 +222,36 @@ test_that("events can be cleared for an individual", {
 
 test_that("targeted events work for scalar delay, vector target", {
   
+  # works as expected
+  event <- TargetedEvent$new(10)
+  target <- 1:5
+  delay <- 5
+  event$schedule(target = target,delay = delay)
+  expect_equal(event$get_scheduled()$to_vector(), target)
+  
+  # fails as expected
+  event <- TargetedEvent$new(10)
+  target <- -5:5
+  delay <- 5
+  expect_error(event$schedule(target = target,delay = delay))
+  
+  # fails as expected
+  event <- TargetedEvent$new(10)
+  target <- c(Inf,5)
+  delay <- 5
+  expect_error(event$schedule(target = target,delay = delay))
+  
+  # fails as expected
+  event <- TargetedEvent$new(10)
+  target <- c(NaN,5)
+  delay <- 5
+  expect_error(event$schedule(target = target,delay = delay))
+  
+  # fails as expected
+  event <- TargetedEvent$new(10)
+  target <-1:5
+  delay <- -5
+  expect_error(event$schedule(target = target,delay = delay))
 })
 
 test_that("targeted events work for scalar delay, bitset target", {

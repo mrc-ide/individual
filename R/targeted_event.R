@@ -20,13 +20,18 @@ TargetedEvent <- R6Class(
     #' can be a scalar or an vector of values for events that should be triggered
     #' multiple times, fore each targeted individual.
     schedule = function(target, delay) {
+      # scalar delay
       if (length(delay) == 1) {
-        if (is.numeric(target)) {
-          targeted_event_schedule_vector(self$.event, target, delay)
-        } else {
+        stopifnot(delay >= 0)
+        if (inherits(target, 'Bitset')) {
           targeted_event_schedule(self$.event, target$.bitset, delay)
+        } else {
+          stopifnot(all(target > 0))
+          targeted_event_schedule_vector(self$.event, target, delay)
         }
+      # vector delay
       } else {
+        stopifnot(all(delay > 0))
         if (inherits(target, 'Bitset')) {
           stopifnot(target$size() != length(delay))
           targeted_event_schedule_multi_delay(self$.event, target$.bitset, delay)
