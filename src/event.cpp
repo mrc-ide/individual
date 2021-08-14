@@ -82,7 +82,7 @@ void targeted_event_schedule_vector(
 }
 
 //[[Rcpp::export]]
-void targeted_event_schedule_multi_delay(
+void targeted_event_schedule_multi_delay_vector(
     const Rcpp::XPtr<TargetedEvent> event,
     std::vector<size_t> target,
     const std::vector<double> delay) {

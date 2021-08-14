@@ -28,13 +28,12 @@ TargetedEvent <- R6Class(
         }
       } else {
         if (inherits(target, 'Bitset')) {
-          target <- target$to_vector()
+          # targeted_event_schedule_multi_delay
+        } else {
+          stopifnot(length(target) != length(delay))
+          stopifnot(all(target > 0))
+          targeted_event_schedule_multi_delay_vector(self$.event, target, delay)
         }
-
-        if (length(target) != length(delay)) {
-          stop('target and delay must be the same size')
-        }
-        targeted_event_schedule_multi_delay(self$.event, target, delay)
       }
     },
 
