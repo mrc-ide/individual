@@ -17,11 +17,12 @@
 using listener_t = std::function<void (size_t)>;
 using targeted_listener_t = std::function<void (size_t, const individual_index_t&)>;
 
-inline double round(double x) {
+inline double round_double(double x) {
     if (x < 0.0) {
         Rcpp::stop("delay must be >= 0");
+    } else {
+        return std::round(x);
     }
-    return std::round(x);
 }
 
 inline std::vector<size_t> round_delay(const std::vector<double>& delay) {
@@ -30,7 +31,7 @@ inline std::vector<size_t> round_delay(const std::vector<double>& delay) {
         if (delay[i] < 0) {
             Rcpp::stop("delay must be >= 0");
         }
-        rounded[i] = static_cast<size_t>(round(delay[i]));
+        rounded[i] = static_cast<size_t>(round_double(delay[i]));
     }
     return rounded;
 }
@@ -165,7 +166,7 @@ struct TargetedEvent : public EventBase {
     virtual void schedule(
         const individual_index_t& target,
         double delay) {
-        schedule(target, static_cast<size_t>(round(delay)));
+        schedule(target, static_cast<size_t>(round_double(delay)));
     }
 
     virtual void schedule(
@@ -173,6 +174,7 @@ struct TargetedEvent : public EventBase {
         size_t delay) {
 
         auto target_timestep = t + delay;
+        Rcpp::Rcout << "target_timestep: " << target_timestep << "---\n";
         if (targeted_schedule.find(target_timestep) == targeted_schedule.end()) {
             targeted_schedule.insert(
                 {target_timestep, individual_index_t(size)}
