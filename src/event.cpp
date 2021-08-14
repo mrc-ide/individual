@@ -67,6 +67,9 @@ void targeted_event_schedule(
     const Rcpp::XPtr<TargetedEvent> event,
     const Rcpp::XPtr<individual_index_t> target,
     double delay) {
+    if (target->max_size() != event->size) {
+        Rcpp::stop("incompatible size bitset used to schedule TargetedEvent");
+    }
     event->schedule(*target, delay);
 }
 
@@ -80,6 +83,19 @@ void targeted_event_schedule_vector(
     bitmap.insert(target.begin(), target.end());
     event->schedule(bitmap, delay);
 }
+
+//[[Rcpp::export]]
+void targeted_event_schedule_multi_delay(
+        const Rcpp::XPtr<TargetedEvent> event,
+        const Rcpp::XPtr<individual_index_t> target,
+        const std::vector<double> delay) {
+    if (target->max_size() != event->size) {
+        Rcpp::stop("incompatible size bitset used to schedule TargetedEvent");
+    }
+    // decrement(target);
+    // event->schedule(target, delay);
+}
+
 
 //[[Rcpp::export]]
 void targeted_event_schedule_multi_delay_vector(
