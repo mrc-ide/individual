@@ -17,6 +17,13 @@
 using listener_t = std::function<void (size_t)>;
 using targeted_listener_t = std::function<void (size_t, const individual_index_t&)>;
 
+inline double round(double x) {
+    if (x < 0.0) {
+        Rcpp::stop("delay must be >= 0");
+    }
+    return std::round(x);
+}
+
 inline std::vector<size_t> round_delay(const std::vector<double>& delay) {
     auto rounded = std::vector<size_t>(delay.size());
     for (auto i = 0u; i < delay.size(); ++i) {
