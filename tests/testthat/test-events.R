@@ -219,3 +219,19 @@ test_that("events can be cleared for an individual", {
   mockery::expect_called(listener, 1)
   expect_targeted_listener(listener, 1, t = 2, target = 2)
 })
+
+test_that("targeted events work for scalar delay, vector target", {
+  
+})
+
+test_that("targeted events work for scalar delay, bitset target", {
+  
+})
+
+test_that("targeted events work for vector delay, vector target", {
+  
+})
+
+test_that("targeted events work for vector delay, bitset target", {
+  
+})
