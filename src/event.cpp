@@ -92,7 +92,7 @@ void targeted_event_schedule_multi_delay(
     if (target->max_size() != event->size) {
         Rcpp::stop("incompatible size bitset used to schedule TargetedEvent");
     }
-    // decrement(target);
+    event->schedule(*target, delay);
     // event->schedule(target, delay);
 }
 

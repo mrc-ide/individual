@@ -102,6 +102,36 @@ struct TargetedEvent : public EventBase {
     //Delays may be continuous but our timeline is discrete.
     //So delays are rounded to the nearest timestep
     virtual void schedule(
+            const individual_index_t& target_bitset,
+            const std::vector<double>& delay) {
+        
+        //round the delays to find a discrete timestep to trigger each event
+        auto rounded = round_delay(delay);
+        
+        //get unique timesteps
+        auto delay_values = std::unordered_set<size_t>(
+            rounded.begin(),
+            rounded.end()
+        );
+        
+        // iterate through unique delay vals;
+        // for each delay go through target_bitset and delay and add to target
+        // for that delay if the delay matches the unique value
+        for (auto v : delay_values) {
+            auto target = individual_index_t(size);
+            auto bitset_it = target_bitset.cbegin();
+            for (auto i = 0u; i < rounded.size(); ++i) {
+                if (rounded[i] == v) {
+                    target.insert(*bitset_it);
+                    
+                }
+                ++bitset_it;
+            }
+            schedule(target, v);
+        }
+    }
+    
+    virtual void schedule(
         const std::vector<size_t>& target_vector,
         const std::vector<double>& delay) {
 
