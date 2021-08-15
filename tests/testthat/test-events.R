@@ -15,6 +15,23 @@ test_that("first event is triggered at t=1", {
   event$.tick()
 })
 
+test_that("first event is triggered at t=1", {
+  event <- Event$new()
+  listener <- mockery::mock()
+  event$add_listener(listener)
+  event$schedule(c(0, 1))
+  
+  #time = 1
+  event$.process()
+  mockery::expect_args(listener, 1, t = 1)
+  event$.tick()
+  
+  #time = 2
+  event$.process()
+  mockery::expect_args(listener, 2, t = 2)
+  event$.tick()
+})
+
 test_that("events can be scheduled for the future", {
   event <- Event$new()
   listener <- mockery::mock()
@@ -43,7 +60,7 @@ test_that("events can be scheduled for the future", {
   mockery::expect_args(listener, 2, t = 4)
 })
 
-test_that("targeted events can be scheduled for the future", {
+test_that("targeted events can be scheduled for the future (vector)", {
   event <- TargetedEvent$new(10)
   listener <- mockery::mock()
   event$add_listener(listener)
@@ -70,7 +87,34 @@ test_that("targeted events can be scheduled for the future", {
   expect_targeted_listener(listener, 1, t = 3, target = c(2, 4))
 })
 
-test_that("events can be scheduled for for a Real time", {
+test_that("targeted events can be scheduled for the future (bitset)", {
+  event <- TargetedEvent$new(10)
+  listener <- mockery::mock()
+  event$add_listener(listener)
+  event$schedule(Bitset$new(10)$insert(c(2,4)), 2)
+  
+  #time = 1
+  event$.process()
+  mockery::expect_called(listener, 0)
+  event$.tick()
+  
+  #time = 2
+  event$.process()
+  mockery::expect_called(listener, 0)
+  event$.tick()
+  
+  #time = 3
+  event$.process()
+  mockery::expect_called(listener, 1)
+  event$.tick()
+  
+  #time = 4
+  event$.process()
+  mockery::expect_called(listener, 1)
+  expect_targeted_listener(listener, 1, t = 3, target = c(2, 4))
+})
+
+test_that("events can be scheduled for for a Real time (vector)", {
   event <- TargetedEvent$new(10)
   listener <- mockery::mock()
   event$add_listener(listener)
@@ -97,7 +141,34 @@ test_that("events can be scheduled for for a Real time", {
   expect_targeted_listener(listener, 1, t = 3, target = c(2, 4))
 })
 
-test_that("you can schedule different times for a target population", {
+("events can be scheduled for for a Real time (bitset)", {
+  event <- TargetedEvent$new(10)
+  listener <- mockery::mock()
+  event$add_listener(listener)
+  event$schedule(Bitset$new(10)$insert(c(2,4)), 1.9)
+  
+  #time = 1
+  event$.process()
+  mockery::expect_called(listener, 0)
+  event$.tick()
+  
+  #time = 2
+  event$.process()
+  mockery::expect_called(listener, 0)
+  event$.tick()
+  
+  #time = 3
+  event$.process()
+  mockery::expect_called(listener, 1)
+  event$.tick()
+  
+  #time = 4
+  event$.process()
+  mockery::expect_called(listener, 1)
+  expect_targeted_listener(listener, 1, t = 3, target = c(2, 4))
+})
+
+test_that("you can schedule different times for a target population (vector)", {
   event <- TargetedEvent$new(10)
   listener <- mockery::mock()
   event$add_listener(listener)
@@ -120,6 +191,35 @@ test_that("you can schedule different times for a target population", {
   expect_targeted_listener(listener, 2, t = 3, target = c(3, 8))
   event$.tick()
 
+  #time = 4
+  event$.process()
+  mockery::expect_called(listener, 3)
+  expect_targeted_listener(listener, 3, t = 4, target = 2)
+})
+
+test_that("you can schedule different times for a target population (bitset)", {
+  event <- TargetedEvent$new(10)
+  listener <- mockery::mock()
+  event$add_listener(listener)
+  event$schedule(Bitset$new(10)$insert(c(1, 2, 3, 4, 8)), c(1, 3, 1, 2, 2))
+  
+  #time = 1
+  event$.process()
+  mockery::expect_called(listener, 0)
+  event$.tick()
+  
+  #time = 2
+  event$.process()
+  mockery::expect_called(listener, 1)
+  expect_targeted_listener(listener, 1, t = 2, target = c(1, 3))
+  event$.tick()
+  
+  #time = 3
+  event$.process()
+  mockery::expect_called(listener, 2)
+  expect_targeted_listener(listener, 2, t = 3, target = c(4, 8))
+  event$.tick()
+  
   #time = 4
   event$.process()
   mockery::expect_called(listener, 3)
@@ -263,6 +363,12 @@ test_that("targeted events work for scalar delay, vector target", {
   event <- TargetedEvent$new(10)
   target <-1:5
   delay <- NaN
+  expect_error(event$schedule(target = target,delay = delay))
+  
+  # fails as expected (bad delay)
+  event <- TargetedEvent$new(10)
+  target <-1:5
+  delay <- numeric(0)
   expect_error(event$schedule(target = target,delay = delay))
 })
 
