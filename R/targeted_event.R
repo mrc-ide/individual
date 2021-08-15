@@ -23,18 +23,26 @@ TargetedEvent <- R6Class(
       # vector delay
       if (length(delay) > 1) {
         if (inherits(target, 'Bitset')) {
-          targeted_event_schedule_multi_delay(self$.event, target$.bitset, delay)
+          if (target$size() > 0){
+            targeted_event_schedule_multi_delay(self$.event, target$.bitset, delay) 
+          }
         } else {
-          stopifnot(all(target > 0))
-          targeted_event_schedule_multi_delay_vector(self$.event, target, delay)
+          if (length(target) > 0) {
+            stopifnot(all(target > 0))
+            targeted_event_schedule_multi_delay_vector(self$.event, target, delay)
+          }
         }
       # single delay
       } else {
         if (inherits(target, 'Bitset')) {
-          targeted_event_schedule(self$.event, target$.bitset, delay)
+          if (target$size() > 0){
+            targeted_event_schedule(self$.event, target$.bitset, delay)
+          }
         } else {
-          stopifnot(all(target > 0))
-          targeted_event_schedule_vector(self$.event, target, delay)
+          if (length(target) > 0){
+            stopifnot(all(target > 0))
+            targeted_event_schedule_vector(self$.event, target, delay)
+          }
         }
       }
     },
