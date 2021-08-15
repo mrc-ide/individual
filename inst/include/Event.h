@@ -229,7 +229,7 @@ inline void TargetedEvent::schedule(
         auto target = individual_index_t(size);
         for (auto i = 0u; i < rounded.size(); ++i) {
             if (rounded[i] == v) {
-                target.insert(target_vector[i]);
+                target.insert_safe(target_vector[i]);
             }
         }
         schedule(target, v);
