@@ -106,6 +106,38 @@ test_that("events can be scheduled for for a Real time (bitset)", {
   expect_targeted_listener(listener, 1, t = 3, target = c(2, 4))
 })
 
+test_that("empty update targets do not call listener (vector)", {
+  event <- TargetedEvent$new(10)
+  listener <- mockery::mock()
+  event$add_listener(listener)
+  event$schedule(integer(0), 1)
+  
+  #time = 1
+  event$.process()
+  mockery::expect_called(listener, 0)
+  event$.tick()
+  
+  #time = 2
+  event$.process()
+  mockery::expect_called(listener, 0)
+})
+
+test_that("empty update targets do not call listener (bitset)", {
+  event <- TargetedEvent$new(10)
+  listener <- mockery::mock()
+  event$add_listener(listener)
+  event$schedule(Bitset$new(10), 1)
+  
+  #time = 1
+  event$.process()
+  mockery::expect_called(listener, 0)
+  event$.tick()
+  
+  #time = 2
+  event$.process()
+  mockery::expect_called(listener, 0)
+})
+
 test_that("you can schedule different times for a target population (vector)", {
   event <- TargetedEvent$new(10)
   listener <- mockery::mock()
@@ -361,22 +393,13 @@ test_that("targeted events work for scalar delay, vector target", {
   delay <- 5
   expect_error(event$schedule(target = target,delay = delay))
   
-  # fails as expected (bad target)
-  event <- TargetedEvent$new(10)
   target <- 11:20
-  delay <- 5
   expect_error(event$schedule(target = target,delay = delay))
   
-  # fails as expected (bad target)
-  event <- TargetedEvent$new(10)
   target <- c(Inf,5)
-  delay <- 5
   expect_error(event$schedule(target = target,delay = delay))
   
-  # fails as expected (bad target)
-  event <- TargetedEvent$new(10)
   target <- c(NaN,5)
-  delay <- 5
   expect_error(event$schedule(target = target,delay = delay))
   
   # fails as expected (bad delay)
@@ -385,15 +408,9 @@ test_that("targeted events work for scalar delay, vector target", {
   delay <- -5
   expect_error(event$schedule(target = target,delay = delay))
   
-  # fails as expected (bad delay)
-  event <- TargetedEvent$new(10)
-  target <- 1:5
   delay <- NaN
   expect_error(event$schedule(target = target,delay = delay))
   
-  # fails as expected (bad delay)
-  event <- TargetedEvent$new(10)
-  target <- 1:5
   delay <- numeric(0)
   expect_error(event$schedule(target = target,delay = delay))
   
@@ -420,9 +437,6 @@ test_that("targeted events work for scalar delay, bitset target", {
   delay <- NaN
   expect_error(event$schedule(target = target,delay = delay))
   
-  # fails as expected (bad delay)
-  event <- TargetedEvent$new(10)
-  target <- Bitset$new(10)$insert(1:5)
   delay <- numeric(0)
   expect_error(event$schedule(target = target,delay = delay))
   
@@ -443,30 +457,15 @@ test_that("targeted events work for vector delay, vector target", {
   delay <- 1:5
   expect_error(event$schedule(target = target,delay = delay))
   
-  # fails as expected (bad delay)
-  event <- TargetedEvent$new(10)
-  target <- 1:5
-  delay <- 1:6
-  expect_error(event$schedule(target = target,delay = delay))
-  
-  # fails as expected (bad delay)
-  event <- TargetedEvent$new(10)
-  target <- 1:5
-  delay <- c(-1,1,1,1,1)
-  expect_error(event$schedule(target = target,delay = delay))
-  
   # fails as expected (bad target)
   event <- TargetedEvent$new(10)
   target <- c(Inf,5)
   delay <- c(1,1)
   expect_error(event$schedule(target = target,delay = delay))
 
-  # fails as expected (bad target)
-  event <- TargetedEvent$new(10)
   target <- c(NaN,5)
-  delay <- c(5,6)
   expect_error(event$schedule(target = target,delay = delay))
-
+  
   # fails as expected (bad delay)
   event <- TargetedEvent$new(10)
   target <- 1:5
@@ -482,21 +481,48 @@ test_that("targeted events work for vector delay, vector target", {
   delay <- numeric(0)
   expect_error(event$schedule(target = target,delay = delay))
   
+  delay <- c(-1,1,1,1,1)
+  expect_error(event$schedule(target = target,delay = delay))
   
-  # # fails as expected (bad delay)
-  # event <- TargetedEvent$new(10)
-  # target <-1:5
-  # delay <- NaN
-  # expect_error(event$schedule(target = target,delay = delay))
-  # 
-  # # fails as expected (bad delay)
-  # event <- TargetedEvent$new(10)
-  # target <-1:5
-  # delay <- numeric(0)
-  # expect_error(event$schedule(target = target,delay = delay))
+  delay <- rep(0,10)
+  expect_error(event$schedule(target = target,delay = delay))
   
 })
 
 test_that("targeted events work for vector delay, bitset target", {
+  
+  # works as expected
+  event <- TargetedEvent$new(10)
+  target <- Bitset$new(10)$insert(1:5)
+  delay <- 1:5
+  event$schedule(target = target,delay = delay)
+  expect_equal(event$get_scheduled()$to_vector(), target$to_vector())
+  
+  # fails as expected (bad target)
+  event <- TargetedEvent$new(10)
+  target <- Bitset$new(20)$insert(1)
+  delay <- 1:5
+  expect_error(event$schedule(target = target,delay = delay))
+  
+  # fails as expected (bad delay)
+  event <- TargetedEvent$new(10)
+  target <- Bitset$new(10)$insert(1:5)
+  delay <- c(NaN,1,1,1,1)
+  expect_error(event$schedule(target = target,delay = delay))
+  
+  delay <- c(1,Inf,1,1,1)
+  expect_error(event$schedule(target = target,delay = delay))
+  
+  delay <- c(1,NA,1,1,1)
+  expect_error(event$schedule(target = target,delay = delay))
+  
+  delay <- numeric(0)
+  expect_error(event$schedule(target = target,delay = delay))
+  
+  delay <- c(-1,1,1,1,1)
+  expect_error(event$schedule(target = target,delay = delay))
+  
+  delay <- rep(0,10)
+  expect_error(event$schedule(target = target,delay = delay))
   
 })
