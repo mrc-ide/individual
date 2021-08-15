@@ -18,7 +18,7 @@ using listener_t = std::function<void (size_t)>;
 using targeted_listener_t = std::function<void (size_t, const individual_index_t&)>;
 
 inline size_t round_double(double x) {
-    if (x < 0.0) {
+    if (x < 0.0 || !std::isfinite(x)) {
         Rcpp::stop("delay must be >= 0");
     } else {
         return static_cast<size_t>(std::round(x));

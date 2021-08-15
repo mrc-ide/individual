@@ -31,10 +31,8 @@ TargetedEvent <- R6Class(
       # vector delay
       } else {
         if (inherits(target, 'Bitset')) {
-          stopifnot(target$size() != length(delay))
           targeted_event_schedule_multi_delay(self$.event, target$.bitset, delay)
         } else {
-          stopifnot(length(target) != length(delay))
           stopifnot(all(target > 0))
           targeted_event_schedule_multi_delay_vector(self$.event, target, delay)
         }

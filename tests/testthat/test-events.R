@@ -229,28 +229,40 @@ test_that("targeted events work for scalar delay, vector target", {
   event$schedule(target = target,delay = delay)
   expect_equal(event$get_scheduled()$to_vector(), target)
   
-  # fails as expected
+  # fails as expected (bad target)
   event <- TargetedEvent$new(10)
   target <- -5:5
   delay <- 5
   expect_error(event$schedule(target = target,delay = delay))
   
-  # fails as expected
+  # fails as expected (bad target)
+  event <- TargetedEvent$new(10)
+  target <- 11:20
+  delay <- 5
+  expect_error(event$schedule(target = target,delay = delay))
+  
+  # fails as expected (bad target)
   event <- TargetedEvent$new(10)
   target <- c(Inf,5)
   delay <- 5
   expect_error(event$schedule(target = target,delay = delay))
   
-  # fails as expected
+  # fails as expected (bad target)
   event <- TargetedEvent$new(10)
   target <- c(NaN,5)
   delay <- 5
   expect_error(event$schedule(target = target,delay = delay))
   
-  # fails as expected
+  # fails as expected (bad delay)
   event <- TargetedEvent$new(10)
   target <-1:5
   delay <- -5
+  expect_error(event$schedule(target = target,delay = delay))
+  
+  # fails as expected (bad delay)
+  event <- TargetedEvent$new(10)
+  target <-1:5
+  delay <- NaN
   expect_error(event$schedule(target = target,delay = delay))
 })
 

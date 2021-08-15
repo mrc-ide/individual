@@ -92,8 +92,10 @@ void targeted_event_schedule_multi_delay(
     if (target->max_size() != event->size) {
         Rcpp::stop("incompatible size bitset used to schedule TargetedEvent");
     }
+    if (target->size() != delay.size()) {
+        Rcpp::stop("incompatible size bitset and delay vector used to schedule TargetedEvent");
+    }
     event->schedule(*target, delay);
-    // event->schedule(target, delay);
 }
 
 
@@ -102,6 +104,9 @@ void targeted_event_schedule_multi_delay_vector(
     const Rcpp::XPtr<TargetedEvent> event,
     std::vector<size_t> target,
     const std::vector<double> delay) {
+    if (target.size() != delay.size()) {
+        Rcpp::stop("incompatible size target and delay vector used to schedule TargetedEvent");
+    }
     decrement(target);
     event->schedule(target, delay);
 }
