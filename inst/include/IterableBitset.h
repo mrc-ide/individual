@@ -361,6 +361,11 @@ inline void IterableBitset<A>::insert(InputIterator begin, InputIterator end) {
     }
 }
 
+//' @title safe insert many
+//' @description insert several elements into the bitset. Each insert calls 
+//' `insert_safe` which includes bounds checking, and this method should be used
+//' to insert data into bitsets from vector and other non bitset objects which
+//' may have bad input.
 template<class A>
 template<class InputIterator>
 inline void IterableBitset<A>::insert_safe(InputIterator begin, InputIterator end) {
@@ -381,6 +386,10 @@ inline void IterableBitset<A>::insert(size_t v) {
     }
 }
 
+//' @title safe insert
+//' @description check if insert is in range and then insert one element into 
+//' the bitset. This method should be used to insert from  data in vectors and 
+//' other non bitset objects which may have bad input.
 template<class A>
 inline void IterableBitset<A>::insert_safe(size_t v) {
     if (v >= max_n) {
