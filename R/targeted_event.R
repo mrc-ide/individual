@@ -17,8 +17,9 @@ TargetedEvent <- R6Class(
     #' @param target the individuals to pass to the listener, this may be 
     #' either a vector of integers or a \code{\link[individual]{Bitset}}.
     #' @param delay the number of time steps to wait before triggering the event,
-    #' can be a scalar or an vector of values for events that should be triggered
-    #' multiple times, fore each targeted individual.
+    #' can be a scalar in which case all targeted individuals are scheduled for
+    #' for the same delay or an vector of values giving the delay for that
+    #' individual.
     schedule = function(target, delay) {
       # vector delay
       if (length(delay) > 1) {
