@@ -12,6 +12,8 @@
   * `test-event.R` now only contains tests for `Event` class, new test file
   `test-targetedevent.R` contains a much updated suite of tests for the
   `TargetedEvent` class.
+  * Fix bug where `CategoricalVariable` could be queued updates for indices in
+  a vector that were outside the range of the population.
 
 # individual 0.1.5
 
