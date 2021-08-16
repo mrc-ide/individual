@@ -255,7 +255,6 @@ inline void TargetedEvent::schedule(
 ) {
     
     auto target_timestep = t + delay;
-    // Rcpp::Rcout << "target_timestep: " << target_timestep << "---\n";
     if (targeted_schedule.find(target_timestep) == targeted_schedule.end()) {
         targeted_schedule.insert(
             {target_timestep, individual_index_t(size)}
