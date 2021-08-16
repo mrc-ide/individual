@@ -20,13 +20,16 @@ DoubleVariable <- R6Class(
     #' or integer vector, return values of those individuals.
     get_values = function(index = NULL) {
       if (is.null(index)) {
-        return(double_variable_get_values(self$.variable))
+        double_variable_get_values(self$.variable)
+      } else {
+        if (inherits(index, 'Bitset')) {
+          double_variable_get_values_at_index(self$.variable, index$.bitset)
+        } else {
+          stopifnot(all(is.finite(index)))
+          stopifnot(all(index > 0))
+          double_variable_get_values_at_index_vector(self$.variable, index)
+        }
       }
-      if (is.numeric(index)) {
-        stopifnot(all(index > 0))
-        return(double_variable_get_values_at_index_vector(self$.variable, index))
-      }
-      double_variable_get_values_at_index(self$.variable, index$.bitset)
     },
 
     #' @description return a \code{\link[individual]{Bitset}} giving individuals 
@@ -92,6 +95,7 @@ DoubleVariable <- R6Class(
           }
         } else {
           if (length(index) != 0) {
+            stopifnot(all(is.finite(index)))
             stopifnot(all(index > 0))
             double_variable_queue_update(
               self$.variable,

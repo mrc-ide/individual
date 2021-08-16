@@ -29,6 +29,7 @@ TargetedEvent <- R6Class(
           }
         } else {
           if (length(target) > 0) {
+            stopifnot(all(is.finite(target)))
             stopifnot(all(target > 0))
             targeted_event_schedule_multi_delay_vector(self$.event, target, delay)
           }
@@ -41,6 +42,7 @@ TargetedEvent <- R6Class(
           }
         } else {
           if (length(target) > 0){
+            stopifnot(all(is.finite(target)))
             stopifnot(all(target > 0))
             targeted_event_schedule_vector(self$.event, target, delay)
           }
