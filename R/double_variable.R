@@ -20,14 +20,14 @@ DoubleVariable <- R6Class(
     #' or integer vector, return values of those individuals.
     get_values = function(index = NULL) {
       if (is.null(index)) {
-        double_variable_get_values(self$.variable)
+        return(double_variable_get_values(self$.variable))
       } else {
         if (inherits(index, 'Bitset')) {
-          double_variable_get_values_at_index(self$.variable, index$.bitset)
+          return(double_variable_get_values_at_index(self$.variable, index$.bitset))
         } else {
           stopifnot(all(is.finite(index)))
           stopifnot(all(index > 0))
-          double_variable_get_values_at_index_vector(self$.variable, index)
+          return(double_variable_get_values_at_index_vector(self$.variable, index))
         }
       }
     },
@@ -38,7 +38,7 @@ DoubleVariable <- R6Class(
     #' @param b upper bound
     get_index_of = function(a, b) {
       stopifnot(a < b)
-      return(Bitset$new(from = double_variable_get_index_of_range(self$.variable, a, b)))            
+      return(Bitset$new(from = double_variable_get_index_of_range(self$.variable, a, b)))      
     },
 
     #' @description return the number of individuals whose value lies in an interval
@@ -47,7 +47,7 @@ DoubleVariable <- R6Class(
     #' @param b upper bound
     get_size_of = function(a, b) {
       stopifnot(a < b)
-      double_variable_get_size_of_range(self$.variable, a, b)            
+      return(double_variable_get_size_of_range(self$.variable, a, b))
     },
 
     #' @description Queue an update for a variable. There are 4 types of variable update:

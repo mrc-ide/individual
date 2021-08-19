@@ -24,14 +24,14 @@ IntegerVariable <- R6Class(
     #' or integer vector, return values of those individuals.
     get_values = function(index = NULL) {
       if (is.null(index)) {
-        integer_variable_get_values(self$.variable)
+        return(integer_variable_get_values(self$.variable))
       } else{
         if (inherits(index, 'Bitset')){
-          integer_variable_get_values_at_index(self$.variable, index$.bitset)
+          return(integer_variable_get_values_at_index(self$.variable, index$.bitset))
         } else {
           stopifnot(all(index > 0))
           stopifnot(all(is.finite(index)))
-          integer_variable_get_values_at_index_vector(self$.variable, index)
+          return(integer_variable_get_values_at_index_vector(self$.variable, index))
         }
       }
       
