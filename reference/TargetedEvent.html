@@ -81,7 +81,7 @@ This is useful for events which are triggered for a sub-population." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -116,6 +116,9 @@ This is useful for events which are triggered for a sub-population." />
       <a href="../articles/Tutorial.html">Tutorial</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -196,8 +199,9 @@ This is useful for events which are triggered for a sub-population.</p>
 either a vector of integers or a <code><a href='Bitset.html'>Bitset</a></code>.</p></dd>
 
 <dt><code>delay</code></dt><dd><p>the number of time steps to wait before triggering the event,
-can be a scalar or an vector of values for events that should be triggered
-multiple times, fore each targeted individual.</p></dd>
+can be a scalar in which case all targeted individuals are scheduled for
+for the same delay or an vector of values giving the delay for that
+individual.</p></dd>
 
 </dl><p></div></p>
 <p><hr>

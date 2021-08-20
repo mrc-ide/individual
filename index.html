@@ -49,7 +49,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -84,6 +84,9 @@
       <a href="articles/Tutorial.html">Tutorial</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -124,20 +127,30 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org">'remotes'</a></span><span class="op">)</span>
 <span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">'mrc-ide/individual'</span><span class="op">)</span></code></pre></div>
+<p>Alternatively you can install individual directly from CRAN, but be aware that the CRAN version may not be the most recent version of the package:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"individual"</span><span class="op">)</span></code></pre></div>
 <p>For development it is most convenient to run the code from source. You can install the dependencies in RStudio by opening the project and selecting “Build” &gt; “Install and Restart”</p>
 <p>Command line users can execute:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org">'remotes'</a></span><span class="op">)</span>
 <span class="fu"><a href="https://remotes.r-lib.org/reference/install_deps.html">install_deps</a></span><span class="op">(</span><span class="st">'.'</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Docker users can build a minimal image with</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">docker</span> build . -f docker/Dockerfile -t [your image name]</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">docker</span> build . -f docker/Dockerfile -t [your image name]</span></code></pre></div>
 <p>Or if you would like devtools and documentation tools you can run</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">docker</span> build . -f docker/Dockerfile.dev -t [your image name]</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="ex">docker</span> build . -f docker/Dockerfile.dev -t [your image name]</span></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>We recommend first reading <code><a href="articles/Tutorial.html">vignette("Tutorial")</a></code> which describes how to simulate a simple SIR model in “individual”, and later <code><a href="articles/API.html">vignette("API")</a></code> which describes in detail how to use the data structures in “individual” to build more complicated models. If you are running into performance issues, learn more about how to speed up your model in <code><a href="articles/Performance.html">vignette("Performance")</a></code>.</p>
+</div>
+<div id="statement-of-need" class="section level2">
+<h2 class="hasAnchor">
+<a href="#statement-of-need" class="anchor"></a>Statement of need</h2>
+<p>Individual based models are important tools for infectious disease epidemiology, but practical use requires an implementation that is both comprehensible so that code may be maintained and adapted, and fast. “individual” is an R package which provides users a set of primitive classes using the <a href="https://github.com/r-lib/R6">R6</a> class system that define elements common to many tasks in infectious disease modeling. Using R6 classes helps ensure that methods invoked on objects are appropriate for that object type, aiding in testing and maintenance of models programmed using “individual”. Computation is carried out in C++ using <a href="https://github.com/RcppCore/Rcpp">Rcpp</a> to link to R, helping achieve good performance for even complex models.</p>
+<p>“individual” provides a unique method to specify individual based models compared to other agent/individual based modeling libraries, where users specify a type for agents, which are subsequently stored in an array or other data structure. In “individual”, users instead instantiate a object for each variable which describes some aspect of state, using the appropriate R6 class. Finding subsets of individuals with particular combinations of state variables for further computation can be efficiently accomplished with set operations, using a custom bitset class implemented in C++. Additionally, the software makes no assumptions on the types of models that may be simulated (<em>e.g.</em> mass action, network), and updates are performed on a discrete time step.</p>
+<p>We hope our software is useful to infectious disease modellers, ecologists, and others who are interested in individual-based modeling in R.</p>
 </div>
 <div id="contributing" class="section level2">
 <h2 class="hasAnchor">

@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -73,6 +73,9 @@
       <a href="../articles/Tutorial.html">Tutorial</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -122,7 +125,7 @@
 <div id="git" class="section level2">
 <h2 class="hasAnchor">
 <a href="#git" class="anchor"></a>Git</h2>
-<p>We use on this project. Which means we use <code>master</code>, <code>dev</code>, <code>feat/*</code>, <code>bug/*</code>, <code>hotfix/*</code> and <code>release/*</code> branches. Please refer to <a href="https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow">this post</a> for more information of each type of branch. NOTE: <code>bug/*</code> branches are <code>feat/*</code> branches which fix a bug.</p>
+<p>We use Git on this project. Which means we use <code>master</code>, <code>dev</code>, <code>feat/*</code>, <code>bug/*</code>, <code>hotfix/*</code> and <code>release/*</code> branches. Please refer to <a href="https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow">this post</a> for more information of each type of branch. NOTE: <code>bug/*</code> branches are <code>feat/*</code> branches which fix a bug.</p>
 <p>Practically speaking, <em>all</em> new code contributions should be feature branches. You should branch off of the <code>dev</code> branch into one called <code>feat/[your feature name here]</code>. When we consider pull requests from forked repositories to the mrc-ide/individual repository, we will expect this convention.</p>
 <p>We periodically merge <code>dev</code> into <code>master</code> for small release updates. These releases will appear on the <a href="https://github.com/mrc-ide/individual/releases">GitHub releases page</a>. Please use <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> as it helps us version Individual properly.</p>
 <p>Large releases will have a <code>release/*</code> branch to manage the transition. No new features will be merged into <code>release/*</code> branches. Only documentation and bug fixes will be considered.</p>

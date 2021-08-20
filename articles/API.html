@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -73,6 +73,9 @@
       <a href="../articles/Tutorial.html">Tutorial</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -115,7 +118,7 @@
 <h2 class="hasAnchor">
 <a href="#var" class="anchor"></a>Variables</h2>
 <p>In “individual”, variables are how one defines state, and represent any attribute of an individual. While many variables will be dynamically updated throughout a simulation, they don’t have to be. Specifying a baseline characteristic for each individual that doesn’t change over a simulation will still be specified using a variable object.</p>
-<p>There are 3 types of variable objects: <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> for discrete variables taking values in a finite set, <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> for discrete integer variables, and <code><a href="../reference/DoubleVariable.html">individual::DoubleVariable</a></code> for continuous variables.</p>
+<p>There are 3 types of variable objects: <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> can represent a set of mutually exclusive categories, <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> for representing integers, and <code><a href="../reference/DoubleVariable.html">individual::DoubleVariable</a></code> for continuous values (real numbers).</p>
 <div id="cat_var" class="section level3">
 <h3 class="hasAnchor">
 <a href="#cat_var" class="anchor"></a>Categorical Variable</h3>
@@ -179,7 +182,7 @@
 <span class="co">#&gt;  replicates)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; data:  times and rgeom(n, prob = 0.1)</span>
-<span class="co">#&gt; X-squared = 5955.6, df = NA, p-value = 0.7731</span></code></pre></div>
+<span class="co">#&gt; X-squared = 12285, df = NA, p-value = 0.04448</span></code></pre></div>
 <p>By using <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> and <code><a href="../reference/DoubleVariable.html">individual::DoubleVariable</a></code> objects to modify the probability with which individuals move between states, as well as counters for recording previous state transitions and times, complex dynamics can be specified from simple building blocks. Several “prefab” functions are provided to make function closures corresponding to state transition processes common in epidemiological models.</p>
 <div id="rend" class="section level3">
 <h3 class="hasAnchor">

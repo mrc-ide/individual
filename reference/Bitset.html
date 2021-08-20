@@ -51,7 +51,7 @@
 integers in some finite set (max_size), and can 
 efficiently perform set operations (union, intersection, complement, symmetric
 difference, set difference). 
-WARNING: all operations (except $not) are in-place so please use $copy 
+WARNING: All operations are in-place so please use $copy
 if you would like to perform an operation without destroying your current bitset." />
 <meta property="og:image" content="/logo.png" />
 
@@ -85,7 +85,7 @@ if you would like to perform an operation without destroying your current bitset
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -121,6 +121,9 @@ if you would like to perform an operation without destroying your current bitset
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -152,7 +155,7 @@ if you would like to perform an operation without destroying your current bitset
 integers in some finite set (<code>max_size</code>), and can 
 efficiently perform set operations (union, intersection, complement, symmetric
 difference, set difference). 
-WARNING: all operations (except <code>$not</code>) are in-place so please use <code>$copy</code> 
+WARNING: All operations are in-place so please use <code>$copy</code>
 if you would like to perform an operation without destroying your current bitset.</p>
     </div>
 
@@ -247,10 +250,14 @@ make empty bitset, otherwise copy existing bitset</p></dd>
 </dl><p></div></p>
 <p><hr>
 <a id="method-not"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>not()</code></h3>
-<p>to "bitwise not" or complement a bitset
-This method returns a new bitset rather than doing in-place modification.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
-<p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>not</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
+<p>to "bitwise not" or complement a bitset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>not</span><span class='op'>(</span><span class='va'>inplace</span><span class='op'>)</span></pre><p></div></p>
 
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>inplace</code></dt><dd><p>whether to overwrite the current bitset</p></dd>
+
+</dl><p></div></p>
 <p><hr>
 <a id="method-xor"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/Logic.html'>xor()</a></code></h3>
 <p>to "bitwise xor" or get the symmetric difference of two bitset
@@ -282,7 +289,7 @@ This method returns a new bitset rather than doing in-place modification.</p><h4
 <p><div class="arguments"></p><dl>
 <dt><code>rate</code></dt><dd><p>the success probability for keeping each element, can be
 a single value for all elements or a vector with of unique
-probabilities for keeping each element</p></dd>
+probabilities for keeping each element.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
@@ -294,7 +301,7 @@ probabilities for keeping each element</p></dd>
 <p><div class="arguments"></p><dl>
 <dt><code>k</code></dt><dd><p>the number of items in the bitset to keep. The selection of
 these k items from N total items in the bitset is random, and
-k should be chosen such that 0 &lt;= k &lt;= N.</p></dd>
+k should be chosen such that \(0 \le k \le N\).</p></dd>
 
 </dl><p></div></p>
 <p><hr>

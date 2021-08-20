@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Multinomial process — fixed_probability_multinomial_process • individual</title>
+<title>Changelog • individual</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,11 +46,7 @@
 
 
 
-<meta property="og:title" content="Multinomial process — fixed_probability_multinomial_process" />
-<meta property="og:description" content="Simulates a two-stage process where all individuals
-in a given source_state sample whether to leave or not with probability
-rate; those who leave go to one of the destination_states with
-probabilities contained in the vector destination_probabilities." />
+<meta property="og:title" content="Changelog" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -70,7 +66,7 @@ probabilities contained in the vector destination_probabilities." />
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -143,61 +139,62 @@ probabilities contained in the vector destination_probabilities." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Multinomial process</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mrc-ide/individual/blob/master/R/prefab.R'><code>R/prefab.R</code></a></small>
-    <div class="hidden name"><code>fixed_probability_multinomial_process.Rd</code></div>
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/mrc-ide/individual/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="ref-description">
-    <p>Simulates a two-stage process where all individuals
-in a given <code>source_state</code> sample whether to leave or not with probability
-<code>rate</code>; those who leave go to one of the <code>destination_states</code> with
-probabilities contained in the vector <code>destination_probabilities</code>.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>fixed_probability_multinomial_process</span><span class='op'>(</span>
-  <span class='va'>variable</span>,
-  <span class='va'>source_state</span>,
-  <span class='va'>destination_states</span>,
-  <span class='va'>rate</span>,
-  <span class='va'>destination_probabilities</span>
-<span class='op'>)</span></pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>variable</th>
-      <td><p>a <code><a href='CategoricalVariable.html'>CategoricalVariable</a></code> object</p></td>
-    </tr>
-    <tr>
-      <th>source_state</th>
-      <td><p>a string representing the source state</p></td>
-    </tr>
-    <tr>
-      <th>destination_states</th>
-      <td><p>a vector of strings representing the destination states</p></td>
-    </tr>
-    <tr>
-      <th>rate</th>
-      <td><p>probability of individuals in source state to leave</p></td>
-    </tr>
-    <tr>
-      <th>destination_probabilities</th>
-      <td><p>probability vector of destination states</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>a function which can be passed as a process to <code><a href='simulation_loop.html'>simulation_loop</a></code></p>
-
+    <div id="individual-016" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.6">
+<a href="#individual-016" class="anchor"></a>individual 0.1.6<small> Unreleased </small>
+</h1>
+<ul>
+<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
+<li>Add Mac OS files to .gitignore</li>
+<li>Update pkgdown reference organization.</li>
+<li>Update <a href="https://github.com/r-lib/actions/tree/master/examples#standard-ci-workflow">R-CMD-check workflow</a>.</li>
+<li>
+<code>Event.h</code> now defines class methods outside of the class definition for easier readability, and add documentation.</li>
+<li>
+<code>TargetedEvent$schedule</code> now dispatches to different C++ functions in <code>event.cpp</code> and <code>Event.h</code> depending on if input index is a bitset or vector (previous behavior used bitset’s <span class="math inline"><em>t</em><em>o</em><sub><em>v</em></sub><em>e</em><em>c</em><em>t</em><em>o</em><em>r</em></span> method in R to pass a vector).</li>
+<li>
+<code>test-event.R</code> now only contains tests for <code>Event</code> class, new test file <code>test-targetedevent.R</code> contains a much updated suite of tests for the <code>TargetedEvent</code> class.</li>
+<li>Fix bug where <code>CategoricalVariable</code> could be queued updates for indices in a vector that were outside the range of the population.</li>
+<li>Update <code>Bitset$not</code> to operate in place. inplace = FALSE will be deprecated in 0.2.0</li>
+<li>Rename the IterableBitset ~ operator to !</li>
+</ul>
+</div>
+    <div id="individual-015" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.5">
+<a href="#individual-015" class="anchor"></a>individual 0.1.5<small> Unreleased </small>
+</h1>
+<ul>
+<li>Added package logo.</li>
+<li>Update DESCRIPTION and remove “reshape2” from suggested packages.</li>
+<li>If given a <code>Bitset</code> for argument <code>index</code>, <code>queue_update</code> methods for <code>IntegerVariable</code> and <code>DoubleVariable</code> pass the bitset directly to the C++ functions <code>integer_variable_queue_update_bitset</code> and <code>double_variable_queue_update_bitset</code> rather than converting to vector and using vector methods.</li>
+<li>
+<code>CategoricalVariable.h</code>, <code>IntegerVariable.h</code>, and <code>DoubleVariable.h</code> now define class methods outside of the class definition for easier readability, and add documentation.</li>
+<li>
+<code>CategoricalVariable</code>, <code>IntegerVariable</code>, and <code>DoubleVariable</code> classes define a virtual destructor with default implementation.</li>
+<li>
+<code>get_index_of_set</code> and <code>get_size_of_set_vector</code> methods for <code>IntegerVariable</code> now pass arguments by reference.</li>
+<li>
+<code>get_values</code> method for <code>IntegerVariable</code> and <code>DoubleVariable</code> corrected to return value rather than reference.</li>
+<li>add overload for <code>get_values</code> for <code>IntegerVariable</code> and <code>DoubleVariable</code> to accept <code>std::vector&lt;size_t&gt;</code> as argument rather than converting to bitset.</li>
+<li>add function <code>bitset_to_vector_internal</code> to <code>IterableBitset.h</code>.</li>
+<li>split <code>testthat/test/test-variables.R</code> into <code>testthat/test/test-categoricalvariable.R</code>, <code>testthat/test/test-integervariable.R</code>, and <code>testthat/test/test-doublevariable.R</code>
+</li>
+<li>remove unnecessary <code>#include</code> statements from header files.</li>
+<li>remove unnecessary comparisons for <code>size_t</code> types.</li>
+</ul>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
+
 </div>
 
 
