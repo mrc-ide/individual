@@ -68,7 +68,7 @@ void categorical_variable_queue_update_vector(
     ) {
     decrement(index);
     auto bitmap = individual_index_t(variable->size);
-    bitmap.insert(index.begin(), index.end());
+    bitmap.insert_safe(index.begin(), index.end());
     variable->queue_update(value, bitmap);
 }
 

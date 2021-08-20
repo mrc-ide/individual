@@ -50,7 +50,11 @@ CategoricalVariable <- R6Class(
       if (inherits(index, "Bitset")) {
         categorical_variable_queue_update(self$.variable, value, index$.bitset)        
       } else {
-        categorical_variable_queue_update_vector(self$.variable, value, as.integer(index))
+        if (length(index) > 0) {
+          stopifnot(all(is.finite(index)))
+          stopifnot(all(index > 0))
+          categorical_variable_queue_update_vector(self$.variable, value, index)
+        }
       }
     },
 

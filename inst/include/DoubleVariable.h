@@ -74,7 +74,12 @@ inline std::vector<double> DoubleVariable::get_values(const std::vector<size_t>&
     
     auto result = std::vector<double>(index.size());
     for (auto i = 0u; i < index.size(); ++i) {
-        result[i] = values.at(index[i]);
+        if (index[i] >= size) {
+            std::stringstream message;
+            message << "index for DoubleVariable out of range, supplied index: " << index[i] << ", size of variable: " << size;
+            Rcpp::stop(message.str()); 
+        }
+        result[i] = values[index[i]];
     }
     return result;
 }

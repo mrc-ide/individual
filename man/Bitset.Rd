@@ -8,7 +8,7 @@ This is a data strucutre that compactly stores the presence of
 integers in some finite set (\code{max_size}), and can 
 efficiently perform set operations (union, intersection, complement, symmetric
 difference, set difference). 
-WARNING: all operations (except \code{$not}) are in-place so please use \code{$copy} 
+WARNING: All operations are in-place so please use \code{$copy}
 if you would like to perform an operation without destroying your current bitset.
 }
 \section{Public fields}{
@@ -142,11 +142,17 @@ to "bitwise and" or intersect two bitsets
 \if{latex}{\out{\hypertarget{method-not}{}}}
 \subsection{Method \code{not()}}{
 to "bitwise not" or complement a bitset
-This method returns a new bitset rather than doing in-place modification.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$not()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$not(inplace)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{inplace}}{whether to overwrite the current bitset}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-xor"></a>}}
@@ -198,7 +204,7 @@ sample a bitset
 \describe{
 \item{\code{rate}}{the success probability for keeping each element, can be
 a single value for all elements or a vector with of unique
-probabilities for keeping each element}
+probabilities for keeping each element.}
 }
 \if{html}{\out{</div>}}
 }
@@ -217,7 +223,7 @@ choose k random items in the bitset
 \describe{
 \item{\code{k}}{the number of items in the bitset to keep. The selection of
 these k items from N total items in the bitset is random, and
-k should be chosen such that 0 <= k <= N.}
+k should be chosen such that \eqn{0 \le k \le N}.}
 }
 \if{html}{\out{</div>}}
 }

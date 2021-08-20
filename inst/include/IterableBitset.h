@@ -73,10 +73,11 @@ public:
     IterableBitset operator&(const IterableBitset&) const;
     IterableBitset operator|(const IterableBitset&) const;
     IterableBitset operator^(const IterableBitset&) const;
-    IterableBitset operator~() const;
+    IterableBitset operator!() const;
     IterableBitset& operator&=(const IterableBitset&);
     IterableBitset& operator|=(const IterableBitset&);
     IterableBitset& operator^=(const IterableBitset&);
+    IterableBitset& inverse();
     iterator begin();
     const_iterator begin() const;
     const_iterator cbegin() const;
@@ -232,15 +233,21 @@ inline IterableBitset<A> IterableBitset<A>::operator ^(const IterableBitset<A>& 
 }
 
 template<class A>
-inline IterableBitset<A> IterableBitset<A>::operator ~() const {
-    auto result = IterableBitset<A>(*this);
-    for (auto i = 0u; i < result.bitmap.size(); ++i) {
-        result.bitmap[i] = ~result.bitmap[i];
+inline IterableBitset<A>& IterableBitset<A>::inverse() {
+    for (auto i = 0u; i < bitmap.size(); ++i) {
+        bitmap[i] = ~bitmap[i];
     }
     //mask out the values after max_n
-    A residual = (static_cast<A>(1) << (result.max_n % result.num_bits)) - 1;
-    result.bitmap[result.bitmap.size() - 1] &= residual;
-    result.n = result.max_n - result.n;
+    A residual = (static_cast<A>(1) << (max_n % num_bits)) - 1;
+    bitmap[bitmap.size() - 1] &= residual;
+    n = max_n - n;
+    return *this;
+}
+
+template<class A>
+inline IterableBitset<A> IterableBitset<A>::operator !() const {
+    auto result = IterableBitset<A>(*this);
+    result.inverse();
     return result;
 }
 
@@ -361,6 +368,11 @@ inline void IterableBitset<A>::insert(InputIterator begin, InputIterator end) {
     }
 }
 
+//' @title safe insert many
+//' @description insert several elements into the bitset. Each insert calls 
+//' `insert_safe` which includes bounds checking, and this method should be used
+//' to insert data into bitsets from vector and other non bitset objects which
+//' may have bad input.
 template<class A>
 template<class InputIterator>
 inline void IterableBitset<A>::insert_safe(InputIterator begin, InputIterator end) {
@@ -381,6 +393,10 @@ inline void IterableBitset<A>::insert(size_t v) {
     }
 }
 
+//' @title safe insert
+//' @description check if insert is in range and then insert one element into 
+//' the bitset. This method should be used to insert from  data in vectors and 
+//' other non bitset objects which may have bad input.
 template<class A>
 inline void IterableBitset<A>::insert_safe(size_t v) {
     if (v >= max_n) {

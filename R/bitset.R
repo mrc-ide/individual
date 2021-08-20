@@ -3,7 +3,7 @@
 #' integers in some finite set (\code{max_size}), and can 
 #' efficiently perform set operations (union, intersection, complement, symmetric
 #' difference, set difference). 
-#' WARNING: all operations (except \code{$not}) are in-place so please use \code{$copy} 
+#' WARNING: All operations are in-place so please use \code{$copy}
 #' if you would like to perform an operation without destroying your current bitset.
 #' @importFrom R6 R6Class
 #' @export
@@ -62,8 +62,20 @@ Bitset <- R6Class(
     },
 
     #' @description to "bitwise not" or complement a bitset
-    #' This method returns a new bitset rather than doing in-place modification.
-    not = function() Bitset$new(from = bitset_not(self$.bitset)),
+    #' @param inplace whether to overwrite the current bitset
+    not = function(inplace) {
+      if (missing(inplace)) {
+        warning(paste(
+          "DEPRECATED: Future versions of Bitset$not will be in place",
+          "to be consistent with other bitset operations.",
+          "To copy this bitset please use the copy method.",
+          "To suppress this warning, please set the `inplace` argument.",
+          sep = " "
+        ))
+        inplace <- FALSE
+      }
+      Bitset$new(from = bitset_not(self$.bitset, inplace))
+    },
 
     #' @description to "bitwise xor" or get the symmetric difference of two bitset
     #' (keep elements in either bitset but not in their intersection)
@@ -84,7 +96,7 @@ Bitset <- R6Class(
     #' @description sample a bitset
     #' @param rate the success probability for keeping each element, can be
     #' a single value for all elements or a vector with of unique
-    #' probabilities for keeping each element
+    #' probabilities for keeping each element.
     sample = function(rate) {
       if (length(rate) == 1) {
         bitset_sample(self$.bitset, rate)
@@ -98,7 +110,7 @@ Bitset <- R6Class(
     #' @description choose k random items in the bitset
     #' @param k the number of items in the bitset to keep. The selection of
     #' these k items from N total items in the bitset is random, and
-    #' k should be chosen such that 0 <= k <= N.
+    #' k should be chosen such that \eqn{0 \le k \le N}.
     choose = function(k) {
       stopifnot(is.finite(k))
       stopifnot(k <= bitset_size(self$.bitset))

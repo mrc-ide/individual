@@ -29,8 +29,8 @@ bitset_and <- function(a, b) {
     invisible(.Call(`_individual_bitset_and`, a, b))
 }
 
-bitset_not <- function(b) {
-    .Call(`_individual_bitset_not`, b)
+bitset_not <- function(b, inplace) {
+    .Call(`_individual_bitset_not`, b, inplace)
 }
 
 bitset_or <- function(a, b) {
@@ -179,6 +179,10 @@ targeted_event_schedule_vector <- function(event, target, delay) {
 
 targeted_event_schedule_multi_delay <- function(event, target, delay) {
     invisible(.Call(`_individual_targeted_event_schedule_multi_delay`, event, target, delay))
+}
+
+targeted_event_schedule_multi_delay_vector <- function(event, target, delay) {
+    invisible(.Call(`_individual_targeted_event_schedule_multi_delay_vector`, event, target, delay))
 }
 
 event_get_timestep <- function(event) {

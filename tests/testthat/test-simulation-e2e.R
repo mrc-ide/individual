@@ -66,7 +66,7 @@ test_that("deterministic state model w events works", {
     function(t) {
       from_state <- state$get_index_of(from)
       # remove the already scheduled individuals
-      from_state$and(event$get_scheduled()$not())
+      from_state$and(event$get_scheduled()$not(TRUE))
       target <- from_state$to_vector()[seq_len(min(rate,from_state$size()))]
       event$schedule(target, delay);
     }
