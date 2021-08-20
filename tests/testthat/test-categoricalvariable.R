@@ -72,3 +72,8 @@ test_that("Queuing invalid category errors", {
                '*'
   )
 })
+
+test_that("Queuing invalid indices errors", {
+  c <- CategoricalVariable$new(categories = c("A","B"),initial_values = rep(c("A","B"),each=10))
+  expect_error(c$queue_update(value = "A",index = c(15,25,50)))
+})

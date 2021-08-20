@@ -543,14 +543,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // targeted_event_schedule_multi_delay
-void targeted_event_schedule_multi_delay(const Rcpp::XPtr<TargetedEvent> event, std::vector<size_t> target, const std::vector<double> delay);
+void targeted_event_schedule_multi_delay(const Rcpp::XPtr<TargetedEvent> event, const Rcpp::XPtr<individual_index_t> target, const std::vector<double> delay);
 RcppExport SEXP _individual_targeted_event_schedule_multi_delay(SEXP eventSEXP, SEXP targetSEXP, SEXP delaySEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type target(targetSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type delay(delaySEXP);
+    targeted_event_schedule_multi_delay(event, target, delay);
+    return R_NilValue;
+END_RCPP
+}
+// targeted_event_schedule_multi_delay_vector
+void targeted_event_schedule_multi_delay_vector(const Rcpp::XPtr<TargetedEvent> event, std::vector<size_t> target, const std::vector<double> delay);
+RcppExport SEXP _individual_targeted_event_schedule_multi_delay_vector(SEXP eventSEXP, SEXP targetSEXP, SEXP delaySEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
     Rcpp::traits::input_parameter< std::vector<size_t> >::type target(targetSEXP);
     Rcpp::traits::input_parameter< const std::vector<double> >::type delay(delaySEXP);
-    targeted_event_schedule_multi_delay(event, target, delay);
+    targeted_event_schedule_multi_delay_vector(event, target, delay);
     return R_NilValue;
 END_RCPP
 }
@@ -915,6 +927,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_targeted_event_schedule", (DL_FUNC) &_individual_targeted_event_schedule, 3},
     {"_individual_targeted_event_schedule_vector", (DL_FUNC) &_individual_targeted_event_schedule_vector, 3},
     {"_individual_targeted_event_schedule_multi_delay", (DL_FUNC) &_individual_targeted_event_schedule_multi_delay, 3},
+    {"_individual_targeted_event_schedule_multi_delay_vector", (DL_FUNC) &_individual_targeted_event_schedule_multi_delay_vector, 3},
     {"_individual_event_get_timestep", (DL_FUNC) &_individual_event_get_timestep, 1},
     {"_individual_event_should_trigger", (DL_FUNC) &_individual_event_should_trigger, 1},
     {"_individual_targeted_event_get_target", (DL_FUNC) &_individual_targeted_event_get_target, 1},

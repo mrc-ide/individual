@@ -64,8 +64,9 @@ Schedule this event to occur in the future
 either a vector of integers or a \code{\link[individual]{Bitset}}.}
 
 \item{\code{delay}}{the number of time steps to wait before triggering the event,
-can be a scalar or an vector of values for events that should be triggered
-multiple times, fore each targeted individual.}
+can be a scalar in which case all targeted individuals are scheduled for
+for the same delay or an vector of values giving the delay for that
+individual.}
 }
 \if{html}{\out{</div>}}
 }

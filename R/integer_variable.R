@@ -25,12 +25,16 @@ IntegerVariable <- R6Class(
     get_values = function(index = NULL) {
       if (is.null(index)) {
         return(integer_variable_get_values(self$.variable))
+      } else{
+        if (inherits(index, 'Bitset')){
+          return(integer_variable_get_values_at_index(self$.variable, index$.bitset))
+        } else {
+          stopifnot(all(index > 0))
+          stopifnot(all(is.finite(index)))
+          return(integer_variable_get_values_at_index_vector(self$.variable, index))
+        }
       }
-      if (is.numeric(index)) {
-        stopifnot(all(index > 0))
-        return(integer_variable_get_values_at_index_vector(self$.variable, index))
-      }
-      integer_variable_get_values_at_index(self$.variable, index$.bitset)
+      
     },
 
 
@@ -132,6 +136,7 @@ IntegerVariable <- R6Class(
           }
         } else {
           if (length(index) > 0) {
+            stopifnot(all(is.finite(index)))
             stopifnot(all(index > 0))
             integer_variable_queue_update(
               self$.variable,

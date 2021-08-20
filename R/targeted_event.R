@@ -17,24 +17,36 @@ TargetedEvent <- R6Class(
     #' @param target the individuals to pass to the listener, this may be 
     #' either a vector of integers or a \code{\link[individual]{Bitset}}.
     #' @param delay the number of time steps to wait before triggering the event,
-    #' can be a scalar or an vector of values for events that should be triggered
-    #' multiple times, fore each targeted individual.
+    #' can be a scalar in which case all targeted individuals are scheduled for
+    #' for the same delay or an vector of values giving the delay for that
+    #' individual.
     schedule = function(target, delay) {
-      if (length(delay) == 1) {
-        if (is.numeric(target)) {
-          targeted_event_schedule_vector(self$.event, target, delay)
+      # vector delay
+      if (length(delay) > 1) {
+        if (inherits(target, 'Bitset')) {
+          if (target$size() > 0){
+            targeted_event_schedule_multi_delay(self$.event, target$.bitset, delay) 
+          }
         } else {
-          targeted_event_schedule(self$.event, target$.bitset, delay)
+          if (length(target) > 0) {
+            stopifnot(all(is.finite(target)))
+            stopifnot(all(target > 0))
+            targeted_event_schedule_multi_delay_vector(self$.event, target, delay)
+          }
         }
+      # single delay
       } else {
         if (inherits(target, 'Bitset')) {
-          target <- target$to_vector()
+          if (target$size() > 0){
+            targeted_event_schedule(self$.event, target$.bitset, delay)
+          }
+        } else {
+          if (length(target) > 0){
+            stopifnot(all(is.finite(target)))
+            stopifnot(all(target > 0))
+            targeted_event_schedule_vector(self$.event, target, delay)
+          }
         }
-
-        if (length(target) != length(delay)) {
-          stop('target and delay must be the same size')
-        }
-        targeted_event_schedule_multi_delay(self$.event, target, delay)
       }
     },
 

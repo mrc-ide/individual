@@ -4,6 +4,16 @@
   * Add Mac OS files to .gitignore
   * Update pkgdown reference organization.
   * Update [R-CMD-check workflow](https://github.com/r-lib/actions/tree/master/examples#standard-ci-workflow).
+  * `Event.h` now defines class methods outside of the class definition for 
+  easier readability, and add documentation.
+  * `TargetedEvent$schedule` now dispatches to different C++ functions in `event.cpp`
+  and `Event.h` depending on if input index is a bitset or vector (previous 
+  behavior used bitset's $to_vector$ method in R to pass a vector).
+  * `test-event.R` now only contains tests for `Event` class, new test file
+  `test-targetedevent.R` contains a much updated suite of tests for the
+  `TargetedEvent` class.
+  * Fix bug where `CategoricalVariable` could be queued updates for indices in
+  a vector that were outside the range of the population.
 
 # individual 0.1.5
 

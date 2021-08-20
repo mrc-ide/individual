@@ -181,6 +181,10 @@ targeted_event_schedule_multi_delay <- function(event, target, delay) {
     invisible(.Call(`_individual_targeted_event_schedule_multi_delay`, event, target, delay))
 }
 
+targeted_event_schedule_multi_delay_vector <- function(event, target, delay) {
+    invisible(.Call(`_individual_targeted_event_schedule_multi_delay_vector`, event, target, delay))
+}
+
 event_get_timestep <- function(event) {
     .Call(`_individual_event_get_timestep`, event)
 }

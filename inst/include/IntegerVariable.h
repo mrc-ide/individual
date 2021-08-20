@@ -79,7 +79,12 @@ inline std::vector<int> IntegerVariable::get_values(const std::vector<size_t>& i
     
     auto result = std::vector<int>(index.size());
     for (auto i = 0u; i < index.size(); ++i) {
-        result[i] = values.at(index[i]);
+        if (index[i] >= size) {
+            std::stringstream message;
+            message << "index for IntegerVariable out of range, supplied index: " << index[i] << ", size of variable: " << size;
+            Rcpp::stop(message.str()); 
+        }
+        result[i] = values[index[i]];
     }
     return result;
 }
