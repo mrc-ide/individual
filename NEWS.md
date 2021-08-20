@@ -14,6 +14,9 @@
   `TargetedEvent` class.
   * Fix bug where `CategoricalVariable` could be queued updates for indices in
   a vector that were outside the range of the population.
+  * Update `Bitset$not` to operate in place. inplace = FALSE will be deprecated
+    in 0.2.0
+  * Rename the IterableBitset ~ operator to !
 
 # individual 0.1.5
 

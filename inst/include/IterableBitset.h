@@ -73,10 +73,11 @@ public:
     IterableBitset operator&(const IterableBitset&) const;
     IterableBitset operator|(const IterableBitset&) const;
     IterableBitset operator^(const IterableBitset&) const;
-    IterableBitset operator~() const;
+    IterableBitset operator!() const;
     IterableBitset& operator&=(const IterableBitset&);
     IterableBitset& operator|=(const IterableBitset&);
     IterableBitset& operator^=(const IterableBitset&);
+    IterableBitset& inverse();
     iterator begin();
     const_iterator begin() const;
     const_iterator cbegin() const;
@@ -232,15 +233,21 @@ inline IterableBitset<A> IterableBitset<A>::operator ^(const IterableBitset<A>& 
 }
 
 template<class A>
-inline IterableBitset<A> IterableBitset<A>::operator ~() const {
-    auto result = IterableBitset<A>(*this);
-    for (auto i = 0u; i < result.bitmap.size(); ++i) {
-        result.bitmap[i] = ~result.bitmap[i];
+inline IterableBitset<A>& IterableBitset<A>::inverse() {
+    for (auto i = 0u; i < bitmap.size(); ++i) {
+        bitmap[i] = ~bitmap[i];
     }
     //mask out the values after max_n
-    A residual = (static_cast<A>(1) << (result.max_n % result.num_bits)) - 1;
-    result.bitmap[result.bitmap.size() - 1] &= residual;
-    result.n = result.max_n - result.n;
+    A residual = (static_cast<A>(1) << (max_n % num_bits)) - 1;
+    bitmap[bitmap.size() - 1] &= residual;
+    n = max_n - n;
+    return *this;
+}
+
+template<class A>
+inline IterableBitset<A> IterableBitset<A>::operator !() const {
+    auto result = IterableBitset<A>(*this);
+    result.inverse();
     return result;
 }
 

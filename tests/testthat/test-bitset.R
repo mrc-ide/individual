@@ -129,13 +129,13 @@ test_that("bitset xor works for disjoint sets", {
 
 
 test_that("bitset combinations work", {
-  a <- Bitset$new(10)$not()
+  a <- Bitset$new(10)$not(FALSE)
   b <- Bitset$new(10)
   expect_equal(a$or(b)$to_vector(), seq(10))
 })
 
 test_that("multi-word bitset combinations work", {
-  a <- Bitset$new(100)$not()
+  a <- Bitset$new(100)$not(FALSE)
   b <- Bitset$new(100)
   expect_equal(a$or(b)$to_vector(), seq(100))
 })
@@ -143,8 +143,19 @@ test_that("multi-word bitset combinations work", {
 test_that("bitset inverse works", {
   a <- Bitset$new(10)
   a$insert(c(1, 5, 6))
-  expect_equal(a$not()$to_vector(), c(2, 3, 4, 7, 8, 9, 10))
-  expect_equal(a$not()$size(), 7)
+  expect_equal(a$not(FALSE)$to_vector(), c(2, 3, 4, 7, 8, 9, 10))
+  expect_equal(a$not(TRUE)$size(), 7)
+})
+
+test_that("bitset not inplace switch works", {
+  a <- Bitset$new(10)
+  a$insert(c(1, 5, 6))
+  b <- a
+  a$not(TRUE)
+  expect_equal(b$to_vector(), c(2, 3, 4, 7, 8, 9, 10))
+  b <- b$not(FALSE)
+  expect_equal(a$to_vector(), c(2, 3, 4, 7, 8, 9, 10))
+  expect_equal(b$to_vector(), c(1, 5, 6))
 })
 
 test_that("bitset sample works at rate = 0", {

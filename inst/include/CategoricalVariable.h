@@ -130,7 +130,7 @@ inline void CategoricalVariable::queue_update(
 inline void CategoricalVariable::update() {
     while(updates.size() > 0) {
         auto& next = updates.front();
-        auto inverse_update = ~next.second;
+        auto inverse_update = !next.second;
         for (auto& entry : indices) {
             if (entry.first == next.first) {
                 // destination state

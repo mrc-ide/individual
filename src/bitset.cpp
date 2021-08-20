@@ -62,9 +62,17 @@ void bitset_and(
 
 //[[Rcpp::export]]
 Rcpp::XPtr<individual_index_t> bitset_not(
-    const Rcpp::XPtr<individual_index_t> b
+    const Rcpp::XPtr<individual_index_t> b,
+    const bool inplace
     ) {
-    return Rcpp::XPtr<individual_index_t>(new individual_index_t(~(*b)), true);
+    if (inplace) {
+        b->inverse();
+        return b;
+    }
+    return Rcpp::XPtr<individual_index_t>(
+        new individual_index_t(!(*b)),
+        true
+    );
 }
 
 //[[Rcpp::export]]
@@ -88,7 +96,7 @@ void bitset_set_difference(
     const Rcpp::XPtr<individual_index_t> a,
     const Rcpp::XPtr<individual_index_t> b
     ) {
-    (*a) &= ~(*b);
+    (*a) &= !(*b);
 }
 
 //[[Rcpp::export]]

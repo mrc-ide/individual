@@ -3,7 +3,7 @@
 #' integers in some finite set (\code{max_size}), and can 
 #' efficiently perform set operations (union, intersection, complement, symmetric
 #' difference, set difference). 
-#' WARNING: all operations (except \code{$not}) are in-place so please use \code{$copy} 
+#' WARNING: All operations are in-place so please use \code{$copy}
 #' if you would like to perform an operation without destroying your current bitset.
 #' @importFrom R6 R6Class
 #' @export
@@ -62,8 +62,20 @@ Bitset <- R6Class(
     },
 
     #' @description to "bitwise not" or complement a bitset
-    #' This method returns a new bitset rather than doing in-place modification.
-    not = function() Bitset$new(from = bitset_not(self$.bitset)),
+    #' @param inplace whether to overwrite the current bitset
+    not = function(inplace) {
+      if (missing(inplace)) {
+        warning(paste(
+          "DEPRECATED: Future versions of Bitset$not will be in place",
+          "to be consistent with other bitset operations.",
+          "To copy this bitset please use the copy method.",
+          "To suppress this warning, please set the `inplace` argument.",
+          sep = " "
+        ))
+        inplace <- FALSE
+      }
+      Bitset$new(from = bitset_not(self$.bitset, inplace))
+    },
 
     #' @description to "bitwise xor" or get the symmetric difference of two bitset
     #' (keep elements in either bitset but not in their intersection)
