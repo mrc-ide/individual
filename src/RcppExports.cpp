@@ -9,11 +9,6 @@
 
 using namespace Rcpp;
 
-#ifdef RCPP_USE_GLOBAL_ROSTREAM
-Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
-Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
-#endif
-
 // create_bitset
 Rcpp::XPtr<individual_index_t> create_bitset(size_t size);
 RcppExport SEXP _individual_create_bitset(SEXP sizeSEXP) {
@@ -92,13 +87,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // bitset_not
-Rcpp::XPtr<individual_index_t> bitset_not(const Rcpp::XPtr<individual_index_t> b);
-RcppExport SEXP _individual_bitset_not(SEXP bSEXP) {
+Rcpp::XPtr<individual_index_t> bitset_not(const Rcpp::XPtr<individual_index_t> b, const bool inplace);
+RcppExport SEXP _individual_bitset_not(SEXP bSEXP, SEXP inplaceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(bitset_not(b));
+    Rcpp::traits::input_parameter< const bool >::type inplace(inplaceSEXP);
+    rcpp_result_gen = Rcpp::wrap(bitset_not(b, inplace));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -888,7 +884,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_bitset_size", (DL_FUNC) &_individual_bitset_size, 1},
     {"_individual_bitset_max_size", (DL_FUNC) &_individual_bitset_max_size, 1},
     {"_individual_bitset_and", (DL_FUNC) &_individual_bitset_and, 2},
-    {"_individual_bitset_not", (DL_FUNC) &_individual_bitset_not, 1},
+    {"_individual_bitset_not", (DL_FUNC) &_individual_bitset_not, 2},
     {"_individual_bitset_or", (DL_FUNC) &_individual_bitset_or, 2},
     {"_individual_bitset_xor", (DL_FUNC) &_individual_bitset_xor, 2},
     {"_individual_bitset_set_difference", (DL_FUNC) &_individual_bitset_set_difference, 2},

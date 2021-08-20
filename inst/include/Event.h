@@ -265,7 +265,7 @@ inline void TargetedEvent::schedule(
 
 //' @title clear scheduled events for `target` individuals
 inline void TargetedEvent::clear_schedule(const individual_index_t& target) {
-    auto not_target = ~target;
+    auto not_target = !target;
     for (auto& entry : targeted_schedule) {
         entry.second &= not_target;
     }

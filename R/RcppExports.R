@@ -29,8 +29,8 @@ bitset_and <- function(a, b) {
     invisible(.Call(`_individual_bitset_and`, a, b))
 }
 
-bitset_not <- function(b) {
-    .Call(`_individual_bitset_not`, b)
+bitset_not <- function(b, inplace) {
+    .Call(`_individual_bitset_not`, b, inplace)
 }
 
 bitset_or <- function(a, b) {
