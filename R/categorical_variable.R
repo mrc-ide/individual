@@ -48,7 +48,9 @@ CategoricalVariable <- R6Class(
     queue_update = function(value, index) {
       stopifnot(all(value %in% self$get_categories()))
       if (inherits(index, "Bitset")) {
-        categorical_variable_queue_update(self$.variable, value, index$.bitset)        
+        if (index$size() > 0) {
+          categorical_variable_queue_update(self$.variable, value, index$.bitset)
+        }
       } else {
         if (length(index) > 0) {
           stopifnot(all(is.finite(index)))

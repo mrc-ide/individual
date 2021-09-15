@@ -26,6 +26,9 @@ void categorical_variable_queue_update(
     const std::string& value,
     Rcpp::XPtr<individual_index_t> index
     ) {
+    if (index->max_size() != variable->size) {
+        Rcpp::stop("incompatible size bitset used to queue update for CategoricalVariable");
+    }
     variable->queue_update(value, *index);
 }
 
