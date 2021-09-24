@@ -42,9 +42,9 @@ model of a system into executable code, which is fast and memory efficient.
 # Statement of need
 
 Complex stochastic models are crucial for many tasks 
-in infectious disease epidemiology [@Ganyani:2021].
+in infectious disease epidemiology.
 Such models can formalize theory, generate synthetic data, evaluate counterfactual 
-scenarios, forecast trends, and be used for statistical inference. IBMs are a way to 
+scenarios, forecast trends, and be used for statistical inference [@Ganyani:2021]. IBMs are a way to 
 design disaggregated simulation models, usually contrasted
 with mathematical models, which may model a density or concentration
 of individuals, or otherwise lump individuals with similar attributes together in some
@@ -70,7 +70,7 @@ other hand a clear yet slow model can be practically unusable for tasks such as
 uncertainty quantification or statistical inference. `individual`
 provides a toolkit for users to write models that is general enough
 to cover nearly all models of practical interest using simple, standardized code which is
-fast enough to be useful for computationally heavy applications.
+fast enough to be useful for computationally taxing applications.
 
 # State of the field
 
@@ -78,8 +78,8 @@ There are many software libraries for epidemiological simulation,
 both in R and other programming languages. However, based on our review of
 existing software, no other library exists in
 the R language which provides users with a set of primitive elements for defining 
-epidemiological models without imposing strong restrictions upon the type of allowed
-models (e.g.; compartmental, network, etc.), or limiting users to particular
+epidemiological models without imposing strong restrictions upon the type of model
+that may be simulated (e.g.; compartmental, network, etc.), or limiting users to particular
 mathematical forms for model dynamics.
 
 ### General R Packages
@@ -95,17 +95,17 @@ existing R ecosystem.
 EpiModel [@Jenness:2018] allows the simulation of highly detailed discrete time
 models on networks, relying on the statnet [@Handcock:statnet] project for
 classes and algorithms. However due to its focus on directly transmitted
-diseases, `individual` may be more generic for other epidemiological situations
-(such as vector borne diseases). In addition it does not offer an interface for
+diseases, `individual` may be more applicable to other epidemiological situations 
+such as vector-borne diseases. In addition it does not offer an interface for
 compiled code.
 
-hybridModels [@Fernando:2020], similarly provides tools for generic IBM
-modelling in R. However, it is fully implemented in R, limiting the scope for
+hybridModels [@Fernando:2020], similarly provides tools for simulating epidemics
+on dynamic networks. However, it is fully implemented in R, limiting the scope for
 scale and optimisation.
 
-Other epidemiology packages in R are more specialised and restrict user models to 
-common forms. These include SimInf [@Bauer:2016], nosoi [@Lequime:2020],
-SPARSEMODr [@Mihaljevic:2021], EpiILMCT [@Almutiry:2020] and
+Other packages in R are more specialised or restrict the model's transmission dynamics 
+to specific mathematical forms (e.g.; mass action). These include SimInf [@Bauer:2016], 
+nosoi [@Lequime:2020], SPARSEMODr [@Mihaljevic:2021], EpiILMCT [@Almutiry:2020] and
 EpiILM [@Warriyar:2020].
 
 # Design Principles
@@ -120,12 +120,13 @@ code for updating their model, fully in R.
 
 In contrast to other individual based modeling software, where users focus on
 defining a type for simulated individuals,
-in `individual` users instead define variables, one for each characteristic. 
+in `individual` users instead define variables, one for each characteristic
+of the simulated population.
 Individual agents are defined by their their position in each bitset giving 
-membership in a variable, or position in a vector of integers or floats.
+membership in a variable, or element in a vector of integers or floats.
 This design is similar to a component system, a design pattern to help
 decouple complicated types [@Nystrom:2014]. 
-Because of this disaggregated representation of state, preforming
+Because of this disaggregated representation of state, performing
 operations to find and schedule cohorts of individuals benefits from fast bitwise operators.
 This state representation is (to our knowledge), novel for epidemiological simulation. 
 While @Rizzi:2018 proposed using a bitset to represent the state of each
@@ -140,7 +141,8 @@ can link to from their R package.
 Users can then write their own C++ code or benefit from other packages with
 a compiled interface,
 significantly enhancing the extensibility of `individual`'s API, and
-documentation on linking is available in [vignettes](https://mrc-ide.github.io/individual/articles/Performance.html).
+documentation on interacting with `individual`'s C++ API is available in
+the package [documentation](https://mrc-ide.github.io/individual/articles/Performance.html).
 
 After a user has specified all the variables in their model, dynamics
 are specified by processes which run each time step, and events which can be
@@ -166,6 +168,6 @@ of the package documentation.
 
 # Acknowledgements
 
-Pete Winskill, Richard Fitzjohn, Oliver Watson
+Peter Winskill, Richard Fitzjohn, Oliver Watson
 
 # References
