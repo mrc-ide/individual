@@ -5,43 +5,39 @@ create_random_data <- function(size, limit) {
   stopifnot(is.finite(size))
   stopifnot(is.finite(limit))
   stopifnot(limit > 0)
-  stopifnot(size > limit)
   sample.int(n = limit, size = size, replace = FALSE)
 }
 
+#' @title Create grid of parameters for benchmarking
+#' @param base1 the base of the first (major) sequence
+#' @param base2 the base of the second (minor) sequence, should be less than `base1`
+#' @param powers1 the sequence of powers for the first sequence, should not include powers < 1
+build_grid <- function(base1, base2, powers1) {
+  stopifnot(base2 < base1)
+  stopifnot(min(powers1) > 1)
+  
+  grid <- lapply(X = powers1, FUN = function(x) {
+    lim <- base1^x
+    y <- floor(log(base1^x) / log(base2))
+    size_seq <- base2^(1:y)
+    data.frame("limit" = lim, "size" = size_seq)
+  })
+  do.call(what = rbind, args = grid)
+}
 
 # limit: max size of bitset
 # size: number of elements to be inserted
-insert_index_grid
-
-limit_powers <- 1:7
-limit_seq <- 10^limit_powers
-
-insert_index_grid <- lapply(X = limit_powers, FUN = function(x) {
-  lim <- 10^x
-  y <- floor(log(10^x) / log(2))
-  size_seq <- 2^(0:y)
-  data.frame("limit" = lim, "size" = size_seq)
-})
-insert_index_grid <- do.call(what = rbind, args = insert_index_grid)
+limit_powers <- c(6)
+insert_index_grid <- build_grid(base1 = 10, base2 = 2, powers1 = limit_powers)
 
 insert_index <- bench::press(
  {
-    
-  }, 
- .grid = 
-)
-
-results <- bench::press(
-  rows = c(1000, 10000),
-  cols = c(2, 10),
-  {
-    dat <- create_df(rows, cols)
+    index <- individual::Bitset$new(size = limit)
+    data <- create_random_data(size = size, limit = limit)
     bench::mark(
-      min_iterations = 100,
-      bracket = dat[dat$x > 500, ],
-      which = dat[which(dat$x > 500), ],
-      subset = subset(dat, x > 500)
+      min_iterations = 10,
+      BM_insert_index = index$insert(data)
     )
-  }
+  }, 
+ .grid = insert_index_grid
 )
