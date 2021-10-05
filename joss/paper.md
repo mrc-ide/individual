@@ -27,8 +27,8 @@ bibliography: paper.bib
 # Summary
 
 `individual` is an R package which provides users a set of useful primitive elements
-for specifying individual based models (IBMs), with special attention to models
-for infectious disease epidemiology. 
+for specifying individual-based models (IBMs), also called agent-based models
+(ABMs), with special attention to models for infectious disease epidemiology. 
 Users build models by specifying variables for each characteristic describing individuals 
 in the simulated population using data structures from the package.
 `individual` provides efficient methods for finding
@@ -82,15 +82,15 @@ epidemiological models without imposing strong restrictions upon the type of mod
 that may be simulated (e.g.; compartmental, network, etc.), or limiting users to particular
 mathematical forms for model dynamics.
 
-### General R Packages
+### General R packages
 
-Generic individual based simulation packages in R include
+Generic individual-based simulation packages in R include
 IBMPopSim [@Giorgi:2020], ibm [@Oliveros:2016] and ibmcraftr [@Tun:2016].
 IBMPopSim provides sophisticated simulation algorithms, but requires users to input C++ code
 as a string which is then compiled, making it difficult to interface with the
 existing R ecosystem.
 
-### Epidemiological R Packages
+### Epidemiological R packages
 
 EpiModel [@Jenness:2018] allows the simulation of highly detailed discrete time
 models on networks, relying on the statnet [@Handcock:statnet] project for
@@ -108,7 +108,7 @@ to specific mathematical forms (e.g.; mass action). These include SimInf [@Bauer
 nosoi [@Lequime:2020], SPARSEMODr [@Mihaljevic:2021], EpiILMCT [@Almutiry:2020] and
 EpiILM [@Warriyar:2020].
 
-# Design Principles
+# Design principles
 
 Because in many epidemiological models the most important representation of state
 is a finite set of mutually exclusive values, such as the Susceptible, Infectious, Recovered
@@ -118,7 +118,7 @@ complement, symmetric difference, set difference) which are implemented as bitwi
 operations in the C++ source. This lets users write clear, highly efficient
 code for updating their model, fully in R. 
 
-In contrast to other individual based modeling software, where users focus on
+In contrast to other individual-based modeling software, where users focus on
 defining a type for simulated individuals,
 in `individual` users instead define variables, one for each characteristic
 of the simulated population.
@@ -151,7 +151,7 @@ executes processes, fires events and updates state on each discrete time step.
 
 ![A flow diagram for the simulation loop](sim_loop.png)
 
-# Licensing and Availability
+# Licensing and availability
 
 `individual` is licensed under the MIT License, with all
 source code stored at [GitHub](https://github.com/mrc-ide/individual).
@@ -168,6 +168,9 @@ of the package documentation.
 
 # Acknowledgements
 
-Peter Winskill, Richard Fitzjohn, Oliver Watson
+We would like to thank Dr. Pete Winskill and Dr. Oliver Watson for their
+encouragement, testing and contributions to the repository. And Dr. Richard
+Fitzjohn for his early technical feedback and expert advice on R package
+development.
 
 # References
