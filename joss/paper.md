@@ -1,5 +1,5 @@
 ---
-title: 'individual: An R package for individual based epidemiological models'
+title: 'individual: An R package for individual-based epidemiological models'
 tags:
   - R
   - epidemiology
