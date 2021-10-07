@@ -8,11 +8,11 @@
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03539/status.svg)](https://doi.org/10.21105/joss.03539)
 <!-- badges: end -->
 
-An R package for specifying and simulating individual based models.
+An R package for specifying and simulating individual-based models.
 
 This package is designed to:
 
-  1. encourage clear and testable components for defining your individual based 
+  1. encourage clear and testable components for defining your individual-based 
 models, and
   2. provide memory efficient, fast code for executing your model
 
@@ -64,7 +64,7 @@ learn more about how to speed up your model in `vignette("Performance")`.
 
 ## Statement of need
 
-Individual based models are important tools for infectious disease epidemiology,
+Individual-based models are important tools for infectious disease epidemiology,
 but practical use requires an implementation that is both comprehensible so that
 code may be maintained and adapted, and fast. "individual" is an R package which
 provides users a set of primitive classes using the [R6](https://github.com/r-lib/R6)
@@ -75,8 +75,8 @@ programmed using "individual". Computation is carried out in C++ using
 [Rcpp](https://github.com/RcppCore/Rcpp) to link to R, helping achieve good
 performance for even complex models.
 
-"individual" provides a unique method to specify individual based models compared
-to other agent/individual based modeling libraries, where users specify a type
+"individual" provides a unique method to specify individual-based models compared
+to other agent/individual-based modeling libraries, where users specify a type
 for agents, which are subsequently stored in an array or other data structure.
 In "individual", users instead instantiate a object for each variable which
 describes some aspect of state, using the appropriate R6 class. Finding subsets
@@ -110,7 +110,7 @@ contribute :)
  - Numerus Model Builder
  - NOVA
  - EMOD
- - Pathogen.jl, a package for individual based simulation of common compartmental models.
+ - Pathogen.jl, a package for individual-based simulation of common compartmental models.
 
 ### General R Packages
 
