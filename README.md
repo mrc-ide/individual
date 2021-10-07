@@ -5,6 +5,7 @@
 [![codecov.io](https://codecov.io/github/mrc-ide/individual/coverage.svg)](https://codecov.io/github/mrc-ide/individual)
 [![CRAN](https://www.r-pkg.org/badges/version/individual)](https://cran.r-project.org/package=individual)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.03539/status.svg)](https://doi.org/10.21105/joss.03539)
 <!-- badges: end -->
 
 An R package for specifying and simulating individual based models.
