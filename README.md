@@ -98,45 +98,45 @@ contribute :)
 
 ### Non R Software
 
- - Repast
- - Mesa
- - NetLogo
- - Agents.jl
+ - [Repast](https://github.com/repast)
+ - [Mesa](https://github.com/projectmesa/mesa)
+ - [NetLogo](https://ccl.northwestern.edu/netlogo/)
+ - [Agents.jl](https://github.com/JuliaDynamics/Agents.jl)
 
 ### Non R Software for Epi
 
- - EpiFire
- - SimpactCyan
- - Numerus Model Builder
+ - [EpiFire](https://github.com/tjhladish/EpiFire)
+ - [SimpactCyan](https://github.com/j0r1/simpactcyan)
+ - [Numerus Model Builder](https://www.numerusinc.com)
  - NOVA
- - EMOD
- - Pathogen.jl, a package for individual-based simulation of common compartmental models.
+ - [EMOD](https://www.idmod.org/tools#emod)
+ - [Pathogen.jl](https://github.com/jangevaare/Pathogen.jl), a package for individual-based simulation of common compartmental models.
 
 ### General R Packages
 
- - nlrx, RNetLogo, NetLogoR are NetLogo interfaces
- - RRepast is a repast interface
- - simecol, provides classes and methods to enhance reproducibility of ecological models.
+ - [nlrx](https://github.com/ropensci/nlrx), [RNetLogo](https://github.com/r-forge/rnetlogo), [NetLogoR](https://github.com/PredictiveEcology/NetLogoR) are NetLogo interfaces
+ - [RRepast](https://github.com/antonio-pgarcia/RRepast) is a repast interface
+ - [simecol](https://github.com/r-forge/simecol), provides classes and methods to enhance reproducibility of ecological models.
 
 ### R based DES
 
- - simmeR
- - SpaDES
+ - [simmeR](https://github.com/r-simmer/simmer)
+ - [SpaDES](https://github.com/PredictiveEcology/SpaDES)
 
 ### R based IBMs
 
- - IBMPopSim
- - ibm
- - ibmcraftr
+ - [IBMPopSim](https://github.com/DaphneGiorgi/IBMPopSim)
+ - [ibm](https://github.com/roliveros-ramos/ibm)
+ - [ibmcraftr](https://github.com/SaiTheinThanTun/ibmcraftr)
 
 ### R based Epi
 
- - EpiModel 
- - SimInf
- - hybridModels
+ - [EpiModel](https://github.com/statnet/EpiModel)
+ - [SimInf](https://github.com/stewid/SimInf)
+ - [hybridModels](https://github.com/fernandosm/hybridModels)
  - epinet
- - EpiDynamics
- - nosoi, generate synthetic data for phylogenetic analysis
- - EpiILMCT
- - EpiILM
- - SPARSEMODr
+ - [EpiDynamics](https://github.com/oswaldosantos/EpiDynamics)
+ - [nosoi](https://github.com/slequime/nosoi), generate synthetic data for phylogenetic analysis
+ - [EpiILMCT](https://github.com/waleedalmutiry/EpiILMCT)
+ - [EpiILM](https://github.com/waleedalmutiry/EpiILM)
+ - [SPARSEMODr](https://github.com/cran/SPARSEMODr)
