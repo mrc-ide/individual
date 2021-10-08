@@ -7,14 +7,14 @@ DoubleVariable <- R6Class(
   public = list(
     .variable = NULL,
 
-    #' @description Create a new DoubleVariable
+    #' @description Create a new DoubleVariable.
     #' @param initial_values a numeric vector of the initial value for each
-    #' individual
+    #' individual.
     initialize = function(initial_values) {
       self$.variable <- create_double_variable(initial_values)
     },
 
-    #' @description get the variable values
+    #' @description get the variable values.
     #' @param index optionally return a subset of the variable vector. If
     #' \code{NULL}, return all values; if passed a \code{\link[individual]{Bitset}}
     #' or integer vector, return values of those individuals.
@@ -65,7 +65,7 @@ DoubleVariable <- R6Class(
     #' should be a single number, which fills all of the variable values in 
     #' the population.}
     #' }
-    #' @param values a vector or scalar of values to assign at the index
+    #' @param values a vector or scalar of values to assign at the index.
     #' @param index is the index at which to apply the change, use \code{NULL} for the
     #' fill options. If using indices, this may be either a vector of integers or
     #' a \code{\link[individual]{Bitset}}.
