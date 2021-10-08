@@ -114,10 +114,10 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>An R package for specifying and simulating individual based models.</p>
+<p>An R package for specifying and simulating individual-based models.</p>
 <p>This package is designed to:</p>
 <ol>
-<li>encourage clear and testable components for defining your individual based models, and</li>
+<li>encourage clear and testable components for defining your individual-based models, and</li>
 <li>provide memory efficient, fast code for executing your model</li>
 </ol>
 <div id="installation" class="section level2">
@@ -148,8 +148,8 @@
 <div id="statement-of-need" class="section level2">
 <h2 class="hasAnchor">
 <a href="#statement-of-need" class="anchor"></a>Statement of need</h2>
-<p>Individual based models are important tools for infectious disease epidemiology, but practical use requires an implementation that is both comprehensible so that code may be maintained and adapted, and fast. “individual” is an R package which provides users a set of primitive classes using the <a href="https://github.com/r-lib/R6">R6</a> class system that define elements common to many tasks in infectious disease modeling. Using R6 classes helps ensure that methods invoked on objects are appropriate for that object type, aiding in testing and maintenance of models programmed using “individual”. Computation is carried out in C++ using <a href="https://github.com/RcppCore/Rcpp">Rcpp</a> to link to R, helping achieve good performance for even complex models.</p>
-<p>“individual” provides a unique method to specify individual based models compared to other agent/individual based modeling libraries, where users specify a type for agents, which are subsequently stored in an array or other data structure. In “individual”, users instead instantiate a object for each variable which describes some aspect of state, using the appropriate R6 class. Finding subsets of individuals with particular combinations of state variables for further computation can be efficiently accomplished with set operations, using a custom bitset class implemented in C++. Additionally, the software makes no assumptions on the types of models that may be simulated (<em>e.g.</em> mass action, network), and updates are performed on a discrete time step.</p>
+<p>Individual-based models are important tools for infectious disease epidemiology, but practical use requires an implementation that is both comprehensible so that code may be maintained and adapted, and fast. “individual” is an R package which provides users a set of primitive classes using the <a href="https://github.com/r-lib/R6">R6</a> class system that define elements common to many tasks in infectious disease modeling. Using R6 classes helps ensure that methods invoked on objects are appropriate for that object type, aiding in testing and maintenance of models programmed using “individual”. Computation is carried out in C++ using <a href="https://github.com/RcppCore/Rcpp">Rcpp</a> to link to R, helping achieve good performance for even complex models.</p>
+<p>“individual” provides a unique method to specify individual-based models compared to other agent/individual-based modeling libraries, where users specify a type for agents, which are subsequently stored in an array or other data structure. In “individual”, users instead instantiate a object for each variable which describes some aspect of state, using the appropriate R6 class. Finding subsets of individuals with particular combinations of state variables for further computation can be efficiently accomplished with set operations, using a custom bitset class implemented in C++. Additionally, the software makes no assumptions on the types of models that may be simulated (<em>e.g.</em> mass action, network), and updates are performed on a discrete time step.</p>
 <p>We hope our software is useful to infectious disease modellers, ecologists, and others who are interested in individual-based modeling in R.</p>
 </div>
 <div id="contributing" class="section level2">
@@ -164,63 +164,68 @@
 <h3 class="hasAnchor">
 <a href="#non-r-software" class="anchor"></a>Non R Software</h3>
 <ul>
-<li>Repast</li>
-<li>Mesa</li>
-<li>NetLogo</li>
-<li>Agents.jl</li>
+<li><a href="https://github.com/repast">Repast</a></li>
+<li><a href="https://github.com/projectmesa/mesa">Mesa</a></li>
+<li><a href="https://ccl.northwestern.edu/netlogo/">NetLogo</a></li>
+<li><a href="https://github.com/JuliaDynamics/Agents.jl">Agents.jl</a></li>
 </ul>
 </div>
 <div id="non-r-software-for-epi" class="section level3">
 <h3 class="hasAnchor">
 <a href="#non-r-software-for-epi" class="anchor"></a>Non R Software for Epi</h3>
 <ul>
-<li>EpiFire</li>
-<li>SimpactCyan</li>
-<li>Numerus Model Builder</li>
+<li><a href="https://github.com/tjhladish/EpiFire">EpiFire</a></li>
+<li><a href="https://github.com/j0r1/simpactcyan">SimpactCyan</a></li>
+<li><a href="https://www.numerusinc.com">Numerus Model Builder</a></li>
 <li>NOVA</li>
-<li>EMOD</li>
-<li>Pathogen.jl, a package for individual based simulation of common compartmental models.</li>
+<li><a href="https://www.idmod.org/tools#emod">EMOD</a></li>
+<li>
+<a href="https://github.com/jangevaare/Pathogen.jl">Pathogen.jl</a>, a package for individual-based simulation of common compartmental models.</li>
 </ul>
 </div>
 <div id="general-r-packages" class="section level3">
 <h3 class="hasAnchor">
 <a href="#general-r-packages" class="anchor"></a>General R Packages</h3>
 <ul>
-<li>nlrx, RNetLogo, NetLogoR are NetLogo interfaces</li>
-<li>RRepast is a repast interface</li>
-<li>simecol, provides classes and methods to enhance reproducibility of ecological models.</li>
+<li>
+<a href="https://github.com/ropensci/nlrx">nlrx</a>, <a href="https://github.com/r-forge/rnetlogo">RNetLogo</a>, <a href="https://github.com/PredictiveEcology/NetLogoR">NetLogoR</a> are NetLogo interfaces</li>
+<li>
+<a href="https://github.com/antonio-pgarcia/RRepast">RRepast</a> is a repast interface</li>
+<li>
+<a href="https://github.com/r-forge/simecol">simecol</a>, provides classes and methods to enhance reproducibility of ecological models.</li>
 </ul>
 </div>
 <div id="r-based-des" class="section level3">
 <h3 class="hasAnchor">
 <a href="#r-based-des" class="anchor"></a>R based DES</h3>
 <ul>
-<li>simmeR</li>
-<li>SpaDES</li>
+<li><a href="https://github.com/r-simmer/simmer">simmeR</a></li>
+<li><a href="https://github.com/PredictiveEcology/SpaDES">SpaDES</a></li>
 </ul>
 </div>
 <div id="r-based-ibms" class="section level3">
 <h3 class="hasAnchor">
 <a href="#r-based-ibms" class="anchor"></a>R based IBMs</h3>
 <ul>
-<li>IBMPopSim</li>
-<li>ibm</li>
-<li>ibmcraftr</li>
+<li><a href="https://github.com/DaphneGiorgi/IBMPopSim">IBMPopSim</a></li>
+<li><a href="https://github.com/roliveros-ramos/ibm">ibm</a></li>
+<li><a href="https://github.com/SaiTheinThanTun/ibmcraftr">ibmcraftr</a></li>
 </ul>
 </div>
 <div id="r-based-epi" class="section level3">
 <h3 class="hasAnchor">
 <a href="#r-based-epi" class="anchor"></a>R based Epi</h3>
 <ul>
-<li>EpiModel</li>
-<li>SimInf</li>
-<li>hybridModels</li>
+<li><a href="https://github.com/statnet/EpiModel">EpiModel</a></li>
+<li><a href="https://github.com/stewid/SimInf">SimInf</a></li>
+<li><a href="https://github.com/fernandosm/hybridModels">hybridModels</a></li>
 <li>epinet</li>
-<li>EpiDynamics</li>
-<li>nosoi, generate synthetic data for phylogenetic analysis</li>
-<li>EpiILMCT</li>
-<li>EpiILM</li>
-<li>SPARSEMODr</li>
+<li><a href="https://github.com/oswaldosantos/EpiDynamics">EpiDynamics</a></li>
+<li>
+<a href="https://github.com/slequime/nosoi">nosoi</a>, generate synthetic data for phylogenetic analysis</li>
+<li><a href="https://github.com/waleedalmutiry/EpiILMCT">EpiILMCT</a></li>
+<li><a href="https://github.com/waleedalmutiry/EpiILM">EpiILM</a></li>
+<li><a href="https://github.com/cran/SPARSEMODr">SPARSEMODr</a></li>
 </ul>
 </div>
 </div>
