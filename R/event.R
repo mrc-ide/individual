@@ -1,5 +1,5 @@
 #' @title Event Class
-#' @description Describes a general event in the simulation
+#' @description Describes a general event in the simulation.
 #' @importFrom R6 R6Class
 #' @export
 Event <- R6Class(
@@ -9,25 +9,25 @@ Event <- R6Class(
     .event = NULL,
     .listeners = list(),
 
-    #' @description Initialise an Event
+    #' @description Initialise an Event.
     initialize = function() {
       self$.event <- create_event()
     },
 
-    #' @description Add an event listener
+    #' @description Add an event listener.
     #' @param listener the function to be executed on the event, which takes a single
     #' argument giving the time step when this event is triggered. 
     add_listener = function(listener) {
       self$.listeners <- c(self$.listeners, listener)
     },
 
-    #' @description Schedule this event to occur in the future
+    #' @description Schedule this event to occur in the future.
     #' @param delay the number of time steps to wait before triggering the event,
-    #' can be a scalar or an vector of values for events that should be triggered
+    #' can be a scalar or a vector of values for events that should be triggered
     #' multiple times.
     schedule = function(delay) event_schedule(self$.event, delay),
 
-    #' @description Stop a future event from triggering
+    #' @description Stop a future event from triggering.
     clear_schedule = function() event_clear_schedule(self$.event),
   
     .tick = function() event_tick(self$.event),
