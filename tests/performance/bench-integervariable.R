@@ -31,11 +31,13 @@ create_random_index_bitset <- function(size, limit) {
 }
 
 #' @title Create grid of parameters for benchmarking
+#' @description First, construct a grid of values raising `base1` to powers in
+#' `powers1` (the major sequence).
 #' @param base1 the base of the first (major) sequence
 #' @param base2 the base of the second (minor) sequence, should be less than `base1`
 #' @param powers1 the sequence of powers for the first sequence, should not include powers < 1
-#' @param n the number of times to run each combination
-build_grid <- function(base1, base2, powers1, n) {
+#' @param n the number of times to run each combination, or extra integer argument.
+build_grid_2base <- function(base1, base2, powers1, n) {
   stopifnot(base2 < base1)
   stopifnot(min(powers1) > 1)
   
@@ -48,15 +50,14 @@ build_grid <- function(base1, base2, powers1, n) {
   do.call(what = rbind, args = grid)
 }
 
-
 # base1 is for maximal population size
 # base2 is for the updating size
 # n is the number of updates that are queued
-test_grid <- build_grid(base1 = 10, base2 = 4, powers1 = c(5), n = 3)
+test_grid <- build_grid_2base(base1 = 10, base2 = 5, powers1 = c(3, 5), n = 3)
 
 
 # single value, bitset index
-update_1 <- bench::press(
+update_sv_bi <- bench::press(
   {
     variable <- individual::IntegerVariable$new(initial_values = rep(1L, limit))
     indices <- lapply(X = 1:n, FUN = function(nn){
@@ -64,7 +65,9 @@ update_1 <- bench::press(
     })
     value <- 0L
     bench::mark(
-      min_iterations = 10,
+      min_iterations = 50,
+      check = FALSE, 
+      filter_gc = TRUE,
       BM_update = {
         lapply(X = indices, FUN = function(b){
           variable$queue_update(values = value, index = b)
@@ -76,3 +79,90 @@ update_1 <- bench::press(
   .grid = test_grid
 )
 
+# vector value, bitset index
+update_vv_bi <- bench::press(
+  {
+    variable <- individual::IntegerVariable$new(initial_values = rep(1L, limit))
+    indices <- lapply(X = 1:n, FUN = function(nn){
+      create_random_index_bitset(size = size, limit = limit)
+    })
+    value <- rep(0L, size)
+    bench::mark(
+      min_iterations = 50,
+      check = FALSE,
+      filter_gc = TRUE,
+      BM_update = {
+        lapply(X = indices, FUN = function(b){
+          variable$queue_update(values = value, index = b)
+        })
+        variable$.update()
+      }
+    )
+  }, 
+  .grid = test_grid
+)
+
+# single value, vector index
+update_sv_vi <- bench::press(
+  {
+    variable <- individual::IntegerVariable$new(initial_values = rep(1L, limit))
+    indices <- lapply(X = 1:n, FUN = function(nn){
+      create_random_index_bitset(size = size, limit = limit)$to_vector()
+    })
+    value <- 0L
+    bench::mark(
+      min_iterations = 50,
+      check = FALSE,
+      filter_gc = TRUE,
+      BM_update = {
+        lapply(X = indices, FUN = function(b){
+          variable$queue_update(values = value, index = b)
+        })
+        variable$.update()
+      }
+    )
+  }, 
+  .grid = test_grid
+)
+
+# vector value, vector index
+update_vv_vi <- bench::press(
+  {
+    variable <- individual::IntegerVariable$new(initial_values = rep(1L, limit))
+    indices <- lapply(X = 1:n, FUN = function(nn){
+      create_random_index_bitset(size = size, limit = limit)$to_vector()
+    })
+    value <- rep(0L, size)
+    bench::mark(
+      min_iterations = 50,
+      check = FALSE,
+      filter_gc = TRUE,
+      BM_update = {
+        lapply(X = indices, FUN = function(b){
+          variable$queue_update(values = value, index = b)
+        })
+        variable$.update()
+      }
+    )
+  }, 
+  .grid = test_grid
+)
+
+update_sv_bi$type <- "sv-bi"
+update_vv_bi$type <- "vv-bi"
+update_sv_vi$type <- "sv-vi"
+update_vv_vi$type <- "vv-vi"
+
+update_sv_bi <- tidyr::unnest(update_sv_bi, c(time, gc))
+update_vv_bi <- tidyr::unnest(update_vv_bi, c(time, gc))
+update_sv_vi <- tidyr::unnest(update_sv_vi, c(time, gc))
+update_vv_vi <- tidyr::unnest(update_vv_vi, c(time, gc))
+
+update_all <- rbind(update_sv_bi, update_vv_bi, update_sv_vi, update_vv_vi)
+
+ggplot(data = update_all[update_all$gc == "none", ]) +
+  geom_violin(aes(type, time, color = type)) +
+  facet_wrap(limit ~ size, scales = "free") +
+  coord_trans(y = "log10")
+
+              
