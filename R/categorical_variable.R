@@ -3,7 +3,7 @@
 #' This class should be used for discrete variables taking values in 
 #' a finite set, such as infection, health, or behavioral state. It should
 #' be used in preference to \code{\link[individual]{IntegerVariable}}
-#' if possible bevause certain operations will be faster.
+#' if possible because certain operations will be faster.
 #' @importFrom R6 R6Class
 #' @export
 CategoricalVariable <- R6Class(
