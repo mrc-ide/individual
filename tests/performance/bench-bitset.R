@@ -27,10 +27,9 @@ build_grid <- function(base1, base2, powers1) {
 
 # limit: max size of bitset
 # size: number of elements to be inserted
-limit_powers <- c(6)
-insert_index_grid <- build_grid(base1 = 10, base2 = 2, powers1 = limit_powers)
+insert_index_grid <- build_grid(base1 = 10, base2 = 2, powers1 = 5)
 
-insert_index <- bench::press(
+insert_bset <- bench::press(
  {
     index <- individual::Bitset$new(size = limit)
     data <- create_random_data(size = size, limit = limit)
@@ -40,4 +39,18 @@ insert_index <- bench::press(
     )
   }, 
  .grid = insert_index_grid
+)
+
+
+# erase
+erase_bset <- bench::press(
+  {
+    index <- individual::Bitset$new(size = limit)$insert(1:limit)
+    data <- create_random_data(size = size, limit = limit)
+    bench::mark(
+      min_iterations = 10,
+      BM_insert_index = index$remove(data)
+    )
+  }, 
+  .grid = insert_index_grid
 )

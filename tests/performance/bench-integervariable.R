@@ -4,6 +4,11 @@
 # single value, vector index
 # many values, vector index
 
+library(individual)
+library(bench)
+library(ggplot2)
+library(tidyr)
+
 # for each we want to run multiple times and apply the update.
 # each time we can use random indices.
 
@@ -68,7 +73,7 @@ update_sv_bi <- bench::press(
       min_iterations = 50,
       check = FALSE, 
       filter_gc = TRUE,
-      BM_update = {
+      {
         lapply(X = indices, FUN = function(b){
           variable$queue_update(values = value, index = b)
         })
@@ -91,7 +96,7 @@ update_vv_bi <- bench::press(
       min_iterations = 50,
       check = FALSE,
       filter_gc = TRUE,
-      BM_update = {
+      {
         lapply(X = indices, FUN = function(b){
           variable$queue_update(values = value, index = b)
         })
@@ -114,7 +119,7 @@ update_sv_vi <- bench::press(
       min_iterations = 50,
       check = FALSE,
       filter_gc = TRUE,
-      BM_update = {
+      {
         lapply(X = indices, FUN = function(b){
           variable$queue_update(values = value, index = b)
         })
@@ -137,7 +142,7 @@ update_vv_vi <- bench::press(
       min_iterations = 50,
       check = FALSE,
       filter_gc = TRUE,
-      BM_update = {
+      {
         lapply(X = indices, FUN = function(b){
           variable$queue_update(values = value, index = b)
         })
@@ -159,10 +164,9 @@ update_sv_vi <- tidyr::unnest(update_sv_vi, c(time, gc))
 update_vv_vi <- tidyr::unnest(update_vv_vi, c(time, gc))
 
 update_all <- rbind(update_sv_bi, update_vv_bi, update_sv_vi, update_vv_vi)
+update_all <- update_all[update_all$gc == "none", ]
 
-ggplot(data = update_all[update_all$gc == "none", ]) +
-  geom_violin(aes(type, time, color = type)) +
-  facet_wrap(limit ~ size, scales = "free") +
-  coord_trans(y = "log10")
-
+ggplot(data = update_all) +
+  geom_violin(aes(type, time, fill = type, color = type)) +
+  facet_wrap(limit ~ size, scales = "free", labeller = label_context)
               
