@@ -1,3 +1,12 @@
+# benchmark the bitset object in individual
+# currently we only benchmark erasure and insertion of elements,
+# eventually more (all?) of its functionality will be benchmarked
+
+library(individual)
+library(bench)
+library(ggplot2)
+library(tidyr)
+
 #' @title Create random integer vector
 #' @param size the size of the vector to be produced
 #' @param limit random elements will be between 1 and limit
@@ -34,8 +43,10 @@ insert_bset <- bench::press(
     index <- individual::Bitset$new(size = limit)
     data <- create_random_data(size = size, limit = limit)
     bench::mark(
-      min_iterations = 10,
-      BM_insert_index = index$insert(data)
+      min_iterations = 50,
+      check = FALSE, 
+      filter_gc = TRUE,
+      {index$insert(data)}
     )
   }, 
  .grid = insert_index_grid
@@ -48,9 +59,23 @@ erase_bset <- bench::press(
     index <- individual::Bitset$new(size = limit)$insert(1:limit)
     data <- create_random_data(size = size, limit = limit)
     bench::mark(
-      min_iterations = 10,
-      BM_insert_index = index$remove(data)
+      min_iterations = 50,
+      check = FALSE, 
+      filter_gc = TRUE,
+      {index$remove(data)}
     )
   }, 
   .grid = insert_index_grid
 )
+
+erase_bset <- tidyr::unnest(erase_bset, c(time, gc))
+erase_bset <- erase_bset[erase_bset$gc == "none", ]
+
+ggplot(data = erase_bset) +
+  geom_violin(aes(x = as.factor(size), y = time))
+
+insert_bset <- tidyr::unnest(insert_bset, c(time, gc))
+insert_bset <- insert_bset[insert_bset$gc == "none", ]
+
+ggplot(data = insert_bset) +
+  geom_violin(aes(x = as.factor(size), y = time))
