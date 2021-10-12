@@ -1,4 +1,4 @@
-#' @title Integer Variable Class
+#' @title IntegerVariable Class
 #' @description Represents a integer valued variable for an individual.
 #' This class is similar to \code{\link[individual]{CategoricalVariable}},
 #' but can be used for variables with unbounded ranges, or other situations where part
@@ -12,13 +12,13 @@ IntegerVariable <- R6Class(
 
     .variable = NULL,
 
-    #' @description Create a new IntegerVariable
+    #' @description Create a new IntegerVariable.
     #' @param initial_values a vector of the initial values for each individual
     initialize = function(initial_values) {
       self$.variable <- create_integer_variable(as.integer(initial_values))
     },
 
-    #' @description Get the variable values
+    #' @description Get the variable values.
     #' @param index optionally return a subset of the variable vector. If
     #' \code{NULL}, return all values; if passed a \code{\link[individual]{Bitset}}
     #' or integer vector, return values of those individuals.
@@ -38,7 +38,7 @@ IntegerVariable <- R6Class(
     },
 
 
-    #' @description Return a \code{\link[individual]{Bitset}} for individuals with some subset of values
+    #' @description Return a \code{\link[individual]{Bitset}} for individuals with some subset of values.
     #' Either search for indices corresponding to values in \code{set}, or
     #' for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
     #' or \code{a} and \code{b} must be provided as arguments.
@@ -64,7 +64,7 @@ IntegerVariable <- R6Class(
         stop("please provide a set of values to check, or both bounds of range [a,b]")        
     },
 
-    #' @description Return the number of individuals with some subset of values
+    #' @description Return the number of individuals with some subset of values.
     #' Either search for indices corresponding to values in \code{set}, or
     #' for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
     #' or \code{a} and \code{b} must be provided as arguments.
