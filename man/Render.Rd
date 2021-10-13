@@ -4,7 +4,7 @@
 \alias{Render}
 \title{Render}
 \description{
-Class to render output for the simulation
+Class to render output for the simulation.
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -21,7 +21,7 @@ Class to render output for the simulation
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Initialise a renderer for the simulation, creates the default state
-renderers
+renderers.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Render$new(timesteps)}\if{html}{\out{</div>}}
 }
@@ -29,7 +29,7 @@ renderers
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{timesteps}}{number of timesteps in the simulation}
+\item{\code{timesteps}}{number of timesteps in the simulation.}
 }
 \if{html}{\out{</div>}}
 }
@@ -39,7 +39,7 @@ renderers
 \if{latex}{\out{\hypertarget{method-set_default}{}}}
 \subsection{Method \code{set_default()}}{
 Set a default value for a rendered output
-renderers
+renderers.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Render$set_default(name, value)}\if{html}{\out{</div>}}
 }
@@ -47,9 +47,9 @@ renderers
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{name}}{the variable to set a default for}
+\item{\code{name}}{the variable to set a default for.}
 
-\item{\code{value}}{the default value to set for a variable}
+\item{\code{value}}{the default value to set for a variable.}
 }
 \if{html}{\out{</div>}}
 }
@@ -58,7 +58,7 @@ renderers
 \if{html}{\out{<a id="method-render"></a>}}
 \if{latex}{\out{\hypertarget{method-render}{}}}
 \subsection{Method \code{render()}}{
-Update the render with new simulation data
+Update the render with new simulation data.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Render$render(name, value, timestep)}\if{html}{\out{</div>}}
 }
@@ -66,11 +66,11 @@ Update the render with new simulation data
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{name}}{the variable to render}
+\item{\code{name}}{the variable to render.}
 
-\item{\code{value}}{the value to store for the variable}
+\item{\code{value}}{the value to store for the variable.}
 
-\item{\code{timestep}}{the timestep of the data point}
+\item{\code{timestep}}{the time-step of the data point.}
 }
 \if{html}{\out{</div>}}
 }
@@ -79,7 +79,7 @@ Update the render with new simulation data
 \if{html}{\out{<a id="method-to_dataframe"></a>}}
 \if{latex}{\out{\hypertarget{method-to_dataframe}{}}}
 \subsection{Method \code{to_dataframe()}}{
-Return the render as a \code{\link[base]{data.frame}}
+Return the render as a \code{\link[base]{data.frame}}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Render$to_dataframe()}\if{html}{\out{</div>}}
 }

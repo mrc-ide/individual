@@ -2,7 +2,7 @@
 % Please edit documentation in R/integer_variable.R
 \name{IntegerVariable}
 \alias{IntegerVariable}
-\title{Integer Variable Class}
+\title{IntegerVariable Class}
 \description{
 Represents a integer valued variable for an individual.
 This class is similar to \code{\link[individual]{CategoricalVariable}},
@@ -26,7 +26,7 @@ household or age bin.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new IntegerVariable
+Create a new IntegerVariable.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$new(initial_values)}\if{html}{\out{</div>}}
 }
@@ -43,7 +43,7 @@ Create a new IntegerVariable
 \if{html}{\out{<a id="method-get_values"></a>}}
 \if{latex}{\out{\hypertarget{method-get_values}{}}}
 \subsection{Method \code{get_values()}}{
-Get the variable values
+Get the variable values.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$get_values(index = NULL)}\if{html}{\out{</div>}}
 }
@@ -62,7 +62,7 @@ or integer vector, return values of those individuals.}
 \if{html}{\out{<a id="method-get_index_of"></a>}}
 \if{latex}{\out{\hypertarget{method-get_index_of}{}}}
 \subsection{Method \code{get_index_of()}}{
-Return a \code{\link[individual]{Bitset}} for individuals with some subset of values
+Return a \code{\link[individual]{Bitset}} for individuals with some subset of values.
 Either search for indices corresponding to values in \code{set}, or
 for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
 or \code{a} and \code{b} must be provided as arguments.
@@ -86,7 +86,7 @@ or \code{a} and \code{b} must be provided as arguments.
 \if{html}{\out{<a id="method-get_size_of"></a>}}
 \if{latex}{\out{\hypertarget{method-get_size_of}{}}}
 \subsection{Method \code{get_size_of()}}{
-Return the number of individuals with some subset of values
+Return the number of individuals with some subset of values.
 Either search for indices corresponding to values in \code{set}, or
 for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
 or \code{a} and \code{b} must be provided as arguments.

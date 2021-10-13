@@ -34,9 +34,11 @@ build_grid <- function(base1, base2, powers1) {
   do.call(what = rbind, args = grid)
 }
 
+# core operations
+
 # limit: max size of bitset
 # size: number of elements to be inserted
-insert_index_grid <- build_grid(base1 = 10, base2 = 2, powers1 = 5)
+args_grid <- build_grid(base1 = 10, base2 = 5, powers1 = 5)
 
 insert_bset <- bench::press(
  {
@@ -49,9 +51,24 @@ insert_bset <- bench::press(
       {index$insert(data)}
     )
   }, 
- .grid = insert_index_grid
+ .grid = args_grid
 )
 
+# iteration: use to_vector
+iterate_bset <- bench::press(
+  {
+    index <- individual::Bitset$new(size = limit)
+    data <- create_random_data(size = size, limit = limit)
+    index$insert(data)
+    bench::mark(
+      min_iterations = 50,
+      check = FALSE, 
+      filter_gc = TRUE,
+      {index$to_vector()}
+    )
+  }, 
+  .grid = args_grid
+)
 
 # erase
 erase_bset <- bench::press(
@@ -65,7 +82,7 @@ erase_bset <- bench::press(
       {index$remove(data)}
     )
   }, 
-  .grid = insert_index_grid
+  .grid = args_grid
 )
 
 erase_bset <- tidyr::unnest(erase_bset, c(time, gc))
@@ -74,8 +91,66 @@ erase_bset <- erase_bset[erase_bset$gc == "none", ]
 ggplot(data = erase_bset) +
   geom_violin(aes(x = as.factor(size), y = time))
 
+iterate_bset <- tidyr::unnest(iterate_bset, c(time, gc))
+iterate_bset <- iterate_bset[iterate_bset$gc == "none", ]
+
+ggplot(data = iterate_bset) +
+  geom_violin(aes(x = as.factor(size), y = time))
+
 insert_bset <- tidyr::unnest(insert_bset, c(time, gc))
 insert_bset <- insert_bset[insert_bset$gc == "none", ]
 
 ggplot(data = insert_bset) +
   geom_violin(aes(x = as.factor(size), y = time))
+
+# set operations
+# or_bset
+# and_bset
+# not_bset
+# xor_bset
+# set_diff_bset
+
+# sampling operations
+# sample_bset
+
+choose_bset <- bench::press(
+  {
+    index <- individual::Bitset$new(size = limit)$insert(1:limit)
+    bench::mark(
+      min_iterations = 50,
+      check = FALSE, 
+      filter_gc = TRUE,
+      {index$choose(k = size)},
+    )
+  }, 
+  .grid = args_grid
+) 
+
+choose_bset <- tidyr::unnest(choose_bset, c(time, gc))
+choose_bset <- choose_bset[choose_bset$gc == "none", ]
+
+ggplot(data = choose_bset) +
+  geom_violin(aes(x = as.factor(size), y = time))
+
+filter_bset <- bench::press(
+  {
+    index <- individual::Bitset$new(size = limit)$insert(1:limit)
+    vector_idx <- create_random_data(size = size, limit = limit)
+    bset_idx <- individual::Bitset$new(size = limit)$insert(vector_idx)
+    bench::mark(
+      min_iterations = 50,
+      check = FALSE, 
+      filter_gc = TRUE,
+      vector = {individual::filter_bitset(bitset = index, other = vector_idx)},
+      bset = {individual::filter_bitset(bitset = index, other = bset_idx)}
+    )
+  }, 
+  .grid = args_grid
+) 
+
+filter_bset <- tidyr::unnest(filter_bset, c(time, gc))
+filter_bset <- filter_bset[filter_bset$gc == "none", ]
+
+ggplot(data = filter_bset) +
+  geom_violin(aes(x = expression, y = time, color = expression, fill = expression)) +
+  facet_wrap(size ~ limit, scales = "free")

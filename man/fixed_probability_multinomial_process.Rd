@@ -13,18 +13,18 @@ fixed_probability_multinomial_process(
 )
 }
 \arguments{
-\item{variable}{a \code{\link{CategoricalVariable}} object}
+\item{variable}{a \code{\link{CategoricalVariable}} object.}
 
-\item{source_state}{a string representing the source state}
+\item{source_state}{a string representing the source state.}
 
-\item{destination_states}{a vector of strings representing the destination states}
+\item{destination_states}{a vector of strings representing the destination states.}
 
-\item{rate}{probability of individuals in source state to leave}
+\item{rate}{probability of individuals in source state to leave.}
 
-\item{destination_probabilities}{probability vector of destination states}
+\item{destination_probabilities}{probability vector of destination states.}
 }
 \value{
-a function which can be passed as a process to \code{\link{simulation_loop}}
+a function which can be passed as a process to \code{\link{simulation_loop}}.
 }
 \description{
 Simulates a two-stage process where all individuals

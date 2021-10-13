@@ -4,7 +4,7 @@
 \alias{Event}
 \title{Event Class}
 \description{
-Describes a general event in the simulation
+Describes a general event in the simulation.
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -24,7 +24,7 @@ Describes a general event in the simulation
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Initialise an Event
+Initialise an Event.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$new()}\if{html}{\out{</div>}}
 }
@@ -34,7 +34,7 @@ Initialise an Event
 \if{html}{\out{<a id="method-add_listener"></a>}}
 \if{latex}{\out{\hypertarget{method-add_listener}{}}}
 \subsection{Method \code{add_listener()}}{
-Add an event listener
+Add an event listener.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$add_listener(listener)}\if{html}{\out{</div>}}
 }
@@ -52,7 +52,7 @@ argument giving the time step when this event is triggered.}
 \if{html}{\out{<a id="method-schedule"></a>}}
 \if{latex}{\out{\hypertarget{method-schedule}{}}}
 \subsection{Method \code{schedule()}}{
-Schedule this event to occur in the future
+Schedule this event to occur in the future.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$schedule(delay)}\if{html}{\out{</div>}}
 }
@@ -61,7 +61,7 @@ Schedule this event to occur in the future
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{delay}}{the number of time steps to wait before triggering the event,
-can be a scalar or an vector of values for events that should be triggered
+can be a scalar or a vector of values for events that should be triggered
 multiple times.}
 }
 \if{html}{\out{</div>}}
@@ -71,7 +71,7 @@ multiple times.}
 \if{html}{\out{<a id="method-clear_schedule"></a>}}
 \if{latex}{\out{\hypertarget{method-clear_schedule}{}}}
 \subsection{Method \code{clear_schedule()}}{
-Stop a future event from triggering
+Stop a future event from triggering.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$clear_schedule()}\if{html}{\out{</div>}}
 }

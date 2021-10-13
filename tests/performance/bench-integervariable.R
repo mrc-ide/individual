@@ -58,7 +58,7 @@ build_grid_2base <- function(base1, base2, powers1, n) {
 # base1 is for maximal population size
 # base2 is for the updating size
 # n is the number of updates that are queued
-test_grid <- build_grid_2base(base1 = 10, base2 = 5, powers1 = c(3, 5), n = 3)
+args_grid <- build_grid_2base(base1 = 10, base2 = 5, powers1 = c(3, 5), n = 3)
 
 
 # single value, bitset index
@@ -81,7 +81,7 @@ update_sv_bi <- bench::press(
       }
     )
   }, 
-  .grid = test_grid
+  .grid = args_grid
 )
 
 # vector value, bitset index
@@ -104,7 +104,7 @@ update_vv_bi <- bench::press(
       }
     )
   }, 
-  .grid = test_grid
+  .grid = args_grid
 )
 
 # single value, vector index
@@ -127,7 +127,7 @@ update_sv_vi <- bench::press(
       }
     )
   }, 
-  .grid = test_grid
+  .grid = args_grid
 )
 
 # vector value, vector index
@@ -150,7 +150,7 @@ update_vv_vi <- bench::press(
       }
     )
   }, 
-  .grid = test_grid
+  .grid = args_grid
 )
 
 update_sv_bi$type <- "sv-bi"
