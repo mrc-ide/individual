@@ -149,7 +149,7 @@ update_vv_vi <- bench::press(
         variable$.update()
       }
     )
-  }, 
+  },
   .grid = args_grid
 )
 
