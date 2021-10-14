@@ -1,5 +1,5 @@
 #' @title TargetedEvent Class
-#' @description Describes a targeted event in the simulation
+#' @description Describes a targeted event in the simulation.
 #' This is useful for events which are triggered for a sub-population.
 #' @importFrom R6 R6Class
 #' @export
@@ -7,18 +7,18 @@ TargetedEvent <- R6Class(
   'TargetedEvent',
   inherit = Event,
   public = list(
-    #' @description Initialise a TargetedEvent
-    #' @param population_size the size of the population
+    #' @description Initialise a TargetedEvent.
+    #' @param population_size the size of the population.
     initialize = function(population_size) {
       self$.event <- create_targeted_event(population_size)
     },
 
-    #' @description Schedule this event to occur in the future
+    #' @description Schedule this event to occur in the future.
     #' @param target the individuals to pass to the listener, this may be 
     #' either a vector of integers or a \code{\link[individual]{Bitset}}.
     #' @param delay the number of time steps to wait before triggering the event,
     #' can be a scalar in which case all targeted individuals are scheduled for
-    #' for the same delay or an vector of values giving the delay for that
+    #' for the same delay or a vector of values giving the delay for that
     #' individual.
     schedule = function(target, delay) {
       # vector delay
@@ -55,7 +55,7 @@ TargetedEvent <- R6Class(
       Bitset$new(from = targeted_event_get_scheduled(self$.event))
     },
 
-    #' @description Stop a future event from triggering for a subset of individuals
+    #' @description Stop a future event from triggering for a subset of individuals.
     #' @param target the individuals to clear, this may be either a vector of integers or
     #' a \code{\link[individual]{Bitset}}.
     clear_schedule = function(target) {

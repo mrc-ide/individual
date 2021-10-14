@@ -1,5 +1,5 @@
 #' @title A Bitset Class
-#' @description This is a data strucutre that compactly stores the presence of 
+#' @description This is a data structure that compactly stores the presence of 
 #' integers in some finite set (\code{max_size}), and can 
 #' efficiently perform set operations (union, intersection, complement, symmetric
 #' difference, set difference). 
@@ -10,16 +10,16 @@
 Bitset <- R6Class(
   'Bitset',
   public = list(
-    #' @field .bitset a pointer to the underlying IterableBitset
+    #' @field .bitset a pointer to the underlying IterableBitset.
     .bitset = NULL,
 
-    #' @field max_size the maximum size of the bitset
+    #' @field max_size the maximum size of the bitset.
     max_size = 0,
 
-    #' @description create a bitset
-    #' @param size the size of the bitset
+    #' @description create a bitset.
+    #' @param size the size of the bitset.
     #' @param from pointer to an existing IterableBitset to use; if \code{NULL}
-    #' make empty bitset, otherwise copy existing bitset
+    #' make empty bitset, otherwise copy existing bitset.
     initialize = function(size, from = NULL) {
       if (is.null(from)) {
         self$.bitset <- create_bitset(size)
@@ -30,39 +30,39 @@ Bitset <- R6Class(
       self$max_size <- bitset_max_size(self$.bitset)
     },
 
-    #' @description insert into the bitset
-    #' @param v an integer vector of elements to insert
+    #' @description insert into the bitset.
+    #' @param v an integer vector of elements to insert.
     insert = function(v) {
       bitset_insert(self$.bitset, v)
       self
     },
 
-    #' @description remove from the bitset
-    #' @param v an integer vector of elements (not indices) to remove
+    #' @description remove from the bitset.
+    #' @param v an integer vector of elements (not indices) to remove.
     remove = function(v) {
       bitset_remove(self$.bitset, v)
       self
     },
 
-    #' @description get the number of elements in the set
+    #' @description get the number of elements in the set.
     size = function() bitset_size(self$.bitset),
 
-    #' @description to "bitwise or" or union two bitsets
-    #' @param other the other bitset
+    #' @description to "bitwise or" or union two bitsets.
+    #' @param other the other bitset.
     or = function(other) {
       bitset_or(self$.bitset, other$.bitset)
       self
     },
 
-    #' @description to "bitwise and" or intersect two bitsets
-    #' @param other the other bitset
+    #' @description to "bitwise and" or intersect two bitsets.
+    #' @param other the other bitset.
     and = function(other) {
       bitset_and(self$.bitset, other$.bitset)
       self
     },
 
-    #' @description to "bitwise not" or complement a bitset
-    #' @param inplace whether to overwrite the current bitset
+    #' @description to "bitwise not" or complement a bitset.
+    #' @param inplace whether to overwrite the current bitset.
     not = function(inplace) {
       if (missing(inplace)) {
         warning(paste(
@@ -78,8 +78,8 @@ Bitset <- R6Class(
     },
 
     #' @description to "bitwise xor" or get the symmetric difference of two bitset
-    #' (keep elements in either bitset but not in their intersection)
-    #' @param other the other bitset
+    #' (keep elements in either bitset but not in their intersection).
+    #' @param other the other bitset.
     xor = function(other){
       bitset_xor(self$.bitset, other$.bitset)
       self
@@ -87,15 +87,15 @@ Bitset <- R6Class(
 
     #' @description Take the set difference of this bitset with another
     #' (keep elements of this bitset which are not in \code{other}).
-    #' @param other the other bitset
+    #' @param other the other bitset.
     set_difference = function(other){
       bitset_set_difference(self$.bitset, other$.bitset)
       self
     },
 
-    #' @description sample a bitset
+    #' @description sample a bitset.
     #' @param rate the success probability for keeping each element, can be
-    #' a single value for all elements or a vector with of unique
+    #' a single value for all elements or a vector of unique
     #' probabilities for keeping each element.
     sample = function(rate) {
       if (length(rate) == 1) {
@@ -121,11 +121,11 @@ Bitset <- R6Class(
       self
     },
 
-    #' @description returns a copy the bitset
+    #' @description returns a copy the bitset.
     copy = function() Bitset$new(from = bitset_copy(self$.bitset)),
 
     #' @description return an integer vector of the elements
-    #' stored in this bitset
+    #' stored in this bitset.
     to_vector = function() bitset_to_vector(self$.bitset)
     
   )

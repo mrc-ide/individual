@@ -5,13 +5,14 @@
 [![codecov.io](https://codecov.io/github/mrc-ide/individual/coverage.svg)](https://codecov.io/github/mrc-ide/individual)
 [![CRAN](https://www.r-pkg.org/badges/version/individual)](https://cran.r-project.org/package=individual)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.03539/status.svg)](https://doi.org/10.21105/joss.03539)
 <!-- badges: end -->
 
-An R package for specifying and simulating individual based models.
+An R package for specifying and simulating individual-based models.
 
 This package is designed to:
 
-  1. encourage clear and testable components for defining your individual based 
+  1. encourage clear and testable components for defining your individual-based 
 models, and
   2. provide memory efficient, fast code for executing your model
 
@@ -63,7 +64,7 @@ learn more about how to speed up your model in `vignette("Performance")`.
 
 ## Statement of need
 
-Individual based models are important tools for infectious disease epidemiology,
+Individual-based models are important tools for infectious disease epidemiology,
 but practical use requires an implementation that is both comprehensible so that
 code may be maintained and adapted, and fast. "individual" is an R package which
 provides users a set of primitive classes using the [R6](https://github.com/r-lib/R6)
@@ -74,8 +75,8 @@ programmed using "individual". Computation is carried out in C++ using
 [Rcpp](https://github.com/RcppCore/Rcpp) to link to R, helping achieve good
 performance for even complex models.
 
-"individual" provides a unique method to specify individual based models compared
-to other agent/individual based modeling libraries, where users specify a type
+"individual" provides a unique method to specify individual-based models compared
+to other agent/individual-based modeling libraries, where users specify a type
 for agents, which are subsequently stored in an array or other data structure.
 In "individual", users instead instantiate a object for each variable which
 describes some aspect of state, using the appropriate R6 class. Finding subsets
@@ -97,45 +98,45 @@ contribute :)
 
 ### Non R Software
 
- - Repast
- - Mesa
- - NetLogo
- - Agents.jl
+ - [Repast](https://github.com/repast)
+ - [Mesa](https://github.com/projectmesa/mesa)
+ - [NetLogo](https://ccl.northwestern.edu/netlogo/)
+ - [Agents.jl](https://github.com/JuliaDynamics/Agents.jl)
 
 ### Non R Software for Epi
 
- - EpiFire
- - SimpactCyan
- - Numerus Model Builder
+ - [EpiFire](https://github.com/tjhladish/EpiFire)
+ - [SimpactCyan](https://github.com/j0r1/simpactcyan)
+ - [Numerus Model Builder](https://www.numerusinc.com)
  - NOVA
- - EMOD
- - Pathogen.jl, a package for individual based simulation of common compartmental models.
+ - [EMOD](https://www.idmod.org/tools#emod)
+ - [Pathogen.jl](https://github.com/jangevaare/Pathogen.jl), a package for individual-based simulation of common compartmental models.
 
 ### General R Packages
 
- - nlrx, RNetLogo, NetLogoR are NetLogo interfaces
- - RRepast is a repast interface
- - simecol, provides classes and methods to enhance reproducibility of ecological models.
+ - [nlrx](https://github.com/ropensci/nlrx), [RNetLogo](https://github.com/r-forge/rnetlogo), [NetLogoR](https://github.com/PredictiveEcology/NetLogoR) are NetLogo interfaces
+ - [RRepast](https://github.com/antonio-pgarcia/RRepast) is a repast interface
+ - [simecol](https://github.com/r-forge/simecol), provides classes and methods to enhance reproducibility of ecological models.
 
 ### R based DES
 
- - simmeR
- - SpaDES
+ - [simmeR](https://github.com/r-simmer/simmer)
+ - [SpaDES](https://github.com/PredictiveEcology/SpaDES)
 
 ### R based IBMs
 
- - IBMPopSim
- - ibm
- - ibmcraftr
+ - [IBMPopSim](https://github.com/DaphneGiorgi/IBMPopSim)
+ - [ibm](https://github.com/roliveros-ramos/ibm)
+ - [ibmcraftr](https://github.com/SaiTheinThanTun/ibmcraftr)
 
 ### R based Epi
 
- - EpiModel 
- - SimInf
- - hybridModels
+ - [EpiModel](https://github.com/statnet/EpiModel)
+ - [SimInf](https://github.com/stewid/SimInf)
+ - [hybridModels](https://github.com/fernandosm/hybridModels)
  - epinet
- - EpiDynamics
- - nosoi, generate synthetic data for phylogenetic analysis
- - EpiILMCT
- - EpiILM
- - SPARSEMODr
+ - [EpiDynamics](https://github.com/oswaldosantos/EpiDynamics)
+ - [nosoi](https://github.com/slequime/nosoi), generate synthetic data for phylogenetic analysis
+ - [EpiILMCT](https://github.com/waleedalmutiry/EpiILMCT)
+ - [EpiILM](https://github.com/waleedalmutiry/EpiILM)
+ - [SPARSEMODr](https://github.com/cran/SPARSEMODr)
