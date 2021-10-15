@@ -145,7 +145,7 @@ struct TargetedEvent : public EventBase {
 
 };
 
-inline TargetedEvent::TargetedEvent(size_t size) : size(size) {};
+inline TargetedEvent::TargetedEvent(size_t size) : size(size) {}
 
 //' @title should first event fire on this timestep?
 inline bool TargetedEvent::should_trigger() {

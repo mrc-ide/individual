@@ -9,11 +9,6 @@
 
 using namespace Rcpp;
 
-#ifdef RCPP_USE_GLOBAL_ROSTREAM
-Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
-Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
-#endif
-
 // create_bitset
 Rcpp::XPtr<individual_index_t> create_bitset(size_t size);
 RcppExport SEXP _individual_create_bitset(SEXP sizeSEXP) {
@@ -878,7 +873,7 @@ RcppExport SEXP _individual_RcppExport_registerCCallable() {
     return R_NilValue;
 }
 
-RcppExport SEXP run_testthat_tests();
+RcppExport SEXP run_testthat_tests(SEXP use_xml_sxp);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_individual_create_bitset", (DL_FUNC) &_individual_create_bitset, 1},
@@ -953,7 +948,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_infection_age_process_internal", (DL_FUNC) &_individual_infection_age_process_internal, 9},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
-    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},
+    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };
 
