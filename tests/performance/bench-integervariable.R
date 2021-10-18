@@ -35,6 +35,16 @@ create_random_index_bitset <- function(size, limit) {
   return(bset)
 }
 
+#' @title Simplify output of [bench::press] for plotting
+#' @description Unnest output to generate histograms or density plots, and remove
+#' all runs where any level of garbage collection was executed.
+#' @param out output of [bench::press] function
+simplify_bench_output <- function(out) {
+  out <- tidyr::unnest(out, c(time, gc))
+  out <- out[out$gc == "none", ]
+  return(out)
+}
+
 #' @title Create grid of parameters for benchmarking
 #' @description First, construct a grid of values raising `base1` to powers in
 #' `powers1` (the major sequence).
@@ -60,6 +70,10 @@ build_grid_2base <- function(base1, base2, powers1, n) {
 # n is the number of updates that are queued
 args_grid <- build_grid_2base(base1 = 10, base2 = 5, powers1 = c(3, 5), n = 3)
 
+
+# ------------------------------------------------------------
+# benchmark: queue and apply updates
+# ------------------------------------------------------------
 
 # single value, bitset index
 update_sv_bi <- bench::press(
@@ -158,13 +172,12 @@ update_vv_bi$type <- "vv-bi"
 update_sv_vi$type <- "sv-vi"
 update_vv_vi$type <- "vv-vi"
 
-update_sv_bi <- tidyr::unnest(update_sv_bi, c(time, gc))
-update_vv_bi <- tidyr::unnest(update_vv_bi, c(time, gc))
-update_sv_vi <- tidyr::unnest(update_sv_vi, c(time, gc))
-update_vv_vi <- tidyr::unnest(update_vv_vi, c(time, gc))
+update_sv_bi <- simplify_bench_output(update_sv_bi)
+update_vv_bi <- simplify_bench_output(update_vv_bi)
+update_sv_vi <- simplify_bench_output(update_sv_vi)
+update_vv_vi <- simplify_bench_output(update_vv_vi)
 
 update_all <- rbind(update_sv_bi, update_vv_bi, update_sv_vi, update_vv_vi)
-update_all <- update_all[update_all$gc == "none", ]
 
 ggplot(data = update_all) +
   geom_violin(aes(type, time, fill = type, color = type)) +

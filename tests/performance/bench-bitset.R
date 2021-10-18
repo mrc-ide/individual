@@ -32,6 +32,16 @@ create_random_bitset <- function(size, limit) {
   return(bset)
 }
 
+#' @title Simplify output of [bench::press] for plotting
+#' @description Unnest output to generate histograms or density plots, and remove
+#' all runs where any level of garbage collection was executed.
+#' @param out output of [bench::press] function
+simplify_bench_output <- function(out) {
+  out <- tidyr::unnest(out, c(time, gc))
+  out <- out[out$gc == "none", ]
+  return(out)
+}
+
 #' @title Create grid of parameters for benchmarking
 #' @param base1 the base of the first (major) sequence
 #' @param base2 the base of the second (minor) sequence, should be less than `base1`
@@ -52,17 +62,6 @@ build_grid <- function(base1, base2, powers1) {
 # limit: max size of bitset
 # size: number of elements to be inserted
 args_grid <- build_grid(base1 = 10, base2 = 5, powers1 = 5)
-
-
-#' @title Simplify output of [bench::press] for plotting
-#' @description Unnest output to generate histograms or density plots, and remove
-#' all runs where any level of garbage collection was executed.
-#' @param out output of [bench::press] function
-simplify_bench_output <- function(out) {
-  out <- tidyr::unnest(out, c(time, gc))
-  out <- out[out$gc == "none", ]
-  return(out)
-}
 
 
 # ------------------------------------------------------------
@@ -203,17 +202,26 @@ set_diff_bset <- bench::press(
   .grid = args_grid
 )
 
+or_bset$type <- "or"
 or_bset <- simplify_bench_output(out = or_bset)
+
+and_bset$type <- "and"
 and_bset <- simplify_bench_output(out = and_bset)
+
+not_bset$type <- "not"
 not_bset <- simplify_bench_output(out = not_bset)
+
+xor_bset$type <- "xor"
 xor_bset <- simplify_bench_output(out = xor_bset)
+
+set_diff_bset$type <- "set_diff"
 set_diff_bset <- simplify_bench_output(out = set_diff_bset)
 
 set_ops_bset <- rbind(or_bset, and_bset, not_bset, xor_bset, set_diff_bset)
 
 ggplot(data = set_ops_bset) +
   geom_violin(aes(x = as.factor(size), y = time, color = as.factor(size), fill = as.factor(size))) +
-  facet_wrap(. ~ expression, scales = "free")
+  facet_wrap(. ~ type, scales = "free")
 
 
 # ------------------------------------------------------------

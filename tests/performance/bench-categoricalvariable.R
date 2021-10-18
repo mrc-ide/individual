@@ -12,16 +12,6 @@ library(tidyr)
 # for each we want to run multiple times and apply the update.
 # each time we can use random indices.
 
-#' @title Create random integer vector
-#' @param size the size of the vector to be produced
-#' @param limit random elements will be between 1 and limit
-create_random_index_vector <- function(size, limit) {
-  stopifnot(is.finite(size))
-  stopifnot(is.finite(limit))
-  stopifnot(limit > 0)
-  sample.int(n = limit, size = size, replace = FALSE)
-}
-
 #' @title Create random bitset
 #' @param size the number of set elements in the bitset
 #' @param limit maximum size of the bitset
@@ -75,21 +65,20 @@ args_grid <- build_grid_2base(base1 = 10, base2 = 5, powers1 = c(3, 5), n = 3)
 # benchmark: queue and apply updates
 # ------------------------------------------------------------
 
-# single value, bitset index
-update_sv_bi <- bench::press(
+update_bset <- bench::press(
   {
-    variable <- individual::DoubleVariable$new(initial_values = rep(1, limit))
+    variable <- individual::CategoricalVariable$new(categories = LETTERS[1:2], initial_values = rep(LETTERS[1], times = limit))
     indices <- lapply(X = 1:n, FUN = function(nn){
       create_random_index_bitset(size = size, limit = limit)
     })
-    value <- 0
+    value <- LETTERS[2]
     bench::mark(
       min_iterations = 50,
       check = FALSE, 
       filter_gc = TRUE,
       {
         lapply(X = indices, FUN = function(b){
-          variable$queue_update(values = value, index = b)
+          variable$queue_update(value = value, index = b)
         })
         variable$.update()
       }
@@ -98,44 +87,20 @@ update_sv_bi <- bench::press(
   .grid = args_grid
 )
 
-# vector value, bitset index
-update_vv_bi <- bench::press(
+update_vector <- bench::press(
   {
-    variable <- individual::DoubleVariable$new(initial_values = rep(1, limit))
-    indices <- lapply(X = 1:n, FUN = function(nn){
-      create_random_index_bitset(size = size, limit = limit)
-    })
-    value <- rep(0, size)
-    bench::mark(
-      min_iterations = 50,
-      check = FALSE,
-      filter_gc = TRUE,
-      {
-        lapply(X = indices, FUN = function(b){
-          variable$queue_update(values = value, index = b)
-        })
-        variable$.update()
-      }
-    )
-  }, 
-  .grid = args_grid
-)
-
-# single value, vector index
-update_sv_vi <- bench::press(
-  {
-    variable <- individual::DoubleVariable$new(initial_values = rep(1, limit))
+    variable <- individual::CategoricalVariable$new(categories = LETTERS[1:2], initial_values = rep(LETTERS[1], times = limit))
     indices <- lapply(X = 1:n, FUN = function(nn){
       create_random_index_bitset(size = size, limit = limit)$to_vector()
     })
-    value <- 0
+    value <- LETTERS[2]
     bench::mark(
       min_iterations = 50,
-      check = FALSE,
+      check = FALSE, 
       filter_gc = TRUE,
       {
         lapply(X = indices, FUN = function(b){
-          variable$queue_update(values = value, index = b)
+          variable$queue_update(value = value, index = b)
         })
         variable$.update()
       }
@@ -144,42 +109,16 @@ update_sv_vi <- bench::press(
   .grid = args_grid
 )
 
-# vector value, vector index
-update_vv_vi <- bench::press(
-  {
-    variable <- individual::DoubleVariable$new(initial_values = rep(1, limit))
-    indices <- lapply(X = 1:n, FUN = function(nn){
-      create_random_index_bitset(size = size, limit = limit)$to_vector()
-    })
-    value <- rep(0, size)
-    bench::mark(
-      min_iterations = 50,
-      check = FALSE,
-      filter_gc = TRUE,
-      {
-        lapply(X = indices, FUN = function(b){
-          variable$queue_update(values = value, index = b)
-        })
-        variable$.update()
-      }
-    )
-  },
-  .grid = args_grid
-)
 
-update_sv_bi$type <- "sv-bi"
-update_vv_bi$type <- "vv-bi"
-update_sv_vi$type <- "sv-vi"
-update_vv_vi$type <- "vv-vi"
+update_bset$type <- "bset"
+update_vector$type <- "vector"
 
-update_sv_bi <- simplify_bench_output(update_sv_bi)
-update_vv_bi <- simplify_bench_output(update_vv_bi)
-update_sv_vi <- simplify_bench_output(update_sv_vi)
-update_vv_vi <- simplify_bench_output(update_vv_vi)
+update_bset <- simplify_bench_output(update_bset)
+update_vector <- simplify_bench_output(update_vector)
 
-update_all <- rbind(update_sv_bi, update_vv_bi, update_sv_vi, update_vv_vi)
+update_all <- rbind(update_bset, update_vector)
 
 ggplot(data = update_all) +
   geom_violin(aes(type, time, fill = type, color = type)) +
   facet_wrap(limit ~ size, scales = "free", labeller = label_context)
-              
+
