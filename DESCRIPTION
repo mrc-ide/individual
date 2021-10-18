@@ -49,12 +49,13 @@ Imports:
   R6,
   Rcpp
 Suggests:
-  ggplot2,
-  knitr,
-  mockery,
-  rmarkdown,
-  pkgdown,
-  testthat (>= 2.1.0)
+    ggplot2,
+    knitr,
+    mockery,
+    rmarkdown,
+    pkgdown,
+    testthat (>= 2.1.0),
+    xml2
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 LinkingTo:

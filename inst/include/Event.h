@@ -13,6 +13,7 @@
 #include <set>
 #include <map>
 #include <functional>
+#include <unordered_set>
 
 using listener_t = std::function<void (size_t)>;
 using targeted_listener_t = std::function<void (size_t, const individual_index_t&)>;
@@ -145,7 +146,7 @@ struct TargetedEvent : public EventBase {
 
 };
 
-inline TargetedEvent::TargetedEvent(size_t size) : size(size) {};
+inline TargetedEvent::TargetedEvent(size_t size) : size(size) {}
 
 //' @title should first event fire on this timestep?
 inline bool TargetedEvent::should_trigger() {

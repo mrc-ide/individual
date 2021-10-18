@@ -1,6 +1,5 @@
 # benchmark the bitset object in individual
 # currently we only benchmark erasure and insertion of elements,
-# eventually more (all?) of its functionality will be benchmarked
 
 rm(list = ls()); gc()
 

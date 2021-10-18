@@ -1,9 +1,3 @@
-# need to check queueing updates and applying updates for:
-# single value, bitset index
-# many values bitset index
-# single value, vector index
-# many values, vector index
-
 library(individual)
 library(bench)
 library(ggplot2)
