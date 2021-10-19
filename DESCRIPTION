@@ -55,7 +55,8 @@ Suggests:
     rmarkdown,
     pkgdown,
     testthat (>= 2.1.0),
-    xml2
+    xml2,
+    bench
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 LinkingTo:
