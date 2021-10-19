@@ -14,7 +14,7 @@ source("./tests/performance/utils.R")
 # base1 is for maximal population size
 # base2 is for the updating size
 # n is the number of updates that are queued
-args_grid <- build_grid_2base(base1 = 10, base2 = 5, powers1 = c(3, 5), n = 3)
+args_grid <- build_grid(base1 = 10, base2 = 5, powers1 = c(3, 5), n = 3)
 
 
 # ------------------------------------------------------------
@@ -65,7 +65,6 @@ update_vector <- bench::press(
   .grid = args_grid
 )
 
-
 update_bset$type <- "bset"
 update_vector$type <- "vector"
 
@@ -76,5 +75,6 @@ update_all <- rbind(update_bset, update_vector)
 
 ggplot(data = update_all) +
   geom_violin(aes(type, time, fill = type, color = type)) +
-  facet_wrap(limit ~ size, scales = "free", labeller = label_context)
+  facet_wrap(limit ~ size, scales = "free", labeller = label_context) +
+  ggtitle("Categorical variable benchmark")
 

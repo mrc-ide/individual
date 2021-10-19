@@ -75,7 +75,7 @@ simplify_bench_output <- function(out) {
 #' @param base1 the base of the first (major) sequence
 #' @param base2 the base of the second (minor) sequence, should be less than `base1`
 #' @param powers1 the sequence of powers for the first sequence, should not include powers < 1
-build_grid <- function(base1, base2, powers1) {
+build_grid <- function(base1, base2, powers1, n = NULL) {
   stopifnot(base2 < base1)
   stopifnot(min(powers1) > 1)
   
@@ -85,5 +85,9 @@ build_grid <- function(base1, base2, powers1) {
     size_seq <- base2^(1:y)
     data.frame("limit" = lim, "size" = size_seq)
   })
-  do.call(what = rbind, args = grid)
+  out <- do.call(what = rbind, args = grid)
+  if (!is.null(n)) {
+    out$n <- as.integer(n)
+  }
+  return(out)
 }

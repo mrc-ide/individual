@@ -78,7 +78,8 @@ core_ops_bset <- rbind(erase_bset, iterate_bset, insert_bset)
 
 ggplot(data = core_ops_bset) +
   geom_violin(aes(x = as.factor(size), y = time, color = as.factor(size), fill = as.factor(size))) +
-  facet_wrap(. ~ type, scales = "free")
+  facet_wrap(. ~ type, scales = "free") +
+  ggtitle("Core operations benchmark")
 
 
 # ------------------------------------------------------------
@@ -173,7 +174,8 @@ set_ops_bset <- rbind(or_bset, and_bset, not_bset, xor_bset, set_diff_bset)
 
 ggplot(data = set_ops_bset) +
   geom_violin(aes(x = as.factor(size), y = time, color = as.factor(size), fill = as.factor(size))) +
-  facet_wrap(. ~ type, scales = "free")
+  facet_wrap(. ~ type, scales = "free") +
+  ggtitle("Set operations benchmark")
 
 
 # ------------------------------------------------------------
@@ -196,7 +198,8 @@ choose_bset <- bench::press(
 choose_bset <- simplify_bench_output(choose_bset)
 
 ggplot(data = choose_bset) +
-  geom_violin(aes(x = as.factor(size), y = time))
+  geom_violin(aes(x = as.factor(size), y = time, color = as.factor(size), fill = as.factor(size))) +
+  ggtitle("Sampling operations benchmark: choose")
 
 filter_bset <- bench::press(
   {
@@ -218,4 +221,5 @@ filter_bset <- simplify_bench_output(filter_bset)
 
 ggplot(data = filter_bset) +
   geom_violin(aes(x = as.factor(expression), y = time, color = expression, fill = expression)) +
-  facet_wrap(size ~ limit, scales = "free")
+  facet_wrap(size ~ limit, scales = "free") +
+  ggtitle("Sampling operations benchmark: filter")
