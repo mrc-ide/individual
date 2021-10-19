@@ -35,10 +35,24 @@ create_random_bitset <- function(size, limit) {
 #' @description Unnest output to generate histograms or density plots, and remove
 #' all runs where any level of garbage collection was executed.
 #' @param out output of [bench::press] function
-simplify_bench_output <- function(out) {
-  out <- tidyr::unnest(out, c(time, gc))
-  out <- out[out$gc == "none", ]
-  return(out)
+simplify_bench_output_new <- function(out) {
+  x <- lapply(X = seq_len(nrow(out)), FUN = function(i) {
+    # get gc level (if run) as factor
+    gc <- rep("none", times = nrow(out$gc[[i]]))
+    gc[which(out$gc[[i]][["level0"]] != 0)] <- "level0"
+    gc[which(out$gc[[i]][["level1"]] != 0)] <- "level1"
+    gc[which(out$gc[[i]][["level2"]] != 0)] <- "level2"
+    gc <- factor(x = gc, levels = c("none", "level0", "level1", "level2"), ordered = FALSE)
+    # time
+    time <- out$time[[i]]
+    # replicate rows
+    n <- length(time)
+    out_i <- out[rep(i, times = n), which(!(colnames(out) %in% c("result", "memory", "time", "gc")))]
+    out_i$time <- time
+    out_i$gc <- gc
+    return(out_i)
+  })
+  return(do.call(what = rbind, args = x))
 }
 
 #' @title Create grid of parameters for benchmarking
@@ -124,7 +138,7 @@ ggplot(data = iterate_bset) +
 
 insert_bset <- simplify_bench_output(out = insert_bset)
 
-ggplot(data = insert_bset) +
+ggplot(data = insert_bset_tidyr) +
   geom_violin(aes(x = as.factor(size), y = time))
 
 
