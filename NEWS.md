@@ -1,3 +1,7 @@
+# individual 0.1.7
+
+  * Check for bad bitset input when queueing updates to CategoricalVariable objects [PR here](https://github.com/mrc-ide/individual/pull/145).
+
 # individual 0.1.6
 
   * Added a `NEWS.md` file to track changes to the package.

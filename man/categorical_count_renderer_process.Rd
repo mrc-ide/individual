@@ -7,15 +7,15 @@
 categorical_count_renderer_process(renderer, variable, categories)
 }
 \arguments{
-\item{renderer}{a \code{\link[individual]{Render}} object}
+\item{renderer}{a \code{\link[individual]{Render}} object.}
 
-\item{variable}{a \code{\link[individual]{CategoricalVariable}} object}
+\item{variable}{a \code{\link[individual]{CategoricalVariable}} object.}
 
-\item{categories}{a character vector of categories to render}
+\item{categories}{a character vector of categories to render.}
 }
 \value{
-a function which can be passed as a process to \code{\link{simulation_loop}}
+a function which can be passed as a process to \code{\link{simulation_loop}}.
 }
 \description{
-Renders the number of individuals in each category
+Renders the number of individuals in each category.
 }

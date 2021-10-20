@@ -17,26 +17,26 @@ infection_age_process(
 )
 }
 \arguments{
-\item{state}{a \code{\link{CategoricalVariable}} object}
+\item{state}{a \code{\link{CategoricalVariable}} object.}
 
-\item{susceptible}{a string representing the susceptible state (usually "S")}
+\item{susceptible}{a string representing the susceptible state (usually "S").}
 
-\item{exposed}{a string representing the state new infections go to (usually "E" or "I")}
+\item{exposed}{a string representing the state new infections go to (usually "E" or "I").}
 
-\item{infectious}{a string representing the infected and infectious  state (usually "I")}
+\item{infectious}{a string representing the infected and infectious  state (usually "I").}
 
-\item{age}{a \code{\link{IntegerVariable}} giving the age of each individual}
+\item{age}{a \code{\link{IntegerVariable}} giving the age of each individual.}
 
-\item{age_bins}{the total number of age bins (groups)}
+\item{age_bins}{the total number of age bins (groups).}
 
-\item{p}{the probability of infection given a contact}
+\item{p}{the probability of infection given a contact.}
 
-\item{dt}{the size of the time step (in units relative to the contact rates in \code{mixing})}
+\item{dt}{the size of the time step (in units relative to the contact rates in \code{mixing}).}
 
-\item{mixing}{a mixing (contact) matrix between age groups}
+\item{mixing}{a mixing (contact) matrix between age groups.}
 }
 \value{
-a function which can be passed as a process to \code{\link{simulation_loop}}
+a function which can be passed as a process to \code{\link{simulation_loop}}.
 }
 \description{
 Simulates infection for age-structured models, where
@@ -45,5 +45,5 @@ The force of infection on susceptibles in a given age class is computed as:
 \deqn{\lambda_{i} = p \sum\limits_{j} C_{i,j} \left( \frac{I_{j}}{N_{j}} \right)  }
 Where \eqn{C} is the matrix of contact rates, \eqn{p} is the probability of infection
 per contact. The per-capita probability of infection for susceptible individuals is then:
-\deqn{1 - e^{-\lambda_{i} \Delta t}}
+\deqn{1 - e^{-\lambda_{i} \Delta t}}.
 }

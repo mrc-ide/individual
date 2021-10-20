@@ -2,13 +2,13 @@
 % Please edit documentation in R/categorical_variable.R
 \name{CategoricalVariable}
 \alias{CategoricalVariable}
-\title{Categorical Variable Class}
+\title{CategoricalVariable Class}
 \description{
 Represents a categorical variable for an individual.
 This class should be used for discrete variables taking values in 
 a finite set, such as infection, health, or behavioral state. It should
 be used in preference to \code{\link[individual]{IntegerVariable}}
-if possible becuase certain operations will be faster.
+if possible because certain operations will be faster.
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -101,11 +101,11 @@ queue an update for this variable
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{index}}{the indices of individuals whose value will be updated
-to the one specified in \code{values}. This may be either a vector of integers or
-a \code{\link[individual]{Bitset}}.}
+\item{\code{value}}{the new value}
 
-\item{\code{values}}{the new values}
+\item{\code{index}}{the indices of individuals whose value will be updated
+to the one specified in \code{value}. This may be either a vector of integers or
+a \code{\link[individual]{Bitset}}.}
 }
 \if{html}{\out{</div>}}
 }

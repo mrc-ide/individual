@@ -22,7 +22,7 @@ Represents a continuous variable for an individual.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new DoubleVariable
+Create a new DoubleVariable.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$new(initial_values)}\if{html}{\out{</div>}}
 }
@@ -31,7 +31,7 @@ Create a new DoubleVariable
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{initial_values}}{a numeric vector of the initial value for each
-individual}
+individual.}
 }
 \if{html}{\out{</div>}}
 }
@@ -40,7 +40,7 @@ individual}
 \if{html}{\out{<a id="method-get_values"></a>}}
 \if{latex}{\out{\hypertarget{method-get_values}{}}}
 \subsection{Method \code{get_values()}}{
-get the variable values
+get the variable values.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$get_values(index = NULL)}\if{html}{\out{</div>}}
 }
@@ -121,7 +121,7 @@ the population.}
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{values}}{a vector or scalar of values to assign at the index}
+\item{\code{values}}{a vector or scalar of values to assign at the index.}
 
 \item{\code{index}}{is the index at which to apply the change, use \code{NULL} for the
 fill options. If using indices, this may be either a vector of integers or
