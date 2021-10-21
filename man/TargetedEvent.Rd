@@ -4,7 +4,7 @@
 \alias{TargetedEvent}
 \title{TargetedEvent Class}
 \description{
-Describes a targeted event in the simulation
+Describes a targeted event in the simulation.
 This is useful for events which are triggered for a sub-population.
 }
 \section{Super class}{
@@ -35,7 +35,7 @@ This is useful for events which are triggered for a sub-population.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Initialise a TargetedEvent
+Initialise a TargetedEvent.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$new(population_size)}\if{html}{\out{</div>}}
 }
@@ -43,7 +43,7 @@ Initialise a TargetedEvent
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{population_size}}{the size of the population}
+\item{\code{population_size}}{the size of the population.}
 }
 \if{html}{\out{</div>}}
 }
@@ -52,7 +52,7 @@ Initialise a TargetedEvent
 \if{html}{\out{<a id="method-schedule"></a>}}
 \if{latex}{\out{\hypertarget{method-schedule}{}}}
 \subsection{Method \code{schedule()}}{
-Schedule this event to occur in the future
+Schedule this event to occur in the future.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$schedule(target, delay)}\if{html}{\out{</div>}}
 }
@@ -65,7 +65,7 @@ either a vector of integers or a \code{\link[individual]{Bitset}}.}
 
 \item{\code{delay}}{the number of time steps to wait before triggering the event,
 can be a scalar in which case all targeted individuals are scheduled for
-for the same delay or an vector of values giving the delay for that
+for the same delay or a vector of values giving the delay for that
 individual.}
 }
 \if{html}{\out{</div>}}
@@ -85,7 +85,7 @@ Get the individuals who are scheduled as a \code{\link[individual]{Bitset}}.
 \if{html}{\out{<a id="method-clear_schedule"></a>}}
 \if{latex}{\out{\hypertarget{method-clear_schedule}{}}}
 \subsection{Method \code{clear_schedule()}}{
-Stop a future event from triggering for a subset of individuals
+Stop a future event from triggering for a subset of individuals.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$clear_schedule(target)}\if{html}{\out{</div>}}
 }

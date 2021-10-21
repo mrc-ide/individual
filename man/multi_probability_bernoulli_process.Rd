@@ -7,16 +7,16 @@
 multi_probability_bernoulli_process(variable, from, to, rate_variable)
 }
 \arguments{
-\item{variable}{a \code{\link{CategoricalVariable}} object}
+\item{variable}{a \code{\link{CategoricalVariable}} object.}
 
-\item{from}{a string representing the source state}
+\item{from}{a string representing the source state.}
 
-\item{to}{a string representing the destination state}
+\item{to}{a string representing the destination state.}
 
-\item{rate_variable}{\code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave}
+\item{rate_variable}{\code{\link{DoubleVariable}} giving individual probability of each individual in source state to leave.}
 }
 \value{
-a function which can be passed as a process to \code{\link{simulation_loop}}
+a function which can be passed as a process to \code{\link{simulation_loop}}.
 }
 \description{
 Simulates a Bernoulli process where all individuals

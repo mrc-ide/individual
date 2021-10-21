@@ -62,7 +62,7 @@ test_that("getting the size of CategoricalVariable category which does not exist
 test_that("can retrieve categories of CategoricalVariable", {
   values <- c("S","E","I","R")
   var <- CategoricalVariable$new(categories = values,initial_values = rep(values,2))
-  expect_setequal(categorical_variable_get_categories(var$.variable), values)
+  expect_setequal(var$get_categories(), values)
 })
 
 test_that("Queuing invalid category errors", {
@@ -75,5 +75,22 @@ test_that("Queuing invalid category errors", {
 
 test_that("Queuing invalid indices errors", {
   c <- CategoricalVariable$new(categories = c("A","B"),initial_values = rep(c("A","B"),each=10))
-  expect_error(c$queue_update(value = "A",index = c(15,25,50)))
+  expect_error(c$queue_update(value = "A",index = c(15, 25, 50)))
+  expect_error(c$queue_update(value = "A",index = c(-5, 1)))
+  expect_error(c$queue_update(value = "A",index = c(5, NaN)))
+  expect_error(c$queue_update(value = "A",index = c(5, NA)))
+  expect_error(c$queue_update(value = "A",index = Bitset$new(50)$insert(c(15, 25, 50))))
+  expect_error(c$queue_update(value = "A",index = Bitset$new(30)$insert(c(15, 17))))
+})
+
+test_that("Updates work correctly", {
+  c <- CategoricalVariable$new(categories = c("A","B"),initial_values = rep(c("A","B"),each=10))
+  b <- 1:5
+  c$queue_update(value = "B", index = b)
+  c$.update()
+  expect_equal(c$get_index_of("A")$to_vector(), 6:10)
+  b <- Bitset$new(20)$insert(1:5)
+  c$queue_update(value = "A", index = b)
+  c$.update()
+  expect_equal(c$get_index_of("A")$to_vector(), 1:10)
 })
