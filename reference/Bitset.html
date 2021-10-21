@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="A Bitset Class — Bitset" />
-<meta property="og:description" content="This is a data strucutre that compactly stores the presence of 
+<meta property="og:description" content="This is a data structure that compactly stores the presence of 
 integers in some finite set (max_size), and can 
 efficiently perform set operations (union, intersection, complement, symmetric
 difference, set difference). 
@@ -151,7 +151,7 @@ if you would like to perform an operation without destroying your current bitset
     </div>
 
     <div class="ref-description">
-    <p>This is a data strucutre that compactly stores the presence of 
+    <p>This is a data structure that compactly stores the presence of 
 integers in some finite set (<code>max_size</code>), and can 
 efficiently perform set operations (union, intersection, complement, symmetric
 difference, set difference). 
@@ -164,9 +164,9 @@ if you would like to perform an operation without destroying your current bitset
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl>
-<dt><code>.bitset</code></dt><dd><p>a pointer to the underlying IterableBitset</p></dd>
+<dt><code>.bitset</code></dt><dd><p>a pointer to the underlying IterableBitset.</p></dd>
 
-<dt><code>max_size</code></dt><dd><p>the maximum size of the bitset</p></dd>
+<dt><code>max_size</code></dt><dd><p>the maximum size of the bitset.</p></dd>
 
 </dl><p></div></p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -192,81 +192,81 @@ if you would like to perform an operation without destroying your current bitset
 </ul>
 <p><hr>
 <a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
-<p>create a bitset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>create a bitset.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>size</span>, from <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>size</code></dt><dd><p>the size of the bitset</p></dd>
+<dt><code>size</code></dt><dd><p>the size of the bitset.</p></dd>
 
 <dt><code>from</code></dt><dd><p>pointer to an existing IterableBitset to use; if <code>NULL</code>
-make empty bitset, otherwise copy existing bitset</p></dd>
+make empty bitset, otherwise copy existing bitset.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-insert"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>insert()</code></h3>
-<p>insert into the bitset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>insert into the bitset.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>insert</span><span class='op'>(</span><span class='va'>v</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>v</code></dt><dd><p>an integer vector of elements to insert</p></dd>
+<dt><code>v</code></dt><dd><p>an integer vector of elements to insert.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-remove"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/rm.html'>remove()</a></code></h3>
-<p>remove from the bitset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>remove from the bitset.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>remove</span><span class='op'>(</span><span class='va'>v</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>v</code></dt><dd><p>an integer vector of elements (not indices) to remove</p></dd>
+<dt><code>v</code></dt><dd><p>an integer vector of elements (not indices) to remove.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-size"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>size()</code></h3>
-<p>get the number of elements in the set</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>get the number of elements in the set.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>size</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
 <a id="method-or"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>or()</code></h3>
-<p>to "bitwise or" or union two bitsets</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>to "bitwise or" or union two bitsets.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>or</span><span class='op'>(</span><span class='va'>other</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>other</code></dt><dd><p>the other bitset</p></dd>
+<dt><code>other</code></dt><dd><p>the other bitset.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-and"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>and()</code></h3>
-<p>to "bitwise and" or intersect two bitsets</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>to "bitwise and" or intersect two bitsets.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>and</span><span class='op'>(</span><span class='va'>other</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>other</code></dt><dd><p>the other bitset</p></dd>
+<dt><code>other</code></dt><dd><p>the other bitset.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-not"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>not()</code></h3>
-<p>to "bitwise not" or complement a bitset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>to "bitwise not" or complement a bitset.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>not</span><span class='op'>(</span><span class='va'>inplace</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>inplace</code></dt><dd><p>whether to overwrite the current bitset</p></dd>
+<dt><code>inplace</code></dt><dd><p>whether to overwrite the current bitset.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-xor"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/Logic.html'>xor()</a></code></h3>
 <p>to "bitwise xor" or get the symmetric difference of two bitset
-(keep elements in either bitset but not in their intersection)</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+(keep elements in either bitset but not in their intersection).</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>xor</span><span class='op'>(</span><span class='va'>other</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>other</code></dt><dd><p>the other bitset</p></dd>
+<dt><code>other</code></dt><dd><p>the other bitset.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
@@ -277,18 +277,18 @@ make empty bitset, otherwise copy existing bitset</p></dd>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>other</code></dt><dd><p>the other bitset</p></dd>
+<dt><code>other</code></dt><dd><p>the other bitset.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-sample"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/sample.html'>sample()</a></code></h3>
-<p>sample a bitset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>sample a bitset.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>sample</span><span class='op'>(</span><span class='va'>rate</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>rate</code></dt><dd><p>the success probability for keeping each element, can be
-a single value for all elements or a vector with of unique
+a single value for all elements or a vector of unique
 probabilities for keeping each element.</p></dd>
 
 </dl><p></div></p>
@@ -306,13 +306,13 @@ k should be chosen such that \(0 \le k \le N\).</p></dd>
 </dl><p></div></p>
 <p><hr>
 <a id="method-copy"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>copy()</code></h3>
-<p>returns a copy the bitset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>returns a copy the bitset.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>copy</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
 <a id="method-to_vector"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>to_vector()</code></h3>
 <p>return an integer vector of the elements
-stored in this bitset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+stored in this bitset.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Bitset</span><span class='op'>$</span><span class='fu'>to_vector</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
