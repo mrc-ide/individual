@@ -1,0 +1,19 @@
+citHeader("To cite individual in publications use:")
+
+bibentry(
+  bibtype  = "Article",
+  title    = "individual: An R package for individual-based epidemiological models",
+  author   = c(person("Giovanni D.", "Charles"),
+                person("Sean L.", "Wu")),
+  journal  = "Journal of Open Source Software",
+  year     = 2021,
+  volume   = 6,
+  number   = 66,
+  pages    = 3539,
+  url      = "https://doi.org/10.21105/joss.03539",
+  doi      = "10.21105/joss.03539",
+  publisher = "The Open Journal",
+  textVersion = paste(
+    "Charles et al., (2021). individual: An R package for individual-based epidemiological models. Journal of Open Source Software, 6(66), 3539, https://doi.org/10.21105/joss.03539"
+  )
+)
