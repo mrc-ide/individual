@@ -173,6 +173,9 @@ inline void IntegerVariable::queue_update(
         const std::vector<int>& values,
         const std::vector<size_t>& index
 ) {
+    if (values.empty()) {
+        return;
+    }
     if (values.size() > 1 && values.size() < size && values.size() != index.size()) {
         Rcpp::stop("Mismatch between value and index length");
     }

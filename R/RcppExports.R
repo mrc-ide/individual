@@ -209,6 +209,10 @@ create_integer_variable <- function(values) {
     .Call(`_individual_create_integer_variable`, values)
 }
 
+integer_variable_get_size <- function(variable) {
+    .Call(`_individual_integer_variable_get_size`, variable)
+}
+
 integer_variable_get_values <- function(variable) {
     .Call(`_individual_integer_variable_get_values`, variable)
 }

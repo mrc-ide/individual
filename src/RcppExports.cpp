@@ -634,6 +634,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// integer_variable_get_size
+size_t integer_variable_get_size(Rcpp::XPtr<IntegerVariable> variable);
+RcppExport SEXP _individual_integer_variable_get_size(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_size(variable));
+    return rcpp_result_gen;
+END_RCPP
+}
 // integer_variable_get_values
 std::vector<int> integer_variable_get_values(Rcpp::XPtr<IntegerVariable> variable);
 RcppExport SEXP _individual_integer_variable_get_values(SEXP variableSEXP) {
@@ -935,6 +946,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_process_listener", (DL_FUNC) &_individual_process_listener, 2},
     {"_individual_process_targeted_listener", (DL_FUNC) &_individual_process_targeted_listener, 3},
     {"_individual_create_integer_variable", (DL_FUNC) &_individual_create_integer_variable, 1},
+    {"_individual_integer_variable_get_size", (DL_FUNC) &_individual_integer_variable_get_size, 1},
     {"_individual_integer_variable_get_values", (DL_FUNC) &_individual_integer_variable_get_values, 1},
     {"_individual_integer_variable_get_values_at_index", (DL_FUNC) &_individual_integer_variable_get_values_at_index, 2},
     {"_individual_integer_variable_get_values_at_index_vector", (DL_FUNC) &_individual_integer_variable_get_values_at_index_vector, 2},
