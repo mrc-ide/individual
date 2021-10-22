@@ -1,7 +1,13 @@
 # individual 0.1.7
 
-  * Check for bad bitset input when queueing updates to CategoricalVariable objects [PR here](https://github.com/mrc-ide/individual/pull/145).
-
+  * Check for bad bitset input when queueing updates to CategoricalVariable objects 
+  [PR here](https://github.com/mrc-ide/individual/pull/145)
+  * Add "bench" package to suggests and include benchmarking scripts of major 
+  functionality in `tests/performance` [PR here](https://github.com/mrc-ide/individual/pull/151)
+  * Update to latest version of "testthat" package so that C++ tests of `IterableBitset`
+  object can be run without giving LTO check errors (see `src/test-bitset.cpp`)
+  * Add CITATION file
+  
 # individual 0.1.6
 
   * Added a `NEWS.md` file to track changes to the package.
