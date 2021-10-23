@@ -172,6 +172,12 @@ test_that("bitset sample works at rate = 1", {
   expect_equal(a$to_vector(), c(1, 5, 6))
 })
 
+test_that("bitset sample works at rate vector", {
+  a <- Bitset$new(10)$insert(1:10)
+  a$sample(rep(x = c(0, 1), times = c(5, 5)))
+  expect_equal(a$to_vector(), 6:10)
+})
+
 test_that("bitset filtering works for vectors", {
   b <- Bitset$new(10)$insert(c(1, 5, 6))
   f <- c(1, 3)
