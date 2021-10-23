@@ -101,6 +101,10 @@ create_double_variable <- function(values) {
     .Call(`_individual_create_double_variable`, values)
 }
 
+double_variable_get_size <- function(variable) {
+    .Call(`_individual_double_variable_get_size`, variable)
+}
+
 double_variable_get_values <- function(variable) {
     .Call(`_individual_double_variable_get_values`, variable)
 }

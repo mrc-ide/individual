@@ -40,8 +40,9 @@ test_that("IntegerVariable get values returns correct values with bitset index",
 
 test_that("IntegerVariable get values fails with incorrect index", {
   variable <- IntegerVariable$new(initial_values = 1:100)
-  b <- Bitset$new(1000)$insert(90:110)
+  b <- Bitset$new(1000)
   expect_error(variable$get_values(b))
+  expect_error(variable$get_values(b$insert(90:110)))
   expect_error(variable$get_values(90:110))
   expect_error(variable$get_values(-5:2))
   expect_error(variable$get_values(NaN))

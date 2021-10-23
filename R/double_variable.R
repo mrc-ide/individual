@@ -11,6 +11,8 @@ DoubleVariable <- R6Class(
     #' @param initial_values a numeric vector of the initial value for each
     #' individual.
     initialize = function(initial_values) {
+      stopifnot(!is.null(initial_values))
+      stopifnot(is.numeric(initial_values))
       self$.variable <- create_double_variable(initial_values)
     },
 
@@ -25,8 +27,8 @@ DoubleVariable <- R6Class(
         if (inherits(index, 'Bitset')) {
           return(double_variable_get_values_at_index(self$.variable, index$.bitset))
         } else {
-          stopifnot(all(is.finite(index)))
-          stopifnot(all(index > 0))
+          stopifnot(is.finite(index))
+          stopifnot(index > 0)
           return(double_variable_get_values_at_index_vector(self$.variable, index))
         }
       }
@@ -73,11 +75,14 @@ DoubleVariable <- R6Class(
       stopifnot(is.numeric(values))
       if(is.null(index)){
         if(length(values) == 1){
+          # variable fill
           double_variable_queue_fill(
             self$.variable,
             values
           )
         } else {
+          # variable reset
+          stopifnot(length(values) == double_variable_get_size(self$.variable))
           double_variable_queue_update(
             self$.variable,
             values,
@@ -86,6 +91,8 @@ DoubleVariable <- R6Class(
         }
       } else {
         if (inherits(index, 'Bitset')) {
+          # subset update/fill: bitset
+          stopifnot(index$max_size == integer_variable_get_size(self$.variable))
           if (index$size() > 0){
             double_variable_queue_update_bitset(
               self$.variable,
@@ -95,8 +102,9 @@ DoubleVariable <- R6Class(
           }
         } else {
           if (length(index) != 0) {
-            stopifnot(all(is.finite(index)))
-            stopifnot(all(index > 0))
+            # subset update/fill: vector
+            stopifnot(is.finite(index))
+            stopifnot(index > 0)
             double_variable_queue_update(
               self$.variable,
               values,

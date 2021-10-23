@@ -328,6 +328,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// double_variable_get_size
+size_t double_variable_get_size(Rcpp::XPtr<DoubleVariable> variable);
+RcppExport SEXP _individual_double_variable_get_size(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(double_variable_get_size(variable));
+    return rcpp_result_gen;
+END_RCPP
+}
 // double_variable_get_values
 std::vector<double> double_variable_get_values(Rcpp::XPtr<DoubleVariable> variable);
 RcppExport SEXP _individual_double_variable_get_values(SEXP variableSEXP) {
@@ -919,6 +930,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_categorical_variable_update", (DL_FUNC) &_individual_categorical_variable_update, 1},
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
     {"_individual_create_double_variable", (DL_FUNC) &_individual_create_double_variable, 1},
+    {"_individual_double_variable_get_size", (DL_FUNC) &_individual_double_variable_get_size, 1},
     {"_individual_double_variable_get_values", (DL_FUNC) &_individual_double_variable_get_values, 1},
     {"_individual_double_variable_get_values_at_index", (DL_FUNC) &_individual_double_variable_get_values_at_index, 2},
     {"_individual_double_variable_get_values_at_index_vector", (DL_FUNC) &_individual_double_variable_get_values_at_index_vector, 2},

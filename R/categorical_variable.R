@@ -17,6 +17,9 @@ CategoricalVariable <- R6Class(
     #' @param initial_values a character vector of the initial value for each
     #' individual
     initialize = function(categories, initial_values) {
+      stopifnot(is.character(initial_values))
+      stopifnot(is.character(categories))
+      stopifnot(initial_values %in% categories)
       self$.variable <- create_categorical_variable(categories, initial_values)
     },
 

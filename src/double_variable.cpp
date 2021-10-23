@@ -20,6 +20,13 @@ Rcpp::XPtr<DoubleVariable> create_double_variable(
 }
 
 //[[Rcpp::export]]
+size_t double_variable_get_size(
+        Rcpp::XPtr<DoubleVariable> variable
+) {
+    return variable->size;
+}
+
+//[[Rcpp::export]]
 std::vector<double> double_variable_get_values(
     Rcpp::XPtr<DoubleVariable> variable
     ) {
