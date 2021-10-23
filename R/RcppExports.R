@@ -73,6 +73,10 @@ create_categorical_variable <- function(categories, values) {
     .Call(`_individual_create_categorical_variable`, categories, values)
 }
 
+categorical_variable_get_size <- function(variable) {
+    .Call(`_individual_categorical_variable_get_size`, variable)
+}
+
 categorical_variable_queue_update <- function(variable, value, index) {
     invisible(.Call(`_individual_categorical_variable_queue_update`, variable, value, index))
 }

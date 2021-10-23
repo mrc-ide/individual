@@ -52,6 +52,7 @@ test_that("Queuing invalid indices errors", {
   expect_error(c$queue_update(value = "A",index = c(5, NA)))
   expect_error(c$queue_update(value = "A",index = Bitset$new(50)$insert(c(15, 25, 50))))
   expect_error(c$queue_update(value = "A",index = Bitset$new(30)$insert(c(15, 17))))
+  expect_error(c$queue_update(value = "A",index = Bitset$new(1e2)))
 })
 
 test_that("Updates work correctly", {
