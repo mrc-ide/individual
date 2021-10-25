@@ -183,3 +183,9 @@ test_that("IntegerVariable get size of set in bounds [a,b] fails with incorrect 
   expect_error(variable$get_size_of(a = integer(0), b = integer(0)))
   expect_error(variable$get_size_of(a = numeric(0), b = numeric(0)))
 })
+
+test_that("IntegerVariable get size and index of set in bounds [a,b] and set gives same answer for equal intervals", {
+  variable <- IntegerVariable$new(-10:10)
+  expect_equal(variable$get_size_of(a = 5, b = 7), variable$get_size_of(set = 5:7))
+  expect_equal(variable$get_index_of(a = 5, b = 7)$to_vector(), variable$get_index_of(set = 5:7)$to_vector())
+})
