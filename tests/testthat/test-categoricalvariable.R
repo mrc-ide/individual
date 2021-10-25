@@ -40,6 +40,7 @@ test_that("CategoricalVariable get index errors with incorrect input", {
   state <- CategoricalVariable$new(SIR, rep('S', size))
   
   expect_error(state$get_index_of(values = 'A'))
+  expect_error(state$get_index_of(values = c('S', 'A')))
   expect_error(state$get_index_of(values = LETTERS[1:3]))
   expect_error(state$get_index_of(values = integer(0)))
   expect_error(state$get_index_of(values = NULL))
@@ -68,6 +69,7 @@ test_that("CategoricalVariable get size of categories errors with incorrect inpu
   state <- CategoricalVariable$new(SIR, rep('S', size))
   
   expect_error(state$get_size_of(values = 'A'))
+  expect_error(state$get_size_of(values = c('S', 'A')))
   expect_error(state$get_size_of(values = LETTERS[1:3]))
   expect_error(state$get_size_of(values = integer(0)))
   expect_error(state$get_size_of(values = NULL))
