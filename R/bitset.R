@@ -43,7 +43,13 @@ Bitset <- R6Class(
       bitset_remove(self$.bitset, v)
       self
     },
-
+    
+    #' @description clear the bitset.
+    clear = function(v) {
+      bitset_clear(self$.bitset)
+      self
+    },
+    
     #' @description get the number of elements in the set.
     size = function() bitset_size(self$.bitset),
 

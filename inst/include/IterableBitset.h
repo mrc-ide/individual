@@ -77,6 +77,7 @@ public:
     IterableBitset& operator&=(const IterableBitset&);
     IterableBitset& operator|=(const IterableBitset&);
     IterableBitset& operator^=(const IterableBitset&);
+    IterableBitset& clear();
     IterableBitset& inverse();
     iterator begin();
     const_iterator begin() const;
@@ -233,15 +234,24 @@ inline IterableBitset<A> IterableBitset<A>::operator ^(const IterableBitset<A>& 
 }
 
 template<class A>
+inline IterableBitset<A>& IterableBitset<A>::clear() {
+  for (auto i : bitmap) {
+    i &= 0x0ULL;
+  }
+  n = 0;
+  return *this;
+}
+
+template<class A>
 inline IterableBitset<A>& IterableBitset<A>::inverse() {
-    for (auto i = 0u; i < bitmap.size(); ++i) {
-        bitmap[i] = ~bitmap[i];
-    }
-    //mask out the values after max_n
-    A residual = (static_cast<A>(1) << (max_n % num_bits)) - 1;
-    bitmap[bitmap.size() - 1] &= residual;
-    n = max_n - n;
-    return *this;
+  for (auto i : bitmap) {
+    i &= ~i;
+  }
+  //mask out the values after max_n
+  A residual = (static_cast<A>(1) << (max_n % num_bits)) - 1;
+  bitmap[bitmap.size() - 1] &= residual;
+  n = max_n - n;
+  return *this;
 }
 
 template<class A>
@@ -289,7 +299,6 @@ inline IterableBitset<A>& IterableBitset<A>::operator ^=(const IterableBitset<A>
     }
     return *this;
 }
-
 
 template<class A>
 inline typename IterableBitset<A>::iterator IterableBitset<A>::begin() {
