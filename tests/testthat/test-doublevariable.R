@@ -1,102 +1,154 @@
-test_that("getting variables works", {
-  size <- 10
-  sequence <- DoubleVariable$new(seq_len(size))
-  sequence_2 <- DoubleVariable$new(seq_len(size) + 10)
-  
-  expect_equal(sequence$get_values(), 1:10)
-  expect_equal(sequence_2$get_values(), (1:10) + 10)
+test_that("Creating DoubleVariables errors with bad input", {
+  expect_error(DoubleVariable$new(NULL))
+  expect_error(DoubleVariable$new(NA))
+  expect_error(DoubleVariable$new("1"))
 })
 
-test_that("getting variables with repeats works", {
+test_that("DoubleVariable get values returns correct values without index", {
   size <- 10
-  sequence <- DoubleVariable$new(seq_len(size))
+  variable <- DoubleVariable$new(seq_len(size))
+  expect_equal(variable$get_values(), 1:10)
   
-  expect_equal(sequence$get_values(c(1, 1, 2, 2)), c(1, 1, 2, 2))
+  variable <- DoubleVariable$new(seq_len(size) + 10)
+  expect_equal(variable$get_values(), (1:10) + 10)
+  
+  variable <- DoubleVariable$new(seq_len(size))
+  expect_equal(variable$get_values(c(1, 1, 2, 2)), c(1, 1, 2, 2))
 })
 
-test_that("getting variables at an index works", {
+test_that("DoubleVariable get values returns correct values with vector index", {
   size <- 10
-  sequence <- DoubleVariable$new(seq_len(size))
-  sequence_2 <- DoubleVariable$new(seq_len(size) + 10)
+  variable <- DoubleVariable$new(seq_len(size))
+  expect_equal(variable$get_values(NULL), 1:10)
   
-  expect_equal(sequence$get_values(NULL), 1:10)
-  expect_error(sequence_2$get_values(5:15))
-  expect_equal(sequence_2$get_values(5:10), 15:20)
-  
-  b <- Bitset$new(size)$insert(5:10)
-  expect_equal(sequence_2$get_values(b), 15:20)
+  variable <- DoubleVariable$new(seq_len(size) + 10)
+  expect_equal(variable$get_values(5:10), 15:20)
 })
 
-test_that("getting indices of DoubleVariable in a range works", {
-  dat <- seq(from=0,to=1,by=0.01)
-  var <- DoubleVariable$new(dat)
+test_that("DoubleVariable get values returns correct values with bitset index", {
+  size <- 10
+  variable <- DoubleVariable$new(seq_len(size) + 10)
+  expect_equal(variable$get_values(Bitset$new(size = size)$insert(5:10)), 15:20)
+})
+
+test_that("DoubleVariable get values fails with incorrect index", {
+  variable <- DoubleVariable$new(initial_values = 1:100)
+  b <- Bitset$new(1000)
+  expect_error(variable$get_values(b))
+  expect_error(variable$get_values(b$insert(90:110)))
+  expect_error(variable$get_values(90:110))
+  expect_error(variable$get_values(-5:2))
+  expect_error(variable$get_values(NaN))
+  expect_error(variable$get_values(NA))
+  expect_error(variable$get_values(Inf))
+  expect_error(variable$get_values("10"))
+})
+
+test_that("DoubleVariable get index of bounds [a,b] works correctly", {
+  variable <- DoubleVariable$new(5:10)
   
-  empty <- var$get_index_of(a = 500,b = 600)
-  full <- var$get_index_of(a = 0.65,b = 0.89)
-  match_full <- which(dat>=0.65 & dat<=0.89)
+  indices <- variable$get_index_of(a = 6, b = 8)  
+  expect_equal(indices$to_vector(), 2:4)
+  
+  indices <- variable$get_index_of(a = 6.9, b = 7.1)
+  expect_equal(indices$to_vector(), 3)
+  
+  indices <- variable$get_index_of(a = 1e3, b = 1.001e3)
+  expect_length(indices$to_vector(), 0)
+  
+  data <- seq(from = 0, to = 1, by = 0.01)
+  variable <- DoubleVariable$new(data)
+  
+  empty <- variable$get_index_of(a = 500, b = 600)
+  full <- variable$get_index_of(a = 0.65, b = 0.89)
+  match_full <- which(data>=0.65 & data<=0.89)
   
   expect_length(empty$to_vector(), 0)
   expect_equal(full$to_vector(), match_full)
-  
-  expect_error(var$get_size_of(a = 50,b = 10))
-  expect_error(var$get_size_of(a = 0,b = -5))
 })
 
-test_that("getting size of DoubleVariable in a range works", {
-  dat <- seq(from=0,to=1,by=0.01)
-  var <- DoubleVariable$new(dat)
+test_that("DoubleVariable get index of bounds [a,b] fails with incorrect bounds", {
+  variable <- DoubleVariable$new(5:10)
   
-  empty <- var$get_size_of(a = 500,b = 600)
-  full <- var$get_size_of(a = 0.65,b = 0.89)
-  match_full <- sum(dat>=0.65 & dat<=0.89)
+  expect_error(variable$get_index_of(a = a, b = NULL))
+  expect_error(variable$get_index_of(a = a, b = a - 10))
+  expect_error(variable$get_index_of(a = a, b = NA))
+  expect_error(variable$get_index_of(a = a, b = NaN))
+  expect_error(variable$get_index_of(a = a, b = Inf))
+  expect_error(variable$get_index_of(a = a, b = -Inf))
+  
+  expect_error(variable$get_index_of(a = NULL, b = b))
+  expect_error(variable$get_index_of(a = b + 10, b = b))
+  expect_error(variable$get_index_of(a = NA, b = b))
+  expect_error(variable$get_index_of(a = NaN, b = b))
+  expect_error(variable$get_index_of(a = Inf, b = b))
+  expect_error(variable$get_index_of(a = -Inf, b = b))
+  
+  expect_error(variable$get_index_of(a = integer(0), b = b))
+  expect_error(variable$get_index_of(a = numeric(0), b = b))
+  
+  expect_error(variable$get_index_of(a = a, b = integer(0)))
+  expect_error(variable$get_index_of(a = a, b = integer(0)))
+  
+  expect_error(variable$get_index_of(a = integer(0), b = integer(0)))
+  expect_error(variable$get_index_of(a = numeric(0), b = numeric(0)))
+  
+  data <- seq(from = 0, to = 1, by = 0.01)
+  variable <- DoubleVariable$new(data)
+  
+  expect_error(variable$get_index_of(a = 50,b = 10))
+  expect_error(variable$get_index_of(a = 0,b = -5))
+})
+
+
+test_that("DoubleVariable get size of set in bounds [a,b] works correctly", {
+  variable <- DoubleVariable$new(-10:10)
+  expect_equal(variable$get_size_of(a = 5, b = 7), 3)
+  expect_equal(variable$get_size_of(a = 4.9, b = 5.1), 1)
+  expect_equal(variable$get_size_of(a = -10, b = -5), 6)
+  expect_equal(variable$get_size_of(a = -50, b = -40), 0)
+  
+  data <- seq(from = 0, to = 1, by = 0.01)
+  variable <- DoubleVariable$new(data)
+  
+  empty <- variable$get_size_of(a = 500,b = 600)
+  full <- variable$get_size_of(a = 0.65,b = 0.89)
+  match_full <- sum(data>=0.65 & data<=0.89)
   
   expect_equal(empty, 0)
   expect_equal(full, match_full)
+  
 })
 
-test_that("getting values from DoubleVariable with incompatible index fails", {
-  x <- DoubleVariable$new(initial_values = 1:100)
-  b <- Bitset$new(1000)$insert(90:110)
-  expect_error(x$get_values(b))
-  expect_error(x$get_values(90:110))
-  expect_error(x$get_values(-5:2))
-})
-
-test_that("queueing updates with bad inputs fails or does nothing", {
-  x <- DoubleVariable$new(initial_values = 1:10)
-  x$queue_update(values = numeric(0), index = 1:10)
-  x$.update()
-  expect_equal(x$get_values(), 1:10)
+test_that("DoubleVariable get size of set in bounds [a,b] fails with incorrect input", {
+  variable <- DoubleVariable$new(-10:10)
   
-  x$queue_update(values = numeric(0), index = Bitset$new(10)$insert(1:3))
-  x$.update()
-  expect_equal(x$get_values(), 1:10)
+  expect_error(variable$get_size_of(a = a, b = NULL))
+  expect_error(variable$get_size_of(a = a, b = a - 10))
+  expect_error(variable$get_size_of(a = a, b = NA))
+  expect_error(variable$get_size_of(a = a, b = NaN))
+  expect_error(variable$get_size_of(a = a, b = Inf))
+  expect_error(variable$get_size_of(a = a, b = -Inf))
   
-  x$queue_update(values = 10, index = Bitset$new(0))
-  x$.update()
-  expect_equal(x$get_values(), 1:10)
+  expect_error(variable$get_size_of(a = NULL, b = b))
+  expect_error(variable$get_size_of(a = b + 10, b = b))
+  expect_error(variable$get_size_of(a = NA, b = b))
+  expect_error(variable$get_size_of(a = NaN, b = b))
+  expect_error(variable$get_size_of(a = Inf, b = b))
+  expect_error(variable$get_size_of(a = -Inf, b = b))
   
-  x$queue_update(values = 10, index = integer(0))
-  x$.update()
-  expect_equal(x$get_values(), 1:10)
+  expect_error(variable$get_size_of(a = integer(0), b = b))
+  expect_error(variable$get_size_of(a = numeric(0), b = b))
   
-  expect_error(x$queue_update(values = 10, index = -5:-3))
+  expect_error(variable$get_size_of(a = a, b = integer(0)))
+  expect_error(variable$get_size_of(a = a, b = integer(0)))
   
-  x$queue_update(values = 10, index = Bitset$new(100))
-  x$.update()
-  expect_equal(x$get_values(), 1:10)
+  expect_error(variable$get_size_of(a = integer(0), b = integer(0)))
+  expect_error(variable$get_size_of(a = numeric(0), b = numeric(0)))
   
-  expect_error(x$queue_update(values = 10, index = Bitset$new(100)$insert(1:50)))
-})
-
-test_that("get size of method fails correctly with bad inputs", {
-  x <- DoubleVariable$new(initial_values = 1:10)
-  expect_error(x$get_size_of(a = 5))
-  expect_error(x$get_size_of(b = 5))
-})
-
-test_that("get index of method fails correctly with bad inputs", {
-  x <- DoubleVariable$new(initial_values = 1:10)
-  expect_error(x$get_index_of(a = 5))
-  expect_error(x$get_index_of(b = 5))
+  data <- seq(from = 0, to = 1, by = 0.01)
+  variable <- DoubleVariable$new(data)
+  
+  expect_error(variable$get_size_of(a = 50,b = 10))
+  expect_error(variable$get_size_of(a = 0,b = -5))
 })

@@ -17,6 +17,9 @@ CategoricalVariable <- R6Class(
     #' @param initial_values a character vector of the initial value for each
     #' individual
     initialize = function(categories, initial_values) {
+      stopifnot(is.character(initial_values))
+      stopifnot(is.character(categories))
+      stopifnot(initial_values %in% categories)
       self$.variable <- create_categorical_variable(categories, initial_values)
     },
 
@@ -48,13 +51,14 @@ CategoricalVariable <- R6Class(
     queue_update = function(value, index) {
       stopifnot(value %in% self$get_categories())
       if (inherits(index, "Bitset")) {
+        stopifnot(index$max_size == categorical_variable_get_size(self$.variable))
         if (index$size() > 0) {
           categorical_variable_queue_update(self$.variable, value, index$.bitset)
         }
       } else {
         if (length(index) > 0) {
-          stopifnot(all(is.finite(index)))
-          stopifnot(all(index > 0))
+          stopifnot(is.finite(index))
+          stopifnot(index > 0)
           categorical_variable_queue_update_vector(self$.variable, value, index)
         }
       }

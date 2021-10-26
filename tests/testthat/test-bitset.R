@@ -14,6 +14,15 @@ test_that("out of range inserts don't work", {
   )
 })
 
+test_that("bitset copy works", {
+  a <- Bitset$new(10)$insert(1:5)
+  b <- a$copy()
+  b$not(inplace = TRUE)
+  
+  expect_equal(a$to_vector(), 1:5)
+  expect_equal(b$to_vector(), 6:10)
+})
+
 test_that("bitset size updates", {
   a <- Bitset$new(10)
   expect_equal(a$max_size, 10)
@@ -158,56 +167,52 @@ test_that("bitset not inplace switch works", {
   expect_equal(b$to_vector(), c(1, 5, 6))
 })
 
-test_that("bitset sample works at rate = 0", {
+# bitset sampling
+
+test_that("bitset sample works with correct input", {
   a <- Bitset$new(10)
+  
   a$insert(c(1, 5, 6))
   a$sample(0)
   expect_equal(a$size(), 0)
-})
-
-test_that("bitset sample works at rate = 1", {
-  a <- Bitset$new(10)
+  
   a$insert(c(1, 5, 6))
   a$sample(1)
   expect_equal(a$to_vector(), c(1, 5, 6))
-})
-
-test_that("bitset filtering works for vectors", {
-  b <- Bitset$new(10)$insert(c(1, 5, 6))
-  f <- c(1, 3)
-  expect_equal(filter_bitset(b, f)$to_vector(), c(1, 6))
-})
-
-test_that("bitset filtering works for bitsets", {
-  b <- Bitset$new(10)$insert(c(1, 5, 6))
-  f <- Bitset$new(10)$insert(c(1, 3))
-  expect_equal(filter_bitset(b, f)$to_vector(), c(1, 6))
-})
-
-test_that("bitset filtering works when given empty index", {
-  b <- Bitset$new(10)$insert(c(1, 5, 6))
-  f <- Bitset$new(10)
-  expect_equal(filter_bitset(b, f)$size(), 0)
-  expect_equal(filter_bitset(b, integer(0))$size(), 0)
-})
-
-test_that("bitset throws error when given bad input probabilities in sample", {
-  b <- Bitset$new(10)$insert(1:10)
-  expect_error(
-    b$sample(rate = c(rep(0.1,9),NA))
-  )
-})
-
-test_that("bitset choose behaves properly when given bad input", {
-  b <- Bitset$new(10)
-  expect_error(b$choose(5))
-  expect_error(b$choose(-1))
-  expect_error(b$choose(100))
-  expect_error(b$choose(Inf))
-})
-
-test_that("bitset choose behaves properly when given a bitset with elements", {
   
+  a$insert(1:10)
+  a$sample(rep(x = c(0, 1), times = c(5, 5)))
+  expect_equal(a$to_vector(), 6:10)
+})
+
+test_that("bitset sample fails with incorrect input", {
+  a <- Bitset$new(10)
+  a$insert(c(1, 5, 6))
+  
+  expect_error(a$sample(NaN))
+  expect_error(a$sample(NULL))
+  expect_error(a$sample(NA))
+  expect_error(a$sample(Inf))
+  expect_error(a$sample(-Inf))
+  expect_error(a$sample("1"))
+  
+  expect_error(a$sample(rep(NaN, 10)))
+  expect_error(a$sample(rep(NULL, 10)))
+  expect_error(a$sample(rep(NA, 10)))
+  expect_error(a$sample(rep(Inf, 10)))
+  expect_error(a$sample(rep(-Inf, 10)))
+  expect_error(a$sample(rep("1", 10)))
+  
+  expect_error(a$sample(rep(c(0.5, NaN), times = c(1, 9))))
+  expect_error(a$sample(rep(c(0.5, NULL), times = c(1, 9))))
+  expect_error(a$sample(rep(c(0.5, NA), times = c(1, 9))))
+  expect_error(a$sample(rep(c(0.5, Inf), times = c(1, 9))))
+  expect_error(a$sample(rep(c(0.5, -Inf), times = c(1, 9))))
+})
+
+# bitset choose
+
+test_that("bitset choose works with correct input", {
   b <- Bitset$new(10)$insert(1:8)
   expect_equal(b$copy()$or(b$copy()$choose(5))$to_vector(), b$to_vector()) # check that b$choose is a subset of b
   
@@ -218,5 +223,49 @@ test_that("bitset choose behaves properly when given a bitset with elements", {
   expect_equal(b$choose(0)$size(), 0)
   
   b <- Bitset$new(10)$insert(1:8)
+  expect_equal(b$choose(8)$size(), 8)
+})
+
+
+test_that("bitset choose errors with incorrect input", {
+  b <- Bitset$new(10)
+  expect_error(b$choose(5))
+  expect_error(b$choose(-1))
+  expect_error(b$choose(100))
+  expect_error(b$choose(Inf))
+  expect_error(b$choose(-Inf))
+  expect_error(b$choose(NA))
+  expect_error(b$choose(NULL))
+  expect_error(b$choose(NaN))
+  
+  b <- Bitset$new(10)$insert(1:8)
   expect_error(b$choose(10))
+})
+
+# bitset filter
+
+test_that("bitset filtering works for vector input", {
+  b <- Bitset$new(10)$insert(c(1, 5, 6))
+  f <- c(1, 3)
+  expect_equal(filter_bitset(b, f)$to_vector(), c(1, 6))
+})
+
+test_that("bitset filtering works for bitset input", {
+  b <- Bitset$new(10)$insert(c(1, 5, 6))
+  f <- Bitset$new(10)$insert(c(1, 3))
+  expect_equal(filter_bitset(b, f)$to_vector(), c(1, 6))
+})
+
+test_that("bitset filtering works when given empty vector", {
+  b <- Bitset$new(10)$insert(c(1, 5, 6))
+  f <- integer(0)
+  expect_equal(filter_bitset(b, f)$size(), 0)
+  expect_equal(filter_bitset(b, integer(0))$size(), 0)
+})
+
+test_that("bitset filtering works when given empty bitset", {
+  b <- Bitset$new(10)$insert(c(1, 5, 6))
+  f <- Bitset$new(10)
+  expect_equal(filter_bitset(b, f)$size(), 0)
+  expect_equal(filter_bitset(b, integer(0))$size(), 0)
 })

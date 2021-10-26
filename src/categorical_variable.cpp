@@ -21,14 +21,18 @@ Rcpp::XPtr<CategoricalVariable> create_categorical_variable(
 }
 
 //[[Rcpp::export]]
+size_t categorical_variable_get_size(
+        Rcpp::XPtr<CategoricalVariable> variable
+) {
+    return variable->size;
+}
+
+//[[Rcpp::export]]
 void categorical_variable_queue_update(
     Rcpp::XPtr<CategoricalVariable> variable,
     const std::string& value,
     Rcpp::XPtr<individual_index_t> index
     ) {
-    if (index->max_size() != variable->size) {
-        Rcpp::stop("incompatible size bitset used to queue update for CategoricalVariable");
-    }
     variable->queue_update(value, *index);
 }
 

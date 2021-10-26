@@ -216,6 +216,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// categorical_variable_get_size
+size_t categorical_variable_get_size(Rcpp::XPtr<CategoricalVariable> variable);
+RcppExport SEXP _individual_categorical_variable_get_size(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(categorical_variable_get_size(variable));
+    return rcpp_result_gen;
+END_RCPP
+}
 // categorical_variable_queue_update
 void categorical_variable_queue_update(Rcpp::XPtr<CategoricalVariable> variable, const std::string& value, Rcpp::XPtr<individual_index_t> index);
 RcppExport SEXP _individual_categorical_variable_queue_update(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
@@ -325,6 +336,17 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::vector<double>& >::type values(valuesSEXP);
     rcpp_result_gen = Rcpp::wrap(create_double_variable(values));
+    return rcpp_result_gen;
+END_RCPP
+}
+// double_variable_get_size
+size_t double_variable_get_size(Rcpp::XPtr<DoubleVariable> variable);
+RcppExport SEXP _individual_double_variable_get_size(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(double_variable_get_size(variable));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -634,6 +656,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// integer_variable_get_size
+size_t integer_variable_get_size(Rcpp::XPtr<IntegerVariable> variable);
+RcppExport SEXP _individual_integer_variable_get_size(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_size(variable));
+    return rcpp_result_gen;
+END_RCPP
+}
 // integer_variable_get_values
 std::vector<int> integer_variable_get_values(Rcpp::XPtr<IntegerVariable> variable);
 RcppExport SEXP _individual_integer_variable_get_values(SEXP variableSEXP) {
@@ -900,6 +933,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_filter_bitset_bitset", (DL_FUNC) &_individual_filter_bitset_bitset, 2},
     {"_individual_bitset_choose", (DL_FUNC) &_individual_bitset_choose, 2},
     {"_individual_create_categorical_variable", (DL_FUNC) &_individual_create_categorical_variable, 2},
+    {"_individual_categorical_variable_get_size", (DL_FUNC) &_individual_categorical_variable_get_size, 1},
     {"_individual_categorical_variable_queue_update", (DL_FUNC) &_individual_categorical_variable_queue_update, 3},
     {"_individual_categorical_variable_get_index_of", (DL_FUNC) &_individual_categorical_variable_get_index_of, 2},
     {"_individual_categorical_variable_get_size_of", (DL_FUNC) &_individual_categorical_variable_get_size_of, 2},
@@ -908,6 +942,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_categorical_variable_update", (DL_FUNC) &_individual_categorical_variable_update, 1},
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
     {"_individual_create_double_variable", (DL_FUNC) &_individual_create_double_variable, 1},
+    {"_individual_double_variable_get_size", (DL_FUNC) &_individual_double_variable_get_size, 1},
     {"_individual_double_variable_get_values", (DL_FUNC) &_individual_double_variable_get_values, 1},
     {"_individual_double_variable_get_values_at_index", (DL_FUNC) &_individual_double_variable_get_values_at_index, 2},
     {"_individual_double_variable_get_values_at_index_vector", (DL_FUNC) &_individual_double_variable_get_values_at_index_vector, 2},
@@ -935,6 +970,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_process_listener", (DL_FUNC) &_individual_process_listener, 2},
     {"_individual_process_targeted_listener", (DL_FUNC) &_individual_process_targeted_listener, 3},
     {"_individual_create_integer_variable", (DL_FUNC) &_individual_create_integer_variable, 1},
+    {"_individual_integer_variable_get_size", (DL_FUNC) &_individual_integer_variable_get_size, 1},
     {"_individual_integer_variable_get_values", (DL_FUNC) &_individual_integer_variable_get_values, 1},
     {"_individual_integer_variable_get_values_at_index", (DL_FUNC) &_individual_integer_variable_get_values_at_index, 2},
     {"_individual_integer_variable_get_values_at_index_vector", (DL_FUNC) &_individual_integer_variable_get_values_at_index_vector, 2},

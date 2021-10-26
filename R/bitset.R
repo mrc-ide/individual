@@ -98,10 +98,10 @@ Bitset <- R6Class(
     #' a single value for all elements or a vector of unique
     #' probabilities for keeping each element.
     sample = function(rate) {
+      stopifnot(is.finite(rate))
       if (length(rate) == 1) {
         bitset_sample(self$.bitset, rate)
       } else {
-        stopifnot(all(is.finite(rate)))
         bitset_sample_vector(self$.bitset, rate)
       }
       self

@@ -15,6 +15,8 @@ IntegerVariable <- R6Class(
     #' @description Create a new IntegerVariable.
     #' @param initial_values a vector of the initial values for each individual
     initialize = function(initial_values) {
+      stopifnot(!is.null(initial_values))
+      stopifnot(is.finite(initial_values))
       self$.variable <- create_integer_variable(as.integer(initial_values))
     },
 
@@ -29,14 +31,13 @@ IntegerVariable <- R6Class(
         if (inherits(index, 'Bitset')){
           return(integer_variable_get_values_at_index(self$.variable, index$.bitset))
         } else {
-          stopifnot(all(index > 0))
-          stopifnot(all(is.finite(index)))
+          stopifnot(index > 0)
+          stopifnot(is.finite(index))
           return(integer_variable_get_values_at_index_vector(self$.variable, index))
         }
       }
       
     },
-
 
     #' @description Return a \code{\link[individual]{Bitset}} for individuals with some subset of values.
     #' Either search for indices corresponding to values in \code{set}, or
@@ -46,14 +47,15 @@ IntegerVariable <- R6Class(
     #' @param a lower bound
     #' @param b upper bound
     get_index_of = function(set = NULL, a = NULL, b = NULL) {
-        if(!is.null(set)) {
-            if (length(set) > 1) {
-              return(Bitset$new(from = integer_variable_get_index_of_set_vector(self$.variable, set)))
-            } else {
-              return(Bitset$new(from = integer_variable_get_index_of_set_scalar(self$.variable, set)))
-            }
+        if (!is.null(set)) {
+          stopifnot(is.finite(set))
+          if (length(set) == 1) {
+            return(Bitset$new(from = integer_variable_get_index_of_set_scalar(self$.variable, set)))
+          } else {
+            return(Bitset$new(from = integer_variable_get_index_of_set_vector(self$.variable, set)))
+          }
         } else {
-          stopifnot(all(is.finite(c(a,b))))
+          stopifnot(is.finite(c(a,b)))
           stopifnot(a <= b)
           if (a < b) {
             return(Bitset$new(from = integer_variable_get_index_of_range(self$.variable, a, b)))              
@@ -72,14 +74,15 @@ IntegerVariable <- R6Class(
     #' @param a lower bound
     #' @param b upper bound
     get_size_of = function(set = NULL, a = NULL, b = NULL) {    
-      if(!is.null(set)) {
-        if (length(set) > 1) {
-          return(integer_variable_get_size_of_set_vector(self$.variable, set))
-        } else {
+      if (!is.null(set)) {
+        stopifnot(is.finite(set))  
+        if (length(set) == 1) {
           return(integer_variable_get_size_of_set_scalar(self$.variable, set))
+        } else {
+          return(integer_variable_get_size_of_set_vector(self$.variable, set))
         }
       } else {
-        stopifnot(all(is.finite(c(a,b))))
+        stopifnot(is.finite(c(a,b)))
         stopifnot(a <= b)
         if (a < b) {
           return(integer_variable_get_size_of_range(self$.variable, a, b))
@@ -111,22 +114,27 @@ IntegerVariable <- R6Class(
     #' fill options. If using indices, this may be either a vector of integers or
     #' a \code{\link[individual]{Bitset}}.
     queue_update = function(values, index = NULL) {
-      stopifnot(is.numeric(values))
+      stopifnot(is.finite(values))
       if(is.null(index)){
         if(length(values) == 1){
+          # variable fill
           integer_variable_queue_fill(
             self$.variable,
             values
           )
         } else {
+          # variable reset
+          stopifnot(length(values) == integer_variable_get_size(self$.variable))
           integer_variable_queue_update(
             self$.variable,
             values,
-            numeric(0)
+            integer(0)
           )
         }
       } else {
         if (inherits(index, 'Bitset')) {
+          # subset update/fill: bitset
+          stopifnot(index$max_size == integer_variable_get_size(self$.variable))
           if (index$size() > 0) {
             integer_variable_queue_update_bitset(
               self$.variable,
@@ -136,14 +144,15 @@ IntegerVariable <- R6Class(
           }
         } else {
           if (length(index) > 0) {
-            stopifnot(all(is.finite(index)))
-            stopifnot(all(index > 0))
+            # subset update/fill: vector
+            stopifnot(is.finite(index))
+            stopifnot(index > 0)
             integer_variable_queue_update(
               self$.variable,
               values,
               index
             )
-          }          
+          }
         }
 
       }
