@@ -7,6 +7,10 @@ test_that("bitset insertions and removals work", {
 })
 
 test_that("bitset clear works", {
+  b <- Bitset$new(0)
+  expect_equal(b$clear()$size(), 0)
+  expect_equal(b$clear()$to_vector(), numeric(0))
+  
   b <- Bitset$new(10)
   expect_equal(b$clear()$size(), 0)
   expect_equal(b$clear()$to_vector(), numeric(0))
