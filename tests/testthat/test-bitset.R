@@ -29,6 +29,9 @@ test_that("bitset clear works", {
   a$and(b)
   expect_equal(a$size(), 0)
   expect_equal(a$to_vector(), numeric(0))
+  
+  b$insert(1:3)
+  expect_equal(b$to_vector(), 1:3)
 })
 
 
