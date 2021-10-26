@@ -96,8 +96,7 @@ clear_bset <- bench::press(
       min_iterations = 100,
       check = FALSE, 
       filter_gc = TRUE,
-      "for" = {index$clear_for()},
-      "iter" = {index$clear_iter()}
+      {index$clear_iter()}
     )
   }, 
   .grid = limit_args_grid
@@ -112,8 +111,7 @@ not_bset <- bench::press(
       min_iterations = 50,
       check = FALSE, 
       filter_gc = TRUE,
-      "for" = {index$not(inplace = TRUE)},
-      "iter" = {index$not_iter(inplace = TRUE)}
+      {index$not(inplace = TRUE)}
     )
   }, 
   .grid = limit_args_grid

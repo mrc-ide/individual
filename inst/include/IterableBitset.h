@@ -235,8 +235,8 @@ inline IterableBitset<A> IterableBitset<A>::operator ^(const IterableBitset<A>& 
 
 template<class A>
 inline IterableBitset<A>& IterableBitset<A>::clear() {
-  for (auto i : bitmap) {
-    i &= 0x0ULL;
+  for (auto i = 0u; i < bitmap.size(); ++i) {
+    bitmap[i] &= 0x0ULL;
   }
   n = 0;
   return *this;
@@ -244,8 +244,8 @@ inline IterableBitset<A>& IterableBitset<A>::clear() {
 
 template<class A>
 inline IterableBitset<A>& IterableBitset<A>::inverse() {
-  for (auto i : bitmap) {
-    i &= ~i;
+  for (auto i = 0u; i < bitmap.size(); ++i) {
+    bitmap[i] = ~bitmap[i];
   }
   //mask out the values after max_n
   A residual = (static_cast<A>(1) << (max_n % num_bits)) - 1;
