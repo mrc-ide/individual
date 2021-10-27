@@ -6,6 +6,35 @@ test_that("bitset insertions and removals work", {
   expect_equal(a$to_vector(), 1)
 })
 
+test_that("bitset clear works", {
+  b <- Bitset$new(0)
+  expect_equal(b$clear()$size(), 0)
+  expect_equal(b$clear()$to_vector(), numeric(0))
+  
+  b <- Bitset$new(10)
+  expect_equal(b$clear()$size(), 0)
+  expect_equal(b$clear()$to_vector(), numeric(0))
+  
+  b$insert(1:10)$clear()
+  expect_equal(b$size(), 0)
+  expect_equal(b$to_vector(), numeric(0))
+  
+  b$insert(c(1, 5, 10))$clear()
+  expect_equal(b$size(), 0)
+  expect_equal(b$to_vector(), numeric(0))
+  
+  a <- Bitset$new(10)$insert(1:10)
+  expect_equal(a$size(), 10)
+  expect_equal(a$to_vector(), 1:10)
+  a$and(b)
+  expect_equal(a$size(), 0)
+  expect_equal(a$to_vector(), numeric(0))
+  
+  b$insert(1:3)
+  expect_equal(b$to_vector(), 1:3)
+})
+
+
 test_that("out of range inserts don't work", {
   a <- Bitset$new(10)
   expect_error(

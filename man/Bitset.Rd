@@ -26,6 +26,7 @@ if you would like to perform an operation without destroying your current bitset
 \item \href{#method-new}{\code{Bitset$new()}}
 \item \href{#method-insert}{\code{Bitset$insert()}}
 \item \href{#method-remove}{\code{Bitset$remove()}}
+\item \href{#method-clear}{\code{Bitset$clear()}}
 \item \href{#method-size}{\code{Bitset$size()}}
 \item \href{#method-or}{\code{Bitset$or()}}
 \item \href{#method-and}{\code{Bitset$and()}}
@@ -92,6 +93,16 @@ remove from the bitset.
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clear"></a>}}
+\if{latex}{\out{\hypertarget{method-clear}{}}}
+\subsection{Method \code{clear()}}{
+clear the bitset.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$clear(v)}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-size"></a>}}
