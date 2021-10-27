@@ -236,7 +236,7 @@ inline IterableBitset<A> IterableBitset<A>::operator ^(const IterableBitset<A>& 
 template<class A>
 inline IterableBitset<A>& IterableBitset<A>::clear() {
   for (auto i = 0u; i < bitmap.size(); ++i) {
-    bitmap[i] &= 0x0ULL;
+    bitmap[i] = 0x0ULL;
   }
   n = 0;
   return *this;

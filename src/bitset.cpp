@@ -43,9 +43,7 @@ void bitset_remove(
 }
 
 //[[Rcpp::export]]
-void bitset_clear(
-        const Rcpp::XPtr<individual_index_t> b
-) {
+void bitset_clear(const Rcpp::XPtr<individual_index_t> b) {
     b->clear();
 }
 

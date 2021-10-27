@@ -96,7 +96,7 @@ clear_bset <- bench::press(
       min_iterations = 100,
       check = FALSE, 
       filter_gc = TRUE,
-      {index$clear_iter()}
+      {index$clear()}
     )
   }, 
   .grid = limit_args_grid
