@@ -89,7 +89,7 @@ size_t integer_variable_get_size_of_set_vector(
     Rcpp::XPtr<IntegerVariable> variable,
     const std::vector<int> values_set
 ) {
-    return variable->get_size_of_set_vector(values_set);
+    return variable->get_size_of_set(values_set);
 }
 
 // [[Rcpp::export]]
@@ -97,7 +97,7 @@ size_t integer_variable_get_size_of_set_scalar(
         Rcpp::XPtr<IntegerVariable> variable,
         const int value
 ) {
-    return variable->get_size_of_set_scalar(value);
+    return variable->get_size_of_set(value);
 }
 
 // [[Rcpp::export]]

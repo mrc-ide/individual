@@ -41,8 +41,8 @@ struct IntegerVariable : public Variable {
     virtual individual_index_t get_index_of_set(const int value) const;
     virtual individual_index_t get_index_of_range(const int a, const int b) const;
     
-    virtual size_t get_size_of_set_vector(const std::vector<int>& values_set) const;
-    virtual size_t get_size_of_set_scalar(const int value) const;
+    virtual size_t get_size_of_set(const std::vector<int>& values_set) const;
+    virtual size_t get_size_of_set(const int value) const;
     virtual size_t get_size_of_range(const int a, const int b) const;
 
     virtual void queue_update(const std::vector<int>& values, const std::vector<size_t>& index);
@@ -136,7 +136,7 @@ inline individual_index_t IntegerVariable::get_index_of_range(
 }
 
 //' @title return number of individuals whose value is in a finite set
-inline size_t IntegerVariable::get_size_of_set_vector(
+inline size_t IntegerVariable::get_size_of_set(
         const std::vector<int>& values_set
 ) const {
     
@@ -149,7 +149,7 @@ inline size_t IntegerVariable::get_size_of_set_vector(
 }
 
 //' @title return number of individuals whose value is equal to a specific scalar
-inline size_t IntegerVariable::get_size_of_set_scalar(
+inline size_t IntegerVariable::get_size_of_set(
         const int value
 ) const {
     
