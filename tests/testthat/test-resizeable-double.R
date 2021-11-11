@@ -1,7 +1,7 @@
 test_that("getting resizeable variables works", {
   size <- 10
-  sequence <- ResizeableDoubleVariable$new(seq_len(size), max_size=10)
-  sequence_2 <- ResizeableDoubleVariable$new(seq_len(size) + 10, max_size=10)
+  sequence <- ResizeableDoubleVariable$new(seq_len(size))
+  sequence_2 <- ResizeableDoubleVariable$new(seq_len(size) + 10)
   
   expect_equal(sequence$get_values(), 1:10)
   expect_equal(sequence_2$get_values(), (1:10) + 10)
@@ -9,7 +9,7 @@ test_that("getting resizeable variables works", {
 
 test_that("extending variables returns the new values", {
   size <- 10
-  x <- ResizeableDoubleVariable$new(seq_len(size), max_size=20)
+  x <- ResizeableDoubleVariable$new(seq_len(size))
   expect_equal(x$get_values(), 1:10)
   x$queue_extend(values = seq_len(size) + 10)
   x$.update()
@@ -18,7 +18,7 @@ test_that("extending variables returns the new values", {
 
 test_that("shrinking variables removes values (bitset)", {
   size <- 10
-  x <- ResizeableDoubleVariable$new(seq_len(size), max_size=10)
+  x <- ResizeableDoubleVariable$new(seq_len(size))
   x$queue_shrink(index = Bitset$new(size)$insert(1:5))
   x$.update()
   expect_equal(x$get_values(), 1:5)
@@ -26,7 +26,7 @@ test_that("shrinking variables removes values (bitset)", {
 
 test_that("shrinking variables removes values (vector)", {
   size <- 10
-  x <- ResizeableDoubleVariable$new(seq_len(size), max_size=10)
+  x <- ResizeableDoubleVariable$new(seq_len(size))
   expect_equal(x$get_values(), 1:10)
   x$queue_shrink(index = 5:10)
   x$.update()
@@ -35,7 +35,7 @@ test_that("shrinking variables removes values (vector)", {
 
 test_that("resizing variables returns the correct size", {
   size <- 10
-  x <- ResizeableDoubleVariable$new(seq_len(size), max_size=10)
+  x <- ResizeableDoubleVariable$new(seq_len(size))
   expect_equal(x$size(), 10)
   x$queue_extend(values = seq_len(size) + 10)
   x$queue_shrink(index = 5:10)
@@ -45,7 +45,7 @@ test_that("resizing variables returns the correct size", {
 
 test_that("resizing operations preserve order", {
   size <- 10
-  x <- ResizeableDoubleVariable$new(seq_len(size), max_size = 20)
+  x <- ResizeableDoubleVariable$new(seq_len(size))
   x$queue_shrink(index = 5:10)
   x$queue_extend(values = seq_len(size) + 10)
   x$queue_shrink(index = 1:5)
@@ -56,7 +56,7 @@ test_that("resizing operations preserve order", {
 
 test_that("invalid shrinking operations error at queue time", {
   size <- 10
-  x <- ResizeableDoubleVariable$new(seq_len(size), max_size = 20)
+  x <- ResizeableDoubleVariable$new(seq_len(size))
   expect_error(x$queue_shrink(index = 1:20))
   expect_error(x$queue_shrink(index = -1:20))
   expect_error(x$queue_shrink(index = Bitset$new(size + 1)))
@@ -64,7 +64,7 @@ test_that("invalid shrinking operations error at queue time", {
 
 test_that("getting indices of DoubleVariable in a range works", {
   dat <- seq(from=0,to=1,by=0.01)
-  var <- ResizeableDoubleVariable$new(dat, max_size=length(dat))
+  var <- ResizeableDoubleVariable$new(dat)
   
   empty <- var$get_index_of(a = 500,b = 600)
   full <- var$get_index_of(a = 0.65,b = 0.89)
@@ -79,7 +79,7 @@ test_that("getting indices of DoubleVariable in a range works", {
 
 test_that("getting size of DoubleVariable in a range works", {
   dat <- seq(from=0,to=1,by=0.01)
-  var <- ResizeableDoubleVariable$new(dat, max_size=length(dat))
+  var <- ResizeableDoubleVariable$new(dat)
   
   empty <- var$get_size_of(a = 500,b = 600)
   full <- var$get_size_of(a = 0.65,b = 0.89)
@@ -90,7 +90,7 @@ test_that("getting size of DoubleVariable in a range works", {
 })
 
 test_that("getting values from DoubleVariable with incompatible index fails", {
-  x <- ResizeableDoubleVariable$new(initial_values = 1:100, max_size=100)
+  x <- ResizeableDoubleVariable$new(initial_values = 1:100)
   b <- Bitset$new(1000)$insert(90:110)
   expect_error(x$get_values(b))
   expect_error(x$get_values(90:110))
@@ -98,7 +98,7 @@ test_that("getting values from DoubleVariable with incompatible index fails", {
 })
 
 test_that("queueing updates with bad inputs fails or does nothing", {
-  x <- ResizeableDoubleVariable$new(initial_values = 1:10, max_size=10)
+  x <- ResizeableDoubleVariable$new(initial_values = 1:10)
   x$queue_update(values = numeric(0), index = 1:10)
   x$.update()
   expect_equal(x$get_values(), 1:10)
@@ -125,13 +125,13 @@ test_that("queueing updates with bad inputs fails or does nothing", {
 })
 
 test_that("get size of method fails correctly with bad inputs", {
-  x <- ResizeableDoubleVariable$new(initial_values = 1:10, max_size=10)
+  x <- ResizeableDoubleVariable$new(initial_values = 1:10)
   expect_error(x$get_size_of(a = 5))
   expect_error(x$get_size_of(b = 5))
 })
 
 test_that("get index of method fails correctly with bad inputs", {
-  x <- ResizeableDoubleVariable$new(initial_values = 1:10, max_size=10)
+  x <- ResizeableDoubleVariable$new(initial_values = 1:10)
   expect_error(x$get_index_of(a = 5))
   expect_error(x$get_index_of(b = 5))
 })
