@@ -293,6 +293,46 @@ infection_age_process_internal <- function(state, susceptible, exposed, infectio
     .Call(`_individual_infection_age_process_internal`, state, susceptible, exposed, infectious, age, age_bins, p, dt, mixing)
 }
 
+create_resizeable_double_variable <- function(values) {
+    .Call(`_individual_create_resizeable_double_variable`, values)
+}
+
+resizeable_double_variable_get_values <- function(variable) {
+    .Call(`_individual_resizeable_double_variable_get_values`, variable)
+}
+
+resizeable_double_variable_get_values_at_index <- function(variable, index) {
+    .Call(`_individual_resizeable_double_variable_get_values_at_index`, variable, index)
+}
+
+resizeable_double_variable_get_values_at_index_vector <- function(variable, index) {
+    .Call(`_individual_resizeable_double_variable_get_values_at_index_vector`, variable, index)
+}
+
+resizeable_double_variable_get_index_of_range <- function(variable, a, b) {
+    .Call(`_individual_resizeable_double_variable_get_index_of_range`, variable, a, b)
+}
+
+resizeable_double_variable_get_size_of_range <- function(variable, a, b) {
+    .Call(`_individual_resizeable_double_variable_get_size_of_range`, variable, a, b)
+}
+
+resizeable_double_variable_queue_fill <- function(variable, value) {
+    invisible(.Call(`_individual_resizeable_double_variable_queue_fill`, variable, value))
+}
+
+resizeable_double_variable_queue_update <- function(variable, value, index) {
+    invisible(.Call(`_individual_resizeable_double_variable_queue_update`, variable, value, index))
+}
+
+resizeable_double_variable_queue_update_bitset <- function(variable, value, index) {
+    invisible(.Call(`_individual_resizeable_double_variable_queue_update_bitset`, variable, value, index))
+}
+
+resizeable_double_variable_update <- function(variable) {
+    invisible(.Call(`_individual_resizeable_double_variable_update`, variable))
+}
+
 execute_process <- function(process, timestep) {
     invisible(.Call(`_individual_execute_process`, process, timestep))
 }

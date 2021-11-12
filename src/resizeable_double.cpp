@@ -23,7 +23,8 @@ Rcpp::XPtr<ResizeableDoubleVariable> create_resizeable_double_variable(
 std::vector<double> resizeable_double_variable_get_values(
     Rcpp::XPtr<ResizeableDoubleVariable> variable
     ) {
-    return variable->get_values();
+    const auto& values = variable->get_values();
+    return std::vector<double>(std::cbegin(values), std::cend(values));
 }
 
 //[[Rcpp::export]]

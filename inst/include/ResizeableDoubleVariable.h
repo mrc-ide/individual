@@ -1,19 +1,79 @@
 /*
- * DoubleVariable.h
+ * ResizeableDoubleVariable.h
  *
- *  Created on: 15 Feb 2021
+ *  Created on: 11 Nov 2021
  *      Author: gc1610
  */
 
-#ifndef INST_INCLUDE_DOUBLE_VARIABLE_H_
-#define INST_INCLUDE_DOUBLE_VARIABLE_H_
+#ifndef INST_INCLUDE_RESIZEABLE_DOUBLE_VARIABLE_H_
+#define INST_INCLUDE_RESIZEABLE_DOUBLE_VARIABLE_H_
 
 #include "Variable.h"
 #include "common_types.h"
 #include <Rcpp.h>
 #include <queue>
+#include <list>
+#include <memory>
+#include "utils.h"
 
 struct ResizeableDoubleVariable;
+
+class ResizeUpdate {
+    virtual void update(std::list<double>&) = 0;
+};
+
+class ExtendUpdate : public ResizeUpdate {
+    const std::vector<double> values;
+public:
+    ExtendUpdate(const std::vector<double>& values) : values(values) {};
+    virtual void update(std::list<double>& values) override {
+        values.insert(
+            std::end(values),
+            std::cbegin(this->values),
+            std::cend(this->values)
+        );
+    };
+};
+
+class BitsetShrinkUpdate : public ResizeUpdate {
+    const individual_index_t index;
+public:
+    BitsetShrinkUpdate(const individual_index_t& index) : index(index) {};
+    virtual void update(std::list<double>& values) override {
+        auto diffs = std::vector<size_t>(index.size());
+        std::adjacent_difference(
+            std::begin(index),
+            std::end(index),
+            std::begin(diffs)
+        );
+        auto it = std::begin(values);
+        for (auto d : diffs) {
+            std::advance(it, d);
+            values.erase(it);
+        }
+    };
+};
+
+class VectorShrinkUpdate : public ResizeUpdate {
+    std::vector<size_t> index;
+public:
+    VectorShrinkUpdate(const std::vector<size_t>& index) : index(index) {
+        std::sort(std::begin(this->index), std::end(this->index));
+    };
+    virtual void update(std::list<double>& values) override {
+        auto diffs = std::vector<size_t>(index.size());
+        std::adjacent_difference(
+            std::begin(index),
+            std::end(index),
+            std::begin(diffs)
+        );
+        auto it = std::begin(values);
+        for (auto d : diffs) {
+            std::advance(it, d);
+            values.erase(it);
+        }
+    };
+};
 
 
 //' @title a variable object for double precision floats
@@ -27,13 +87,14 @@ struct ResizeableDoubleVariable : public Variable {
 
     using update_t = std::pair<std::vector<double>, std::vector<size_t>>;
     std::queue<update_t> updates;
+    std::queue<std::unique_ptr<ResizeUpdate>> resize_updates;
     size_t size;
-    std::vector<double> values;
+    std::list<double> values;
     
     ResizeableDoubleVariable(const std::vector<double>& values);
-    virtual ~DoubleVariable() = default;
+    virtual ~ResizeableDoubleVariable() = default;
 
-    virtual std::vector<double> get_values() const;
+    virtual std::list<double> get_values() const;
     virtual std::vector<double> get_values(const individual_index_t& index) const;
     virtual std::vector<double> get_values(const std::vector<size_t>& index) const;
 
@@ -46,12 +107,14 @@ struct ResizeableDoubleVariable : public Variable {
 };
 
 
-inline ResizeableDoubleVariable::ResizeableDoubleVariable(const std::vector<double>& values)
-    : size(values.size()), values(values)
+inline ResizeableDoubleVariable::ResizeableDoubleVariable(
+    const std::vector<double>& values
+    ) : size(values.size()),
+    values(std::list<double>(std::begin(values), std::end(values)))
 {}
 
 //' @title get all values
-inline std::vector<double> ResizeableDoubleVariable::get_values() const {
+inline std::list<double> ResizeableDoubleVariable::get_values() const {
     return values;
 }
 
@@ -60,57 +123,53 @@ inline std::vector<double> ResizeableDoubleVariable::get_values(const individual
     if (size != index.max_size()) {
         Rcpp::stop("incompatible size bitset used to get values from DoubleVariable");
     }
-    auto result = std::vector<double>(index.size());
-    auto result_i = 0u;
-    for (auto i : index) {
-        result[result_i] = values[i];
-        ++result_i;
-    }
-    return result;
+    auto it = FilterIterator<std::list<double>::const_iterator, individual_index_t::iterator, const double>(
+        std::begin(values),
+        std::end(values),
+        index.begin(),
+        index.end()
+    );
+    return std::vector<double>(it.begin(), it.end());
 }
 
 //' @title get values at index given by a vector
 inline std::vector<double> ResizeableDoubleVariable::get_values(const std::vector<size_t>& index) const {
-    
-    auto result = std::vector<double>(index.size());
-    for (auto i = 0u; i < index.size(); ++i) {
-        if (index[i] >= size) {
-            std::stringstream message;
-            message << "index for DoubleVariable out of range, supplied index: " << index[i] << ", size of variable: " << size;
-            Rcpp::stop(message.str()); 
-        }
-        result[i] = values[index[i]];
-    }
-    return result;
+    auto it = FilterIterator<std::list<double>::const_iterator, std::vector<size_t>::const_iterator, const double>(
+        std::begin(values),
+        std::end(values),
+        std::begin(index),
+        std::end(index)
+    );
+    return std::vector<double>(it.begin(), it.end());
 }
 
 //' @title return bitset giving index of individuals whose value is in some range [a,b]
 inline individual_index_t ResizeableDoubleVariable::get_index_of_range(
         const double a, const double b
 ) const {
-    
     auto result = individual_index_t(size);
-    for (auto i = 0u; i < values.size(); ++i) {
-        if( !(values[i] < a) && !(b < values[i]) ) {
+    auto i = 0u;
+    for (const auto& x : values) {
+        if(!((x < a) || (b < x))) {
             result.insert(i);
         }
+        ++i;
     }
-    
     return result;
-    
 }
 
 //' @title return number of individuals whose value is in some range [a,b]
 inline size_t ResizeableDoubleVariable::get_size_of_range(
         const double a, const double b
 ) const {
-    
-    size_t result = std::count_if(values.begin(), values.end(), [&](const double v) -> bool {
-        return !(v < a) && !(b < v);
-    });
-    
+    size_t result = std::count_if(
+        values.cbegin(),
+        values.cend(),
+        [&](const double v) -> bool {
+            return !(v < a) && !(b < v);
+        }
+    );
     return result;
-    
 }
 
 //' @title queue a state update for some subset of individuals
@@ -134,7 +193,7 @@ inline void ResizeableDoubleVariable::update() {
     while(updates.size() > 0) {
         const auto& update = updates.front();
         const auto& values = update.first;
-        const auto& index = update.second;
+        auto index = update.second;
         if (values.size() == 0) {
             return;
         }
@@ -149,18 +208,33 @@ inline void ResizeableDoubleVariable::update() {
             if (value_fill) {
                 std::fill(to_update.begin(), to_update.end(), values[0]);
             } else {
-                to_update = values;
+                to_update = std::list<double>(
+                    std::cbegin(values),
+                    std::cend(values)
+                );
             }
         } else {
+            std::sort(std::begin(index), std::end(index));
+            auto diffs = std::vector<size_t>(index.size());
+            std::adjacent_difference(
+                std::begin(index),
+                std::end(index),
+                std::begin(diffs)
+            );
+            auto update_iterator = std::begin(to_update);
             if (value_fill) {
                 // For a fill update
-                for (auto i : index) {
-                    to_update[i] = values[0];
+                for (auto d : diffs) {
+                    std::advance(update_iterator, d);
+                    *update_iterator = values[0];
                 }
             } else {
                 // Subset assignment
-                for (auto i = 0u; i < index.size(); ++i) {
-                    to_update[index[i]] = values[i];
+                auto i = 0u;
+                for (auto d : diffs) {
+                    std::advance(update_iterator, d);
+                    *update_iterator = values[i];
+                    ++i;
                 }
             }
         }
@@ -168,4 +242,4 @@ inline void ResizeableDoubleVariable::update() {
     }
 }
 
-#endif /* INST_INCLUDE_DOUBLE_VARIABLE_H_ */
+#endif /* INST_INCLUDE_RESIZEABLE_DOUBLE_VARIABLE_H_ */

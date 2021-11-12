@@ -894,6 +894,123 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// create_resizeable_double_variable
+Rcpp::XPtr<ResizeableDoubleVariable> create_resizeable_double_variable(const std::vector<double>& values);
+RcppExport SEXP _individual_create_resizeable_double_variable(SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type values(valuesSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_resizeable_double_variable(values));
+    return rcpp_result_gen;
+END_RCPP
+}
+// resizeable_double_variable_get_values
+std::vector<double> resizeable_double_variable_get_values(Rcpp::XPtr<ResizeableDoubleVariable> variable);
+RcppExport SEXP _individual_resizeable_double_variable_get_values(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableDoubleVariable> >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(resizeable_double_variable_get_values(variable));
+    return rcpp_result_gen;
+END_RCPP
+}
+// resizeable_double_variable_get_values_at_index
+std::vector<double> resizeable_double_variable_get_values_at_index(Rcpp::XPtr<ResizeableDoubleVariable> variable, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_resizeable_double_variable_get_values_at_index(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableDoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(resizeable_double_variable_get_values_at_index(variable, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// resizeable_double_variable_get_values_at_index_vector
+std::vector<double> resizeable_double_variable_get_values_at_index_vector(Rcpp::XPtr<ResizeableDoubleVariable> variable, std::vector<size_t> index);
+RcppExport SEXP _individual_resizeable_double_variable_get_values_at_index_vector(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableDoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(resizeable_double_variable_get_values_at_index_vector(variable, index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// resizeable_double_variable_get_index_of_range
+Rcpp::XPtr<individual_index_t> resizeable_double_variable_get_index_of_range(Rcpp::XPtr<ResizeableDoubleVariable> variable, const double a, const double b);
+RcppExport SEXP _individual_resizeable_double_variable_get_index_of_range(SEXP variableSEXP, SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableDoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(resizeable_double_variable_get_index_of_range(variable, a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// resizeable_double_variable_get_size_of_range
+size_t resizeable_double_variable_get_size_of_range(Rcpp::XPtr<ResizeableDoubleVariable> variable, const double a, const double b);
+RcppExport SEXP _individual_resizeable_double_variable_get_size_of_range(SEXP variableSEXP, SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableDoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(resizeable_double_variable_get_size_of_range(variable, a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// resizeable_double_variable_queue_fill
+void resizeable_double_variable_queue_fill(Rcpp::XPtr<ResizeableDoubleVariable> variable, const std::vector<double> value);
+RcppExport SEXP _individual_resizeable_double_variable_queue_fill(SEXP variableSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableDoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type value(valueSEXP);
+    resizeable_double_variable_queue_fill(variable, value);
+    return R_NilValue;
+END_RCPP
+}
+// resizeable_double_variable_queue_update
+void resizeable_double_variable_queue_update(Rcpp::XPtr<ResizeableDoubleVariable> variable, const std::vector<double> value, std::vector<size_t> index);
+RcppExport SEXP _individual_resizeable_double_variable_queue_update(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableDoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
+    resizeable_double_variable_queue_update(variable, value, index);
+    return R_NilValue;
+END_RCPP
+}
+// resizeable_double_variable_queue_update_bitset
+void resizeable_double_variable_queue_update_bitset(Rcpp::XPtr<ResizeableDoubleVariable> variable, const std::vector<double> value, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_resizeable_double_variable_queue_update_bitset(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableDoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    resizeable_double_variable_queue_update_bitset(variable, value, index);
+    return R_NilValue;
+END_RCPP
+}
+// resizeable_double_variable_update
+void resizeable_double_variable_update(Rcpp::XPtr<ResizeableDoubleVariable> variable);
+RcppExport SEXP _individual_resizeable_double_variable_update(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableDoubleVariable> >::type variable(variableSEXP);
+    resizeable_double_variable_update(variable);
+    return R_NilValue;
+END_RCPP
+}
 // execute_process
 void execute_process(Rcpp::XPtr<process_t> process, size_t timestep);
 RcppExport SEXP _individual_execute_process(SEXP processSEXP, SEXP timestepSEXP) {
@@ -999,6 +1116,16 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_multi_probability_multinomial_process_internal", (DL_FUNC) &_individual_multi_probability_multinomial_process_internal, 5},
     {"_individual_multi_probability_bernoulli_process_internal", (DL_FUNC) &_individual_multi_probability_bernoulli_process_internal, 4},
     {"_individual_infection_age_process_internal", (DL_FUNC) &_individual_infection_age_process_internal, 9},
+    {"_individual_create_resizeable_double_variable", (DL_FUNC) &_individual_create_resizeable_double_variable, 1},
+    {"_individual_resizeable_double_variable_get_values", (DL_FUNC) &_individual_resizeable_double_variable_get_values, 1},
+    {"_individual_resizeable_double_variable_get_values_at_index", (DL_FUNC) &_individual_resizeable_double_variable_get_values_at_index, 2},
+    {"_individual_resizeable_double_variable_get_values_at_index_vector", (DL_FUNC) &_individual_resizeable_double_variable_get_values_at_index_vector, 2},
+    {"_individual_resizeable_double_variable_get_index_of_range", (DL_FUNC) &_individual_resizeable_double_variable_get_index_of_range, 3},
+    {"_individual_resizeable_double_variable_get_size_of_range", (DL_FUNC) &_individual_resizeable_double_variable_get_size_of_range, 3},
+    {"_individual_resizeable_double_variable_queue_fill", (DL_FUNC) &_individual_resizeable_double_variable_queue_fill, 2},
+    {"_individual_resizeable_double_variable_queue_update", (DL_FUNC) &_individual_resizeable_double_variable_queue_update, 3},
+    {"_individual_resizeable_double_variable_queue_update_bitset", (DL_FUNC) &_individual_resizeable_double_variable_queue_update_bitset, 3},
+    {"_individual_resizeable_double_variable_update", (DL_FUNC) &_individual_resizeable_double_variable_update, 1},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
