@@ -20,6 +20,7 @@ struct ResizeableDoubleVariable;
 
 struct ResizeUpdate {
     virtual void update(std::list<double>&) = 0;
+    virtual ~ResizeUpdate() = default;
 };
 
 class ExtendUpdate : public ResizeUpdate {
@@ -33,6 +34,7 @@ public:
             std::cend(this->values)
         );
     };
+    virtual ~ExtendUpdate() = default;
 };
 
 class BitsetShrinkUpdate : public ResizeUpdate {
@@ -54,6 +56,7 @@ public:
             extra_step = 1u;
         }
     };
+    virtual ~BitsetShrinkUpdate() = default;
 };
 
 class VectorShrinkUpdate : public ResizeUpdate {
@@ -77,6 +80,7 @@ public:
             extra_step = 1u;
         }
     };
+    virtual ~VectorShrinkUpdate() = default;
 };
 
 

@@ -461,7 +461,7 @@ inline IterableBitset<A> filter_bitset(
     auto result = IterableBitset<A>(source.max_size());
     auto is = std::vector<size_t>(begin, end);
     std::sort(std::begin(is), std::end(is));
-    auto it = FilterIterator<typename IterableBitset<A>::iterator, std::vector<size_t>::iterator, A>(
+    auto it = FilterIterator<typename IterableBitset<A>::iterator, std::vector<size_t>::iterator, size_t>(
         std::begin(source),
         std::end(source),
         std::begin(is),

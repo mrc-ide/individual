@@ -14,7 +14,6 @@ class FilterIterator
     FilteringIterator f_begin;
     FilteringIterator f_end;
     std::vector<size_t> diffs;
-    size_t position = 0;
 public:
     struct Iterator {
         using iterator_category = std::forward_iterator_tag;
@@ -42,8 +41,8 @@ public:
         Iterator(FilterIterator& container, size_t i)
             : container(container), i(i) {}
     private:
-        size_t i;
         FilterIterator& container;
+        size_t i;
         void next() {
             std::advance(container.s_begin, container.diffs[i]);
             if (container.s_begin == container.s_end) {
