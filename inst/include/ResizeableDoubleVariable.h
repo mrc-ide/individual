@@ -18,7 +18,7 @@
 
 struct ResizeableDoubleVariable;
 
-class ResizeUpdate {
+struct ResizeUpdate {
     virtual void update(std::list<double>&) = 0;
 };
 
@@ -47,9 +47,11 @@ public:
             std::begin(diffs)
         );
         auto it = std::begin(values);
+        auto extra_step = 0u;
         for (auto d : diffs) {
-            std::advance(it, d);
-            values.erase(it);
+            std::advance(it, d - extra_step);
+            it = values.erase(it);
+            extra_step = 1u;
         }
     };
 };
@@ -68,9 +70,11 @@ public:
             std::begin(diffs)
         );
         auto it = std::begin(values);
+        auto extra_step = 0u;
         for (auto d : diffs) {
-            std::advance(it, d);
-            values.erase(it);
+            std::advance(it, d - extra_step);
+            it = values.erase(it);
+            extra_step = 1u;
         }
     };
 };
@@ -81,14 +85,12 @@ public:
 //' in the real numbers. It inherits from Variable.
 //' It contains the following data members:
 //'     * updates: a priority queue of pairs of values and indices to update
-//'     * size: the number of elements stored (size of population)
 //'     * values: a vector of values
 struct ResizeableDoubleVariable : public Variable {
 
     using update_t = std::pair<std::vector<double>, std::vector<size_t>>;
     std::queue<update_t> updates;
     std::queue<std::unique_ptr<ResizeUpdate>> resize_updates;
-    size_t size;
     std::list<double> values;
     
     ResizeableDoubleVariable(const std::vector<double>& values);
@@ -102,15 +104,16 @@ struct ResizeableDoubleVariable : public Variable {
     virtual size_t get_size_of_range(const double a, const double b) const;
 
     virtual void queue_update(const std::vector<double>& values, const std::vector<size_t>& index);
+    virtual void queue_extend(const std::vector<double>& values);
+    virtual void queue_shrink(const std::vector<size_t>&);
+    virtual void queue_shrink(const individual_index_t&);
+    virtual size_t size() const;
     virtual void update() override;
-    
 };
-
 
 inline ResizeableDoubleVariable::ResizeableDoubleVariable(
     const std::vector<double>& values
-    ) : size(values.size()),
-    values(std::list<double>(std::begin(values), std::end(values)))
+    ) : values(std::list<double>(std::begin(values), std::end(values)))
 {}
 
 //' @title get all values
@@ -120,7 +123,7 @@ inline std::list<double> ResizeableDoubleVariable::get_values() const {
 
 //' @title get values at index given by a bitset
 inline std::vector<double> ResizeableDoubleVariable::get_values(const individual_index_t& index) const {
-    if (size != index.max_size()) {
+    if (size() != index.max_size()) {
         Rcpp::stop("incompatible size bitset used to get values from DoubleVariable");
     }
     auto it = FilterIterator<std::list<double>::const_iterator, individual_index_t::iterator, const double>(
@@ -147,7 +150,7 @@ inline std::vector<double> ResizeableDoubleVariable::get_values(const std::vecto
 inline individual_index_t ResizeableDoubleVariable::get_index_of_range(
         const double a, const double b
 ) const {
-    auto result = individual_index_t(size);
+    auto result = individual_index_t(size());
     auto i = 0u;
     for (const auto& x : values) {
         if(!((x < a) || (b < x))) {
@@ -174,26 +177,55 @@ inline size_t ResizeableDoubleVariable::get_size_of_range(
 
 //' @title queue a state update for some subset of individuals
 inline void ResizeableDoubleVariable::queue_update(
-        const std::vector<double>& values,
-        const std::vector<size_t>& index
+    const std::vector<double>& values,
+    const std::vector<size_t>& index
 ) {
-    if (values.size() > 1 && values.size() < size && values.size() != index.size()) {
+    if (values.size() > 1 && values.size() < size() && values.size() != index.size()) {
         Rcpp::stop("Mismatch between value and index length");
     }
     for (auto i : index) {
-        if (i >= size) {
+        if (i >= size()) {
             Rcpp::stop("Index out of bounds");
         }
     }
     updates.push({ values, index });
 }
 
+//' @title queue new values to add to the variable
+inline void ResizeableDoubleVariable::queue_extend(
+    const std::vector<double>& values
+) {
+    resize_updates.push(std::make_unique<ExtendUpdate>(values));
+}
+
+//' @title queue values to be erased from the variable
+inline void ResizeableDoubleVariable::queue_shrink(
+    const individual_index_t& index 
+) {
+    if (index.max_size() != size()) {
+        Rcpp::stop("Invalid bitset size for variable shrink");
+    }
+    resize_updates.push(std::make_unique<BitsetShrinkUpdate>(index));
+}
+
+//' @title queue values to be erased from the variable
+inline void ResizeableDoubleVariable::queue_shrink(
+    const std::vector<size_t>& index
+) {
+    for (const auto& x : index) {
+        if (x >= size()) {
+            Rcpp::stop("Invalid vector index for variable shrink");
+        }
+    }
+    resize_updates.push(std::make_unique<VectorShrinkUpdate>(index));
+}
+
 //' @title apply all queued state updates in FIFO order
 inline void ResizeableDoubleVariable::update() {
     while(updates.size() > 0) {
-        const auto& update = updates.front();
+        auto& update = updates.front();
         const auto& values = update.first;
-        auto index = update.second;
+        auto& index = update.second;
         if (values.size() == 0) {
             return;
         }
@@ -240,6 +272,17 @@ inline void ResizeableDoubleVariable::update() {
         }
         updates.pop();
     }
+
+    // handle resize updates
+    while(resize_updates.size() > 0) {
+        const auto& update = resize_updates.front();
+        update->update(values);
+        resize_updates.pop();
+    }
+}
+
+inline size_t ResizeableDoubleVariable::size() const {
+    return values.size();
 }
 
 #endif /* INST_INCLUDE_RESIZEABLE_DOUBLE_VARIABLE_H_ */

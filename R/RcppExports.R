@@ -333,6 +333,22 @@ resizeable_double_variable_update <- function(variable) {
     invisible(.Call(`_individual_resizeable_double_variable_update`, variable))
 }
 
+resizeable_double_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_resizeable_double_variable_queue_extend`, variable, values))
+}
+
+resizeable_double_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_resizeable_double_variable_queue_shrink_bitset`, variable, index))
+}
+
+resizeable_double_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_resizeable_double_variable_queue_shrink`, variable, index))
+}
+
+resizeable_double_variable_size <- function(variable) {
+    .Call(`_individual_resizeable_double_variable_size`, variable)
+}
+
 execute_process <- function(process, timestep) {
     invisible(.Call(`_individual_execute_process`, process, timestep))
 }

@@ -107,6 +107,8 @@ ResizeableDoubleVariable <- R6Class(
       }
     },
 
+    #' @description extend the variable with new values
+    #' @param values to add to the variable
     queue_extend = function(values) {
       stopifnot(is.numeric(values))
       resizeable_double_variable_queue_extend(
@@ -115,6 +117,8 @@ ResizeableDoubleVariable <- R6Class(
       )
     },
 
+    #' @description shrink the variable
+    #' @param index a bitset or vector representing the individuals to remove
     queue_shrink = function(index) {
       if (inherits(index, 'Bitset')) {
         if (index$size() > 0){
@@ -134,6 +138,9 @@ ResizeableDoubleVariable <- R6Class(
         }
       }
     },
+
+    #' @description get the current size of the variable
+    size = function() resizeable_double_variable_size(self$.variable),
 
     .update = function() resizeable_double_variable_update(self$.variable)
   )

@@ -89,7 +89,7 @@ void resizeable_double_variable_queue_update_bitset(
         const std::vector<double> value,
         Rcpp::XPtr<individual_index_t> index
 ) {
-    if (index->max_size() != variable->size) {
+    if (index->max_size() != variable->size()) {
         Rcpp::stop("incompatible size bitset used to queue update for DoubleVariable");
     }
     auto index_vec = bitset_to_vector_internal(*index, false);
@@ -99,4 +99,36 @@ void resizeable_double_variable_queue_update_bitset(
 //[[Rcpp::export]]
 void resizeable_double_variable_update(Rcpp::XPtr<ResizeableDoubleVariable> variable) {
     variable->update();
+}
+
+//[[Rcpp::export]]
+void resizeable_double_variable_queue_extend(
+    Rcpp::XPtr<ResizeableDoubleVariable> variable,
+    const std::vector<double>& values
+) {
+    variable->queue_extend(values);
+}
+
+//[[Rcpp::export]]
+void resizeable_double_variable_queue_shrink_bitset(
+    Rcpp::XPtr<ResizeableDoubleVariable> variable,
+    Rcpp::XPtr<individual_index_t> index
+) {
+    variable->queue_shrink(*index);
+}
+
+//[[Rcpp::export]]
+void resizeable_double_variable_queue_shrink(
+    Rcpp::XPtr<ResizeableDoubleVariable> variable,
+    std::vector<size_t> index
+) {
+    decrement(index);
+    variable->queue_shrink(index);
+}
+
+//[[Rcpp::export]]
+size_t resizeable_double_variable_size(
+    Rcpp::XPtr<ResizeableDoubleVariable> variable
+) {
+    return variable->size();
 }
