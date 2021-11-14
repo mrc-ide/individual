@@ -92,7 +92,7 @@ DoubleVariable <- R6Class(
       } else {
         if (inherits(index, 'Bitset')) {
           # subset update/fill: bitset
-          stopifnot(index$max_size == integer_variable_get_size(self$.variable))
+          stopifnot(index$max_size == double_variable_get_size(self$.variable))
           if (index$size() > 0){
             double_variable_queue_update_bitset(
               self$.variable,
