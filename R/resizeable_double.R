@@ -1,5 +1,7 @@
-#' @title DoubleVariable Class
-#' @description Represents a continuous variable for an individual.
+#' @title ResizeableDoubleVariable Class
+#' @description Represents a continuous variable for a varying popuation size.
+#' Value updates are applied as in DoubleVariable. Resizing updates (i.e.
+#' extend and shrink updates) are applied after all value updates are applied.
 #' @importFrom R6 R6Class
 #' @export
 ResizeableDoubleVariable <- R6Class(
