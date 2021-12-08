@@ -18,30 +18,26 @@
 
 struct ResizeableDoubleVariable;
 
-struct ResizeUpdate {
-    virtual void update(std::list<double>&) = 0;
-    virtual ~ResizeUpdate() = default;
-};
-
-class ExtendUpdate : public ResizeUpdate {
-    const std::vector<double> values;
+template<class A>
+class ExtendUpdate {
+    const std::vector<A> values;
 public:
-    ExtendUpdate(const std::vector<double>& values) : values(values) {};
-    virtual void update(std::list<double>& values) override {
+    ExtendUpdate(const std::vector<A>& values) : values(values) {};
+    void update(std::list<A>& values) const {
         values.insert(
             std::end(values),
             std::cbegin(this->values),
             std::cend(this->values)
         );
     };
-    virtual ~ExtendUpdate() = default;
 };
 
-class BitsetShrinkUpdate : public ResizeUpdate {
+template<class A>
+class BitsetShrinkUpdate {
     const individual_index_t index;
 public:
     BitsetShrinkUpdate(const individual_index_t& index) : index(index) {};
-    virtual void update(std::list<double>& values) override {
+    void update(std::list<A>& values) const {
         auto diffs = std::vector<size_t>(index.size());
         std::adjacent_difference(
             std::begin(index),
@@ -56,16 +52,16 @@ public:
             extra_step = 1u;
         }
     };
-    virtual ~BitsetShrinkUpdate() = default;
 };
 
-class VectorShrinkUpdate : public ResizeUpdate {
+template<class A>
+class VectorShrinkUpdate {
     std::vector<size_t> index;
 public:
     VectorShrinkUpdate(const std::vector<size_t>& index) : index(index) {
         std::sort(std::begin(this->index), std::end(this->index));
     };
-    virtual void update(std::list<double>& values) override {
+    void update(std::list<A>& values) const {
         auto diffs = std::vector<size_t>(index.size());
         std::adjacent_difference(
             std::begin(index),
@@ -94,7 +90,7 @@ struct ResizeableDoubleVariable : public Variable {
 
     using update_t = std::pair<std::vector<double>, std::vector<size_t>>;
     std::queue<update_t> updates;
-    std::queue<std::unique_ptr<ResizeUpdate>> resize_updates;
+    std::queue<std::function<void (std::list<double>&)>> resize_updates;
     std::list<double> values;
     
     ResizeableDoubleVariable(const std::vector<double>& values);
@@ -197,9 +193,10 @@ inline void ResizeableDoubleVariable::queue_update(
 
 //' @title queue new values to add to the variable
 inline void ResizeableDoubleVariable::queue_extend(
-    const std::vector<double>& values
+    const std::vector<double>& new_values
 ) {
-    resize_updates.push(std::make_unique<ExtendUpdate>(values));
+    auto update = ExtendUpdate<double>(new_values);
+    resize_updates.push([=](auto& values) { update.update(values); });
 }
 
 //' @title queue values to be erased from the variable
@@ -209,7 +206,8 @@ inline void ResizeableDoubleVariable::queue_shrink(
     if (index.max_size() != size()) {
         Rcpp::stop("Invalid bitset size for variable shrink");
     }
-    resize_updates.push(std::make_unique<BitsetShrinkUpdate>(index));
+    auto update = BitsetShrinkUpdate<double>(index);
+    resize_updates.push([=](auto& values) { update.update(values); });
 }
 
 //' @title queue values to be erased from the variable
@@ -221,7 +219,8 @@ inline void ResizeableDoubleVariable::queue_shrink(
             Rcpp::stop("Invalid vector index for variable shrink");
         }
     }
-    resize_updates.push(std::make_unique<VectorShrinkUpdate>(index));
+    auto update = VectorShrinkUpdate<double>(index);
+    resize_updates.push([=](auto& values) { update.update(values); });
 }
 
 //' @title apply all queued state updates in FIFO order
@@ -280,7 +279,7 @@ inline void ResizeableDoubleVariable::update() {
     // handle resize updates
     while(resize_updates.size() > 0) {
         const auto& update = resize_updates.front();
-        update->update(values);
+        update(values);
         resize_updates.pop();
     }
 }
