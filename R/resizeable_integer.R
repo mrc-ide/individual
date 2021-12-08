@@ -13,6 +13,8 @@ ResizeableIntegerVariable <- R6Class(
     #' @param initial_values a numeric vector of the initial value for each
     #' individual.
     initialize = function(initial_values) {
+      stopifnot(!is.null(initial_values))
+      stopifnot(is.finite(initial_values))
       self$.variable <- create_resizeable_integer_variable(initial_values)
     },
 
@@ -27,8 +29,8 @@ ResizeableIntegerVariable <- R6Class(
         if (inherits(index, 'Bitset')) {
           return(resizeable_integer_variable_get_values_at_index(self$.variable, index$.bitset))
         } else {
-          stopifnot(all(is.finite(index)))
-          stopifnot(all(index > 0))
+          stopifnot(index > 0)
+          stopifnot(is.finite(index))
           return(resizeable_integer_variable_get_values_at_index_vector(self$.variable, index))
         }
       }
@@ -108,14 +110,17 @@ ResizeableIntegerVariable <- R6Class(
     #' fill options. If using indices, this may be either a vector of integers or
     #' a \code{\link[individual]{Bitset}}.
     queue_update = function(values, index = NULL) {
-      stopifnot(is.numeric(values))
+      stopifnot(is.finite(values))
       if(is.null(index)){
         if(length(values) == 1){
+          # variable fill
           resizeable_integer_variable_queue_fill(
             self$.variable,
             values
           )
         } else {
+          # variable reset
+          stopifnot(length(values) == resizeable_integer_variable_size(self$.variable))
           resizeable_integer_variable_queue_update(
             self$.variable,
             values,
@@ -124,7 +129,9 @@ ResizeableIntegerVariable <- R6Class(
         }
       } else {
         if (inherits(index, 'Bitset')) {
-          if (index$size() > 0){
+          # subset update/fill: bitset
+          stopifnot(index$max_size == resizeable_integer_variable_size(self$.variable))
+          if (index$size() > 0) {
             resizeable_integer_variable_queue_update_bitset(
               self$.variable,
               values,
@@ -132,9 +139,10 @@ ResizeableIntegerVariable <- R6Class(
             )
           }
         } else {
-          if (length(index) != 0) {
-            stopifnot(all(is.finite(index)))
-            stopifnot(all(index > 0))
+          if (length(index) > 0) {
+            # subset update/fill: vector
+            stopifnot(is.finite(index))
+            stopifnot(index > 0)
             resizeable_integer_variable_queue_update(
               self$.variable,
               values,

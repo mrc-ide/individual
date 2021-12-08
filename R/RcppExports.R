@@ -349,6 +349,62 @@ resizeable_double_variable_size <- function(variable) {
     .Call(`_individual_resizeable_double_variable_size`, variable)
 }
 
+create_resizeable_integer_variable <- function(values) {
+    .Call(`_individual_create_resizeable_integer_variable`, values)
+}
+
+resizeable_integer_variable_get_values <- function(variable) {
+    .Call(`_individual_resizeable_integer_variable_get_values`, variable)
+}
+
+resizeable_integer_variable_get_values_at_index <- function(variable, index) {
+    .Call(`_individual_resizeable_integer_variable_get_values_at_index`, variable, index)
+}
+
+resizeable_integer_variable_get_values_at_index_vector <- function(variable, index) {
+    .Call(`_individual_resizeable_integer_variable_get_values_at_index_vector`, variable, index)
+}
+
+resizeable_integer_variable_get_index_of_range <- function(variable, a, b) {
+    .Call(`_individual_resizeable_integer_variable_get_index_of_range`, variable, a, b)
+}
+
+resizeable_integer_variable_get_size_of_range <- function(variable, a, b) {
+    .Call(`_individual_resizeable_integer_variable_get_size_of_range`, variable, a, b)
+}
+
+resizeable_integer_variable_queue_fill <- function(variable, value) {
+    invisible(.Call(`_individual_resizeable_integer_variable_queue_fill`, variable, value))
+}
+
+resizeable_integer_variable_queue_update <- function(variable, value, index) {
+    invisible(.Call(`_individual_resizeable_integer_variable_queue_update`, variable, value, index))
+}
+
+resizeable_integer_variable_queue_update_bitset <- function(variable, value, index) {
+    invisible(.Call(`_individual_resizeable_integer_variable_queue_update_bitset`, variable, value, index))
+}
+
+resizeable_integer_variable_update <- function(variable) {
+    invisible(.Call(`_individual_resizeable_integer_variable_update`, variable))
+}
+
+resizeable_integer_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_resizeable_integer_variable_queue_extend`, variable, values))
+}
+
+resizeable_integer_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_resizeable_integer_variable_queue_shrink_bitset`, variable, index))
+}
+
+resizeable_integer_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_resizeable_integer_variable_queue_shrink`, variable, index))
+}
+
+resizeable_integer_variable_size <- function(variable) {
+    .Call(`_individual_resizeable_integer_variable_size`, variable)
+}
+
 execute_process <- function(process, timestep) {
     invisible(.Call(`_individual_execute_process`, process, timestep))
 }
