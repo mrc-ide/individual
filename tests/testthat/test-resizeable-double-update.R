@@ -366,5 +366,3 @@ test_that("ResizeableDoubleVariable invalid shrinking operations error at queue 
   expect_error(x$queue_shrink(index = -1:20))
   expect_error(x$queue_shrink(index = Bitset$new(size + 1)$insert(1:20)))
 })
-
-
