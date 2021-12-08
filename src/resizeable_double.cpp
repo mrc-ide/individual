@@ -6,22 +6,22 @@
  */
 
 
-#include "../inst/include/ResizeableDoubleVariable.h"
+#include "../inst/include/ResizeableNumericVariable.h"
 #include "utils.h"
 
 //[[Rcpp::export]]
-Rcpp::XPtr<ResizeableDoubleVariable> create_resizeable_double_variable(
+Rcpp::XPtr<ResizeableNumericVariable<double>> create_resizeable_double_variable(
     const std::vector<double>& values
     ) {
-    return Rcpp::XPtr<ResizeableDoubleVariable>(
-        new ResizeableDoubleVariable(values),
+    return Rcpp::XPtr<ResizeableNumericVariable<double>>(
+        new ResizeableNumericVariable<double>(values),
         true
     );
 }
 
 //[[Rcpp::export]]
 std::vector<double> resizeable_double_variable_get_values(
-    Rcpp::XPtr<ResizeableDoubleVariable> variable
+    Rcpp::XPtr<ResizeableNumericVariable<double>> variable
     ) {
     const auto& values = variable->get_values();
     return std::vector<double>(std::cbegin(values), std::cend(values));
@@ -29,7 +29,7 @@ std::vector<double> resizeable_double_variable_get_values(
 
 //[[Rcpp::export]]
 std::vector<double> resizeable_double_variable_get_values_at_index(
-    Rcpp::XPtr<ResizeableDoubleVariable> variable,
+    Rcpp::XPtr<ResizeableNumericVariable<double>> variable,
     Rcpp::XPtr<individual_index_t> index
     ) {
     return variable->get_values(*index);
@@ -37,7 +37,7 @@ std::vector<double> resizeable_double_variable_get_values_at_index(
 
 //[[Rcpp::export]]
 std::vector<double> resizeable_double_variable_get_values_at_index_vector(
-    Rcpp::XPtr<ResizeableDoubleVariable> variable,
+    Rcpp::XPtr<ResizeableNumericVariable<double>> variable,
     std::vector<size_t> index
     ) {
     decrement(index);
@@ -46,7 +46,7 @@ std::vector<double> resizeable_double_variable_get_values_at_index_vector(
 
 // [[Rcpp::export]]
 Rcpp::XPtr<individual_index_t> resizeable_double_variable_get_index_of_range(
-    Rcpp::XPtr<ResizeableDoubleVariable> variable,
+    Rcpp::XPtr<ResizeableNumericVariable<double>> variable,
     const double a,
     const double b
 ) {
@@ -58,7 +58,7 @@ Rcpp::XPtr<individual_index_t> resizeable_double_variable_get_index_of_range(
 
 // [[Rcpp::export]]
 size_t resizeable_double_variable_get_size_of_range(
-    Rcpp::XPtr<ResizeableDoubleVariable> variable,
+    Rcpp::XPtr<ResizeableNumericVariable<double>> variable,
     const double a,
     const double b
 ) {
@@ -67,7 +67,7 @@ size_t resizeable_double_variable_get_size_of_range(
 
 //[[Rcpp::export]]
 void resizeable_double_variable_queue_fill(
-    Rcpp::XPtr<ResizeableDoubleVariable> variable,
+    Rcpp::XPtr<ResizeableNumericVariable<double>> variable,
     const std::vector<double> value
 ) {
     variable->queue_update(value, std::vector<size_t>());
@@ -75,7 +75,7 @@ void resizeable_double_variable_queue_fill(
 
 //[[Rcpp::export]]
 void resizeable_double_variable_queue_update(
-    Rcpp::XPtr<ResizeableDoubleVariable> variable,
+    Rcpp::XPtr<ResizeableNumericVariable<double>> variable,
     const std::vector<double> value,
     std::vector<size_t> index
 ) {
@@ -85,7 +85,7 @@ void resizeable_double_variable_queue_update(
 
 //[[Rcpp::export]]
 void resizeable_double_variable_queue_update_bitset(
-        Rcpp::XPtr<ResizeableDoubleVariable> variable,
+        Rcpp::XPtr<ResizeableNumericVariable<double>> variable,
         const std::vector<double> value,
         Rcpp::XPtr<individual_index_t> index
 ) {
@@ -97,13 +97,13 @@ void resizeable_double_variable_queue_update_bitset(
 }
 
 //[[Rcpp::export]]
-void resizeable_double_variable_update(Rcpp::XPtr<ResizeableDoubleVariable> variable) {
+void resizeable_double_variable_update(Rcpp::XPtr<ResizeableNumericVariable<double>> variable) {
     variable->update();
 }
 
 //[[Rcpp::export]]
 void resizeable_double_variable_queue_extend(
-    Rcpp::XPtr<ResizeableDoubleVariable> variable,
+    Rcpp::XPtr<ResizeableNumericVariable<double>> variable,
     const std::vector<double>& values
 ) {
     variable->queue_extend(values);
@@ -111,7 +111,7 @@ void resizeable_double_variable_queue_extend(
 
 //[[Rcpp::export]]
 void resizeable_double_variable_queue_shrink_bitset(
-    Rcpp::XPtr<ResizeableDoubleVariable> variable,
+    Rcpp::XPtr<ResizeableNumericVariable<double>> variable,
     Rcpp::XPtr<individual_index_t> index
 ) {
     variable->queue_shrink(*index);
@@ -119,7 +119,7 @@ void resizeable_double_variable_queue_shrink_bitset(
 
 //[[Rcpp::export]]
 void resizeable_double_variable_queue_shrink(
-    Rcpp::XPtr<ResizeableDoubleVariable> variable,
+    Rcpp::XPtr<ResizeableNumericVariable<double>> variable,
     std::vector<size_t> index
 ) {
     decrement(index);
@@ -128,7 +128,7 @@ void resizeable_double_variable_queue_shrink(
 
 //[[Rcpp::export]]
 size_t resizeable_double_variable_size(
-    Rcpp::XPtr<ResizeableDoubleVariable> variable
+    Rcpp::XPtr<ResizeableNumericVariable<double>> variable
 ) {
     return variable->size();
 }

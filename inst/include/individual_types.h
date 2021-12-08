@@ -12,7 +12,7 @@
 #include "CategoricalVariable.h"
 #include "IntegerVariable.h"
 #include "DoubleVariable.h"
-#include "ResizeableDoubleVariable.h"
+#include "ResizeableNumericVariable.h"
 #include "Event.h"
 
 #endif /* INDIVIDUAL_TYPES_H_ */

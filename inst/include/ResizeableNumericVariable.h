@@ -1,12 +1,12 @@
 /*
- * ResizeableDoubleVariable.h
+ * ResizeableNumericVariable.h
  *
  *  Created on: 11 Nov 2021
  *      Author: gc1610
  */
 
-#ifndef INST_INCLUDE_RESIZEABLE_DOUBLE_VARIABLE_H_
-#define INST_INCLUDE_RESIZEABLE_DOUBLE_VARIABLE_H_
+#ifndef INST_INCLUDE_RESIZEABLE_NUMERIC_VARIABLE_H_
+#define INST_INCLUDE_RESIZEABLE_NUMERIC_VARIABLE_H_
 
 #include "Variable.h"
 #include "common_types.h"
@@ -16,7 +16,8 @@
 #include <memory>
 #include "utils.h"
 
-struct ResizeableDoubleVariable;
+template<class A>
+struct ResizeableNumericVariable;
 
 template<class A>
 class ExtendUpdate {
@@ -76,7 +77,6 @@ public:
             extra_step = 1u;
         }
     };
-    virtual ~VectorShrinkUpdate() = default;
 };
 
 
@@ -86,69 +86,74 @@ public:
 //' It contains the following data members:
 //'     * updates: a priority queue of pairs of values and indices to update
 //'     * values: a vector of values
-struct ResizeableDoubleVariable : public Variable {
+template<class A>
+struct ResizeableNumericVariable {
 
-    using update_t = std::pair<std::vector<double>, std::vector<size_t>>;
+    using update_t = std::pair<std::vector<A>, std::vector<size_t>>;
     std::queue<update_t> updates;
-    std::queue<std::function<void (std::list<double>&)>> resize_updates;
-    std::list<double> values;
+    std::queue<std::function<void (std::list<A>&)>> resize_updates;
+    std::list<A> values;
     
-    ResizeableDoubleVariable(const std::vector<double>& values);
-    virtual ~ResizeableDoubleVariable() = default;
+    ResizeableNumericVariable(const std::vector<A>& values);
 
-    virtual std::list<double> get_values() const;
-    virtual std::vector<double> get_values(const individual_index_t& index) const;
-    virtual std::vector<double> get_values(const std::vector<size_t>& index) const;
+    std::list<A> get_values() const;
+    std::vector<A> get_values(const individual_index_t& index) const;
+    std::vector<A> get_values(const std::vector<size_t>& index) const;
 
-    virtual individual_index_t get_index_of_range(const double a, const double b) const;
-    virtual size_t get_size_of_range(const double a, const double b) const;
+    individual_index_t get_index_of_range(const A a, const A b) const;
+    size_t get_size_of_range(const A a, const A b) const;
 
-    virtual void queue_update(const std::vector<double>& values, const std::vector<size_t>& index);
-    virtual void queue_extend(const std::vector<double>& values);
-    virtual void queue_shrink(const std::vector<size_t>&);
-    virtual void queue_shrink(const individual_index_t&);
-    virtual size_t size() const;
-    virtual void update() override;
+    void queue_update(const std::vector<A>& values, const std::vector<size_t>& index);
+    void queue_extend(const std::vector<A>& values);
+    void queue_shrink(const std::vector<size_t>&);
+    void queue_shrink(const individual_index_t&);
+    size_t size() const;
+    void update();
 };
 
-inline ResizeableDoubleVariable::ResizeableDoubleVariable(
-    const std::vector<double>& values
-    ) : values(std::list<double>(std::begin(values), std::end(values)))
+template<class A>
+inline ResizeableNumericVariable<A>::ResizeableNumericVariable(
+    const std::vector<A>& values
+    ) : values(std::list<A>(std::begin(values), std::end(values)))
 {}
 
 //' @title get all values
-inline std::list<double> ResizeableDoubleVariable::get_values() const {
+template<class A>
+inline std::list<A> ResizeableNumericVariable<A>::get_values() const {
     return values;
 }
 
 //' @title get values at index given by a bitset
-inline std::vector<double> ResizeableDoubleVariable::get_values(const individual_index_t& index) const {
+template<class A>
+inline std::vector<A> ResizeableNumericVariable<A>::get_values(const individual_index_t& index) const {
     if (size() != index.max_size()) {
-        Rcpp::stop("incompatible size bitset used to get values from DoubleVariable");
+        Rcpp::stop("incompatible size bitset used to get values from Variable");
     }
-    auto it = FilterIterator<std::list<double>::const_iterator, individual_index_t::iterator, const double>(
+    auto it = FilterIterator<typename std::list<A>::const_iterator, individual_index_t::iterator, const A>(
         std::begin(values),
         std::end(values),
         index.begin(),
         index.end()
     );
-    return std::vector<double>(it.begin(), it.end());
+    return std::vector<A>(it.begin(), it.end());
 }
 
 //' @title get values at index given by a vector
-inline std::vector<double> ResizeableDoubleVariable::get_values(const std::vector<size_t>& index) const {
-    auto it = FilterIterator<std::list<double>::const_iterator, std::vector<size_t>::const_iterator, const double>(
+template<class A>
+inline std::vector<A> ResizeableNumericVariable<A>::get_values(const std::vector<size_t>& index) const {
+    auto it = FilterIterator<typename std::list<A>::const_iterator, std::vector<size_t>::const_iterator, const A>(
         std::begin(values),
         std::end(values),
         std::begin(index),
         std::end(index)
     );
-    return std::vector<double>(it.begin(), it.end());
+    return std::vector<A>(it.begin(), it.end());
 }
 
 //' @title return bitset giving index of individuals whose value is in some range [a,b]
-inline individual_index_t ResizeableDoubleVariable::get_index_of_range(
-        const double a, const double b
+template<class A>
+inline individual_index_t ResizeableNumericVariable<A>::get_index_of_range(
+        const A a, const A b
 ) const {
     auto result = individual_index_t(size());
     auto i = 0u;
@@ -162,13 +167,14 @@ inline individual_index_t ResizeableDoubleVariable::get_index_of_range(
 }
 
 //' @title return number of individuals whose value is in some range [a,b]
-inline size_t ResizeableDoubleVariable::get_size_of_range(
-        const double a, const double b
+template<class A>
+inline size_t ResizeableNumericVariable<A>::get_size_of_range(
+        const A a, const A b
 ) const {
     size_t result = std::count_if(
         values.cbegin(),
         values.cend(),
-        [&](const double v) -> bool {
+        [&](const A v) -> bool {
             return !(v < a) && !(b < v);
         }
     );
@@ -176,8 +182,9 @@ inline size_t ResizeableDoubleVariable::get_size_of_range(
 }
 
 //' @title queue a state update for some subset of individuals
-inline void ResizeableDoubleVariable::queue_update(
-    const std::vector<double>& values,
+template<class A>
+inline void ResizeableNumericVariable<A>::queue_update(
+    const std::vector<A>& values,
     const std::vector<size_t>& index
 ) {
     if (values.size() > 1 && values.size() < size() && values.size() != index.size()) {
@@ -192,26 +199,29 @@ inline void ResizeableDoubleVariable::queue_update(
 }
 
 //' @title queue new values to add to the variable
-inline void ResizeableDoubleVariable::queue_extend(
-    const std::vector<double>& new_values
+template<class A>
+inline void ResizeableNumericVariable<A>::queue_extend(
+    const std::vector<A>& new_values
 ) {
-    auto update = ExtendUpdate<double>(new_values);
+    auto update = ExtendUpdate<A>(new_values);
     resize_updates.push([=](auto& values) { update.update(values); });
 }
 
 //' @title queue values to be erased from the variable
-inline void ResizeableDoubleVariable::queue_shrink(
+template<class A>
+inline void ResizeableNumericVariable<A>::queue_shrink(
     const individual_index_t& index 
 ) {
     if (index.max_size() != size()) {
         Rcpp::stop("Invalid bitset size for variable shrink");
     }
-    auto update = BitsetShrinkUpdate<double>(index);
+    auto update = BitsetShrinkUpdate<A>(index);
     resize_updates.push([=](auto& values) { update.update(values); });
 }
 
 //' @title queue values to be erased from the variable
-inline void ResizeableDoubleVariable::queue_shrink(
+template<class A>
+inline void ResizeableNumericVariable<A>::queue_shrink(
     const std::vector<size_t>& index
 ) {
     for (const auto& x : index) {
@@ -219,12 +229,13 @@ inline void ResizeableDoubleVariable::queue_shrink(
             Rcpp::stop("Invalid vector index for variable shrink");
         }
     }
-    auto update = VectorShrinkUpdate<double>(index);
+    auto update = VectorShrinkUpdate<A>(index);
     resize_updates.push([=](auto& values) { update.update(values); });
 }
 
 //' @title apply all queued state updates in FIFO order
-inline void ResizeableDoubleVariable::update() {
+template<class A>
+inline void ResizeableNumericVariable<A>::update() {
     while(updates.size() > 0) {
         auto& update = updates.front();
         const auto& values = update.first;
@@ -243,7 +254,7 @@ inline void ResizeableDoubleVariable::update() {
             if (value_fill) {
                 std::fill(to_update.begin(), to_update.end(), values[0]);
             } else {
-                to_update = std::list<double>(
+                to_update = std::list<A>(
                     std::cbegin(values),
                     std::cend(values)
                 );
@@ -284,8 +295,9 @@ inline void ResizeableDoubleVariable::update() {
     }
 }
 
-inline size_t ResizeableDoubleVariable::size() const {
+template<class A>
+inline size_t ResizeableNumericVariable<A>::size() const {
     return values.size();
 }
 
-#endif /* INST_INCLUDE_RESIZEABLE_DOUBLE_VARIABLE_H_ */
+#endif /* INST_INCLUDE_RESIZEABLE_NUMERIC_VARIABLE_H_ */
