@@ -13,6 +13,7 @@
 #include "IntegerVariable.h"
 #include "DoubleVariable.h"
 #include "ResizeableNumericVariable.h"
+#include "ResizeableIntegerVariable.h"
 #include "Event.h"
 
 #endif /* INDIVIDUAL_TYPES_H_ */

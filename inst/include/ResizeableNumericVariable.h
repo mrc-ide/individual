@@ -8,7 +8,6 @@
 #ifndef INST_INCLUDE_RESIZEABLE_NUMERIC_VARIABLE_H_
 #define INST_INCLUDE_RESIZEABLE_NUMERIC_VARIABLE_H_
 
-#include "Variable.h"
 #include "common_types.h"
 #include <Rcpp.h>
 #include <queue>

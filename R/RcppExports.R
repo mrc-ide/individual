@@ -401,6 +401,10 @@ resizeable_integer_variable_queue_shrink <- function(variable, index) {
     invisible(.Call(`_individual_resizeable_integer_variable_queue_shrink`, variable, index))
 }
 
+resizeable_integer_variable_get_index_of_set_vector <- function(variable, values_set) {
+    .Call(`_individual_resizeable_integer_variable_get_index_of_set_vector`, variable, values_set)
+}
+
 resizeable_integer_variable_size <- function(variable) {
     .Call(`_individual_resizeable_integer_variable_size`, variable)
 }
