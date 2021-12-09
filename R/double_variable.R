@@ -4,6 +4,21 @@
 #' @export
 DoubleVariable <- R6Class(
   'DoubleVariable',
+  private = list(
+    implementation = list(
+      create = create_double_variable,
+      get_values = double_variable_get_values,
+      get_size = double_variable_get_size,
+      get_values_at_index = double_variable_get_values_at_index,
+      get_values_at_index_vector = double_variable_get_values_at_index_vector,
+      get_index_of_range = double_variable_get_index_of_range,
+      get_size_of_range = double_variable_get_size_of_range,
+      queue_fill = double_variable_queue_fill,
+      queue_update = double_variable_queue_update,
+      queue_update_bitset = double_variable_queue_update_bitset,
+      update = double_variable_update
+    )
+  ),
   public = list(
     .variable = NULL,
 
@@ -13,7 +28,7 @@ DoubleVariable <- R6Class(
     initialize = function(initial_values) {
       stopifnot(!is.null(initial_values))
       stopifnot(is.numeric(initial_values))
-      self$.variable <- create_double_variable(initial_values)
+      self$.variable <- private$implementation$create(initial_values)
     },
 
     #' @description get the variable values.
@@ -22,14 +37,14 @@ DoubleVariable <- R6Class(
     #' or integer vector, return values of those individuals.
     get_values = function(index = NULL) {
       if (is.null(index)) {
-        return(double_variable_get_values(self$.variable))
+        return(private$implementation$get_values(self$.variable))
       } else {
         if (inherits(index, 'Bitset')) {
-          return(double_variable_get_values_at_index(self$.variable, index$.bitset))
+          return(private$implementation$get_values_at_index(self$.variable, index$.bitset))
         } else {
           stopifnot(is.finite(index))
           stopifnot(index > 0)
-          return(double_variable_get_values_at_index_vector(self$.variable, index))
+          return(private$implementation$get_values_at_index_vector(self$.variable, index))
         }
       }
     },
@@ -40,7 +55,7 @@ DoubleVariable <- R6Class(
     #' @param b upper bound
     get_index_of = function(a, b) {
       stopifnot(a < b)
-      return(Bitset$new(from = double_variable_get_index_of_range(self$.variable, a, b)))      
+      return(Bitset$new(from = private$implementation$get_index_of_range(self$.variable, a, b)))      
     },
 
     #' @description return the number of individuals whose value lies in an interval
@@ -49,7 +64,7 @@ DoubleVariable <- R6Class(
     #' @param b upper bound
     get_size_of = function(a, b) {
       stopifnot(a < b)
-      return(double_variable_get_size_of_range(self$.variable, a, b))
+      return(private$implementation$get_size_of_range(self$.variable, a, b))
     },
 
     #' @description Queue an update for a variable. There are 4 types of variable update:
@@ -76,14 +91,14 @@ DoubleVariable <- R6Class(
       if(is.null(index)){
         if(length(values) == 1){
           # variable fill
-          double_variable_queue_fill(
+          private$implementation$queue_fill(
             self$.variable,
             values
           )
         } else {
           # variable reset
-          stopifnot(length(values) == double_variable_get_size(self$.variable))
-          double_variable_queue_update(
+          stopifnot(length(values) == private$implementation$get_size(self$.variable))
+          private$implementation$queue_update(
             self$.variable,
             values,
             integer(0)
@@ -92,9 +107,9 @@ DoubleVariable <- R6Class(
       } else {
         if (inherits(index, 'Bitset')) {
           # subset update/fill: bitset
-          stopifnot(index$max_size == integer_variable_get_size(self$.variable))
+          stopifnot(index$max_size == private$implementation$get_size(self$.variable))
           if (index$size() > 0){
-            double_variable_queue_update_bitset(
+            private$implementation$queue_update_bitset(
               self$.variable,
               values,
               index$.bitset
@@ -105,7 +120,7 @@ DoubleVariable <- R6Class(
             # subset update/fill: vector
             stopifnot(is.finite(index))
             stopifnot(index > 0)
-            double_variable_queue_update(
+            private$implementation$queue_update(
               self$.variable,
               values,
               index
@@ -115,6 +130,6 @@ DoubleVariable <- R6Class(
       }
     },
 
-    .update = function() double_variable_update(self$.variable)
+    .update = function() private$implementation$update(self$.variable)
   )
 )

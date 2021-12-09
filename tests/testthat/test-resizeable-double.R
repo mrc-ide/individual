@@ -20,7 +20,6 @@ test_that("ResizeableDoubleVariable get values returns correct values with vecto
   size <- 10
   variable <- ResizeableDoubleVariable$new(seq_len(size))
   expect_equal(variable$get_values(NULL), 1:10)
-  
   variable <- ResizeableDoubleVariable$new(seq_len(size) + 10)
   expect_equal(variable$get_values(5:10), 15:20)
 })
