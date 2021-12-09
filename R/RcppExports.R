@@ -365,14 +365,6 @@ resizeable_integer_variable_get_values_at_index_vector <- function(variable, ind
     .Call(`_individual_resizeable_integer_variable_get_values_at_index_vector`, variable, index)
 }
 
-resizeable_integer_variable_get_index_of_range <- function(variable, a, b) {
-    .Call(`_individual_resizeable_integer_variable_get_index_of_range`, variable, a, b)
-}
-
-resizeable_integer_variable_get_size_of_range <- function(variable, a, b) {
-    .Call(`_individual_resizeable_integer_variable_get_size_of_range`, variable, a, b)
-}
-
 resizeable_integer_variable_queue_fill <- function(variable, value) {
     invisible(.Call(`_individual_resizeable_integer_variable_queue_fill`, variable, value))
 }
@@ -403,6 +395,26 @@ resizeable_integer_variable_queue_shrink <- function(variable, index) {
 
 resizeable_integer_variable_get_index_of_set_vector <- function(variable, values_set) {
     .Call(`_individual_resizeable_integer_variable_get_index_of_set_vector`, variable, values_set)
+}
+
+resizeable_integer_variable_get_size_of_set_vector <- function(variable, values_set) {
+    .Call(`_individual_resizeable_integer_variable_get_size_of_set_vector`, variable, values_set)
+}
+
+resizeable_integer_variable_get_size_of_set_scalar <- function(variable, value) {
+    .Call(`_individual_resizeable_integer_variable_get_size_of_set_scalar`, variable, value)
+}
+
+resizeable_integer_variable_get_index_of_set_scalar <- function(variable, values_set) {
+    .Call(`_individual_resizeable_integer_variable_get_index_of_set_scalar`, variable, values_set)
+}
+
+resizeable_integer_variable_get_index_of_range <- function(variable, a, b) {
+    .Call(`_individual_resizeable_integer_variable_get_index_of_range`, variable, a, b)
+}
+
+resizeable_integer_variable_get_size_of_range <- function(variable, a, b) {
+    .Call(`_individual_resizeable_integer_variable_get_size_of_range`, variable, a, b)
 }
 
 resizeable_integer_variable_size <- function(variable) {

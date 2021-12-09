@@ -1101,32 +1101,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// resizeable_integer_variable_get_index_of_range
-Rcpp::XPtr<individual_index_t> resizeable_integer_variable_get_index_of_range(Rcpp::XPtr<ResizeableIntegerVariable> variable, const double a, const double b);
-RcppExport SEXP _individual_resizeable_integer_variable_get_index_of_range(SEXP variableSEXP, SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableIntegerVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const double >::type a(aSEXP);
-    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(resizeable_integer_variable_get_index_of_range(variable, a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// resizeable_integer_variable_get_size_of_range
-size_t resizeable_integer_variable_get_size_of_range(Rcpp::XPtr<ResizeableIntegerVariable> variable, const double a, const double b);
-RcppExport SEXP _individual_resizeable_integer_variable_get_size_of_range(SEXP variableSEXP, SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableIntegerVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const double >::type a(aSEXP);
-    Rcpp::traits::input_parameter< const double >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(resizeable_integer_variable_get_size_of_range(variable, a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
 // resizeable_integer_variable_queue_fill
 void resizeable_integer_variable_queue_fill(Rcpp::XPtr<ResizeableIntegerVariable> variable, const std::vector<int> value);
 RcppExport SEXP _individual_resizeable_integer_variable_queue_fill(SEXP variableSEXP, SEXP valueSEXP) {
@@ -1214,6 +1188,68 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableIntegerVariable> >::type variable(variableSEXP);
     Rcpp::traits::input_parameter< std::vector<int> >::type values_set(values_setSEXP);
     rcpp_result_gen = Rcpp::wrap(resizeable_integer_variable_get_index_of_set_vector(variable, values_set));
+    return rcpp_result_gen;
+END_RCPP
+}
+// resizeable_integer_variable_get_size_of_set_vector
+size_t resizeable_integer_variable_get_size_of_set_vector(Rcpp::XPtr<ResizeableIntegerVariable> variable, const std::vector<int> values_set);
+RcppExport SEXP _individual_resizeable_integer_variable_get_size_of_set_vector(SEXP variableSEXP, SEXP values_setSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableIntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const std::vector<int> >::type values_set(values_setSEXP);
+    rcpp_result_gen = Rcpp::wrap(resizeable_integer_variable_get_size_of_set_vector(variable, values_set));
+    return rcpp_result_gen;
+END_RCPP
+}
+// resizeable_integer_variable_get_size_of_set_scalar
+size_t resizeable_integer_variable_get_size_of_set_scalar(Rcpp::XPtr<ResizeableIntegerVariable> variable, const int value);
+RcppExport SEXP _individual_resizeable_integer_variable_get_size_of_set_scalar(SEXP variableSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableIntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const int >::type value(valueSEXP);
+    rcpp_result_gen = Rcpp::wrap(resizeable_integer_variable_get_size_of_set_scalar(variable, value));
+    return rcpp_result_gen;
+END_RCPP
+}
+// resizeable_integer_variable_get_index_of_set_scalar
+Rcpp::XPtr<individual_index_t> resizeable_integer_variable_get_index_of_set_scalar(Rcpp::XPtr<ResizeableIntegerVariable> variable, const int values_set);
+RcppExport SEXP _individual_resizeable_integer_variable_get_index_of_set_scalar(SEXP variableSEXP, SEXP values_setSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableIntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const int >::type values_set(values_setSEXP);
+    rcpp_result_gen = Rcpp::wrap(resizeable_integer_variable_get_index_of_set_scalar(variable, values_set));
+    return rcpp_result_gen;
+END_RCPP
+}
+// resizeable_integer_variable_get_index_of_range
+Rcpp::XPtr<individual_index_t> resizeable_integer_variable_get_index_of_range(Rcpp::XPtr<ResizeableIntegerVariable> variable, const int a, const int b);
+RcppExport SEXP _individual_resizeable_integer_variable_get_index_of_range(SEXP variableSEXP, SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableIntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const int >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const int >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(resizeable_integer_variable_get_index_of_range(variable, a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// resizeable_integer_variable_get_size_of_range
+size_t resizeable_integer_variable_get_size_of_range(Rcpp::XPtr<ResizeableIntegerVariable> variable, const int a, const int b);
+RcppExport SEXP _individual_resizeable_integer_variable_get_size_of_range(SEXP variableSEXP, SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<ResizeableIntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const int >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const int >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(resizeable_integer_variable_get_size_of_range(variable, a, b));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1351,8 +1387,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_resizeable_integer_variable_get_values", (DL_FUNC) &_individual_resizeable_integer_variable_get_values, 1},
     {"_individual_resizeable_integer_variable_get_values_at_index", (DL_FUNC) &_individual_resizeable_integer_variable_get_values_at_index, 2},
     {"_individual_resizeable_integer_variable_get_values_at_index_vector", (DL_FUNC) &_individual_resizeable_integer_variable_get_values_at_index_vector, 2},
-    {"_individual_resizeable_integer_variable_get_index_of_range", (DL_FUNC) &_individual_resizeable_integer_variable_get_index_of_range, 3},
-    {"_individual_resizeable_integer_variable_get_size_of_range", (DL_FUNC) &_individual_resizeable_integer_variable_get_size_of_range, 3},
     {"_individual_resizeable_integer_variable_queue_fill", (DL_FUNC) &_individual_resizeable_integer_variable_queue_fill, 2},
     {"_individual_resizeable_integer_variable_queue_update", (DL_FUNC) &_individual_resizeable_integer_variable_queue_update, 3},
     {"_individual_resizeable_integer_variable_queue_update_bitset", (DL_FUNC) &_individual_resizeable_integer_variable_queue_update_bitset, 3},
@@ -1361,6 +1395,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_resizeable_integer_variable_queue_shrink_bitset", (DL_FUNC) &_individual_resizeable_integer_variable_queue_shrink_bitset, 2},
     {"_individual_resizeable_integer_variable_queue_shrink", (DL_FUNC) &_individual_resizeable_integer_variable_queue_shrink, 2},
     {"_individual_resizeable_integer_variable_get_index_of_set_vector", (DL_FUNC) &_individual_resizeable_integer_variable_get_index_of_set_vector, 2},
+    {"_individual_resizeable_integer_variable_get_size_of_set_vector", (DL_FUNC) &_individual_resizeable_integer_variable_get_size_of_set_vector, 2},
+    {"_individual_resizeable_integer_variable_get_size_of_set_scalar", (DL_FUNC) &_individual_resizeable_integer_variable_get_size_of_set_scalar, 2},
+    {"_individual_resizeable_integer_variable_get_index_of_set_scalar", (DL_FUNC) &_individual_resizeable_integer_variable_get_index_of_set_scalar, 2},
+    {"_individual_resizeable_integer_variable_get_index_of_range", (DL_FUNC) &_individual_resizeable_integer_variable_get_index_of_range, 3},
+    {"_individual_resizeable_integer_variable_get_size_of_range", (DL_FUNC) &_individual_resizeable_integer_variable_get_size_of_range, 3},
     {"_individual_resizeable_integer_variable_size", (DL_FUNC) &_individual_resizeable_integer_variable_size, 1},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},

@@ -44,27 +44,6 @@ std::vector<int> resizeable_integer_variable_get_values_at_index_vector(
     return variable->get_values(index);
 }
 
-// [[Rcpp::export]]
-Rcpp::XPtr<individual_index_t> resizeable_integer_variable_get_index_of_range(
-    Rcpp::XPtr<ResizeableIntegerVariable> variable,
-    const double a,
-    const double b
-) {
-    return Rcpp::XPtr<individual_index_t>(
-        new individual_index_t(variable->get_index_of_range(a, b)),
-        true
-    );
-}
-
-// [[Rcpp::export]]
-size_t resizeable_integer_variable_get_size_of_range(
-    Rcpp::XPtr<ResizeableIntegerVariable> variable,
-    const double a,
-    const double b
-) {
-    return variable->get_size_of_range(a, b);
-}
-
 //[[Rcpp::export]]
 void resizeable_integer_variable_queue_fill(
     Rcpp::XPtr<ResizeableIntegerVariable> variable,
@@ -135,6 +114,54 @@ Rcpp::XPtr<individual_index_t> resizeable_integer_variable_get_index_of_set_vect
         new individual_index_t(variable->get_index_of_set(values_set)),
         true
     );
+}
+
+// [[Rcpp::export]]
+size_t resizeable_integer_variable_get_size_of_set_vector(
+    Rcpp::XPtr<ResizeableIntegerVariable> variable,
+    const std::vector<int> values_set
+) {
+    return variable->get_size_of_set(values_set);
+}
+
+// [[Rcpp::export]]
+size_t resizeable_integer_variable_get_size_of_set_scalar(
+        Rcpp::XPtr<ResizeableIntegerVariable> variable,
+        const int value
+) {
+    return variable->get_size_of_set(value);
+}
+
+// [[Rcpp::export]]
+Rcpp::XPtr<individual_index_t> resizeable_integer_variable_get_index_of_set_scalar(
+        Rcpp::XPtr<ResizeableIntegerVariable> variable,
+        const int values_set
+) {
+    return Rcpp::XPtr<individual_index_t>(
+        new individual_index_t(variable->get_index_of_set(values_set)),
+        true
+    );
+}
+
+// [[Rcpp::export]]
+Rcpp::XPtr<individual_index_t> resizeable_integer_variable_get_index_of_range(
+    Rcpp::XPtr<ResizeableIntegerVariable> variable,
+    const int a,
+    const int b
+) {
+    return Rcpp::XPtr<individual_index_t>(
+        new individual_index_t(variable->get_index_of_range(a, b)),
+        true
+    );
+}
+
+// [[Rcpp::export]]
+size_t resizeable_integer_variable_get_size_of_range(
+    Rcpp::XPtr<ResizeableIntegerVariable> variable,
+    const int a,
+    const int b
+) {
+    return variable->get_size_of_range(a, b);
 }
 
 //[[Rcpp::export]]
