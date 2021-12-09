@@ -57,7 +57,7 @@ test_that("ResizeableDoubleVariable get index of bounds [a,b] works correctly", 
   
   data <- seq(from = 0, to = 1, by = 0.01)
   variable <- ResizeableDoubleVariable$new(data)
-  
+ 
   empty <- variable$get_index_of(a = 500, b = 600)
   full <- variable$get_index_of(a = 0.65, b = 0.89)
   match_full <- which(data>=0.65 & data<=0.89)
