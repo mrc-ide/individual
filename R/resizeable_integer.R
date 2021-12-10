@@ -6,188 +6,66 @@
 #' @export
 ResizeableIntegerVariable <- R6Class(
   'ResizeableIntegerVariable',
+  inherit = IntegerVariable,
+  private = list(
+    resize_interface = NULL
+  ),
   public = list(
-    .variable = NULL,
-
-    #' @description Create a new DoubleVariable.
-    #' @param initial_values a numeric vector of the initial value for each
-    #' individual.
     initialize = function(initial_values) {
       stopifnot(!is.null(initial_values))
       stopifnot(is.finite(initial_values))
-      self$.variable <- create_resizeable_integer_variable(initial_values)
-    },
-
-    #' @description get the variable values.
-    #' @param index optionally return a subset of the variable vector. If
-    #' \code{NULL}, return all values; if passed a \code{\link[individual]{Bitset}}
-    #' or integer vector, return values of those individuals.
-    get_values = function(index = NULL) {
-      if (is.null(index)) {
-        return(resizeable_integer_variable_get_values(self$.variable))
-      } else {
-        if (inherits(index, 'Bitset')) {
-          return(resizeable_integer_variable_get_values_at_index(self$.variable, index$.bitset))
-        } else {
-          stopifnot(index > 0)
-          stopifnot(is.finite(index))
-          return(resizeable_integer_variable_get_values_at_index_vector(self$.variable, index))
-        }
-      }
-    },
-
-    #' @description Return a \code{\link[individual]{Bitset}} for individuals with some subset of values.
-    #' Either search for indices corresponding to values in \code{set}, or
-    #' for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
-    #' or \code{a} and \code{b} must be provided as arguments.
-    #' @param set a vector of values (providing \code{set} means \code{a,b} are ignored)
-    #' @param a lower bound
-    #' @param b upper bound
-    get_index_of = function(set = NULL, a = NULL, b = NULL) {
-        if (!is.null(set)) {
-          stopifnot(is.finite(set))
-          if (length(set) == 1) {
-            return(Bitset$new(from = resizeable_integer_variable_get_index_of_set_scalar(self$.variable, set)))
-          } else {
-            return(Bitset$new(from = resizeable_integer_variable_get_index_of_set_vector(self$.variable, set)))
-          }
-        } else {
-          stopifnot(is.finite(c(a,b)))
-          stopifnot(a <= b)
-          if (a < b) {
-            return(Bitset$new(from = resizeable_integer_variable_get_index_of_range(self$.variable, a, b)))              
-          } else {
-            return(Bitset$new(from = resizeable_integer_variable_get_index_of_set_scalar(self$.variable, a))) 
-          }
-        }
-        stop("please provide a set of values to check, or both bounds of range [a,b]")        
-    },
-
-    #' @description Return the number of individuals with some subset of values.
-    #' Either search for indices corresponding to values in \code{set}, or
-    #' for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
-    #' or \code{a} and \code{b} must be provided as arguments.
-    #' @param set a vector of values (providing \code{set} means \code{a,b} are ignored)
-    #' @param a lower bound
-    #' @param b upper bound
-    get_size_of = function(set = NULL, a = NULL, b = NULL) {    
-      if (!is.null(set)) {
-        stopifnot(is.finite(set))  
-        if (length(set) == 1) {
-          return(resizeable_integer_variable_get_size_of_set_scalar(self$.variable, set))
-        } else {
-          return(resizeable_integer_variable_get_size_of_set_vector(self$.variable, set))
-        }
-      } else {
-        stopifnot(is.finite(c(a,b)))
-        stopifnot(a <= b)
-        if (a < b) {
-          return(resizeable_integer_variable_get_size_of_range(self$.variable, a, b))
-        } else {
-          return(resizeable_integer_variable_get_size_of_set_scalar(self$.variable, a))
-        }
-      }
-      stop("please provide a set of values to check, or both bounds of range [a,b]")    
-    },
-
-    #' @description Queue an update for a variable. There are 4 types of variable update:
-    #' \enumerate{
-    #'  \item{Subset update: }{The argument \code{index} represents a subset of the variable to
-    #' update. The argument \code{values} should be a vector whose length matches the size of \code{index},
-    #' which represents the new values for that subset.}
-    #'  \item{Subset fill: }{The argument \code{index} represents a subset of the variable to
-    #' update. The argument \code{values} should be a single number, which fills the specified subset.}
-    #'  \item{Variable reset: }{The index vector is set to \code{NULL} and the argument \code{values}
-    #' replaces all of the current values in the simulation. \code{values} should be a vector
-    #' whose length should match the size of the population, which fills all the variable values in
-    #' the population}
-    #'  \item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
-    #' should be a single number, which fills all of the variable values in 
-    #' the population.}
-    #' }
-    #' @param values a vector or scalar of values to assign at the index.
-    #' @param index is the index at which to apply the change, use \code{NULL} for the
-    #' fill options. If using indices, this may be either a vector of integers or
-    #' a \code{\link[individual]{Bitset}}.
-    queue_update = function(values, index = NULL) {
-      stopifnot(is.finite(values))
-      if(is.null(index)){
-        if(length(values) == 1){
-          # variable fill
-          resizeable_integer_variable_queue_fill(
-            self$.variable,
-            values
-          )
-        } else {
-          # variable reset
-          stopifnot(length(values) == resizeable_integer_variable_size(self$.variable))
-          resizeable_integer_variable_queue_update(
-            self$.variable,
-            values,
-            integer(0)
-          )
-        }
-      } else {
-        if (inherits(index, 'Bitset')) {
-          # subset update/fill: bitset
-          stopifnot(index$max_size == resizeable_integer_variable_size(self$.variable))
-          if (index$size() > 0) {
-            resizeable_integer_variable_queue_update_bitset(
-              self$.variable,
-              values,
-              index$.bitset
-            )
-          }
-        } else {
-          if (length(index) > 0) {
-            # subset update/fill: vector
-            stopifnot(is.finite(index))
-            stopifnot(index > 0)
-            resizeable_integer_variable_queue_update(
-              self$.variable,
-              values,
-              index
-            )
-          }
-        }
-      }
+      self$.variable <- create_resizeable_integer_variable(as.integer(initial_values))
+      private$variable_interface <- VariableInterface$new(
+        variable = self$.variable,
+        interface = list(
+          get_size = resizeable_integer_variable_size,
+          get_values = resizeable_integer_variable_get_values,
+          get_values_at_index = resizeable_integer_variable_get_values_at_index,
+          get_values_at_index_vector = resizeable_integer_variable_get_values_at_index_vector,
+          queue_fill = resizeable_integer_variable_queue_fill,
+          queue_update = resizeable_integer_variable_queue_update,
+          queue_update_bitset = resizeable_integer_variable_queue_update_bitset,
+          queue_update = resizeable_integer_variable_queue_update,
+          update = resizeable_integer_variable_update
+        )
+      )
+      private$integer_interface <- IntegerInterface$new(
+        variable = self$.variable,
+        interface = list(
+          get_index_of_set_scalar = resizeable_integer_variable_get_index_of_set_scalar,
+          get_index_of_set_vector = resizeable_integer_variable_get_index_of_set_vector,
+          get_index_of_range = resizeable_integer_variable_get_index_of_range,
+          get_size_of_set_scalar = resizeable_integer_variable_get_size_of_set_scalar,
+          get_size_of_set_vector = resizeable_integer_variable_get_size_of_set_vector,
+          get_size_of_range = resizeable_integer_variable_get_size_of_range,
+          get_size_of_set_scalar = resizeable_integer_variable_get_size_of_set_scalar
+        )
+      )
+      private$resize_interface <- ResizeInterface$new(
+        variable = self$.variable,
+        interface = list(
+          queue_extend = resizeable_integer_variable_queue_extend,
+          queue_shrink_bitset = resizeable_integer_variable_queue_shrink_bitset,
+          queue_shrink = resizeable_integer_variable_queue_shrink
+        )
+      )
     },
 
     #' @description extend the variable with new values
     #' @param values to add to the variable
     queue_extend = function(values) {
-      stopifnot(is.numeric(values))
-      resizeable_integer_variable_queue_extend(
-        self$.variable,
-        values
-      )
+      private$resize_interface$queue_extend(values)
     },
 
     #' @description shrink the variable
     #' @param index a bitset or vector representing the individuals to remove
     queue_shrink = function(index) {
-      if (inherits(index, 'Bitset')) {
-        if (index$size() > 0){
-          resizeable_integer_variable_queue_shrink_bitset(
-            self$.variable,
-            index$.bitset
-          )
-        }
-      } else {
-        if (length(index) != 0) {
-          stopifnot(all(is.finite(index)))
-          stopifnot(all(index > 0))
-          resizeable_integer_variable_queue_shrink(
-            self$.variable,
-            index
-          )
-        }
-      }
+      private$resize_interface$queue_shrink(index)
     },
 
     #' @description get the current size of the variable
     size = function() resizeable_integer_variable_size(self$.variable),
 
-    .update = function() resizeable_integer_variable_update(self$.variable)
+    .update = function() private$variable_interface$update()
   )
 )

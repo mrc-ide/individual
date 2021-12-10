@@ -8,8 +8,11 @@
 #' @export
 IntegerVariable <- R6Class(
   'IntegerVariable',
+  private = list(
+    variable_interface = NULL,
+    integer_interface = NULL
+  ),
   public = list(
-
     .variable = NULL,
 
     #' @description Create a new IntegerVariable.
@@ -18,6 +21,32 @@ IntegerVariable <- R6Class(
       stopifnot(!is.null(initial_values))
       stopifnot(is.finite(initial_values))
       self$.variable <- create_integer_variable(as.integer(initial_values))
+      private$variable_interface <- VariableInterface$new(
+        variable = self$.variable,
+        interface = list(
+          get_size = integer_variable_get_size,
+          get_values = integer_variable_get_values,
+          get_values_at_index = integer_variable_get_values_at_index,
+          get_values_at_index_vector = integer_variable_get_values_at_index_vector,
+          queue_fill = integer_variable_queue_fill,
+          queue_update = integer_variable_queue_update,
+          queue_update_bitset = integer_variable_queue_update_bitset,
+          queue_update = integer_variable_queue_update,
+          update = integer_variable_update
+        )
+      )
+      private$integer_interface <- IntegerInterface$new(
+        variable = self$.variable,
+        interface = list(
+          get_index_of_set_scalar = integer_variable_get_index_of_set_scalar,
+          get_index_of_set_vector = integer_variable_get_index_of_set_vector,
+          get_index_of_range = integer_variable_get_index_of_range,
+          get_size_of_set_scalar = integer_variable_get_size_of_set_scalar,
+          get_size_of_set_vector = integer_variable_get_size_of_set_vector,
+          get_size_of_range = integer_variable_get_size_of_range,
+          get_size_of_set_scalar = integer_variable_get_size_of_set_scalar
+        )
+      )
     },
 
     #' @description Get the variable values.
@@ -25,18 +54,7 @@ IntegerVariable <- R6Class(
     #' \code{NULL}, return all values; if passed a \code{\link[individual]{Bitset}}
     #' or integer vector, return values of those individuals.
     get_values = function(index = NULL) {
-      if (is.null(index)) {
-        return(integer_variable_get_values(self$.variable))
-      } else{
-        if (inherits(index, 'Bitset')){
-          return(integer_variable_get_values_at_index(self$.variable, index$.bitset))
-        } else {
-          stopifnot(index > 0)
-          stopifnot(is.finite(index))
-          return(integer_variable_get_values_at_index_vector(self$.variable, index))
-        }
-      }
-      
+      private$variable_interface$get_values(index)
     },
 
     #' @description Return a \code{\link[individual]{Bitset}} for individuals with some subset of values.
@@ -47,23 +65,7 @@ IntegerVariable <- R6Class(
     #' @param a lower bound
     #' @param b upper bound
     get_index_of = function(set = NULL, a = NULL, b = NULL) {
-        if (!is.null(set)) {
-          stopifnot(is.finite(set))
-          if (length(set) == 1) {
-            return(Bitset$new(from = integer_variable_get_index_of_set_scalar(self$.variable, set)))
-          } else {
-            return(Bitset$new(from = integer_variable_get_index_of_set_vector(self$.variable, set)))
-          }
-        } else {
-          stopifnot(is.finite(c(a,b)))
-          stopifnot(a <= b)
-          if (a < b) {
-            return(Bitset$new(from = integer_variable_get_index_of_range(self$.variable, a, b)))              
-          } else {
-            return(Bitset$new(from = integer_variable_get_index_of_set_scalar(self$.variable, a))) 
-          }
-        }
-        stop("please provide a set of values to check, or both bounds of range [a,b]")        
+      private$integer_interface$get_index_of(set, a, b)
     },
 
     #' @description Return the number of individuals with some subset of values.
@@ -74,23 +76,7 @@ IntegerVariable <- R6Class(
     #' @param a lower bound
     #' @param b upper bound
     get_size_of = function(set = NULL, a = NULL, b = NULL) {    
-      if (!is.null(set)) {
-        stopifnot(is.finite(set))  
-        if (length(set) == 1) {
-          return(integer_variable_get_size_of_set_scalar(self$.variable, set))
-        } else {
-          return(integer_variable_get_size_of_set_vector(self$.variable, set))
-        }
-      } else {
-        stopifnot(is.finite(c(a,b)))
-        stopifnot(a <= b)
-        if (a < b) {
-          return(integer_variable_get_size_of_range(self$.variable, a, b))
-        } else {
-          return(integer_variable_get_size_of_set_scalar(self$.variable, a))
-        }
-      }
-      stop("please provide a set of values to check, or both bounds of range [a,b]")    
+      private$integer_interface$get_size_of(set, a, b)
     },
     
     #' @description Queue an update for a variable. There are 4 types of variable update:
@@ -114,50 +100,83 @@ IntegerVariable <- R6Class(
     #' fill options. If using indices, this may be either a vector of integers or
     #' a \code{\link[individual]{Bitset}}.
     queue_update = function(values, index = NULL) {
-      stopifnot(is.finite(values))
-      if(is.null(index)){
-        if(length(values) == 1){
-          # variable fill
-          integer_variable_queue_fill(
-            self$.variable,
-            values
-          )
-        } else {
-          # variable reset
-          stopifnot(length(values) == integer_variable_get_size(self$.variable))
-          integer_variable_queue_update(
-            self$.variable,
-            values,
-            integer(0)
-          )
-        }
-      } else {
-        if (inherits(index, 'Bitset')) {
-          # subset update/fill: bitset
-          stopifnot(index$max_size == integer_variable_get_size(self$.variable))
-          if (index$size() > 0) {
-            integer_variable_queue_update_bitset(
-              self$.variable,
-              values,
-              index$.bitset
-            )
-          }
-        } else {
-          if (length(index) > 0) {
-            # subset update/fill: vector
-            stopifnot(is.finite(index))
-            stopifnot(index > 0)
-            integer_variable_queue_update(
-              self$.variable,
-              values,
-              index
-            )
-          }
-        }
-
-      }
+      private$variable_interface$queue_update(values, index)
     },
 
-    .update = function() integer_variable_update(self$.variable)
+    .update = function() private$variable_interface$update()
+  )
+)
+
+#' @title IntegerInterface Class
+#' @description An interface for integer set operations
+#' @importFrom R6 R6Class
+IntegerInterface <- R6Class(
+  'IntegerInterface',
+  private = list(
+    variable = NULL,
+    interface = NULL
+  ),
+  public = list(
+    #' @description initialise this interface
+    #' @param variable a C++ object implementing this variable
+    #' @param interface a list of C++ functions implementing this interface
+    initialize = function(variable, interface) {
+      private$variable <- variable
+      private$interface <- interface
+    },
+
+    #' @description Return a \code{\link[individual]{Bitset}} for individuals with some subset of values.
+    #' Either search for indices corresponding to values in \code{set}, or
+    #' for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
+    #' or \code{a} and \code{b} must be provided as arguments.
+    #' @param set a vector of values (providing \code{set} means \code{a,b} are ignored)
+    #' @param a lower bound
+    #' @param b upper bound
+    get_index_of = function(set = NULL, a = NULL, b = NULL) {
+        if (!is.null(set)) {
+          stopifnot(is.finite(set))
+          if (length(set) == 1) {
+            return(Bitset$new(from = private$interface$get_index_of_set_scalar(private$variable, set)))
+          } else {
+            return(Bitset$new(from = private$interface$get_index_of_set_vector(private$variable, set)))
+          }
+        } else {
+          stopifnot(is.finite(c(a,b)))
+          stopifnot(a <= b)
+          if (a < b) {
+            return(Bitset$new(from = private$interface$get_index_of_range(private$variable, a, b)))              
+          } else {
+            return(Bitset$new(from = private$interface$get_index_of_set_scalar(private$variable, a))) 
+          }
+        }
+        stop("please provide a set of values to check, or both bounds of range [a,b]")        
+    },
+
+    #' @description Return the number of individuals with some subset of values.
+    #' Either search for indices corresponding to values in \code{set}, or
+    #' for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
+    #' or \code{a} and \code{b} must be provided as arguments.
+    #' @param set a vector of values (providing \code{set} means \code{a,b} are ignored)
+    #' @param a lower bound
+    #' @param b upper bound
+    get_size_of = function(set = NULL, a = NULL, b = NULL) {    
+      if (!is.null(set)) {
+        stopifnot(is.finite(set))  
+        if (length(set) == 1) {
+          return(private$interface$get_size_of_set_scalar(private$variable, set))
+        } else {
+          return(private$interface$get_size_of_set_vector(private$variable, set))
+        }
+      } else {
+        stopifnot(is.finite(c(a,b)))
+        stopifnot(a <= b)
+        if (a < b) {
+          return(private$interface$get_size_of_range(private$variable, a, b))
+        } else {
+          return(private$interface$get_size_of_set_scalar(private$variable, a))
+        }
+      }
+      stop("please provide a set of values to check, or both bounds of range [a,b]")    
+    }
   )
 )
