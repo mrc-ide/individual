@@ -5,19 +5,8 @@
 DoubleVariable <- R6Class(
   'DoubleVariable',
   private = list(
-    implementation = list(
-      create = create_double_variable,
-      get_values = double_variable_get_values,
-      get_size = double_variable_get_size,
-      get_values_at_index = double_variable_get_values_at_index,
-      get_values_at_index_vector = double_variable_get_values_at_index_vector,
-      get_index_of_range = double_variable_get_index_of_range,
-      get_size_of_range = double_variable_get_size_of_range,
-      queue_fill = double_variable_queue_fill,
-      queue_update = double_variable_queue_update,
-      queue_update_bitset = double_variable_queue_update_bitset,
-      update = double_variable_update
-    )
+    variable_interface = NULL,
+    double_interface = NULL
   ),
   public = list(
     .variable = NULL,
@@ -28,7 +17,27 @@ DoubleVariable <- R6Class(
     initialize = function(initial_values) {
       stopifnot(!is.null(initial_values))
       stopifnot(is.numeric(initial_values))
-      self$.variable <- private$implementation$create(initial_values)
+      self$.variable <- create_double_variable(initial_values)
+      private$variable_interface <- VariableInterface$new(
+        variable = self$.variable,
+        interface = list(
+          get_size = double_variable_get_size,
+          get_values = double_variable_get_values,
+          get_values_at_index = double_variable_get_values_at_index,
+          get_values_at_index_vector = double_variable_get_values_at_index_vector,
+          queue_fill = double_variable_queue_fill,
+          queue_update = double_variable_queue_update,
+          queue_update_bitset = double_variable_queue_update_bitset,
+          update = double_variable_update
+        )
+      )
+      private$double_interface <- DoubleInterface$new(
+        variable = self$.variable,
+        interface = list(
+          get_index_of_range = double_variable_get_index_of_range,
+          get_size_of_range = double_variable_get_size_of_range
+        )
+      )
     },
 
     #' @description get the variable values.
@@ -36,36 +45,20 @@ DoubleVariable <- R6Class(
     #' \code{NULL}, return all values; if passed a \code{\link[individual]{Bitset}}
     #' or integer vector, return values of those individuals.
     get_values = function(index = NULL) {
-      if (is.null(index)) {
-        return(private$implementation$get_values(self$.variable))
-      } else {
-        if (inherits(index, 'Bitset')) {
-          return(private$implementation$get_values_at_index(self$.variable, index$.bitset))
-        } else {
-          stopifnot(is.finite(index))
-          stopifnot(index > 0)
-          return(private$implementation$get_values_at_index_vector(self$.variable, index))
-        }
-      }
+      private$variable_interface$get_values(index)
     },
 
     #' @description return a \code{\link[individual]{Bitset}} giving individuals 
     #' whose value lies in an interval \eqn{[a,b]}.
     #' @param a lower bound
     #' @param b upper bound
-    get_index_of = function(a, b) {
-      stopifnot(a < b)
-      return(Bitset$new(from = private$implementation$get_index_of_range(self$.variable, a, b)))      
-    },
+    get_index_of = function(a, b) private$double_interface$get_index_of(a, b),
 
     #' @description return the number of individuals whose value lies in an interval
     #' Count individuals whose value lies in an interval \eqn{[a,b]}.
     #' @param a lower bound
     #' @param b upper bound
-    get_size_of = function(a, b) {
-      stopifnot(a < b)
-      return(private$implementation$get_size_of_range(self$.variable, a, b))
-    },
+    get_size_of = function(a, b) private$double_interface$get_size_of(a, b),
 
     #' @description Queue an update for a variable. There are 4 types of variable update:
     #' \enumerate{
@@ -87,49 +80,47 @@ DoubleVariable <- R6Class(
     #' fill options. If using indices, this may be either a vector of integers or
     #' a \code{\link[individual]{Bitset}}.
     queue_update = function(values, index = NULL) {
-      stopifnot(is.numeric(values))
-      if(is.null(index)){
-        if(length(values) == 1){
-          # variable fill
-          private$implementation$queue_fill(
-            self$.variable,
-            values
-          )
-        } else {
-          # variable reset
-          stopifnot(length(values) == private$implementation$get_size(self$.variable))
-          private$implementation$queue_update(
-            self$.variable,
-            values,
-            integer(0)
-          )
-        }
-      } else {
-        if (inherits(index, 'Bitset')) {
-          # subset update/fill: bitset
-          stopifnot(index$max_size == private$implementation$get_size(self$.variable))
-          if (index$size() > 0){
-            private$implementation$queue_update_bitset(
-              self$.variable,
-              values,
-              index$.bitset
-            )
-          }
-        } else {
-          if (length(index) != 0) {
-            # subset update/fill: vector
-            stopifnot(is.finite(index))
-            stopifnot(index > 0)
-            private$implementation$queue_update(
-              self$.variable,
-              values,
-              index
-            )
-          }
-        }
-      }
+      private$variable_interface$queue_update(values, index)
     },
 
-    .update = function() private$implementation$update(self$.variable)
+    .update = function() private$variable_interface$update()
+  )
+)
+
+#' @title DoubleInterface Class
+#' @description An interface for double indexing operations
+#' @importFrom R6 R6Class
+DoubleInterface <- R6Class(
+  'DoubleInterface',
+  private = list(
+    variable = NULL,
+    interface = NULL
+  ),
+  public = list(
+    #' @description initialise this interface
+    #' @param variable a C++ object implementing this variable
+    #' @param interface a list of C++ functions implementing this interface
+    initialize = function(variable, interface) {
+      private$variable <- variable
+      private$interface <- interface
+    },
+
+    #' @description return a \code{\link[individual]{Bitset}} giving individuals 
+    #' whose value lies in an interval \eqn{[a,b]}.
+    #' @param a lower bound
+    #' @param b upper bound
+    get_index_of = function(a, b) {
+      stopifnot(a < b)
+      return(Bitset$new(from = private$interface$get_index_of_range(private$variable, a, b)))      
+    },
+
+    #' @description return the number of individuals whose value lies in an interval
+    #' Count individuals whose value lies in an interval \eqn{[a,b]}.
+    #' @param a lower bound
+    #' @param b upper bound
+    get_size_of = function(a, b) {
+      stopifnot(a < b)
+      return(private$interface$get_size_of_range(private$variable, a, b))
+    }
   )
 )

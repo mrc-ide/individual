@@ -64,8 +64,6 @@ ResizeableIntegerVariable <- R6Class(
     },
 
     #' @description get the current size of the variable
-    size = function() resizeable_integer_variable_size(self$.variable),
-
-    .update = function() private$variable_interface$update()
+    size = function() resizeable_integer_variable_size(self$.variable)
   )
 )
