@@ -36,7 +36,7 @@ Event <- R6Class(
       for (listener in self$.listeners) {
         if (event_should_trigger(self$.event)) {
           if (inherits(listener, "externalptr")) {
-            self$.process_listener_cpp(self$.event, listener)
+            self$.process_listener_cpp(listener)
           } else {
             self$.process_listener(listener)
           }
