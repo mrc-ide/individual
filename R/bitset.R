@@ -43,7 +43,13 @@ Bitset <- R6Class(
       bitset_remove(self$.bitset, v)
       self
     },
-
+    
+    #' @description clear the bitset.
+    clear = function(v) {
+      bitset_clear(self$.bitset)
+      self
+    },
+    
     #' @description get the number of elements in the set.
     size = function() bitset_size(self$.bitset),
 
@@ -98,10 +104,10 @@ Bitset <- R6Class(
     #' a single value for all elements or a vector of unique
     #' probabilities for keeping each element.
     sample = function(rate) {
+      stopifnot(is.finite(rate))
       if (length(rate) == 1) {
         bitset_sample(self$.bitset, rate)
       } else {
-        stopifnot(all(is.finite(rate)))
         bitset_sample_vector(self$.bitset, rate)
       }
       self

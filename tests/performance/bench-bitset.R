@@ -13,7 +13,7 @@ source("./tests/performance/utils.R")
 
 # limit: max size of bitset
 # size: number of elements to be inserted
-args_grid <- build_grid(base1 = 10, base2 = 5, powers1 = 5)
+args_grid <- build_grid(base1 = 10, base2 = 5, powers1 = c(3,5,7))
 
 
 # ------------------------------------------------------------
@@ -83,6 +83,56 @@ ggplot(data = core_ops_bset) +
 
 
 # ------------------------------------------------------------
+# benchmark: set operations that do not require 'size' argument
+# ------------------------------------------------------------
+
+limit_args_grid <- data.frame(limit = 10^(3:8))
+
+# clear
+clear_bset <- bench::press(
+  {
+    index <- individual::Bitset$new(size = limit)$insert(1:limit)
+    bench::mark(
+      min_iterations = 100,
+      check = FALSE, 
+      filter_gc = TRUE,
+      {index$clear()}
+    )
+  }, 
+  .grid = limit_args_grid
+) 
+
+clear_bset <- simplify_bench_output(clear_bset)
+
+not_bset <- bench::press(
+  {
+    index <- individual::Bitset$new(size = limit)$insert(1:limit)
+    bench::mark(
+      min_iterations = 50,
+      check = FALSE, 
+      filter_gc = TRUE,
+      {index$not(inplace = TRUE)}
+    )
+  }, 
+  .grid = limit_args_grid
+) 
+
+not_bset <- simplify_bench_output(out = not_bset)
+
+ggplot(data = clear_bset) +
+  geom_violin(aes(x = expression, y = time, color = expression, fill = expression)) +
+  facet_wrap(. ~ limit, scales = "free") +
+  coord_flip() +
+  ggtitle("Clear benchmark")
+
+ggplot(data = not_bset) +
+  geom_violin(aes(x = expression, y = time, color = expression, fill = expression)) +
+  facet_wrap(. ~ limit, scales = "free") +
+  coord_flip() +
+  ggtitle("Not benchmark")
+
+
+# ------------------------------------------------------------
 # benchmark: set operations
 # ------------------------------------------------------------
 
@@ -109,19 +159,6 @@ and_bset <- bench::press(
       check = FALSE, 
       filter_gc = TRUE,
       {index1$and(index2)},
-    )
-  }, 
-  .grid = args_grid
-) 
-
-not_bset <- bench::press(
-  {
-    index <- create_random_bitset(size = size, limit = limit)
-    bench::mark(
-      min_iterations = 50,
-      check = FALSE, 
-      filter_gc = TRUE,
-      {index$not(inplace = TRUE)},
     )
   }, 
   .grid = args_grid
@@ -161,20 +198,18 @@ or_bset <- simplify_bench_output(out = or_bset)
 and_bset$type <- "and"
 and_bset <- simplify_bench_output(out = and_bset)
 
-not_bset$type <- "not"
-not_bset <- simplify_bench_output(out = not_bset)
-
 xor_bset$type <- "xor"
 xor_bset <- simplify_bench_output(out = xor_bset)
 
 set_diff_bset$type <- "set_diff"
 set_diff_bset <- simplify_bench_output(out = set_diff_bset)
 
-set_ops_bset <- rbind(or_bset, and_bset, not_bset, xor_bset, set_diff_bset)
+set_ops_bset <- rbind(or_bset, and_bset, xor_bset, set_diff_bset)
 
 ggplot(data = set_ops_bset) +
   geom_violin(aes(x = as.factor(size), y = time, color = as.factor(size), fill = as.factor(size))) +
-  facet_wrap(. ~ type, scales = "free") +
+  facet_wrap(limit ~ type, scales = "free") +
+  coord_flip() +
   ggtitle("Set operations benchmark")
 
 
@@ -189,7 +224,7 @@ choose_bset <- bench::press(
       min_iterations = 50,
       check = FALSE, 
       filter_gc = TRUE,
-      {index$choose(k = size)},
+      {index$choose(k = size)}
     )
   }, 
   .grid = args_grid

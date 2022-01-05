@@ -1,6 +1,6 @@
 Package: individual
 Title: Framework for Specifying and Simulating Individual Based Models
-Version: 0.1.6
+Version: 0.1.8
 Authors@R: c(
   person(
     given = "Giovanni",

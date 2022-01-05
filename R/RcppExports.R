@@ -17,6 +17,10 @@ bitset_remove <- function(b, v) {
     invisible(.Call(`_individual_bitset_remove`, b, v))
 }
 
+bitset_clear <- function(b) {
+    invisible(.Call(`_individual_bitset_clear`, b))
+}
+
 bitset_size <- function(b) {
     .Call(`_individual_bitset_size`, b)
 }
@@ -73,6 +77,10 @@ create_categorical_variable <- function(categories, values) {
     .Call(`_individual_create_categorical_variable`, categories, values)
 }
 
+categorical_variable_get_size <- function(variable) {
+    .Call(`_individual_categorical_variable_get_size`, variable)
+}
+
 categorical_variable_queue_update <- function(variable, value, index) {
     invisible(.Call(`_individual_categorical_variable_queue_update`, variable, value, index))
 }
@@ -99,6 +107,10 @@ categorical_variable_update <- function(variable) {
 
 create_double_variable <- function(values) {
     .Call(`_individual_create_double_variable`, values)
+}
+
+double_variable_get_size <- function(variable) {
+    .Call(`_individual_double_variable_get_size`, variable)
 }
 
 double_variable_get_values <- function(variable) {
@@ -207,6 +219,10 @@ process_targeted_listener <- function(event, listener, target) {
 
 create_integer_variable <- function(values) {
     .Call(`_individual_create_integer_variable`, values)
+}
+
+integer_variable_get_size <- function(variable) {
+    .Call(`_individual_integer_variable_get_size`, variable)
 }
 
 integer_variable_get_values <- function(variable) {

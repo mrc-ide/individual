@@ -1,183 +1,191 @@
-test_that("getting variables works", {
+test_that("Creating IntegerVariables errors with bad input", {
+  expect_error(IntegerVariable$new(NULL))
+  expect_error(IntegerVariable$new(NaN))
+  expect_error(IntegerVariable$new(c(1,NaN)))
+  expect_error(IntegerVariable$new(NA))
+  expect_error(IntegerVariable$new(c(1,NA)))
+  expect_error(IntegerVariable$new(Inf))
+  expect_error(IntegerVariable$new(c(1,Inf)))
+  expect_error(IntegerVariable$new(-Inf))
+  expect_error(IntegerVariable$new(c(1,-Inf)))
+  expect_error(IntegerVariable$new("1"))
+})
+
+test_that("IntegerVariable get values returns correct values without index", {
   size <- 10
-  sequence <- IntegerVariable$new(seq_len(size))
-  sequence_2 <- IntegerVariable$new(seq_len(size) + 10)
+  variable <- IntegerVariable$new(seq_len(size))
+  expect_equal(variable$get_values(), 1:10)
   
-  expect_equal(sequence$get_values(), 1:10)
-  expect_equal(sequence_2$get_values(), (1:10) + 10)
+  variable <- IntegerVariable$new(seq_len(size) + 10)
+  expect_equal(variable$get_values(), (1:10) + 10)
+  
+  variable <- IntegerVariable$new(seq_len(size))
+  expect_equal(variable$get_values(c(1, 1, 2, 2)), c(1, 1, 2, 2))
 })
 
-test_that("getting variables with repeats works", {
+test_that("IntegerVariable get values returns correct values with vector index", {
   size <- 10
-  sequence <- IntegerVariable$new(seq_len(size))
+  variable <- IntegerVariable$new(seq_len(size))
+  expect_equal(variable$get_values(NULL), 1:10)
   
-  expect_equal(sequence$get_values(c(1, 1, 2, 2)), c(1, 1, 2, 2))
+  variable <- IntegerVariable$new(seq_len(size) + 10)
+  expect_equal(variable$get_values(5:10), 15:20)
 })
 
-test_that("getting variables at an index works", {
+test_that("IntegerVariable get values returns correct values with bitset index", {
   size <- 10
-  sequence <- IntegerVariable$new(seq_len(size))
-  sequence_2 <- IntegerVariable$new(seq_len(size) + 10)
-  
-  expect_equal(sequence$get_values(NULL), 1:10)
-  expect_error(sequence_2$get_values(5:15))
-  expect_equal(sequence_2$get_values(5:10), 15:20)
+  variable <- IntegerVariable$new(seq_len(size) + 10)
+  expect_equal(variable$get_values(Bitset$new(size = size)$insert(5:10)), 15:20)
 })
 
-test_that("getting values with incompatible index fails", {
-  x <- IntegerVariable$new(initial_values = 1:100)
-  b <- Bitset$new(1000)$insert(90:110)
-  expect_error(x$get_values(b))
-  expect_error(x$get_values(90:110))
-  expect_error(x$get_values(-5:2))
+test_that("IntegerVariable get values fails with incorrect index", {
+  variable <- IntegerVariable$new(initial_values = 1:100)
+  b <- Bitset$new(1000)
+  expect_error(variable$get_values(b))
+  expect_error(variable$get_values(b$insert(90:110)))
+  expect_error(variable$get_values(90:110))
+  expect_error(variable$get_values(-5:2))
+  expect_error(variable$get_values(NaN))
+  expect_error(variable$get_values(NA))
+  expect_error(variable$get_values(Inf))
+  expect_error(variable$get_values("10"))
 })
 
-
-test_that("getting a set of IntegerVariable indices which exist works", {
+test_that("IntegerVariable get index of set works correctly", {
+  variable <- IntegerVariable$new(5:10)
   
-  vals <- 5:10
-  intvar <- IntegerVariable$new(vals)
-  
-  set <- 6:8
-  indices <- intvar$get_index_of(set = set)  
-  
+  indices <- variable$get_index_of(set = 6:8)  
   expect_equal(indices$to_vector(), 2:4)
   
-  set <- 10
-  indices <- intvar$get_index_of(set = set)
+  indices <- variable$get_index_of(set = 10)
   expect_equal(indices$to_vector(), 6)
+  
+  indices <- variable$get_index_of(set = 1e3:1.001e3)  
+  expect_equal(indices$size(), 0)
+  
+  indices <- variable$get_index_of(set = -5)
+  expect_equal(indices$size(), 0)
+  
+  indices <- variable$get_index_of(set = integer(0))
+  expect_equal(indices$size(), 0)
+  
+  indices <- variable$get_index_of(set = numeric(0))
+  expect_equal(indices$size(), 0)
+  
+  variable <- IntegerVariable$new(-10:10)
+  indices <- variable$get_index_of(set = c(-2,-1,1,2))
+  expect_equal(indices$to_vector(), c(9, 10, 12, 13))
 })
 
-test_that("getting a set of IntegerVariable indices which do not exist works", {
-  
-  vals <- 5:10
-  intvar <- IntegerVariable$new(vals)
-  
-  set <- 1e3:1.001e3
-  indices <- intvar$get_index_of(set = set)  
-  
-  expect_length(indices$to_vector(), 0)
-  
-  set <- -5
-  indices <- intvar$get_index_of(set = set)  
-  
-  expect_length(indices$to_vector(), 0)
+test_that("IntegerVariable get index of set fails with incorrect set", {
+  variable <- IntegerVariable$new(1:10)
+  expect_error(variable$get_index_of(set = Inf))
+  expect_error(variable$get_index_of(set = -Inf))
+  expect_error(variable$get_index_of(set = NULL))
+  expect_error(variable$get_index_of(set = NA))
+  expect_error(variable$get_index_of(set = NaN))
+  expect_error(variable$get_index_of(set = "5"))
 })
 
-test_that("getting indices within bounds of IntegerVariable which exist works", {
+
+test_that("IntegerVariable get index of bounds [a,b] works correctly", {
+  variable <- IntegerVariable$new(5:10)
   
-  vals <- 5:10
-  intvar <- IntegerVariable$new(vals)
-  
-  a <- 6
-  b <- 8
-  indices <- intvar$get_index_of(a = a, b = b)  
-  
+  indices <- variable$get_index_of(a = 6, b = 8)  
   expect_equal(indices$to_vector(), 2:4)
-})
-
-test_that("getting indices within bounds of IntegerVariable which do not exist works", {
   
-  vals <- 5:10
-  intvar <- IntegerVariable$new(vals)
+  indices <- variable$get_index_of(a = 7, b = 7)
+  expect_equal(indices$to_vector(), 3)
   
-  a <- 1e3
-  b <- 1.001e3
-  indices <- intvar$get_index_of(a = a, b = b)  
-  
+  indices <- variable$get_index_of(a = 1e3, b = 1.001e3)
   expect_length(indices$to_vector(), 0)
 })
 
-test_that("getting size of a set of IntegerVariable values which exist works", {
-  intvar <- IntegerVariable$new(-10:10)
+test_that("IntegerVariable get index of bounds [a,b] fails with incorrect bounds", {
+  variable <- IntegerVariable$new(5:10)
+  
+  expect_error(variable$get_index_of(a = a, b = NULL))
+  expect_error(variable$get_index_of(a = a, b = a - 10))
+  expect_error(variable$get_index_of(a = a, b = NA))
+  expect_error(variable$get_index_of(a = a, b = NaN))
+  expect_error(variable$get_index_of(a = a, b = Inf))
+  expect_error(variable$get_index_of(a = a, b = -Inf))
+  
+  expect_error(variable$get_index_of(a = NULL, b = b))
+  expect_error(variable$get_index_of(a = b + 10, b = b))
+  expect_error(variable$get_index_of(a = NA, b = b))
+  expect_error(variable$get_index_of(a = NaN, b = b))
+  expect_error(variable$get_index_of(a = Inf, b = b))
+  expect_error(variable$get_index_of(a = -Inf, b = b))
+  
+  expect_error(variable$get_index_of(a = integer(0), b = b))
+  expect_error(variable$get_index_of(a = numeric(0), b = b))
+  
+  expect_error(variable$get_index_of(a = a, b = integer(0)))
+  expect_error(variable$get_index_of(a = a, b = integer(0)))
+  
+  expect_error(variable$get_index_of(a = integer(0), b = integer(0)))
+  expect_error(variable$get_index_of(a = numeric(0), b = numeric(0)))
+})
+
+test_that("IntegerVariable get size of set works correctly", {
+  variable <- IntegerVariable$new(-10:10)
   set <- c(-2,-1,1,2) 
-  expect_equal(intvar$get_size_of(set = set), 4)
+  expect_equal(variable$get_size_of(set = set), length(set))
   
-  set <- 10
-  expect_equal(intvar$get_size_of(set = set), 1)
+  expect_equal(variable$get_size_of(set = -20:-15), 0)
+  expect_equal(variable$get_size_of(set = 10), 1)
+  expect_equal(variable$get_size_of(set = numeric(0)), 0)
+  expect_equal(variable$get_size_of(set = integer(0)), 0)
 })
 
-test_that("getting size of a set of IntegerVariable values which do not exist works", {
-  intvar <- IntegerVariable$new(-10:10)
-  set <- -20:-15
-  expect_equal(intvar$get_size_of(set = set), 0)
-  
-  set <- 50
-  expect_equal(intvar$get_size_of(set = set), 0)
+test_that("IntegerVariable get size of set fails with incorrect input", {
+  variable <- IntegerVariable$new(-10:10)
+  expect_error(variable$get_size_of(set = NULL))
+  expect_error(variable$get_size_of(set = NA))
+  expect_error(variable$get_size_of(set = NaN))
+  expect_error(variable$get_size_of(set = Inf))
+  expect_error(variable$get_size_of(set = -Inf))
+  expect_error(variable$get_size_of(set = "5"))
 })
 
-test_that("getting size of a interval of IntegerVariable values which exist works", {
-  intvar <- IntegerVariable$new(-10:10)
-  a <- 5
-  b <- 7
-  expect_equal(intvar$get_size_of(a = a, b = b), 3)
+test_that("IntegerVariable get size of set in bounds [a,b] works correctly", {
+  variable <- IntegerVariable$new(-10:10)
+  expect_equal(variable$get_size_of(a = 5, b = 7), 3)
+  expect_equal(variable$get_size_of(a = 5, b = 5), 1)
+  expect_equal(variable$get_size_of(a = -10, b = -5), 6)
+  expect_equal(variable$get_size_of(a = -50, b = -40), 0)
 })
 
-test_that("getting size of a interval of IntegerVariable values which do not exist works", {
-  intvar <- IntegerVariable$new(-10:10)
-  a <- -50
-  b <- -40
-  expect_equal(intvar$get_size_of(a = a, b = b), 0)
-})+
-
-test_that("using a, b in IntegerVariable size and index methods works", {
-  intvar <- IntegerVariable$new(rep(1:10,each=3))
-  a <- 5
-  b <- 5
-  expect_equal(intvar$get_size_of(a = a, b = b), 3)
-  expect_error(intvar$get_size_of(a = 7,b = 4))
+test_that("IntegerVariable get size of set in bounds [a,b] fails with incorrect input", {
+  variable <- IntegerVariable$new(-10:10)
   
-  expect_equal(intvar$get_index_of(a = a, b = b)$to_vector(), c(13, 14, 15))
-  expect_error(intvar$get_index_of(a = 7,b = 4))
+  expect_error(variable$get_size_of(a = a, b = NULL))
+  expect_error(variable$get_size_of(a = a, b = a - 10))
+  expect_error(variable$get_size_of(a = a, b = NA))
+  expect_error(variable$get_size_of(a = a, b = NaN))
+  expect_error(variable$get_size_of(a = a, b = Inf))
+  expect_error(variable$get_size_of(a = a, b = -Inf))
+  
+  expect_error(variable$get_size_of(a = NULL, b = b))
+  expect_error(variable$get_size_of(a = b + 10, b = b))
+  expect_error(variable$get_size_of(a = NA, b = b))
+  expect_error(variable$get_size_of(a = NaN, b = b))
+  expect_error(variable$get_size_of(a = Inf, b = b))
+  expect_error(variable$get_size_of(a = -Inf, b = b))
+  
+  expect_error(variable$get_size_of(a = integer(0), b = b))
+  expect_error(variable$get_size_of(a = numeric(0), b = b))
+  
+  expect_error(variable$get_size_of(a = a, b = integer(0)))
+  expect_error(variable$get_size_of(a = a, b = integer(0)))
+  
+  expect_error(variable$get_size_of(a = integer(0), b = integer(0)))
+  expect_error(variable$get_size_of(a = numeric(0), b = numeric(0)))
 })
 
-test_that("getting values from IntegerVariable with bitset of incompatible size fails", {
-  x <- IntegerVariable$new(initial_values = 1:100)
-  b <- Bitset$new(1000)$insert(90:110)
-  expect_error(x$get_values(b))
-})
-
-test_that("queueing updates with bad inputs fails or does nothing", {
-  x <- IntegerVariable$new(initial_values = 1:10)
-  x$queue_update(values = numeric(0), index = 1:10)
-  x$.update()
-  expect_equal(x$get_values(), 1:10)
-  
-  x$queue_update(values = numeric(0), index = Bitset$new(10)$insert(1:3))
-  x$.update()
-  expect_equal(x$get_values(), 1:10)
-  
-  x$queue_update(values = 10, index = Bitset$new(0))
-  x$.update()
-  expect_equal(x$get_values(), 1:10)
-  
-  x$queue_update(values = 10, index = integer(0))
-  x$.update()
-  expect_equal(x$get_values(), 1:10)
-  
-  expect_error(x$queue_update(values = 10, index = -5:-3))
-  
-  x$queue_update(values = 10, index = Bitset$new(100))
-  x$.update()
-  expect_equal(x$get_values(), 1:10)
-  
-  expect_error(x$queue_update(values = 10, index = Bitset$new(100)$insert(1:50)))
-})
-
-test_that("get size of method fails correctly with bad inputs", {
-  x <- IntegerVariable$new(initial_values = 1:10)
-  expect_error(x$get_size_of(a = 5))
-  expect_error(x$get_size_of(b = 5))
-  # ignore other inputs if provide set
-  expect_equal(x$get_size_of(set = 5), x$get_size_of(set = 5,a = 1))
-  expect_equal(x$get_size_of(set = 5), x$get_size_of(set = 5,b = 4))
-})
-
-test_that("get index of method fails correctly with bad inputs", {
-  x <- IntegerVariable$new(initial_values = 1:10)
-  expect_error(x$get_index_of(a = 5))
-  expect_error(x$get_index_of(b = 5))
-  # ignore other inputs if provide set
-  expect_equal(x$get_index_of(set = 5)$to_vector(), x$get_index_of(set = 5,a = 1)$to_vector())
-  expect_equal(x$get_index_of(set = 5)$to_vector(), x$get_index_of(set = 5,b = 4)$to_vector())
+test_that("IntegerVariable get size and index of set in bounds [a,b] and set gives same answer for equal intervals", {
+  variable <- IntegerVariable$new(-10:10)
+  expect_equal(variable$get_size_of(a = 5, b = 7), variable$get_size_of(set = 5:7))
+  expect_equal(variable$get_index_of(a = 5, b = 7)$to_vector(), variable$get_index_of(set = 5:7)$to_vector())
 })

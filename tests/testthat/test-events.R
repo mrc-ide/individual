@@ -87,3 +87,33 @@ test_that("events can be scheduled for a real time", {
   mockery::expect_args(listener, 1, t = 3)
   mockery::expect_args(listener, 2, t = 4)
 })
+
+test_that("events can be scheduled and canceled", {
+  event <- Event$new()
+  listener <- mockery::mock()
+  event$add_listener(listener)
+  event$schedule(c(1, 3))
+  
+  #time = 1
+  event$.process()
+  mockery::expect_called(listener, 0)
+  event$.tick()
+  
+  #time = 2
+  event$.process()
+  mockery::expect_called(listener, 1)
+  event$.tick()
+  
+  #time = 3
+  event$.process()
+  mockery::expect_called(listener, 1)
+  event$.tick()
+  
+  # cancel next one
+  event$clear_schedule()
+  
+  #time = 4
+  event$.process()
+  mockery::expect_called(listener, 1)
+  mockery::expect_args(listener, 1, t = 2)
+})

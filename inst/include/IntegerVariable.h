@@ -41,8 +41,8 @@ struct IntegerVariable : public Variable {
     virtual individual_index_t get_index_of_set(const int value) const;
     virtual individual_index_t get_index_of_range(const int a, const int b) const;
     
-    virtual size_t get_size_of_set_vector(const std::vector<int>& values_set) const;
-    virtual size_t get_size_of_set_scalar(const int value) const;
+    virtual size_t get_size_of_set(const std::vector<int>& values_set) const;
+    virtual size_t get_size_of_set(const int value) const;
     virtual size_t get_size_of_range(const int a, const int b) const;
 
     virtual void queue_update(const std::vector<int>& values, const std::vector<size_t>& index);
@@ -136,7 +136,7 @@ inline individual_index_t IntegerVariable::get_index_of_range(
 }
 
 //' @title return number of individuals whose value is in a finite set
-inline size_t IntegerVariable::get_size_of_set_vector(
+inline size_t IntegerVariable::get_size_of_set(
         const std::vector<int>& values_set
 ) const {
     
@@ -149,7 +149,7 @@ inline size_t IntegerVariable::get_size_of_set_vector(
 }
 
 //' @title return number of individuals whose value is equal to a specific scalar
-inline size_t IntegerVariable::get_size_of_set_scalar(
+inline size_t IntegerVariable::get_size_of_set(
         const int value
 ) const {
     
@@ -173,9 +173,13 @@ inline void IntegerVariable::queue_update(
         const std::vector<int>& values,
         const std::vector<size_t>& index
 ) {
+    if (values.empty()) {
+        return;
+    }
     if (values.size() > 1 && values.size() < size && values.size() != index.size()) {
         Rcpp::stop("Mismatch between value and index length");
     }
+    
     for (auto i : index) {
         if (i >= size) {
             Rcpp::stop("Index out of bounds");
@@ -190,9 +194,6 @@ inline void IntegerVariable::update() {
         const auto& update = updates.front();
         const auto& values = update.first;
         const auto& index = update.second;
-        if (values.size() == 0) {
-            return;
-        }
         
         auto vector_replacement = (index.size() == 0);
         auto value_fill = (values.size() == 1);
