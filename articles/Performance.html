@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,18 +40,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -80,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/mrc-ide/individual/">
+  <a href="https://github.com/mrc-ide/individual/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -101,28 +97,28 @@
       <h1 data-toc-skip>Performance</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/mrc-ide/individual/blob/master/vignettes/Performance.Rmd"><code>vignettes/Performance.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mrc-ide/individual/blob/HEAD/vignettes/Performance.Rmd" class="external-link"><code>vignettes/Performance.Rmd</code></a></small>
       <div class="hidden name"><code>Performance.Rmd</code></div>
 
     </div>
 
     
     
-<div id="intro" class="section level2">
-<h2 class="hasAnchor">
-<a href="#intro" class="anchor"></a>Introduction</h2>
+<div class="section level2">
+<h2 id="intro">Introduction<a class="anchor" aria-label="anchor" href="#intro"></a>
+</h2>
 <p>Individual is designed for running big individual-based models. But if you find your model taking too long or consuming all of your memory, here are some things you can try to speed up your simulation.</p>
-<div id="bitset" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bitset" class="anchor"></a>Bitset</h3>
-<p>The <a href="https://en.wikipedia.org/wiki/Bit_array">bitset</a> data structure is used to record the presence or absence of an element in a finite set. <code><a href="../reference/Bitset.html">individual::Bitset</a></code> implements this data structure and is able to preform set operations extremely quickly using <a href="https://en.wikipedia.org/wiki/Bitwise_operation">bitwise operations</a>. Taking advantage of these operations can lead to very fast processes, when you need to find some particular subset of individuals.</p>
+<div class="section level3">
+<h3 id="bitset">Bitset<a class="anchor" aria-label="anchor" href="#bitset"></a>
+</h3>
+<p>The <a href="https://en.wikipedia.org/wiki/Bit_array" class="external-link">bitset</a> data structure is used to record the presence or absence of an element in a finite set. <code><a href="../reference/Bitset.html">individual::Bitset</a></code> implements this data structure and is able to preform set operations extremely quickly using <a href="https://en.wikipedia.org/wiki/Bitwise_operation" class="external-link">bitwise operations</a>. Taking advantage of these operations can lead to very fast processes, when you need to find some particular subset of individuals.</p>
 <p>Let’s take a look at the recovery process in <code><a href="../articles/Tutorial.html">vignette("Tutorial")</a></code>. A crucial operation here is to get all infectious individuals who are not already scheduled for recovery. The object <code>I</code> is a bitset containing all those individuals currently infectious, and <code>already_scheduled</code> is another bitset containing those individuals scheduled for a recovery event. Using <code>already_scheduled$not()</code> returns a new bitset of those individuals <em>not</em> in the set of already scheduled persons. This is passed to the <code>I$and()</code>, which modifies <code>I</code> in-place so that the result is the intersection of currently infectious persons and persons who have not yet been scheduled for a recovery event, which is precisely the set of people we want.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">recovery_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">{</span>
   <span class="va">I</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">"I"</span><span class="op">)</span>
   <span class="va">already_scheduled</span> <span class="op">&lt;-</span> <span class="va">recovery_event</span><span class="op">$</span><span class="fu">get_scheduled</span><span class="op">(</span><span class="op">)</span>
   <span class="va">I</span><span class="op">$</span><span class="fu">and</span><span class="op">(</span><span class="va">already_scheduled</span><span class="op">$</span><span class="fu">not</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">rec_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Geometric.html">rgeom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">I</span><span class="op">$</span><span class="fu">size</span><span class="op">(</span><span class="op">)</span>,prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">gamma</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>
+  <span class="va">rec_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Geometric.html" class="external-link">rgeom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">I</span><span class="op">$</span><span class="fu">size</span><span class="op">(</span><span class="op">)</span>,prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">gamma</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>
   <span class="va">recovery_event</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span>target <span class="op">=</span> <span class="va">I</span>,delay <span class="op">=</span> <span class="va">rec_times</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>Bitsets can also be efficiently sampled using <code>Bitset$sample()</code>. This is used in the infection process of <code><a href="../articles/Tutorial.html">vignette("Tutorial")</a></code>. Once the per-capita force of infection (probability of moving from S to I during this time step) is calculated, the bitset <code>S</code> is sampled with that probability which modifies it in-place. The number of elements remaining after being sampled is binomially distributed. The argument <code>rate</code> can also be specified as a vector of probabilities, one for each element in the bitset.</p>
@@ -131,7 +127,7 @@
   <span class="va">I</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_size_of</span><span class="op">(</span><span class="st">"I"</span><span class="op">)</span>
   <span class="va">foi</span> <span class="op">&lt;-</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">I</span><span class="op">/</span><span class="va">N</span>
   <span class="va">S</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">"S"</span><span class="op">)</span>
-  <span class="va">S</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span>rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">foi</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">S</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span>rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">foi</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span>
   <span class="va">health</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>value <span class="op">=</span> <span class="st">"I"</span>,index <span class="op">=</span> <span class="va">S</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>When creating a new Bitset, a user must specify the maximum size of the bitset. This is the maximum number of positive integers which the bitset can store. For example, if calling <code>Bitset$new(size = 100)</code>, the resulting object is able to store the presence or absence of integers between 1 and 100 (inclusive). Attempting to insert or remove elements outside of this range will result in an error.</p>
@@ -140,12 +136,12 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e4</span>
 <span class="va">bset</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Bitset.html">Bitset</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">$</span><span class="fu">insert</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">)</span>
-<span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>
+<span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>
 
 <span class="va">keep</span> <span class="op">&lt;-</span> <span class="va">probs</span> <span class="op">&gt;=</span> <span class="fl">0.5</span>
 
-<span class="va">stay</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_bitset.html">filter_bitset</a></span><span class="op">(</span>bitset <span class="op">=</span> <span class="va">bset</span>,other <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">keep</span><span class="op">)</span><span class="op">)</span>
-<span class="va">leave</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_bitset.html">filter_bitset</a></span><span class="op">(</span>bitset <span class="op">=</span> <span class="va">bset</span>,other <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="op">!</span><span class="va">keep</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="va">stay</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_bitset.html">filter_bitset</a></span><span class="op">(</span>bitset <span class="op">=</span> <span class="va">bset</span>,other <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">keep</span><span class="op">)</span><span class="op">)</span>
+<span class="va">leave</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_bitset.html">filter_bitset</a></span><span class="op">(</span>bitset <span class="op">=</span> <span class="va">bset</span>,other <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="op">!</span><span class="va">keep</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>This pattern is almost always slower than using the sample method with a set difference:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">stay</span> <span class="op">&lt;-</span> <span class="va">bset</span><span class="op">$</span><span class="fu">copy</span><span class="op">(</span><span class="op">)</span>
@@ -155,9 +151,9 @@
 <p>In both instances the original bitset object <code>bset</code> is not modified. The latter pattern can be made even faster if the original may be modified by directly taking the set difference with it. For models with large population sizes, the speed differences can be substantial.</p>
 <p>Because a bitset stores integers in some finite set, it can be returned as an integer vector by using <code>Bitset$to_vector()</code>. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model’s dynamics require the frequent returning of integer vectors, an <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> object will be more appropriate. However, for most discrete variables, and especially those which mirror compartments in mathematical models, bitset operations and <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> (which uses bitsets internally) should be preferred.</p>
 </div>
-<div id="prefab" class="section level3">
-<h3 class="hasAnchor">
-<a href="#prefab" class="anchor"></a>Prefabs</h3>
+<div class="section level3">
+<h3 id="prefab">Prefabs<a class="anchor" aria-label="anchor" href="#prefab"></a>
+</h3>
 <p>Every time your processes ask for a variable, there is an overhead associated with moving simulation data into R, potentially incurring expensive copying of data.</p>
 <p>Because many epidemiological models have similar state transitions, we’ve included several “prefab” processes and event listeners implemented in C++ which provide significant speed improvements and can be used out of the box in models. The functions return pointers which can be passed to the process list of <code>individual::simulate_loop</code> or event listeners just like closures in R. The processes available are:</p>
 <ul>
@@ -182,9 +178,9 @@
 <code><a href="../reference/categorical_count_renderer_process.html">individual::categorical_count_renderer_process</a></code>: used for <code><a href="../reference/Render.html">individual::Render</a></code> objects that counts the size of each state in a categorical variable.</li>
 </ul>
 </div>
-<div id="cpp_prefab" class="section level3">
-<h3 class="hasAnchor">
-<a href="#cpp_prefab" class="anchor"></a>C++ Prefabs</h3>
+<div class="section level3">
+<h3 id="cpp_prefab">C++ Prefabs<a class="anchor" aria-label="anchor" href="#cpp_prefab"></a>
+</h3>
 <p>Unfortunately, we don’t have a prefab for every situation. Please feel free to write one of your own!</p>
 <p>These are the basic steps to add C++ processes to your R package:</p>
 <ol style="list-style-type: decimal">
@@ -196,13 +192,13 @@
 <span id="cb5-2"><a href="#cb5-2"></a>src/mypackage_types.hpp</span>
 <span id="cb5-3"><a href="#cb5-3"></a>inst/include/mypackage_types.h</span>
 <span id="cb5-4"><a href="#cb5-4"></a>inst/include/mypackage_types.hpp</span></code></pre></div>
-<p>Then this header file will be automatically included in <code>RcppExports.cpp</code>. For more information, see section “2.5 Types in Generated Code” in the <a href="https://CRAN.R-project.org/package=Rcpp/vignettes/Rcpp-attributes.pdf">Rcpp Attributes vignette</a>.</p>
+<p>Then this header file will be automatically included in <code>RcppExports.cpp</code>. For more information, see section “2.5 Types in Generated Code” in the <a href="https://CRAN.R-project.org/package=Rcpp/vignettes/Rcpp-attributes.pdf" class="external-link">Rcpp Attributes vignette</a>.</p>
 </li>
 <li><p>Create a file <code>src/Makecars</code> containing the line <code>CXX_STD = CXX14</code>. Because <code>individual</code> uses C++14 features, when compiling your package against it you must let the compiler know it should use the C++14 standard, otherwise it will not be able to compile.</p></li>
 <li><p>Write your process!</p></li>
 </ol>
 <p>Processes in C++ are of type <code>process_t</code>, defined in <code>inst/include/common_types.h</code>. Types for listeners for <code><a href="../reference/Event.html">individual::Event</a></code> and <code><a href="../reference/TargetedEvent.html">individual::TargetedEvent</a></code> are <code>listener_t</code> and <code>targeted_listener_t</code>, defined in <code>inst/include/Event.h</code>. Below is how the C++ implementation of <code>multi_probability_bernoulli_process</code> is coded.</p>
-<p>Note that the return type is a <code>Rcpp::XPtr</code> <a href="https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1XPtr.html">(see here)</a> to a <code>process_t</code>, which is implemented as a <code>std::function</code> <a href="http://www.cplusplus.com/reference/functional/function/">(see here)</a> object, a C++ class that can hold any callable type. The <code>Rcpp::XPtr</code> is initialized with a pointer to a <code>process_t</code> object, which itself holds a C++ <a href="https://en.cppreference.com/w/cpp/language/lambda">lambda function</a>, basically a function closure.</p>
+<p>Note that the return type is a <code>Rcpp::XPtr</code> <a href="https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1XPtr.html" class="external-link">(see here)</a> to a <code>process_t</code>, which is implemented as a <code>std::function</code> <a href="http://www.cplusplus.com/reference/functional/function/" class="external-link">(see here)</a> object, a C++ class that can hold any callable type. The <code>Rcpp::XPtr</code> is initialized with a pointer to a <code>process_t</code> object, which itself holds a C++ <a href="https://en.cppreference.com/w/cpp/language/lambda" class="external-link">lambda function</a>, basically a function closure.</p>
 <p>The lambda function captures the input arguments by value, and takes a single argument when called <code>t</code>, giving the current time step (just like process functions in R). Sampling those individuals to change state is implemented with the C++ API for these objects.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1"></a><span class="pp">#include </span><span class="im">&lt;individual.h&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
@@ -232,7 +228,7 @@
 <span id="cb6-26"><a href="#cb6-26"></a>};</span></code></pre></div>
 <p>The exported function can be used normally in R when creating the list of processes:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">processes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">processes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
   <span class="fu">multi_probability_bernoulli_process_cpp</span><span class="op">(</span><span class="va">state</span>, <span class="st">"I"</span>, <span class="st">"R"</span>, <span class="va">prob</span><span class="op">)</span>,
   <span class="va">other_process_1</span>,
   <span class="va">other_process_2</span>
@@ -253,11 +249,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Giovanni Charles, Sean L. Wu, Peter Winskill.</p>
+  <p></p>
+<p>Developed by Giovanni Charles, Sean L. Wu, Peter Winskill.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -265,6 +263,8 @@
 
   
 
+
+  
 
   </body>
 </html>

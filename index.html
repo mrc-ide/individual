@@ -37,6 +37,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -49,18 +51,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -91,7 +87,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/mrc-ide/individual/">
+  <a href="https://github.com/mrc-ide/individual/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -108,124 +104,123 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="individual-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#individual-" class="anchor"></a>Individual <img src="reference/figures/logo.png" align="right" height="139">
+<div class="section level1">
+<div class="page-header"><h1 id="individual-">Individual <img src="reference/figures/logo.png" align="right" height="139"><a class="anchor" aria-label="anchor" href="#individual-"></a>
 </h1></div>
 <!-- badges: start -->
 
 <p>An R package for specifying and simulating individual-based models.</p>
 <p>This package is designed to:</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>encourage clear and testable components for defining your individual-based models, and</li>
 <li>provide memory efficient, fast code for executing your model</li>
 </ol>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>The package can be installed from github using the “remotes” library</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org">'remotes'</a></span><span class="op">)</span>
-<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">'mrc-ide/individual'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">'remotes'</a></span><span class="op">)</span>
+<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'mrc-ide/individual'</span><span class="op">)</span></code></pre></div>
 <p>Alternatively you can install individual directly from CRAN, but be aware that the CRAN version may not be the most recent version of the package:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"individual"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"individual"</span><span class="op">)</span></code></pre></div>
 <p>For development it is most convenient to run the code from source. You can install the dependencies in RStudio by opening the project and selecting “Build” &gt; “Install and Restart”</p>
 <p>Command line users can execute:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org">'remotes'</a></span><span class="op">)</span>
-<span class="fu"><a href="https://remotes.r-lib.org/reference/install_deps.html">install_deps</a></span><span class="op">(</span><span class="st">'.'</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">'remotes'</a></span><span class="op">)</span>
+<span class="fu"><a href="https://remotes.r-lib.org/reference/install_deps.html" class="external-link">install_deps</a></span><span class="op">(</span><span class="st">'.'</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Docker users can build a minimal image with</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">docker</span> build . -f docker/Dockerfile -t [your image name]</span></code></pre></div>
 <p>Or if you would like devtools and documentation tools you can run</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="ex">docker</span> build . -f docker/Dockerfile.dev -t [your image name]</span></code></pre></div>
 </div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
 <p>We recommend first reading <code><a href="articles/Tutorial.html">vignette("Tutorial")</a></code> which describes how to simulate a simple SIR model in “individual”, and later <code><a href="articles/API.html">vignette("API")</a></code> which describes in detail how to use the data structures in “individual” to build more complicated models. If you are running into performance issues, learn more about how to speed up your model in <code><a href="articles/Performance.html">vignette("Performance")</a></code>.</p>
 </div>
-<div id="statement-of-need" class="section level2">
-<h2 class="hasAnchor">
-<a href="#statement-of-need" class="anchor"></a>Statement of need</h2>
-<p>Individual-based models are important tools for infectious disease epidemiology, but practical use requires an implementation that is both comprehensible so that code may be maintained and adapted, and fast. “individual” is an R package which provides users a set of primitive classes using the <a href="https://github.com/r-lib/R6">R6</a> class system that define elements common to many tasks in infectious disease modeling. Using R6 classes helps ensure that methods invoked on objects are appropriate for that object type, aiding in testing and maintenance of models programmed using “individual”. Computation is carried out in C++ using <a href="https://github.com/RcppCore/Rcpp">Rcpp</a> to link to R, helping achieve good performance for even complex models.</p>
+<div class="section level2">
+<h2 id="statement-of-need">Statement of need<a class="anchor" aria-label="anchor" href="#statement-of-need"></a>
+</h2>
+<p>Individual-based models are important tools for infectious disease epidemiology, but practical use requires an implementation that is both comprehensible so that code may be maintained and adapted, and fast. “individual” is an R package which provides users a set of primitive classes using the <a href="https://github.com/r-lib/R6" class="external-link">R6</a> class system that define elements common to many tasks in infectious disease modeling. Using R6 classes helps ensure that methods invoked on objects are appropriate for that object type, aiding in testing and maintenance of models programmed using “individual”. Computation is carried out in C++ using <a href="https://github.com/RcppCore/Rcpp" class="external-link">Rcpp</a> to link to R, helping achieve good performance for even complex models.</p>
 <p>“individual” provides a unique method to specify individual-based models compared to other agent/individual-based modeling libraries, where users specify a type for agents, which are subsequently stored in an array or other data structure. In “individual”, users instead instantiate a object for each variable which describes some aspect of state, using the appropriate R6 class. Finding subsets of individuals with particular combinations of state variables for further computation can be efficiently accomplished with set operations, using a custom bitset class implemented in C++. Additionally, the software makes no assumptions on the types of models that may be simulated (<em>e.g.</em> mass action, network), and updates are performed on a discrete time step.</p>
 <p>We hope our software is useful to infectious disease modellers, ecologists, and others who are interested in individual-based modeling in R.</p>
 </div>
-<div id="contributing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing</h2>
+<div class="section level2">
+<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h2>
 <p>Thank you! Please refer to the vignette on <code><a href="articles/Contributing.html">vignette("Contributing")</a></code> for info on how to contribute :)</p>
 </div>
-<div id="alternatives" class="section level2">
-<h2 class="hasAnchor">
-<a href="#alternatives" class="anchor"></a>Alternatives</h2>
-<div id="non-r-software" class="section level3">
-<h3 class="hasAnchor">
-<a href="#non-r-software" class="anchor"></a>Non R Software</h3>
+<div class="section level2">
+<h2 id="alternatives">Alternatives<a class="anchor" aria-label="anchor" href="#alternatives"></a>
+</h2>
+<div class="section level3">
+<h3 id="non-r-software">Non R Software<a class="anchor" aria-label="anchor" href="#non-r-software"></a>
+</h3>
 <ul>
-<li><a href="https://github.com/repast">Repast</a></li>
-<li><a href="https://github.com/projectmesa/mesa">Mesa</a></li>
-<li><a href="https://ccl.northwestern.edu/netlogo/">NetLogo</a></li>
-<li><a href="https://github.com/JuliaDynamics/Agents.jl">Agents.jl</a></li>
+<li><a href="https://github.com/repast" class="external-link">Repast</a></li>
+<li><a href="https://github.com/projectmesa/mesa" class="external-link">Mesa</a></li>
+<li><a href="https://ccl.northwestern.edu/netlogo/" class="external-link">NetLogo</a></li>
+<li><a href="https://github.com/JuliaDynamics/Agents.jl" class="external-link">Agents.jl</a></li>
 </ul>
 </div>
-<div id="non-r-software-for-epi" class="section level3">
-<h3 class="hasAnchor">
-<a href="#non-r-software-for-epi" class="anchor"></a>Non R Software for Epi</h3>
+<div class="section level3">
+<h3 id="non-r-software-for-epi">Non R Software for Epi<a class="anchor" aria-label="anchor" href="#non-r-software-for-epi"></a>
+</h3>
 <ul>
-<li><a href="https://github.com/tjhladish/EpiFire">EpiFire</a></li>
-<li><a href="https://github.com/j0r1/simpactcyan">SimpactCyan</a></li>
-<li><a href="https://www.numerusinc.com">Numerus Model Builder</a></li>
+<li><a href="https://github.com/tjhladish/EpiFire" class="external-link">EpiFire</a></li>
+<li><a href="https://github.com/j0r1/simpactcyan" class="external-link">SimpactCyan</a></li>
+<li><a href="https://www.numerusinc.com" class="external-link">Numerus Model Builder</a></li>
 <li>NOVA</li>
-<li><a href="https://www.idmod.org/tools#emod">EMOD</a></li>
+<li><a href="https://www.idmod.org/tools#emod" class="external-link">EMOD</a></li>
 <li>
-<a href="https://github.com/jangevaare/Pathogen.jl">Pathogen.jl</a>, a package for individual-based simulation of common compartmental models.</li>
+<a href="https://github.com/jangevaare/Pathogen.jl" class="external-link">Pathogen.jl</a>, a package for individual-based simulation of common compartmental models.</li>
 </ul>
 </div>
-<div id="general-r-packages" class="section level3">
-<h3 class="hasAnchor">
-<a href="#general-r-packages" class="anchor"></a>General R Packages</h3>
+<div class="section level3">
+<h3 id="general-r-packages">General R Packages<a class="anchor" aria-label="anchor" href="#general-r-packages"></a>
+</h3>
 <ul>
 <li>
-<a href="https://github.com/ropensci/nlrx">nlrx</a>, <a href="https://github.com/r-forge/rnetlogo">RNetLogo</a>, <a href="https://github.com/PredictiveEcology/NetLogoR">NetLogoR</a> are NetLogo interfaces</li>
+<a href="https://github.com/ropensci/nlrx" class="external-link">nlrx</a>, <a href="https://github.com/r-forge/rnetlogo" class="external-link">RNetLogo</a>, <a href="https://github.com/PredictiveEcology/NetLogoR" class="external-link">NetLogoR</a> are NetLogo interfaces</li>
 <li>
-<a href="https://github.com/antonio-pgarcia/RRepast">RRepast</a> is a repast interface</li>
+<a href="https://github.com/antonio-pgarcia/RRepast" class="external-link">RRepast</a> is a repast interface</li>
 <li>
-<a href="https://github.com/r-forge/simecol">simecol</a>, provides classes and methods to enhance reproducibility of ecological models.</li>
+<a href="https://github.com/r-forge/simecol" class="external-link">simecol</a>, provides classes and methods to enhance reproducibility of ecological models.</li>
 </ul>
 </div>
-<div id="r-based-des" class="section level3">
-<h3 class="hasAnchor">
-<a href="#r-based-des" class="anchor"></a>R based DES</h3>
+<div class="section level3">
+<h3 id="r-based-des">R based DES<a class="anchor" aria-label="anchor" href="#r-based-des"></a>
+</h3>
 <ul>
-<li><a href="https://github.com/r-simmer/simmer">simmeR</a></li>
-<li><a href="https://github.com/PredictiveEcology/SpaDES">SpaDES</a></li>
+<li><a href="https://github.com/r-simmer/simmer" class="external-link">simmeR</a></li>
+<li><a href="https://github.com/PredictiveEcology/SpaDES" class="external-link">SpaDES</a></li>
 </ul>
 </div>
-<div id="r-based-ibms" class="section level3">
-<h3 class="hasAnchor">
-<a href="#r-based-ibms" class="anchor"></a>R based IBMs</h3>
+<div class="section level3">
+<h3 id="r-based-ibms">R based IBMs<a class="anchor" aria-label="anchor" href="#r-based-ibms"></a>
+</h3>
 <ul>
-<li><a href="https://github.com/DaphneGiorgi/IBMPopSim">IBMPopSim</a></li>
-<li><a href="https://github.com/roliveros-ramos/ibm">ibm</a></li>
-<li><a href="https://github.com/SaiTheinThanTun/ibmcraftr">ibmcraftr</a></li>
+<li><a href="https://github.com/DaphneGiorgi/IBMPopSim" class="external-link">IBMPopSim</a></li>
+<li><a href="https://github.com/roliveros-ramos/ibm" class="external-link">ibm</a></li>
+<li><a href="https://github.com/SaiTheinThanTun/ibmcraftr" class="external-link">ibmcraftr</a></li>
 </ul>
 </div>
-<div id="r-based-epi" class="section level3">
-<h3 class="hasAnchor">
-<a href="#r-based-epi" class="anchor"></a>R based Epi</h3>
+<div class="section level3">
+<h3 id="r-based-epi">R based Epi<a class="anchor" aria-label="anchor" href="#r-based-epi"></a>
+</h3>
 <ul>
-<li><a href="https://github.com/statnet/EpiModel">EpiModel</a></li>
-<li><a href="https://github.com/stewid/SimInf">SimInf</a></li>
-<li><a href="https://github.com/fernandosm/hybridModels">hybridModels</a></li>
+<li><a href="https://github.com/statnet/EpiModel" class="external-link">EpiModel</a></li>
+<li><a href="https://github.com/stewid/SimInf" class="external-link">SimInf</a></li>
+<li><a href="https://github.com/fernandosm/hybridModels" class="external-link">hybridModels</a></li>
 <li>epinet</li>
-<li><a href="https://github.com/oswaldosantos/EpiDynamics">EpiDynamics</a></li>
+<li><a href="https://github.com/oswaldosantos/EpiDynamics" class="external-link">EpiDynamics</a></li>
 <li>
-<a href="https://github.com/slequime/nosoi">nosoi</a>, generate synthetic data for phylogenetic analysis</li>
-<li><a href="https://github.com/waleedalmutiry/EpiILMCT">EpiILMCT</a></li>
-<li><a href="https://github.com/waleedalmutiry/EpiILM">EpiILM</a></li>
-<li><a href="https://github.com/cran/SPARSEMODr">SPARSEMODr</a></li>
+<a href="https://github.com/slequime/nosoi" class="external-link">nosoi</a>, generate synthetic data for phylogenetic analysis</li>
+<li><a href="https://github.com/waleedalmutiry/EpiILMCT" class="external-link">EpiILMCT</a></li>
+<li><a href="https://github.com/waleedalmutiry/EpiILM" class="external-link">EpiILM</a></li>
+<li><a href="https://github.com/cran/SPARSEMODr" class="external-link">SPARSEMODr</a></li>
 </ul>
 </div>
 </div>
@@ -234,53 +229,63 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=individual">https://​cloud.r-project.org/​package=individual</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/mrc-ide/individual/">https://​github.com/​mrc-ide/​individual/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/mrc-ide/individual/issues">https://​github.com/​mrc-ide/​individual/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Giovanni Charles <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-7024-1200" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Sean L. Wu <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5781-9493" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Peter Winskill <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-3001-4959" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://cloud.r-project.org/package=individual" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/mrc-ide/individual/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/mrc-ide/individual/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/mrc-ide/individual/actions"><img src="https://github.com/mrc-ide/individual/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/github/mrc-ide/individual"><img src="https://codecov.io/github/mrc-ide/individual/coverage.svg" alt="codecov.io"></a></li>
-<li><a href="https://cran.r-project.org/package=individual"><img src="https://www.r-pkg.org/badges/version/individual" alt="CRAN"></a></li>
-<li><a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></li>
-<li><a href="https://doi.org/10.21105/joss.03539"><img src="https://joss.theoj.org/papers/10.21105/joss.03539/status.svg" alt="DOI"></a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing individual</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Giovanni Charles <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-7024-1200" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Sean L. Wu <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5781-9493" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Peter Winskill <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-3001-4959" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/mrc-ide/individual/actions" class="external-link"><img src="https://github.com/mrc-ide/individual/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/github/mrc-ide/individual" class="external-link"><img src="https://codecov.io/github/mrc-ide/individual/coverage.svg" alt="codecov.io"></a></li>
+<li><a href="https://cran.r-project.org/package=individual" class="external-link"><img src="https://www.r-pkg.org/badges/version/individual" alt="CRAN"></a></li>
+<li><a href="https://opensource.org/licenses/MIT" class="external-link"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></li>
+<li><a href="https://doi.org/10.21105/joss.03539" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.03539/status.svg" alt="DOI"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Giovanni Charles, Sean L. Wu, Peter Winskill.</p>
+  <p></p>
+<p>Developed by Giovanni Charles, Sean L. Wu, Peter Winskill.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -288,6 +293,8 @@
 
   
 
+
+  
 
   </body>
 </html>
