@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include <Rcpp.h>
+#include "utils.h"
 
 template<class A>
 class IterableBitset;
@@ -460,20 +461,13 @@ inline IterableBitset<A> filter_bitset(
     auto result = IterableBitset<A>(source.max_size());
     auto is = std::vector<size_t>(begin, end);
     std::sort(std::begin(is), std::end(is));
-    auto diffs = std::vector<size_t>(is.size());
-    std::adjacent_difference(
+    auto it = FilterIterator<typename IterableBitset<A>::iterator, std::vector<size_t>::iterator, size_t>(
+        std::begin(source),
+        std::end(source),
         std::begin(is),
-        std::end(is),
-        std::begin(diffs)
+        std::end(is)
     );
-    auto it = std::begin(source);
-    for (auto d : diffs) {
-        std::advance(it, d);
-        if (it == std::end(source)) {
-            Rcpp::stop("invalid index for filtering");
-        }
-        result.insert(*it);
-    }
+    result.insert(it.begin(), it.end());
     return result;
 }
 
