@@ -306,6 +306,39 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// categorical_variable_queue_extend
+void categorical_variable_queue_extend(Rcpp::XPtr<CategoricalVariable> variable, std::vector<std::string>& values);
+RcppExport SEXP _individual_categorical_variable_queue_extend(SEXP variableSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::string>& >::type values(valuesSEXP);
+    categorical_variable_queue_extend(variable, values);
+    return R_NilValue;
+END_RCPP
+}
+// categorical_variable_queue_shrink
+void categorical_variable_queue_shrink(Rcpp::XPtr<CategoricalVariable> variable, std::vector<size_t>& index);
+RcppExport SEXP _individual_categorical_variable_queue_shrink(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
+    categorical_variable_queue_shrink(variable, index);
+    return R_NilValue;
+END_RCPP
+}
+// categorical_variable_queue_shrink_bitset
+void categorical_variable_queue_shrink_bitset(Rcpp::XPtr<CategoricalVariable> variable, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_categorical_variable_queue_shrink_bitset(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    categorical_variable_queue_shrink_bitset(variable, index);
+    return R_NilValue;
+END_RCPP
+}
 // dummy
 void dummy();
 static SEXP _individual_dummy_try() {
@@ -951,6 +984,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_categorical_variable_get_categories", (DL_FUNC) &_individual_categorical_variable_get_categories, 1},
     {"_individual_categorical_variable_queue_update_vector", (DL_FUNC) &_individual_categorical_variable_queue_update_vector, 3},
     {"_individual_categorical_variable_update", (DL_FUNC) &_individual_categorical_variable_update, 1},
+    {"_individual_categorical_variable_queue_extend", (DL_FUNC) &_individual_categorical_variable_queue_extend, 2},
+    {"_individual_categorical_variable_queue_shrink", (DL_FUNC) &_individual_categorical_variable_queue_shrink, 2},
+    {"_individual_categorical_variable_queue_shrink_bitset", (DL_FUNC) &_individual_categorical_variable_queue_shrink_bitset, 2},
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
     {"_individual_create_double_variable", (DL_FUNC) &_individual_create_double_variable, 1},
     {"_individual_double_variable_get_size", (DL_FUNC) &_individual_double_variable_get_size, 1},

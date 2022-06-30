@@ -105,6 +105,18 @@ categorical_variable_update <- function(variable) {
     invisible(.Call(`_individual_categorical_variable_update`, variable))
 }
 
+categorical_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_categorical_variable_queue_extend`, variable, values))
+}
+
+categorical_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_categorical_variable_queue_shrink`, variable, index))
+}
+
+categorical_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_categorical_variable_queue_shrink_bitset`, variable, index))
+}
+
 create_double_variable <- function(values) {
     .Call(`_individual_create_double_variable`, values)
 }

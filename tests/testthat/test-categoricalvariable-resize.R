@@ -12,7 +12,7 @@ test_that("CategoricalVariable extending variables returns the new values", {
 
 test_that("CategoricalVariable shrinking variables removes values (bitset)", {
   x <- CategoricalVariable$new(SIR, rep('S', 10))
-  x$queue_shrink(index = Bitset$new(size)$insert(1:5))
+  x$queue_shrink(index = Bitset$new(10)$insert(1:5))
   x$.update()
   expect_equal(x$get_index_of('S')$to_vector(), 1:5)
 })
@@ -44,8 +44,8 @@ test_that("CategoricalVariable resizing operations preserve order", {
 })
 
 test_that("CategoricalVariable invalid shrinking operations error at queue time", {
-  x <- CategoricalVariable$new(seq_len(size))
+  x <- CategoricalVariable$new(SIR, rep('S', 10))
   expect_error(x$queue_shrink(index = 1:20))
-  expect_error(x$queue_shrink(index = -1:20))
+  expect_error(x$queue_shrink(index = -1:5))
   expect_error(x$queue_shrink(index = Bitset$new(size + 1)$insert(1:20)))
 })

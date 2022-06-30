@@ -24,7 +24,6 @@ class IterableBitset;
 //' Each integer stores the existance of sizeof(A) * 8 elements in the set.
 template<class A>
 class IterableBitset {
-private:
     size_t max_n;
     size_t n;
     size_t num_bits;
@@ -97,6 +96,8 @@ public:
     size_type size() const;
     size_type max_size() const;
     bool empty() const;
+    void extend(size_t);
+    void shrink(const std::vector<size_t>&);
 };
 
 
@@ -556,6 +557,44 @@ inline void bitset_sample_multi_internal(
         ++bitset_it;
     }
 
+}
+
+//' @title extend the bitset
+//' @description adds space in the bitset for more elements
+template<class A>
+inline void IterableBitset<A>::extend(size_t n) {  
+    if (max_n % num_bits < n) {
+        auto new_blocks = (n - (max_n % num_bits)) / num_bits + 1;
+        bitmap.insert(bitmap.end(), new_blocks, static_cast<A>(0));
+    }
+    max_n += n;
+}
+
+//' @title shrink the bitset
+//' @description removes the elements in `index` shifting subsequent elements to
+//fill their position. Assumes `index` is sorted and unique
+template<class A>
+inline void IterableBitset<A>::shrink(const std::vector<size_t>& index) {  
+    size_t n_shifts = 0;
+    auto values = std::list<size_t>(this->cbegin(), this->cend());
+    auto it = values.begin();
+    auto removal_it = index.cbegin();
+    while (it != values.end()) {
+        if (*it == *removal_it) {
+            it = values.erase(it);
+            ++n_shifts;
+        } else {
+            (*it) -= n_shifts;
+            ++it;
+        }
+    }
+    auto max_block = (max_n - index.size()) / num_bits + 1;
+    if (max_block < bitmap.size()) {
+        bitmap.erase(bitmap.begin() + max_block, bitmap.end());
+    }
+    clear();
+    insert(values.cbegin(), values.cend());
+    max_n -= index.size();
 }
 
 #endif /* INST_INCLUDE_ITERABLEBITSET_H_ */
