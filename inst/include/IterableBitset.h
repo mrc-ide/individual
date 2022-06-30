@@ -580,9 +580,12 @@ inline void IterableBitset<A>::shrink(const std::vector<size_t>& index) {
     auto it = values.begin();
     auto removal_it = index.cbegin();
     while (it != values.end()) {
+        while (removal_it != index.cend() && *it > *removal_it) {
+            ++removal_it;
+            ++n_shifts;
+        }
         if (*it == *removal_it) {
             it = values.erase(it);
-            ++n_shifts;
         } else {
             (*it) -= n_shifts;
             ++it;
