@@ -499,6 +499,39 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// double_variable_queue_extend
+void double_variable_queue_extend(Rcpp::XPtr<DoubleVariable> variable, std::vector<double>& values);
+RcppExport SEXP _individual_double_variable_queue_extend(SEXP variableSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<double>& >::type values(valuesSEXP);
+    double_variable_queue_extend(variable, values);
+    return R_NilValue;
+END_RCPP
+}
+// double_variable_queue_shrink
+void double_variable_queue_shrink(Rcpp::XPtr<DoubleVariable> variable, std::vector<size_t>& index);
+RcppExport SEXP _individual_double_variable_queue_shrink(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
+    double_variable_queue_shrink(variable, index);
+    return R_NilValue;
+END_RCPP
+}
+// double_variable_queue_shrink_bitset
+void double_variable_queue_shrink_bitset(Rcpp::XPtr<DoubleVariable> variable, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_double_variable_queue_shrink_bitset(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    double_variable_queue_shrink_bitset(variable, index);
+    return R_NilValue;
+END_RCPP
+}
 // create_event
 Rcpp::XPtr<EventBase> create_event();
 RcppExport SEXP _individual_create_event() {
@@ -999,6 +1032,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_double_variable_queue_update", (DL_FUNC) &_individual_double_variable_queue_update, 3},
     {"_individual_double_variable_queue_update_bitset", (DL_FUNC) &_individual_double_variable_queue_update_bitset, 3},
     {"_individual_double_variable_update", (DL_FUNC) &_individual_double_variable_update, 1},
+    {"_individual_double_variable_queue_extend", (DL_FUNC) &_individual_double_variable_queue_extend, 2},
+    {"_individual_double_variable_queue_shrink", (DL_FUNC) &_individual_double_variable_queue_shrink, 2},
+    {"_individual_double_variable_queue_shrink_bitset", (DL_FUNC) &_individual_double_variable_queue_shrink_bitset, 2},
     {"_individual_create_event", (DL_FUNC) &_individual_create_event, 0},
     {"_individual_create_targeted_event", (DL_FUNC) &_individual_create_targeted_event, 1},
     {"_individual_event_tick", (DL_FUNC) &_individual_event_tick, 1},

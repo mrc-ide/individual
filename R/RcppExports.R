@@ -161,6 +161,18 @@ double_variable_update <- function(variable) {
     invisible(.Call(`_individual_double_variable_update`, variable))
 }
 
+double_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_double_variable_queue_extend`, variable, values))
+}
+
+double_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_double_variable_queue_shrink`, variable, index))
+}
+
+double_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_double_variable_queue_shrink_bitset`, variable, index))
+}
+
 create_event <- function() {
     .Call(`_individual_create_event`)
 }

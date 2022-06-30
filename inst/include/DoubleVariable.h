@@ -9,6 +9,7 @@
 #define INST_INCLUDE_DOUBLE_VARIABLE_H_
 
 #include "Variable.h"
+#include "vector_updates.h"
 #include "common_types.h"
 #include <Rcpp.h>
 #include <queue>
@@ -23,13 +24,14 @@ struct DoubleVariable;
 //'     * updates: a priority queue of pairs of values and indices to update
 //'     * size: the number of elements stored (size of population)
 //'     * values: a vector of values
-struct DoubleVariable : public Variable {
+class DoubleVariable : public Variable {
 
     using update_t = std::pair<std::vector<double>, std::vector<size_t>>;
     std::queue<update_t> updates;
-    size_t size;
+    std::queue<std::function<void (std::vector<double>&)>> resize_updates;
     std::vector<double> values;
     
+public:
     DoubleVariable(const std::vector<double>& values);
     virtual ~DoubleVariable() = default;
 
@@ -41,13 +43,19 @@ struct DoubleVariable : public Variable {
     virtual size_t get_size_of_range(const double a, const double b) const;
 
     virtual void queue_update(const std::vector<double>& values, const std::vector<size_t>& index);
+    virtual void queue_extend(const std::vector<double>&);
+    virtual void queue_shrink(const std::vector<size_t>&);
+    virtual void queue_shrink(const individual_index_t&);
+    virtual void apply_resize_updates();
+    virtual size_t size() const;
+
     virtual void update() override;
     
 };
 
 
 inline DoubleVariable::DoubleVariable(const std::vector<double>& values)
-    : size(values.size()), values(values)
+    : values(values)
 {}
 
 //' @title get all values
@@ -57,7 +65,7 @@ inline std::vector<double> DoubleVariable::get_values() const {
 
 //' @title get values at index given by a bitset
 inline std::vector<double> DoubleVariable::get_values(const individual_index_t& index) const {
-    if (size != index.max_size()) {
+    if (size() != index.max_size()) {
         Rcpp::stop("incompatible size bitset used to get values from DoubleVariable");
     }
     auto result = std::vector<double>(index.size());
@@ -74,9 +82,10 @@ inline std::vector<double> DoubleVariable::get_values(const std::vector<size_t>&
     
     auto result = std::vector<double>(index.size());
     for (auto i = 0u; i < index.size(); ++i) {
-        if (index[i] >= size) {
+        if (index[i] >= size()) {
             std::stringstream message;
-            message << "index for DoubleVariable out of range, supplied index: " << index[i] << ", size of variable: " << size;
+            message << "index for DoubleVariable out of range, supplied index: ";
+            message << index[i] << ", size of variable: " << size();
             Rcpp::stop(message.str()); 
         }
         result[i] = values[index[i]];
@@ -89,8 +98,8 @@ inline individual_index_t DoubleVariable::get_index_of_range(
         const double a, const double b
 ) const {
     
-    auto result = individual_index_t(size);
-    for (auto i = 0u; i < values.size(); ++i) {
+    auto result = individual_index_t(size());
+    for (auto i = 0u; i < size(); ++i) {
         if( !(values[i] < a) && !(b < values[i]) ) {
             result.insert(i);
         }
@@ -121,12 +130,12 @@ inline void DoubleVariable::queue_update(
     if (values.empty()) {
         return;
     }
-    if (values.size() > 1 && values.size() < size && values.size() != index.size()) {
+    if (values.size() > 1 && values.size() < size() && values.size() != index.size()) {
         Rcpp::stop("Mismatch between value and index length");
     }
     
     for (auto i : index) {
-        if (i >= size) {
+        if (i >= size()) {
             Rcpp::stop("Index out of bounds");
         }
     }
@@ -167,6 +176,51 @@ inline void DoubleVariable::update() {
         }
         updates.pop();
     }
+    apply_resize_updates();
+}
+
+//' @title queue new values to add to the variable
+inline void DoubleVariable::queue_extend(
+    const std::vector<double>& new_values
+) {
+    auto update = VectorExtendUpdate<double>(new_values);
+    resize_updates.push([=](auto& values) { update.update(values); });
+}
+
+//' @title queue values to be erased from the variable
+inline void DoubleVariable::queue_shrink(
+    const individual_index_t& index
+) {
+    if (index.max_size() != size()) {
+        Rcpp::stop("Invalid bitset size for variable shrink");
+    }
+    auto update = VectorShrinkUpdate<double>(index);
+    resize_updates.push([=](auto& values) { update.update(values); });
+}
+
+//' @title queue values to be erased from the variable
+inline void DoubleVariable::queue_shrink(
+    const std::vector<size_t>& index
+) {
+    for (const auto& x : index) {
+        if (x >= size()) {
+            Rcpp::stop("Invalid vector index for variable shrink");
+        }
+    }
+    auto update = VectorShrinkUpdate<double>(index);
+    resize_updates.push([=](auto& values) { update.update(values); });
+}
+
+inline void DoubleVariable::apply_resize_updates() {
+    while(resize_updates.size() > 0) {
+        const auto& update = resize_updates.front();
+        update(values);
+        resize_updates.pop();
+    }
+}
+
+inline size_t DoubleVariable::size() const {
+    return values.size();
 }
 
 #endif /* INST_INCLUDE_DOUBLE_VARIABLE_H_ */

@@ -1,5 +1,3 @@
-# subset update (index and values of same length)
-
 test_that("extending IntegerVariable returns the new values", {
   size <- 10
   x <- IntegerVariable$new(seq_len(size))

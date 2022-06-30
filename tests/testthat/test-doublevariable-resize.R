@@ -1,5 +1,3 @@
-# subset update (index and values of same length)
-
 test_that("DoubleVariable extending variables returns the new values", {
   size <- 10
   x <- DoubleVariable$new(seq_len(size))

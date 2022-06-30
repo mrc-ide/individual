@@ -15,10 +15,10 @@
 
 struct CategoricalVariable;
 
-class ExtendUpdate {
+class CategoricalExtendUpdate {
     const std::vector<std::string> values;
 public:
-    ExtendUpdate(const std::vector<std::string>& values) : values(values) {};
+    CategoricalExtendUpdate(const std::vector<std::string>& values) : values(values) {};
     void update(named_array_t<individual_index_t>& indices) const {
         const auto initial_size = indices.begin()->second.max_size();
         for (auto& entry : indices) {
@@ -30,10 +30,10 @@ public:
     };
 };
 
-class ShrinkUpdate {
+class CategoricalShrinkUpdate {
     std::vector<size_t> index;
 public:
-    ShrinkUpdate(const std::vector<size_t>& index) : index(index) {
+    CategoricalShrinkUpdate(const std::vector<size_t>& index) : index(index) {
         // sort
         std::sort(this->index.begin(), this->index.end());
         // deduplicate
@@ -42,7 +42,7 @@ public:
             this->index.end()
         );
     };
-    ShrinkUpdate(const individual_index_t& index)
+    CategoricalShrinkUpdate(const individual_index_t& index)
         : index(std::vector<size_t>(index.cbegin(), index.cend())) {};
     void update(named_array_t<individual_index_t>& indices) const {
         for (auto& entry : indices) {
@@ -195,7 +195,7 @@ inline void CategoricalVariable::update() {
 inline void CategoricalVariable::queue_extend(
     const std::vector<std::string>& new_values
 ) {
-    auto update = ExtendUpdate(new_values);
+    auto update = CategoricalExtendUpdate(new_values);
     resize_updates.push([=](auto& values) { update.update(values); });
 }
 
@@ -206,7 +206,7 @@ inline void CategoricalVariable::queue_shrink(
     if (index.max_size() != size()) {
         Rcpp::stop("Invalid bitset size for variable shrink");
     }
-    auto update = ShrinkUpdate(index);
+    auto update = CategoricalShrinkUpdate(index);
     resize_updates.push([=](auto& values) { update.update(values); });
 }
 
@@ -219,7 +219,7 @@ inline void CategoricalVariable::queue_shrink(
             Rcpp::stop("Invalid vector index for variable shrink");
         }
     }
-    auto update = ShrinkUpdate(index);
+    auto update = CategoricalShrinkUpdate(index);
     resize_updates.push([=](auto& values) { update.update(values); });
 }
 
