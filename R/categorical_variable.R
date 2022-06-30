@@ -90,6 +90,9 @@ CategoricalVariable <- R6Class(
       }
     },
 
+    #' @description get the size of the variable
+    size = function() categorical_variable_get_size(self$.variable),
+
     .update = function() categorical_variable_update(self$.variable)
   )
 )

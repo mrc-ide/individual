@@ -92,6 +92,7 @@ void categorical_variable_queue_shrink(
     Rcpp::XPtr<CategoricalVariable> variable,
     std::vector<size_t>& index
     ) {
+    decrement(index);
     variable->queue_shrink(index);
 }
 

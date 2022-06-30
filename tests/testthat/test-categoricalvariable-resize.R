@@ -21,7 +21,7 @@ test_that("CategoricalVariable shrinking variables removes values (vector)", {
   x <- CategoricalVariable$new(SIR, rep('S', 10))
   x$queue_shrink(index = 6:10)
   x$.update()
-  expect_equal(x$get_values(), 1:5)
+  expect_equal(x$get_index_of('S')$to_vector(), 1:5)
 })
 
 test_that("CategoricalVariable resizing variables returns the correct size", {
@@ -35,12 +35,14 @@ test_that("CategoricalVariable resizing variables returns the correct size", {
 
 test_that("CategoricalVariable resizing operations preserve order", {
   x <- CategoricalVariable$new(SIR, rep('S', 10))
-  x$queue_shrink(index = 5:10)
+  x$queue_shrink(index = 6:10)
   x$queue_extend(values = rep('I', 10))
-  x$queue_shrink(index = 1:5)
+  x$queue_shrink(index = 6:10)
   x$queue_extend(values = rep('R', 10))
   x$.update()
   expect_equal(x$get_index_of('S')$to_vector(), 1:5)
+  expect_equal(x$get_index_of('I')$to_vector(), 6:10)
+  expect_equal(x$get_index_of('R')$to_vector(), 11:20)
 })
 
 test_that("CategoricalVariable invalid shrinking operations error at queue time", {
