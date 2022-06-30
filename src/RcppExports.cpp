@@ -897,6 +897,39 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// integer_variable_queue_extend
+void integer_variable_queue_extend(Rcpp::XPtr<IntegerVariable> variable, std::vector<int>& values);
+RcppExport SEXP _individual_integer_variable_queue_extend(SEXP variableSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<int>& >::type values(valuesSEXP);
+    integer_variable_queue_extend(variable, values);
+    return R_NilValue;
+END_RCPP
+}
+// integer_variable_queue_shrink
+void integer_variable_queue_shrink(Rcpp::XPtr<IntegerVariable> variable, std::vector<size_t>& index);
+RcppExport SEXP _individual_integer_variable_queue_shrink(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
+    integer_variable_queue_shrink(variable, index);
+    return R_NilValue;
+END_RCPP
+}
+// integer_variable_queue_shrink_bitset
+void integer_variable_queue_shrink_bitset(Rcpp::XPtr<IntegerVariable> variable, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_integer_variable_queue_shrink_bitset(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    integer_variable_queue_shrink_bitset(variable, index);
+    return R_NilValue;
+END_RCPP
+}
 // fixed_probability_multinomial_process_internal
 Rcpp::XPtr<process_t> fixed_probability_multinomial_process_internal(Rcpp::XPtr<CategoricalVariable> variable, const std::string source_state, const std::vector<std::string> destination_states, const double rate, const std::vector<double> destination_probabilities);
 RcppExport SEXP _individual_fixed_probability_multinomial_process_internal(SEXP variableSEXP, SEXP source_stateSEXP, SEXP destination_statesSEXP, SEXP rateSEXP, SEXP destination_probabilitiesSEXP) {
@@ -1067,6 +1100,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_queue_update", (DL_FUNC) &_individual_integer_variable_queue_update, 3},
     {"_individual_integer_variable_queue_update_bitset", (DL_FUNC) &_individual_integer_variable_queue_update_bitset, 3},
     {"_individual_integer_variable_update", (DL_FUNC) &_individual_integer_variable_update, 1},
+    {"_individual_integer_variable_queue_extend", (DL_FUNC) &_individual_integer_variable_queue_extend, 2},
+    {"_individual_integer_variable_queue_shrink", (DL_FUNC) &_individual_integer_variable_queue_shrink, 2},
+    {"_individual_integer_variable_queue_shrink_bitset", (DL_FUNC) &_individual_integer_variable_queue_shrink_bitset, 2},
     {"_individual_fixed_probability_multinomial_process_internal", (DL_FUNC) &_individual_fixed_probability_multinomial_process_internal, 5},
     {"_individual_multi_probability_multinomial_process_internal", (DL_FUNC) &_individual_multi_probability_multinomial_process_internal, 5},
     {"_individual_multi_probability_bernoulli_process_internal", (DL_FUNC) &_individual_multi_probability_bernoulli_process_internal, 4},

@@ -9,55 +9,19 @@
 #define INST_INCLUDE_CATEGORICAL_VARIABLE_H_
 
 #include "Variable.h"
+#include "category_updates.h"
 #include "common_types.h"
 #include <Rcpp.h>
 #include <queue>
 
 struct CategoricalVariable;
 
-class CategoricalExtendUpdate {
-    const std::vector<std::string> values;
-public:
-    CategoricalExtendUpdate(const std::vector<std::string>& values) : values(values) {};
-    void update(named_array_t<individual_index_t>& indices) const {
-        const auto initial_size = indices.begin()->second.max_size();
-        for (auto& entry : indices) {
-            entry.second.extend(values.size());
-        }
-        for (auto i = 0u; i < values.size(); ++i) {
-            indices.at(values[i]).insert(initial_size + i);
-        }
-    };
-};
-
-class CategoricalShrinkUpdate {
-    std::vector<size_t> index;
-public:
-    CategoricalShrinkUpdate(const std::vector<size_t>& index) : index(index) {
-        // sort
-        std::sort(this->index.begin(), this->index.end());
-        // deduplicate
-        this->index.erase(
-            std::unique(this->index.begin(), this->index.end()),
-            this->index.end()
-        );
-    };
-    CategoricalShrinkUpdate(const individual_index_t& index)
-        : index(std::vector<size_t>(index.cbegin(), index.cend())) {};
-    void update(named_array_t<individual_index_t>& indices) const {
-        for (auto& entry : indices) {
-            entry.second.shrink(index);
-        }
-    };
-};
-
-
 //' @title a variable object for categorical variables
 //' @description This class provides functionality for variables which takes values
 //' in a discrete finite set. It inherits from Variable.
 //' It contains the following data members:
 //'     * indices: an unordered_map mapping strings to bitsets
-//'     * size: size of the populations
+//'     * size: size of the population
 //'     * updates: a priority queue of pairs of values and indices to update
 class CategoricalVariable : public Variable {
     
@@ -84,9 +48,9 @@ public:
     virtual void queue_extend(const std::vector<std::string>&);
     virtual void queue_shrink(const std::vector<size_t>&);
     virtual void queue_shrink(const individual_index_t&);
-    virtual size_t size() const;
     virtual const std::vector<std::string>& get_categories() const;
     virtual void apply_resize_updates();
+    virtual size_t size() const override;
     virtual void update() override;
 };
 

@@ -301,6 +301,18 @@ integer_variable_update <- function(variable) {
     invisible(.Call(`_individual_integer_variable_update`, variable))
 }
 
+integer_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_integer_variable_queue_extend`, variable, values))
+}
+
+integer_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_integer_variable_queue_shrink`, variable, index))
+}
+
+integer_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_integer_variable_queue_shrink_bitset`, variable, index))
+}
+
 fixed_probability_multinomial_process_internal <- function(variable, source_state, destination_states, rate, destination_probabilities) {
     .Call(`_individual_fixed_probability_multinomial_process_internal`, variable, source_state, destination_states, rate, destination_probabilities)
 }

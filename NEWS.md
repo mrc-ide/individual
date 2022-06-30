@@ -1,3 +1,9 @@
+# individual 0.1.8
+
+  * [fix bug](https://github.com/mrc-ide/individual/pull/163) with C++ event
+  listeners
+  * All variables are resizable
+
 # individual 0.1.7
 
   * Check for bad bitset input when queueing updates to CategoricalVariable objects 
