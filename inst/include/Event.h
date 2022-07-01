@@ -14,6 +14,7 @@
 #include <map>
 #include <functional>
 #include <unordered_set>
+#include <queue>
 
 using listener_t = std::function<void (size_t)>;
 using targeted_listener_t = std::function<void (size_t, const individual_index_t&)>;
@@ -110,12 +111,14 @@ inline void Event::clear_schedule() {
 //'     * t: current simulation time step
 //'     * targeted_schedule: a map of times and bitsets of scheduled individuals
 //'     * size: size of population
-struct TargetedEvent : public EventBase {
+class TargetedEvent : public EventBase {
 
+    std::queue<std::function<void ()>> resize_updates;
     std::map<size_t, individual_index_t> targeted_schedule;
-    size_t size = 0;
+    size_t _size = 0;
 
-    TargetedEvent(size_t size);
+public:
+    TargetedEvent(size_t);
     virtual ~TargetedEvent() = default;
 
     virtual bool should_trigger() override;
@@ -125,28 +128,28 @@ struct TargetedEvent : public EventBase {
     virtual void tick() override;
 
     virtual void schedule(
-        const individual_index_t& target_bitset,
-        const std::vector<double>& delay
+        const individual_index_t&,
+        const std::vector<double>&
     );
     virtual void schedule(
-        const std::vector<size_t>& target_vector,
-        const std::vector<double>& delay
+        const std::vector<size_t>&,
+        const std::vector<double>&
     );
-    virtual void schedule(
-        const individual_index_t& target,
-        double delay
-    );
-    virtual void schedule(
-        const individual_index_t& target,
-        size_t delay
-    );
+    virtual void schedule(const individual_index_t&, double);
+    virtual void schedule(const individual_index_t&, size_t);
+    virtual void queue_shrink(const individual_index_t&);
+    virtual void queue_shrink(const std::vector<size_t>&);
+    virtual void queue_extend(size_t);
+    virtual void queue_extend(const std::vector<double>&);
+    virtual size_t size() const;
+    virtual void resize();
 
-    virtual void clear_schedule(const individual_index_t& target);
+    virtual void clear_schedule(const individual_index_t&);
     virtual individual_index_t get_scheduled() const;
 
 };
 
-inline TargetedEvent::TargetedEvent(size_t size) : size(size) {}
+inline TargetedEvent::TargetedEvent(size_t size) : _size(size) {}
 
 //' @title should first event fire on this timestep?
 inline bool TargetedEvent::should_trigger() {
@@ -195,7 +198,7 @@ inline void TargetedEvent::schedule(
     // for each delay go through target_bitset and delay and add to target
     // for that delay if the delay matches the unique value
     for (auto v : delay_values) {
-        auto target = individual_index_t(size);
+        auto target = individual_index_t(size());
         auto bitset_it = target_bitset.cbegin();
         for (auto i = 0u; i < rounded.size(); ++i) {
             if (rounded[i] == v) {
@@ -227,7 +230,7 @@ inline void TargetedEvent::schedule(
     );
     
     for (auto v : delay_values) {
-        auto target = individual_index_t(size);
+        auto target = individual_index_t(size());
         for (auto i = 0u; i < rounded.size(); ++i) {
             if (rounded[i] == v) {
                 target.insert_safe(target_vector[i]);
@@ -258,7 +261,7 @@ inline void TargetedEvent::schedule(
     auto target_timestep = t + delay;
     if (targeted_schedule.find(target_timestep) == targeted_schedule.end()) {
         targeted_schedule.insert(
-            {target_timestep, individual_index_t(size)}
+            {target_timestep, individual_index_t(size())}
         );
     }
     targeted_schedule.at(target_timestep) |= target;
@@ -274,13 +277,77 @@ inline void TargetedEvent::clear_schedule(const individual_index_t& target) {
 
 //' @title get all individuals scheduled for events
 inline individual_index_t TargetedEvent::get_scheduled() const {
-    auto scheduled = individual_index_t(size);
+    auto scheduled = individual_index_t(size());
     for (auto& entry : targeted_schedule) {
         scheduled |= entry.second;
     }
     return scheduled;
 }
 
+inline void TargetedEvent::queue_extend(size_t n) {
+    resize_updates.push([&, n=n]() {
+        for (auto& entry : targeted_schedule) {
+            entry.second.extend(n);
+        }
+        _size += n;
+    });
+}
 
+inline void TargetedEvent::queue_extend(const std::vector<double>& delays) {
+    resize_updates.push([&, delays=delays]() {
+        for (auto& entry : targeted_schedule) {
+            entry.second.extend(delays.size());
+        }
+        auto target = std::vector<size_t>();
+        target.reserve(delays.size());
+        for (auto i = _size; i < _size + delays.size(); ++i) {
+            target.push_back(i);
+        }
+        _size += delays.size();
+        schedule(target, delays);
+    });
+}
+
+inline void TargetedEvent::queue_shrink(const individual_index_t& index) {
+    resize_updates.push([&, index=index]() {
+        const auto vector_index = std::vector<size_t>(
+            index.begin(),
+            index.end()
+        );
+        for (auto& entry : targeted_schedule) {
+            entry.second.shrink(vector_index);
+        }
+        _size -= vector_index.size();
+    });
+}
+
+inline void TargetedEvent::queue_shrink(const std::vector<size_t>& index) {
+    resize_updates.push([&, index=index]() {
+        auto fixed_index = std::vector<size_t>(index);
+        // sort
+        std::sort(fixed_index.begin(), fixed_index.end());
+        // deduplicate
+        fixed_index.erase(
+            std::unique(fixed_index.begin(), fixed_index.end()),
+            fixed_index.end()
+        );
+        for (auto& entry : targeted_schedule) {
+            entry.second.shrink(fixed_index);
+        }
+        _size -= fixed_index.size();
+    });
+}
+
+inline size_t TargetedEvent::size() const {
+    return _size;
+}
+
+inline void TargetedEvent::resize() {
+    while(resize_updates.size() > 0) {
+        const auto& update = resize_updates.front();
+        update();
+        resize_updates.pop();
+    }
+}
 
 #endif /* INST_INCLUDE_EVENT_H_ */

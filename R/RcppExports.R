@@ -209,6 +209,22 @@ targeted_event_schedule <- function(event, target, delay) {
     invisible(.Call(`_individual_targeted_event_schedule`, event, target, delay))
 }
 
+targeted_event_queue_shrink_bitset <- function(event, index) {
+    invisible(.Call(`_individual_targeted_event_queue_shrink_bitset`, event, index))
+}
+
+targeted_event_queue_shrink <- function(event, index) {
+    invisible(.Call(`_individual_targeted_event_queue_shrink`, event, index))
+}
+
+targeted_event_queue_extend <- function(event, n) {
+    invisible(.Call(`_individual_targeted_event_queue_extend`, event, n))
+}
+
+targeted_event_queue_extend_with_schedule <- function(event, delays) {
+    invisible(.Call(`_individual_targeted_event_queue_extend_with_schedule`, event, delays))
+}
+
 targeted_event_schedule_vector <- function(event, target, delay) {
     invisible(.Call(`_individual_targeted_event_schedule_vector`, event, target, delay))
 }
@@ -331,6 +347,18 @@ infection_age_process_internal <- function(state, susceptible, exposed, infectio
 
 execute_process <- function(process, timestep) {
     invisible(.Call(`_individual_execute_process`, process, timestep))
+}
+
+variable_get_size <- function(variable) {
+    .Call(`_individual_variable_get_size`, variable)
+}
+
+variable_update <- function(variable) {
+    invisible(.Call(`_individual_variable_update`, variable))
+}
+
+variable_resize <- function(variable) {
+    invisible(.Call(`_individual_variable_resize`, variable))
 }
 
 # Register entry points for exported C++ functions

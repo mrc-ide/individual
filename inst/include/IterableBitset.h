@@ -575,6 +575,9 @@ inline void IterableBitset<A>::extend(size_t n) {
 //fill their position. Assumes `index` is sorted and unique
 template<class A>
 inline void IterableBitset<A>::shrink(const std::vector<size_t>& index) {  
+    if (index.size() == 0) {
+        return;
+    }
     size_t n_shifts = 0;
     auto values = std::list<size_t>(this->cbegin(), this->cend());
     auto it = values.begin();
@@ -584,7 +587,7 @@ inline void IterableBitset<A>::shrink(const std::vector<size_t>& index) {
             ++removal_it;
             ++n_shifts;
         }
-        if (*it == *removal_it) {
+        if (removal_it != index.cend() && *it == *removal_it) {
             it = values.erase(it);
         } else {
             (*it) -= n_shifts;

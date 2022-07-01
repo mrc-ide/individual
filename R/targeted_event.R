@@ -66,6 +66,28 @@ TargetedEvent <- R6Class(
       }
     },
 
+    #' @description Extend the target size
+    #' @param n the number of new elements to add to the index
+    queue_extend = function(n) {
+      stopifnot(is.finite(n))
+      stopifnot(n > 0)
+      targeted_event_queue_extend(n)
+    },
+
+    #' @description Extend the target size and schedule for the new population
+    #' @param delays the delay for each new 
+    queue_extend_with_schedule = function(delays) {
+      stopifnot(is.finite(delays))
+      targeted_event_queue_extend_with_schedule(delays)
+    },
+
+    #' @description Extend the target size and schedule for the new population
+    #' @param delays the delay for each new 
+    queue_shrink = function(index) {
+      stopifnot(is.finite(delays))
+      targeted_event_queue_shrink(delays)
+    },
+
     .process_listener = function(listener) {
       listener(
         event_get_timestep(self$.event),
@@ -79,7 +101,8 @@ TargetedEvent <- R6Class(
         listener = listener,
         target = targeted_event_get_target(self$.event)
       )
-    }
+    },
 
+    .resize = function() targeted_event_resize()
   )
 )

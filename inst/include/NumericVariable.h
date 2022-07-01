@@ -9,7 +9,6 @@
 #define INST_INCLUDE_NUMERIC_VARIABLE_H_
 
 #include "Variable.h"
-#include "vector_updates.h"
 #include "common_types.h"
 #include <Rcpp.h>
 #include <queue>
@@ -29,7 +28,8 @@ class NumericVariable : public Variable {
 
     using update_t = std::pair<std::vector<A>, std::vector<size_t>>;
     std::queue<update_t> updates;
-    std::queue<std::function<void (std::vector<A>&)>> resize_updates;
+    individual_index_t shrink_index;
+    std::vector<A> extend_values;
 
 protected:
     std::vector<A> values;
@@ -49,7 +49,7 @@ public:
     virtual void queue_extend(const std::vector<A>&);
     virtual void queue_shrink(const std::vector<size_t>&);
     virtual void queue_shrink(const individual_index_t&);
-    virtual void apply_resize_updates();
+    virtual void resize() override;
     virtual size_t size() const override;
 
     virtual void update() override;
@@ -57,7 +57,7 @@ public:
 
 template<class A>
 inline NumericVariable<A>::NumericVariable(const std::vector<A>& values)
-    : values(values)
+    : values(values), shrink_index(individual_index_t(values.size()))
 {}
 
 //' @title get all values
@@ -185,7 +185,6 @@ inline void NumericVariable<A>::update() {
         }
         updates.pop();
     }
-    apply_resize_updates();
 }
 
 //' @title queue new values to add to the variable
@@ -193,8 +192,11 @@ template<class A>
 inline void NumericVariable<A>::queue_extend(
     const std::vector<A>& new_values
 ) {
-    auto update = VectorExtendUpdate<A>(new_values);
-    resize_updates.push([=](auto& values) { update.update(values); });
+    extend_values.insert(
+        extend_values.cend(),
+        new_values.cbegin(),
+        new_values.cend()
+    );
 }
 
 //' @title queue values to be erased from the variable
@@ -205,8 +207,7 @@ inline void NumericVariable<A>::queue_shrink(
     if (index.max_size() != size()) {
         Rcpp::stop("Invalid bitset size for variable shrink");
     }
-    auto update = VectorShrinkUpdate<A>(index);
-    resize_updates.push([=](auto& values) { update.update(values); });
+    shrink_index |= index;
 }
 
 //' @title queue values to be erased from the variable
@@ -219,16 +220,46 @@ inline void NumericVariable<A>::queue_shrink(
             Rcpp::stop("Invalid vector index for variable shrink");
         }
     }
-    auto update = VectorShrinkUpdate<A>(index);
-    resize_updates.push([=](auto& values) { update.update(values); });
+    shrink_index.insert(index.cbegin(), index.cend());
 }
 
 template<class A>
-inline void NumericVariable<A>::apply_resize_updates() {
-    while(resize_updates.size() > 0) {
-        const auto& update = resize_updates.front();
-        update(values);
-        resize_updates.pop();
+inline void NumericVariable<A>::resize() {
+    auto size_changed = false;
+
+    // Apply shrink updates
+    if (shrink_index.size() > 0) {
+        auto index = std::vector<size_t>(
+            shrink_index.cbegin(),
+            shrink_index.cend()
+        );
+        auto new_values = std::vector<A>();
+        new_values.reserve(values.size() - index.size());
+        auto it = index.cbegin();
+        for (auto i = 0u; i < values.size(); ++i) {
+            if (i == *it) {
+                ++it;
+            } else {
+                new_values.push_back(values[i]);
+            }
+        }
+        values = new_values;
+        shrink_index.clear();
+        size_changed = true;
+    }
+
+    // Apply extension updates
+    if (extend_values.size() > 0) {
+        values.insert(
+            values.cend(), 
+            extend_values.cbegin(),
+            extend_values.cend()
+        );
+        extend_values.clear();
+    }
+
+    if (size_changed) {
+        shrink_index = individual_index_t(size());
     }
 }
 

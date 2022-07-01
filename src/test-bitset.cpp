@@ -180,6 +180,14 @@ context("Bitset") {
         expect_error(x.insert_safe(201));
     }
 
+    test_that("Bitsets can be shrunk at the beginning") {
+        auto x = individual_index_t(10, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+        const auto index = std::vector<size_t>{0, 1, 2, 3, 4};
+        x.shrink(index);
+        const auto expected_bitset = individual_index_t(5, {0, 1, 2, 3, 4});
+        expect_true(x == expected_bitset);
+    }
+
     test_that("Bitsets can be shrunk with an index containing unset bits") {
         auto x = individual_index_t(100, {1, 36, 73, 99});
         const auto index = std::vector<size_t>{2, 4, 37};

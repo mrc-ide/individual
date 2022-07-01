@@ -53,7 +53,9 @@ Event <- R6Class(
         event = self$.event, 
         listener = listener
       )
-    }
+    },
 
+    # NOTE: intentionally empty
+    .resize = function() {}
   )
 )

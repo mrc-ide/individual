@@ -9,7 +9,6 @@
 #define INST_INCLUDE_CATEGORICAL_VARIABLE_H_
 
 #include "Variable.h"
-#include "category_updates.h"
 #include "common_types.h"
 #include <Rcpp.h>
 #include <queue>
@@ -29,7 +28,8 @@ class CategoricalVariable : public Variable {
     named_array_t<individual_index_t> indices;
     using update_t = std::pair<std::string, individual_index_t>;
     std::queue<update_t> updates;
-    std::queue<std::function<void (named_array_t<individual_index_t>&)>> resize_updates;
+    individual_index_t shrink_index;
+    std::vector<std::string> extend_values;
 
 public:
     CategoricalVariable(
@@ -49,7 +49,7 @@ public:
     virtual void queue_shrink(const std::vector<size_t>&);
     virtual void queue_shrink(const individual_index_t&);
     virtual const std::vector<std::string>& get_categories() const;
-    virtual void apply_resize_updates();
+    virtual void resize() override;
     virtual size_t size() const override;
     virtual void update() override;
 };
@@ -58,7 +58,7 @@ public:
 inline CategoricalVariable::CategoricalVariable(
     const std::vector<std::string>& categories, 
     const std::vector<std::string>& values
-) : categories(categories) {
+) : categories(categories), shrink_index(individual_index_t(values.size())) {
     const auto size = values.size();
     for (auto& category : categories) {
         indices.insert({ category, individual_index_t(size) });
@@ -152,15 +152,17 @@ inline void CategoricalVariable::update() {
         }
         updates.pop();
     }
-    apply_resize_updates();
 }
 
 //' @title queue new values to add to the variable
 inline void CategoricalVariable::queue_extend(
     const std::vector<std::string>& new_values
 ) {
-    auto update = CategoricalExtendUpdate(new_values);
-    resize_updates.push([=](auto& values) { update.update(values); });
+    extend_values.insert(
+        extend_values.cend(),
+        new_values.cbegin(),
+        new_values.cend()
+    );
 }
 
 //' @title queue values to be erased from the variable
@@ -170,8 +172,7 @@ inline void CategoricalVariable::queue_shrink(
     if (index.max_size() != size()) {
         Rcpp::stop("Invalid bitset size for variable shrink");
     }
-    auto update = CategoricalShrinkUpdate(index);
-    resize_updates.push([=](auto& values) { update.update(values); });
+    shrink_index |= index;
 }
 
 //' @title queue values to be erased from the variable
@@ -183,15 +184,40 @@ inline void CategoricalVariable::queue_shrink(
             Rcpp::stop("Invalid vector index for variable shrink");
         }
     }
-    auto update = CategoricalShrinkUpdate(index);
-    resize_updates.push([=](auto& values) { update.update(values); });
+    shrink_index.insert(index.cbegin(), index.cend());
 }
 
-inline void CategoricalVariable::apply_resize_updates() {
-    while(resize_updates.size() > 0) {
-        const auto& update = resize_updates.front();
-        update(indices);
-        resize_updates.pop();
+inline void CategoricalVariable::resize() {
+    auto size_changed = false;
+
+    // Apply shrink updates
+    if (shrink_index.size() > 0) {
+        auto index = std::vector<size_t>(
+            shrink_index.cbegin(),
+            shrink_index.cend()
+        );
+        for (auto& entry : indices) {
+            entry.second.shrink(index);
+        }
+        shrink_index.clear();
+        size_changed = true;
+    }
+
+    // Apply extension updates
+    if (extend_values.size() > 0) {
+        auto shrunk_size = size();
+        for (auto& entry : indices) {
+            entry.second.extend(extend_values.size());
+        }
+        for (auto i = 0u; i < extend_values.size(); ++i) {
+            indices.at(extend_values[i]).insert(shrunk_size + i);
+        }
+        extend_values.clear();
+        size_changed = true;
+    }
+
+    if (size_changed) {
+        shrink_index = individual_index_t(size());
     }
 }
 

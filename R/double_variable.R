@@ -142,8 +142,9 @@ DoubleVariable <- R6Class(
     },
 
     #' @description get the size of the variable
-    size = function() double_variable_get_size(self$.variable),
+    size = function() variable_get_size(self$.variable),
 
-    .update = function() double_variable_update(self$.variable)
+    .update = function() variable_update(self$.variable),
+    .resize = function() variable_resize(self$.variable)
   )
 )
