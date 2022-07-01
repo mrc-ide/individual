@@ -641,12 +641,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // targeted_event_queue_shrink
-void targeted_event_queue_shrink(const Rcpp::XPtr<TargetedEvent> event, const std::vector<size_t>& index);
+void targeted_event_queue_shrink(const Rcpp::XPtr<TargetedEvent> event, std::vector<size_t>& index);
 RcppExport SEXP _individual_targeted_event_queue_shrink(SEXP eventSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
-    Rcpp::traits::input_parameter< const std::vector<size_t>& >::type index(indexSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
     targeted_event_queue_shrink(event, index);
     return R_NilValue;
 END_RCPP
@@ -740,6 +740,16 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
     rcpp_result_gen = Rcpp::wrap(targeted_event_get_target(event));
     return rcpp_result_gen;
+END_RCPP
+}
+// targeted_event_resize
+void targeted_event_resize(const Rcpp::XPtr<TargetedEvent> event);
+RcppExport SEXP _individual_targeted_event_resize(SEXP eventSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    targeted_event_resize(event);
+    return R_NilValue;
 END_RCPP
 }
 // process_listener
@@ -1162,6 +1172,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_event_get_timestep", (DL_FUNC) &_individual_event_get_timestep, 1},
     {"_individual_event_should_trigger", (DL_FUNC) &_individual_event_should_trigger, 1},
     {"_individual_targeted_event_get_target", (DL_FUNC) &_individual_targeted_event_get_target, 1},
+    {"_individual_targeted_event_resize", (DL_FUNC) &_individual_targeted_event_resize, 1},
     {"_individual_process_listener", (DL_FUNC) &_individual_process_listener, 2},
     {"_individual_process_targeted_listener", (DL_FUNC) &_individual_process_targeted_listener, 3},
     {"_individual_create_integer_variable", (DL_FUNC) &_individual_create_integer_variable, 1},

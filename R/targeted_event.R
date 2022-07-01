@@ -71,21 +71,33 @@ TargetedEvent <- R6Class(
     queue_extend = function(n) {
       stopifnot(is.finite(n))
       stopifnot(n > 0)
-      targeted_event_queue_extend(n)
+      targeted_event_queue_extend(self$.event, n)
     },
 
     #' @description Extend the target size and schedule for the new population
     #' @param delays the delay for each new 
     queue_extend_with_schedule = function(delays) {
       stopifnot(is.finite(delays))
-      targeted_event_queue_extend_with_schedule(delays)
+      targeted_event_queue_extend_with_schedule(self$.event, delays)
     },
 
     #' @description Extend the target size and schedule for the new population
     #' @param delays the delay for each new 
     queue_shrink = function(index) {
-      stopifnot(is.finite(delays))
-      targeted_event_queue_shrink(delays)
+      if (inherits(index, 'Bitset')) {
+        if (index$size() > 0){
+          targeted_event_queue_shrink_bitset(
+            self$.event,
+            index$.bitset
+          )
+        }
+      } else {
+        if (length(index) != 0) {
+          stopifnot(all(is.finite(index)))
+          stopifnot(all(index > 0))
+          targeted_event_queue_shrink(self$.event, index)
+        }
+      }
     },
 
     .process_listener = function(listener) {
@@ -103,6 +115,6 @@ TargetedEvent <- R6Class(
       )
     },
 
-    .resize = function() targeted_event_resize()
+    .resize = function() targeted_event_resize(self$.event)
   )
 )

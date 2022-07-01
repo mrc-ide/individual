@@ -87,8 +87,9 @@ void targeted_event_queue_shrink_bitset(
 //[[Rcpp::export]]
 void targeted_event_queue_shrink(
     const Rcpp::XPtr<TargetedEvent> event,
-    const std::vector<size_t>& index
+    std::vector<size_t>& index
     ) {
+    decrement(index);
     event->queue_shrink(index);
 }
 
@@ -162,6 +163,11 @@ Rcpp::XPtr<individual_index_t> targeted_event_get_target(const Rcpp::XPtr<Target
         new individual_index_t(event->current_target()),
         true
     );
+}
+
+// [[Rcpp::export]]
+void targeted_event_resize(const Rcpp::XPtr<TargetedEvent> event) {
+    event->resize();
 }
 
 // [[Rcpp::export]]

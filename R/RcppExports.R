@@ -249,6 +249,10 @@ targeted_event_get_target <- function(event) {
     .Call(`_individual_targeted_event_get_target`, event)
 }
 
+targeted_event_resize <- function(event) {
+    invisible(.Call(`_individual_targeted_event_resize`, event))
+}
+
 process_listener <- function(event, listener) {
     invisible(.Call(`_individual_process_listener`, event, listener))
 }

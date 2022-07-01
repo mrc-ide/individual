@@ -113,7 +113,8 @@ inline void Event::clear_schedule() {
 //'     * size: size of population
 class TargetedEvent : public EventBase {
 
-    std::queue<std::function<void ()>> resize_updates;
+    std::queue<std::function<void ()>> extensions;
+    individual_index_t shrink_index;
     std::map<size_t, individual_index_t> targeted_schedule;
     size_t _size = 0;
 
@@ -149,7 +150,8 @@ public:
 
 };
 
-inline TargetedEvent::TargetedEvent(size_t size) : _size(size) {}
+inline TargetedEvent::TargetedEvent(size_t size)
+    : _size(size), shrink_index(individual_index_t(size)) {}
 
 //' @title should first event fire on this timestep?
 inline bool TargetedEvent::should_trigger() {
@@ -285,7 +287,7 @@ inline individual_index_t TargetedEvent::get_scheduled() const {
 }
 
 inline void TargetedEvent::queue_extend(size_t n) {
-    resize_updates.push([&, n=n]() {
+    extensions.push([&, n=n]() {
         for (auto& entry : targeted_schedule) {
             entry.second.extend(n);
         }
@@ -294,7 +296,7 @@ inline void TargetedEvent::queue_extend(size_t n) {
 }
 
 inline void TargetedEvent::queue_extend(const std::vector<double>& delays) {
-    resize_updates.push([&, delays=delays]() {
+    extensions.push([&, delays=delays]() {
         for (auto& entry : targeted_schedule) {
             entry.second.extend(delays.size());
         }
@@ -309,33 +311,19 @@ inline void TargetedEvent::queue_extend(const std::vector<double>& delays) {
 }
 
 inline void TargetedEvent::queue_shrink(const individual_index_t& index) {
-    resize_updates.push([&, index=index]() {
-        const auto vector_index = std::vector<size_t>(
-            index.begin(),
-            index.end()
-        );
-        for (auto& entry : targeted_schedule) {
-            entry.second.shrink(vector_index);
-        }
-        _size -= vector_index.size();
-    });
+    if (index.max_size() != size()) {
+        Rcpp::stop("Invalid bitset size for variable shrink");
+    }
+    shrink_index |= index;
 }
 
 inline void TargetedEvent::queue_shrink(const std::vector<size_t>& index) {
-    resize_updates.push([&, index=index]() {
-        auto fixed_index = std::vector<size_t>(index);
-        // sort
-        std::sort(fixed_index.begin(), fixed_index.end());
-        // deduplicate
-        fixed_index.erase(
-            std::unique(fixed_index.begin(), fixed_index.end()),
-            fixed_index.end()
-        );
-        for (auto& entry : targeted_schedule) {
-            entry.second.shrink(fixed_index);
+    for (const auto& x : index) {
+        if (x >= size()) {
+            Rcpp::stop("Invalid vector index for variable shrink");
         }
-        _size -= fixed_index.size();
-    });
+    }
+    shrink_index.insert(index.cbegin(), index.cend());
 }
 
 inline size_t TargetedEvent::size() const {
@@ -343,10 +331,29 @@ inline size_t TargetedEvent::size() const {
 }
 
 inline void TargetedEvent::resize() {
-    while(resize_updates.size() > 0) {
-        const auto& update = resize_updates.front();
+    auto size_changed = false;
+    // perform shrinks
+    if (shrink_index.size() > 0) {
+        const auto index = std::vector<size_t>(
+            shrink_index.begin(),
+            shrink_index.end()
+        );
+        for (auto& entry : targeted_schedule) {
+            entry.second.shrink(index);
+        }
+        _size -= index.size();
+        size_changed = true;
+    }
+
+    while(extensions.size() > 0) {
+        const auto& update = extensions.front();
         update();
-        resize_updates.pop();
+        extensions.pop();
+        size_changed = true;
+    }
+
+    if (size_changed) {
+        shrink_index = individual_index_t(size());
     }
 }
 
