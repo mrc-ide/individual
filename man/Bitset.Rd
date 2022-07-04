@@ -4,10 +4,10 @@
 \alias{Bitset}
 \title{A Bitset Class}
 \description{
-This is a data structure that compactly stores the presence of 
-integers in some finite set (\code{max_size}), and can 
+This is a data structure that compactly stores the presence of
+integers in some finite set (\code{max_size}), and can
 efficiently perform set operations (union, intersection, complement, symmetric
-difference, set difference). 
+difference, set difference).
 WARNING: All operations are in-place so please use \code{$copy}
 if you would like to perform an operation without destroying your current bitset.
 }
@@ -23,26 +23,26 @@ if you would like to perform an operation without destroying your current bitset
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Bitset$new()}}
-\item \href{#method-insert}{\code{Bitset$insert()}}
-\item \href{#method-remove}{\code{Bitset$remove()}}
-\item \href{#method-clear}{\code{Bitset$clear()}}
-\item \href{#method-size}{\code{Bitset$size()}}
-\item \href{#method-or}{\code{Bitset$or()}}
-\item \href{#method-and}{\code{Bitset$and()}}
-\item \href{#method-not}{\code{Bitset$not()}}
-\item \href{#method-xor}{\code{Bitset$xor()}}
-\item \href{#method-set_difference}{\code{Bitset$set_difference()}}
-\item \href{#method-sample}{\code{Bitset$sample()}}
-\item \href{#method-choose}{\code{Bitset$choose()}}
-\item \href{#method-copy}{\code{Bitset$copy()}}
-\item \href{#method-to_vector}{\code{Bitset$to_vector()}}
-\item \href{#method-clone}{\code{Bitset$clone()}}
+\item \href{#method-Bitset-new}{\code{Bitset$new()}}
+\item \href{#method-Bitset-insert}{\code{Bitset$insert()}}
+\item \href{#method-Bitset-remove}{\code{Bitset$remove()}}
+\item \href{#method-Bitset-clear}{\code{Bitset$clear()}}
+\item \href{#method-Bitset-size}{\code{Bitset$size()}}
+\item \href{#method-Bitset-or}{\code{Bitset$or()}}
+\item \href{#method-Bitset-and}{\code{Bitset$and()}}
+\item \href{#method-Bitset-not}{\code{Bitset$not()}}
+\item \href{#method-Bitset-xor}{\code{Bitset$xor()}}
+\item \href{#method-Bitset-set_difference}{\code{Bitset$set_difference()}}
+\item \href{#method-Bitset-sample}{\code{Bitset$sample()}}
+\item \href{#method-Bitset-choose}{\code{Bitset$choose()}}
+\item \href{#method-Bitset-copy}{\code{Bitset$copy()}}
+\item \href{#method-Bitset-to_vector}{\code{Bitset$to_vector()}}
+\item \href{#method-Bitset-clone}{\code{Bitset$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Bitset-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-new}{}}}
 \subsection{Method \code{new()}}{
 create a bitset.
 \subsection{Usage}{
@@ -61,8 +61,8 @@ make empty bitset, otherwise copy existing bitset.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-insert"></a>}}
-\if{latex}{\out{\hypertarget{method-insert}{}}}
+\if{html}{\out{<a id="method-Bitset-insert"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-insert}{}}}
 \subsection{Method \code{insert()}}{
 insert into the bitset.
 \subsection{Usage}{
@@ -78,8 +78,8 @@ insert into the bitset.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-remove"></a>}}
-\if{latex}{\out{\hypertarget{method-remove}{}}}
+\if{html}{\out{<a id="method-Bitset-remove"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-remove}{}}}
 \subsection{Method \code{remove()}}{
 remove from the bitset.
 \subsection{Usage}{
@@ -95,18 +95,18 @@ remove from the bitset.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clear"></a>}}
-\if{latex}{\out{\hypertarget{method-clear}{}}}
+\if{html}{\out{<a id="method-Bitset-clear"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-clear}{}}}
 \subsection{Method \code{clear()}}{
 clear the bitset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$clear(v)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$clear()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-size"></a>}}
-\if{latex}{\out{\hypertarget{method-size}{}}}
+\if{html}{\out{<a id="method-Bitset-size"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-size}{}}}
 \subsection{Method \code{size()}}{
 get the number of elements in the set.
 \subsection{Usage}{
@@ -115,8 +115,8 @@ get the number of elements in the set.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-or"></a>}}
-\if{latex}{\out{\hypertarget{method-or}{}}}
+\if{html}{\out{<a id="method-Bitset-or"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-or}{}}}
 \subsection{Method \code{or()}}{
 to "bitwise or" or union two bitsets.
 \subsection{Usage}{
@@ -132,8 +132,8 @@ to "bitwise or" or union two bitsets.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-and"></a>}}
-\if{latex}{\out{\hypertarget{method-and}{}}}
+\if{html}{\out{<a id="method-Bitset-and"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-and}{}}}
 \subsection{Method \code{and()}}{
 to "bitwise and" or intersect two bitsets.
 \subsection{Usage}{
@@ -149,8 +149,8 @@ to "bitwise and" or intersect two bitsets.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-not"></a>}}
-\if{latex}{\out{\hypertarget{method-not}{}}}
+\if{html}{\out{<a id="method-Bitset-not"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-not}{}}}
 \subsection{Method \code{not()}}{
 to "bitwise not" or complement a bitset.
 \subsection{Usage}{
@@ -166,8 +166,8 @@ to "bitwise not" or complement a bitset.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-xor"></a>}}
-\if{latex}{\out{\hypertarget{method-xor}{}}}
+\if{html}{\out{<a id="method-Bitset-xor"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-xor}{}}}
 \subsection{Method \code{xor()}}{
 to "bitwise xor" or get the symmetric difference of two bitset
 (keep elements in either bitset but not in their intersection).
@@ -184,8 +184,8 @@ to "bitwise xor" or get the symmetric difference of two bitset
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_difference"></a>}}
-\if{latex}{\out{\hypertarget{method-set_difference}{}}}
+\if{html}{\out{<a id="method-Bitset-set_difference"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-set_difference}{}}}
 \subsection{Method \code{set_difference()}}{
 Take the set difference of this bitset with another
 (keep elements of this bitset which are not in \code{other}).
@@ -202,8 +202,8 @@ Take the set difference of this bitset with another
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sample"></a>}}
-\if{latex}{\out{\hypertarget{method-sample}{}}}
+\if{html}{\out{<a id="method-Bitset-sample"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-sample}{}}}
 \subsection{Method \code{sample()}}{
 sample a bitset.
 \subsection{Usage}{
@@ -221,8 +221,8 @@ probabilities for keeping each element.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-choose"></a>}}
-\if{latex}{\out{\hypertarget{method-choose}{}}}
+\if{html}{\out{<a id="method-Bitset-choose"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-choose}{}}}
 \subsection{Method \code{choose()}}{
 choose k random items in the bitset
 \subsection{Usage}{
@@ -240,8 +240,8 @@ k should be chosen such that \eqn{0 \le k \le N}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-copy"></a>}}
-\if{latex}{\out{\hypertarget{method-copy}{}}}
+\if{html}{\out{<a id="method-Bitset-copy"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-copy}{}}}
 \subsection{Method \code{copy()}}{
 returns a copy the bitset.
 \subsection{Usage}{
@@ -250,8 +250,8 @@ returns a copy the bitset.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_vector"></a>}}
-\if{latex}{\out{\hypertarget{method-to_vector}{}}}
+\if{html}{\out{<a id="method-Bitset-to_vector"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-to_vector}{}}}
 \subsection{Method \code{to_vector()}}{
 return an integer vector of the elements
 stored in this bitset.
@@ -261,8 +261,8 @@ stored in this bitset.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Bitset-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Bitset-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

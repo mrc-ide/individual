@@ -13,18 +13,22 @@ household or age bin.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{IntegerVariable$new()}}
-\item \href{#method-get_values}{\code{IntegerVariable$get_values()}}
-\item \href{#method-get_index_of}{\code{IntegerVariable$get_index_of()}}
-\item \href{#method-get_size_of}{\code{IntegerVariable$get_size_of()}}
-\item \href{#method-queue_update}{\code{IntegerVariable$queue_update()}}
-\item \href{#method-.update}{\code{IntegerVariable$.update()}}
-\item \href{#method-clone}{\code{IntegerVariable$clone()}}
+\item \href{#method-IntegerVariable-new}{\code{IntegerVariable$new()}}
+\item \href{#method-IntegerVariable-get_values}{\code{IntegerVariable$get_values()}}
+\item \href{#method-IntegerVariable-get_index_of}{\code{IntegerVariable$get_index_of()}}
+\item \href{#method-IntegerVariable-get_size_of}{\code{IntegerVariable$get_size_of()}}
+\item \href{#method-IntegerVariable-queue_update}{\code{IntegerVariable$queue_update()}}
+\item \href{#method-IntegerVariable-queue_extend}{\code{IntegerVariable$queue_extend()}}
+\item \href{#method-IntegerVariable-queue_shrink}{\code{IntegerVariable$queue_shrink()}}
+\item \href{#method-IntegerVariable-size}{\code{IntegerVariable$size()}}
+\item \href{#method-IntegerVariable-.update}{\code{IntegerVariable$.update()}}
+\item \href{#method-IntegerVariable-.resize}{\code{IntegerVariable$.resize()}}
+\item \href{#method-IntegerVariable-clone}{\code{IntegerVariable$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-IntegerVariable-new"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new IntegerVariable.
 \subsection{Usage}{
@@ -40,8 +44,8 @@ Create a new IntegerVariable.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_values"></a>}}
-\if{latex}{\out{\hypertarget{method-get_values}{}}}
+\if{html}{\out{<a id="method-IntegerVariable-get_values"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-get_values}{}}}
 \subsection{Method \code{get_values()}}{
 Get the variable values.
 \subsection{Usage}{
@@ -59,8 +63,8 @@ or integer vector, return values of those individuals.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_index_of"></a>}}
-\if{latex}{\out{\hypertarget{method-get_index_of}{}}}
+\if{html}{\out{<a id="method-IntegerVariable-get_index_of"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-get_index_of}{}}}
 \subsection{Method \code{get_index_of()}}{
 Return a \code{\link[individual]{Bitset}} for individuals with some subset of values.
 Either search for indices corresponding to values in \code{set}, or
@@ -83,8 +87,8 @@ or \code{a} and \code{b} must be provided as arguments.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_size_of"></a>}}
-\if{latex}{\out{\hypertarget{method-get_size_of}{}}}
+\if{html}{\out{<a id="method-IntegerVariable-get_size_of"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-get_size_of}{}}}
 \subsection{Method \code{get_size_of()}}{
 Return the number of individuals with some subset of values.
 Either search for indices corresponding to values in \code{set}, or
@@ -107,8 +111,8 @@ or \code{a} and \code{b} must be provided as arguments.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-queue_update"></a>}}
-\if{latex}{\out{\hypertarget{method-queue_update}{}}}
+\if{html}{\out{<a id="method-IntegerVariable-queue_update"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-queue_update}{}}}
 \subsection{Method \code{queue_update()}}{
 Queue an update for a variable. There are 4 types of variable update:
 
@@ -123,7 +127,7 @@ replaces all of the current values in the simulation. \code{values} should be a 
 whose length should match the size of the population, which fills all the variable values in
 the population}
  \item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
-should be a single number, which fills all of the variable values in 
+should be a single number, which fills all of the variable values in
 the population.}
 }
 \subsection{Usage}{
@@ -143,8 +147,52 @@ a \code{\link[individual]{Bitset}}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-.update"></a>}}
-\if{latex}{\out{\hypertarget{method-.update}{}}}
+\if{html}{\out{<a id="method-IntegerVariable-queue_extend"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-queue_extend}{}}}
+\subsection{Method \code{queue_extend()}}{
+extend the variable with new values
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$queue_extend(values)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{values}}{to add to the variable}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-IntegerVariable-queue_shrink"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-queue_shrink}{}}}
+\subsection{Method \code{queue_shrink()}}{
+shrink the variable
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$queue_shrink(index)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{index}}{a bitset or vector representing the individuals to remove}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-IntegerVariable-size"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-size}{}}}
+\subsection{Method \code{size()}}{
+get the size of the variable
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$size()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-IntegerVariable-.update"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-.update}{}}}
 \subsection{Method \code{.update()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$.update()}\if{html}{\out{</div>}}
@@ -152,8 +200,17 @@ a \code{\link[individual]{Bitset}}.}
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-IntegerVariable-.resize"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-.resize}{}}}
+\subsection{Method \code{.resize()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$.resize()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-IntegerVariable-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
