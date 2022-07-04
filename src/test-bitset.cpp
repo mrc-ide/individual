@@ -180,6 +180,17 @@ context("Bitset") {
         expect_error(x.insert_safe(201));
     }
 
+    test_that("Bitsets can be extended across word boundaries") {
+        auto x = individual_index_t(1000, {1, 36, 73});
+        expect_error(x.insert_safe(1025));
+        x.extend(38);
+        const auto expected_bitset = individual_index_t(1038, {1, 36, 73});
+        expect_true(x == expected_bitset);
+        x.insert(1025);
+        expect_true(x.find(1025) != x.end());
+        expect_error(x.insert_safe(1050));
+    }
+
     test_that("Bitsets can be shrunk at the beginning") {
         auto x = individual_index_t(10, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
         const auto index = std::vector<size_t>{0, 1, 2, 3, 4};

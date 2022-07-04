@@ -563,9 +563,13 @@ inline void bitset_sample_multi_internal(
 //' @description adds space in the bitset for more elements
 template<class A>
 inline void IterableBitset<A>::extend(size_t n) {  
-    if (max_n % num_bits < n) {
-        auto new_blocks = (n - (max_n % num_bits)) / num_bits + 1;
-        bitmap.insert(bitmap.end(), new_blocks, static_cast<A>(0));
+    const auto n_blocks = (max_n + n) / num_bits + 1;
+    if (n_blocks > bitmap.size()) {
+        bitmap.insert(
+            bitmap.end(),
+            n_blocks - bitmap.size(),
+            static_cast<A>(0)
+        );
     }
     max_n += n;
 }

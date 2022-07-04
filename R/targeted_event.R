@@ -75,14 +75,14 @@ TargetedEvent <- R6Class(
     },
 
     #' @description Extend the target size and schedule for the new population
-    #' @param delays the delay for each new 
+    #' @param delays the delay for each new individual
     queue_extend_with_schedule = function(delays) {
       stopifnot(is.finite(delays))
       targeted_event_queue_extend_with_schedule(self$.event, delays)
     },
 
-    #' @description Extend the target size and schedule for the new population
-    #' @param delays the delay for each new 
+    #' @description Shrink the targeted event
+    #' @param index the individuals to remove from the event
     queue_shrink = function(index) {
       if (inherits(index, 'Bitset')) {
         if (index$size() > 0){
