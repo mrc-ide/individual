@@ -113,10 +113,10 @@ inline void Event::clear_schedule() {
 //'     * size: size of population
 class TargetedEvent : public EventBase {
 
+    size_t _size = 0;
+    std::map<size_t, individual_index_t> targeted_schedule;
     std::queue<std::function<void ()>> extensions;
     individual_index_t shrink_index;
-    std::map<size_t, individual_index_t> targeted_schedule;
-    size_t _size = 0;
 
 public:
     TargetedEvent(size_t);

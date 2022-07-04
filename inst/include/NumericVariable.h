@@ -57,7 +57,7 @@ public:
 
 template<class A>
 inline NumericVariable<A>::NumericVariable(const std::vector<A>& values)
-    : values(values), shrink_index(individual_index_t(values.size()))
+    : shrink_index(individual_index_t(values.size())), values(values) 
 {}
 
 //' @title get all values
