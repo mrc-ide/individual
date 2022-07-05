@@ -36,7 +36,7 @@ IntegerVariable <- R6Class(
           return(integer_variable_get_values_at_index_vector(self$.variable, index))
         }
       }
-      
+
     },
 
     #' @description Return a \code{\link[individual]{Bitset}} for individuals with some subset of values.
@@ -58,12 +58,12 @@ IntegerVariable <- R6Class(
           stopifnot(is.finite(c(a,b)))
           stopifnot(a <= b)
           if (a < b) {
-            return(Bitset$new(from = integer_variable_get_index_of_range(self$.variable, a, b)))              
+            return(Bitset$new(from = integer_variable_get_index_of_range(self$.variable, a, b)))
           } else {
-            return(Bitset$new(from = integer_variable_get_index_of_set_scalar(self$.variable, a))) 
+            return(Bitset$new(from = integer_variable_get_index_of_set_scalar(self$.variable, a)))
           }
         }
-        stop("please provide a set of values to check, or both bounds of range [a,b]")        
+        stop("please provide a set of values to check, or both bounds of range [a,b]")
     },
 
     #' @description Return the number of individuals with some subset of values.
@@ -73,9 +73,9 @@ IntegerVariable <- R6Class(
     #' @param set a vector of values (providing \code{set} means \code{a,b} are ignored)
     #' @param a lower bound
     #' @param b upper bound
-    get_size_of = function(set = NULL, a = NULL, b = NULL) {    
+    get_size_of = function(set = NULL, a = NULL, b = NULL) {
       if (!is.null(set)) {
-        stopifnot(is.finite(set))  
+        stopifnot(is.finite(set))
         if (length(set) == 1) {
           return(integer_variable_get_size_of_set_scalar(self$.variable, set))
         } else {
@@ -90,9 +90,9 @@ IntegerVariable <- R6Class(
           return(integer_variable_get_size_of_set_scalar(self$.variable, a))
         }
       }
-      stop("please provide a set of values to check, or both bounds of range [a,b]")    
+      stop("please provide a set of values to check, or both bounds of range [a,b]")
     },
-    
+
     #' @description Queue an update for a variable. There are 4 types of variable update:
     #'
     #' \enumerate{
@@ -106,7 +106,7 @@ IntegerVariable <- R6Class(
     #' whose length should match the size of the population, which fills all the variable values in
     #' the population}
     #'  \item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
-    #' should be a single number, which fills all of the variable values in 
+    #' should be a single number, which fills all of the variable values in
     #' the population.}
     #' }
     #' @param values a vector or scalar of values to assign at the index
@@ -114,7 +114,7 @@ IntegerVariable <- R6Class(
     #' fill options. If using indices, this may be either a vector of integers or
     #' a \code{\link[individual]{Bitset}}.
     queue_update = function(values, index = NULL) {
-      stopifnot(is.finite(values))
+      stopifnot(is.finite(values), !is.null(values))
       if(is.null(index)){
         if(length(values) == 1){
           # variable fill

@@ -9,18 +9,22 @@ Represents a continuous variable for an individual.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{DoubleVariable$new()}}
-\item \href{#method-get_values}{\code{DoubleVariable$get_values()}}
-\item \href{#method-get_index_of}{\code{DoubleVariable$get_index_of()}}
-\item \href{#method-get_size_of}{\code{DoubleVariable$get_size_of()}}
-\item \href{#method-queue_update}{\code{DoubleVariable$queue_update()}}
-\item \href{#method-.update}{\code{DoubleVariable$.update()}}
-\item \href{#method-clone}{\code{DoubleVariable$clone()}}
+\item \href{#method-DoubleVariable-new}{\code{DoubleVariable$new()}}
+\item \href{#method-DoubleVariable-get_values}{\code{DoubleVariable$get_values()}}
+\item \href{#method-DoubleVariable-get_index_of}{\code{DoubleVariable$get_index_of()}}
+\item \href{#method-DoubleVariable-get_size_of}{\code{DoubleVariable$get_size_of()}}
+\item \href{#method-DoubleVariable-queue_update}{\code{DoubleVariable$queue_update()}}
+\item \href{#method-DoubleVariable-queue_extend}{\code{DoubleVariable$queue_extend()}}
+\item \href{#method-DoubleVariable-queue_shrink}{\code{DoubleVariable$queue_shrink()}}
+\item \href{#method-DoubleVariable-size}{\code{DoubleVariable$size()}}
+\item \href{#method-DoubleVariable-.update}{\code{DoubleVariable$.update()}}
+\item \href{#method-DoubleVariable-.resize}{\code{DoubleVariable$.resize()}}
+\item \href{#method-DoubleVariable-clone}{\code{DoubleVariable$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-DoubleVariable-new"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new DoubleVariable.
 \subsection{Usage}{
@@ -37,8 +41,8 @@ individual.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_values"></a>}}
-\if{latex}{\out{\hypertarget{method-get_values}{}}}
+\if{html}{\out{<a id="method-DoubleVariable-get_values"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-get_values}{}}}
 \subsection{Method \code{get_values()}}{
 get the variable values.
 \subsection{Usage}{
@@ -56,10 +60,10 @@ or integer vector, return values of those individuals.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_index_of"></a>}}
-\if{latex}{\out{\hypertarget{method-get_index_of}{}}}
+\if{html}{\out{<a id="method-DoubleVariable-get_index_of"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-get_index_of}{}}}
 \subsection{Method \code{get_index_of()}}{
-return a \code{\link[individual]{Bitset}} giving individuals 
+return a \code{\link[individual]{Bitset}} giving individuals
 whose value lies in an interval \eqn{[a,b]}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$get_index_of(a, b)}\if{html}{\out{</div>}}
@@ -76,8 +80,8 @@ whose value lies in an interval \eqn{[a,b]}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_size_of"></a>}}
-\if{latex}{\out{\hypertarget{method-get_size_of}{}}}
+\if{html}{\out{<a id="method-DoubleVariable-get_size_of"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-get_size_of}{}}}
 \subsection{Method \code{get_size_of()}}{
 return the number of individuals whose value lies in an interval
 Count individuals whose value lies in an interval \eqn{[a,b]}.
@@ -96,8 +100,8 @@ Count individuals whose value lies in an interval \eqn{[a,b]}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-queue_update"></a>}}
-\if{latex}{\out{\hypertarget{method-queue_update}{}}}
+\if{html}{\out{<a id="method-DoubleVariable-queue_update"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-queue_update}{}}}
 \subsection{Method \code{queue_update()}}{
 Queue an update for a variable. There are 4 types of variable update:
 \enumerate{
@@ -111,7 +115,7 @@ replaces all of the current values in the simulation. \code{values} should be a 
 whose length should match the size of the population, which fills all the variable values in
 the population}
  \item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
-should be a single number, which fills all of the variable values in 
+should be a single number, which fills all of the variable values in
 the population.}
 }
 \subsection{Usage}{
@@ -131,8 +135,52 @@ a \code{\link[individual]{Bitset}}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-.update"></a>}}
-\if{latex}{\out{\hypertarget{method-.update}{}}}
+\if{html}{\out{<a id="method-DoubleVariable-queue_extend"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-queue_extend}{}}}
+\subsection{Method \code{queue_extend()}}{
+extend the variable with new values
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$queue_extend(values)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{values}}{to add to the variable}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DoubleVariable-queue_shrink"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-queue_shrink}{}}}
+\subsection{Method \code{queue_shrink()}}{
+shrink the variable
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$queue_shrink(index)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{index}}{a bitset or vector representing the individuals to remove}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DoubleVariable-size"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-size}{}}}
+\subsection{Method \code{size()}}{
+get the size of the variable
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$size()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DoubleVariable-.update"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-.update}{}}}
 \subsection{Method \code{.update()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$.update()}\if{html}{\out{</div>}}
@@ -140,8 +188,17 @@ a \code{\link[individual]{Bitset}}.}
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-DoubleVariable-.resize"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-.resize}{}}}
+\subsection{Method \code{.resize()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$.resize()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DoubleVariable-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

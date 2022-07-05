@@ -14,7 +14,7 @@ TargetedEvent <- R6Class(
     },
 
     #' @description Schedule this event to occur in the future.
-    #' @param target the individuals to pass to the listener, this may be 
+    #' @param target the individuals to pass to the listener, this may be
     #' either a vector of integers or a \code{\link[individual]{Bitset}}.
     #' @param delay the number of time steps to wait before triggering the event,
     #' can be a scalar in which case all targeted individuals are scheduled for
@@ -25,7 +25,7 @@ TargetedEvent <- R6Class(
       if (length(delay) > 1) {
         if (inherits(target, 'Bitset')) {
           if (target$size() > 0){
-            targeted_event_schedule_multi_delay(self$.event, target$.bitset, delay) 
+            targeted_event_schedule_multi_delay(self$.event, target$.bitset, delay)
           }
         } else {
           if (length(target) > 0) {
@@ -108,8 +108,8 @@ TargetedEvent <- R6Class(
     },
 
     .process_listener_cpp = function(listener){
-      individual:::process_targeted_listener(
-        event = self$.event, 
+      process_targeted_listener(
+        event = self$.event,
         listener = listener,
         target = targeted_event_get_target(self$.event)
       )

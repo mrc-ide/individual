@@ -34,13 +34,13 @@ DoubleVariable <- R6Class(
       }
     },
 
-    #' @description return a \code{\link[individual]{Bitset}} giving individuals 
+    #' @description return a \code{\link[individual]{Bitset}} giving individuals
     #' whose value lies in an interval \eqn{[a,b]}.
     #' @param a lower bound
     #' @param b upper bound
     get_index_of = function(a, b) {
       stopifnot(a < b)
-      return(Bitset$new(from = double_variable_get_index_of_range(self$.variable, a, b)))      
+      return(Bitset$new(from = double_variable_get_index_of_range(self$.variable, a, b)))
     },
 
     #' @description return the number of individuals whose value lies in an interval
@@ -64,7 +64,7 @@ DoubleVariable <- R6Class(
     #' whose length should match the size of the population, which fills all the variable values in
     #' the population}
     #'  \item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
-    #' should be a single number, which fills all of the variable values in 
+    #' should be a single number, which fills all of the variable values in
     #' the population.}
     #' }
     #' @param values a vector or scalar of values to assign at the index.
@@ -72,7 +72,7 @@ DoubleVariable <- R6Class(
     #' fill options. If using indices, this may be either a vector of integers or
     #' a \code{\link[individual]{Bitset}}.
     queue_update = function(values, index = NULL) {
-      stopifnot(is.numeric(values))
+      stopifnot(is.numeric(values), !is.null(values))
       if(is.null(index)){
         if(length(values) == 1){
           # variable fill
