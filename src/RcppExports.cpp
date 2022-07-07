@@ -306,6 +306,39 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// categorical_variable_queue_extend
+void categorical_variable_queue_extend(Rcpp::XPtr<CategoricalVariable> variable, std::vector<std::string>& values);
+RcppExport SEXP _individual_categorical_variable_queue_extend(SEXP variableSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::string>& >::type values(valuesSEXP);
+    categorical_variable_queue_extend(variable, values);
+    return R_NilValue;
+END_RCPP
+}
+// categorical_variable_queue_shrink
+void categorical_variable_queue_shrink(Rcpp::XPtr<CategoricalVariable> variable, std::vector<size_t>& index);
+RcppExport SEXP _individual_categorical_variable_queue_shrink(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
+    categorical_variable_queue_shrink(variable, index);
+    return R_NilValue;
+END_RCPP
+}
+// categorical_variable_queue_shrink_bitset
+void categorical_variable_queue_shrink_bitset(Rcpp::XPtr<CategoricalVariable> variable, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_categorical_variable_queue_shrink_bitset(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    categorical_variable_queue_shrink_bitset(variable, index);
+    return R_NilValue;
+END_RCPP
+}
 // dummy
 void dummy();
 static SEXP _individual_dummy_try() {
@@ -466,6 +499,39 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// double_variable_queue_extend
+void double_variable_queue_extend(Rcpp::XPtr<DoubleVariable> variable, std::vector<double>& values);
+RcppExport SEXP _individual_double_variable_queue_extend(SEXP variableSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<double>& >::type values(valuesSEXP);
+    double_variable_queue_extend(variable, values);
+    return R_NilValue;
+END_RCPP
+}
+// double_variable_queue_shrink
+void double_variable_queue_shrink(Rcpp::XPtr<DoubleVariable> variable, std::vector<size_t>& index);
+RcppExport SEXP _individual_double_variable_queue_shrink(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
+    double_variable_queue_shrink(variable, index);
+    return R_NilValue;
+END_RCPP
+}
+// double_variable_queue_shrink_bitset
+void double_variable_queue_shrink_bitset(Rcpp::XPtr<DoubleVariable> variable, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_double_variable_queue_shrink_bitset(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    double_variable_queue_shrink_bitset(variable, index);
+    return R_NilValue;
+END_RCPP
+}
 // create_event
 Rcpp::XPtr<EventBase> create_event();
 RcppExport SEXP _individual_create_event() {
@@ -563,6 +629,50 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// targeted_event_queue_shrink_bitset
+void targeted_event_queue_shrink_bitset(const Rcpp::XPtr<TargetedEvent> event, const Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_targeted_event_queue_shrink_bitset(SEXP eventSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    targeted_event_queue_shrink_bitset(event, index);
+    return R_NilValue;
+END_RCPP
+}
+// targeted_event_queue_shrink
+void targeted_event_queue_shrink(const Rcpp::XPtr<TargetedEvent> event, std::vector<size_t>& index);
+RcppExport SEXP _individual_targeted_event_queue_shrink(SEXP eventSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
+    targeted_event_queue_shrink(event, index);
+    return R_NilValue;
+END_RCPP
+}
+// targeted_event_queue_extend
+void targeted_event_queue_extend(const Rcpp::XPtr<TargetedEvent> event, size_t n);
+RcppExport SEXP _individual_targeted_event_queue_extend(SEXP eventSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n(nSEXP);
+    targeted_event_queue_extend(event, n);
+    return R_NilValue;
+END_RCPP
+}
+// targeted_event_queue_extend_with_schedule
+void targeted_event_queue_extend_with_schedule(const Rcpp::XPtr<TargetedEvent> event, const std::vector<double>& delays);
+RcppExport SEXP _individual_targeted_event_queue_extend_with_schedule(SEXP eventSEXP, SEXP delaysSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type delays(delaysSEXP);
+    targeted_event_queue_extend_with_schedule(event, delays);
+    return R_NilValue;
+END_RCPP
+}
 // targeted_event_schedule_vector
 void targeted_event_schedule_vector(const Rcpp::XPtr<TargetedEvent> event, std::vector<size_t> target, double delay);
 RcppExport SEXP _individual_targeted_event_schedule_vector(SEXP eventSEXP, SEXP targetSEXP, SEXP delaySEXP) {
@@ -630,6 +740,16 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
     rcpp_result_gen = Rcpp::wrap(targeted_event_get_target(event));
     return rcpp_result_gen;
+END_RCPP
+}
+// targeted_event_resize
+void targeted_event_resize(const Rcpp::XPtr<TargetedEvent> event);
+RcppExport SEXP _individual_targeted_event_resize(SEXP eventSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
+    targeted_event_resize(event);
+    return R_NilValue;
 END_RCPP
 }
 // process_listener
@@ -831,6 +951,39 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// integer_variable_queue_extend
+void integer_variable_queue_extend(Rcpp::XPtr<IntegerVariable> variable, std::vector<int>& values);
+RcppExport SEXP _individual_integer_variable_queue_extend(SEXP variableSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<int>& >::type values(valuesSEXP);
+    integer_variable_queue_extend(variable, values);
+    return R_NilValue;
+END_RCPP
+}
+// integer_variable_queue_shrink
+void integer_variable_queue_shrink(Rcpp::XPtr<IntegerVariable> variable, std::vector<size_t>& index);
+RcppExport SEXP _individual_integer_variable_queue_shrink(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
+    integer_variable_queue_shrink(variable, index);
+    return R_NilValue;
+END_RCPP
+}
+// integer_variable_queue_shrink_bitset
+void integer_variable_queue_shrink_bitset(Rcpp::XPtr<IntegerVariable> variable, Rcpp::XPtr<individual_index_t> index);
+RcppExport SEXP _individual_integer_variable_queue_shrink_bitset(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
+    integer_variable_queue_shrink_bitset(variable, index);
+    return R_NilValue;
+END_RCPP
+}
 // fixed_probability_multinomial_process_internal
 Rcpp::XPtr<process_t> fixed_probability_multinomial_process_internal(Rcpp::XPtr<CategoricalVariable> variable, const std::string source_state, const std::vector<std::string> destination_states, const double rate, const std::vector<double> destination_probabilities);
 RcppExport SEXP _individual_fixed_probability_multinomial_process_internal(SEXP variableSEXP, SEXP source_stateSEXP, SEXP destination_statesSEXP, SEXP rateSEXP, SEXP destination_probabilitiesSEXP) {
@@ -905,6 +1058,37 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// variable_get_size
+size_t variable_get_size(Rcpp::XPtr<Variable> variable);
+RcppExport SEXP _individual_variable_get_size(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<Variable> >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(variable_get_size(variable));
+    return rcpp_result_gen;
+END_RCPP
+}
+// variable_update
+void variable_update(Rcpp::XPtr<Variable> variable);
+RcppExport SEXP _individual_variable_update(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<Variable> >::type variable(variableSEXP);
+    variable_update(variable);
+    return R_NilValue;
+END_RCPP
+}
+// variable_resize
+void variable_resize(Rcpp::XPtr<Variable> variable);
+RcppExport SEXP _individual_variable_resize(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<Variable> >::type variable(variableSEXP);
+    variable_resize(variable);
+    return R_NilValue;
+END_RCPP
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _individual_RcppExport_validate(const char* sig) { 
@@ -951,6 +1135,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_categorical_variable_get_categories", (DL_FUNC) &_individual_categorical_variable_get_categories, 1},
     {"_individual_categorical_variable_queue_update_vector", (DL_FUNC) &_individual_categorical_variable_queue_update_vector, 3},
     {"_individual_categorical_variable_update", (DL_FUNC) &_individual_categorical_variable_update, 1},
+    {"_individual_categorical_variable_queue_extend", (DL_FUNC) &_individual_categorical_variable_queue_extend, 2},
+    {"_individual_categorical_variable_queue_shrink", (DL_FUNC) &_individual_categorical_variable_queue_shrink, 2},
+    {"_individual_categorical_variable_queue_shrink_bitset", (DL_FUNC) &_individual_categorical_variable_queue_shrink_bitset, 2},
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
     {"_individual_create_double_variable", (DL_FUNC) &_individual_create_double_variable, 1},
     {"_individual_double_variable_get_size", (DL_FUNC) &_individual_double_variable_get_size, 1},
@@ -963,6 +1150,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_double_variable_queue_update", (DL_FUNC) &_individual_double_variable_queue_update, 3},
     {"_individual_double_variable_queue_update_bitset", (DL_FUNC) &_individual_double_variable_queue_update_bitset, 3},
     {"_individual_double_variable_update", (DL_FUNC) &_individual_double_variable_update, 1},
+    {"_individual_double_variable_queue_extend", (DL_FUNC) &_individual_double_variable_queue_extend, 2},
+    {"_individual_double_variable_queue_shrink", (DL_FUNC) &_individual_double_variable_queue_shrink, 2},
+    {"_individual_double_variable_queue_shrink_bitset", (DL_FUNC) &_individual_double_variable_queue_shrink_bitset, 2},
     {"_individual_create_event", (DL_FUNC) &_individual_create_event, 0},
     {"_individual_create_targeted_event", (DL_FUNC) &_individual_create_targeted_event, 1},
     {"_individual_event_tick", (DL_FUNC) &_individual_event_tick, 1},
@@ -972,12 +1162,17 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_targeted_event_clear_schedule", (DL_FUNC) &_individual_targeted_event_clear_schedule, 2},
     {"_individual_targeted_event_get_scheduled", (DL_FUNC) &_individual_targeted_event_get_scheduled, 1},
     {"_individual_targeted_event_schedule", (DL_FUNC) &_individual_targeted_event_schedule, 3},
+    {"_individual_targeted_event_queue_shrink_bitset", (DL_FUNC) &_individual_targeted_event_queue_shrink_bitset, 2},
+    {"_individual_targeted_event_queue_shrink", (DL_FUNC) &_individual_targeted_event_queue_shrink, 2},
+    {"_individual_targeted_event_queue_extend", (DL_FUNC) &_individual_targeted_event_queue_extend, 2},
+    {"_individual_targeted_event_queue_extend_with_schedule", (DL_FUNC) &_individual_targeted_event_queue_extend_with_schedule, 2},
     {"_individual_targeted_event_schedule_vector", (DL_FUNC) &_individual_targeted_event_schedule_vector, 3},
     {"_individual_targeted_event_schedule_multi_delay", (DL_FUNC) &_individual_targeted_event_schedule_multi_delay, 3},
     {"_individual_targeted_event_schedule_multi_delay_vector", (DL_FUNC) &_individual_targeted_event_schedule_multi_delay_vector, 3},
     {"_individual_event_get_timestep", (DL_FUNC) &_individual_event_get_timestep, 1},
     {"_individual_event_should_trigger", (DL_FUNC) &_individual_event_should_trigger, 1},
     {"_individual_targeted_event_get_target", (DL_FUNC) &_individual_targeted_event_get_target, 1},
+    {"_individual_targeted_event_resize", (DL_FUNC) &_individual_targeted_event_resize, 1},
     {"_individual_process_listener", (DL_FUNC) &_individual_process_listener, 2},
     {"_individual_process_targeted_listener", (DL_FUNC) &_individual_process_targeted_listener, 3},
     {"_individual_create_integer_variable", (DL_FUNC) &_individual_create_integer_variable, 1},
@@ -995,11 +1190,17 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_queue_update", (DL_FUNC) &_individual_integer_variable_queue_update, 3},
     {"_individual_integer_variable_queue_update_bitset", (DL_FUNC) &_individual_integer_variable_queue_update_bitset, 3},
     {"_individual_integer_variable_update", (DL_FUNC) &_individual_integer_variable_update, 1},
+    {"_individual_integer_variable_queue_extend", (DL_FUNC) &_individual_integer_variable_queue_extend, 2},
+    {"_individual_integer_variable_queue_shrink", (DL_FUNC) &_individual_integer_variable_queue_shrink, 2},
+    {"_individual_integer_variable_queue_shrink_bitset", (DL_FUNC) &_individual_integer_variable_queue_shrink_bitset, 2},
     {"_individual_fixed_probability_multinomial_process_internal", (DL_FUNC) &_individual_fixed_probability_multinomial_process_internal, 5},
     {"_individual_multi_probability_multinomial_process_internal", (DL_FUNC) &_individual_multi_probability_multinomial_process_internal, 5},
     {"_individual_multi_probability_bernoulli_process_internal", (DL_FUNC) &_individual_multi_probability_bernoulli_process_internal, 4},
     {"_individual_infection_age_process_internal", (DL_FUNC) &_individual_infection_age_process_internal, 9},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
+    {"_individual_variable_get_size", (DL_FUNC) &_individual_variable_get_size, 1},
+    {"_individual_variable_update", (DL_FUNC) &_individual_variable_update, 1},
+    {"_individual_variable_resize", (DL_FUNC) &_individual_variable_resize, 1},
     {"_individual_RcppExport_registerCCallable", (DL_FUNC) &_individual_RcppExport_registerCCallable, 0},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}

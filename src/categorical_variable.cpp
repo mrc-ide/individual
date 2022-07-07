@@ -24,7 +24,7 @@ Rcpp::XPtr<CategoricalVariable> create_categorical_variable(
 size_t categorical_variable_get_size(
         Rcpp::XPtr<CategoricalVariable> variable
 ) {
-    return variable->size;
+    return variable->size();
 }
 
 //[[Rcpp::export]]
@@ -59,12 +59,7 @@ int categorical_variable_get_size_of(
 std::vector<std::string> categorical_variable_get_categories(
     Rcpp::XPtr<CategoricalVariable> variable
     ) {
-    std::vector<std::string> categories;
-    categories.reserve(variable->indices.size());
-    for (const auto& it : variable->indices) {
-        categories.emplace_back(it.first);
-    }
-    return categories;
+    return variable->get_categories();
 }
 
 //[[Rcpp::export]]
@@ -74,7 +69,7 @@ void categorical_variable_queue_update_vector(
     std::vector<size_t>& index
     ) {
     decrement(index);
-    auto bitmap = individual_index_t(variable->size);
+    auto bitmap = individual_index_t(variable->size());
     bitmap.insert_safe(index.begin(), index.end());
     variable->queue_update(value, bitmap);
 }
@@ -82,4 +77,29 @@ void categorical_variable_queue_update_vector(
 //[[Rcpp::export]]
 void categorical_variable_update(Rcpp::XPtr<CategoricalVariable> variable) {
     variable->update();
+}
+
+//[[Rcpp::export]]
+void categorical_variable_queue_extend(
+    Rcpp::XPtr<CategoricalVariable> variable,
+    std::vector<std::string>& values
+    ) {
+    variable->queue_extend(values);
+}
+
+//[[Rcpp::export]]
+void categorical_variable_queue_shrink(
+    Rcpp::XPtr<CategoricalVariable> variable,
+    std::vector<size_t>& index
+    ) {
+    decrement(index);
+    variable->queue_shrink(index);
+}
+
+//[[Rcpp::export]]
+void categorical_variable_queue_shrink_bitset(
+    Rcpp::XPtr<CategoricalVariable> variable,
+    Rcpp::XPtr<individual_index_t> index
+    ) {
+    variable->queue_shrink(*index);
 }

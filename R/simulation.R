@@ -51,6 +51,12 @@ simulation_loop <- function(
       variable$.update()
     }
     for (event in events) {
+      event$.resize()
+    }
+    for (variable in variables) {
+      variable$.resize()
+    }
+    for (event in events) {
       event$.tick()
     }
   }
