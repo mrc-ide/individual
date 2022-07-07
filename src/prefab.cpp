@@ -151,7 +151,7 @@ Rcpp::XPtr<process_t> infection_age_process_internal(
             // need NumericVector for sugar elementwise addition, division, and sum
             Rcpp::NumericVector N(age_bins); 
             Rcpp::NumericVector I(age_bins);
-            std::vector<individual_index_t> S(age_bins, state->size);
+            std::vector<individual_index_t> S(age_bins, state->size());
 
             // get number of infectious and total individuals in each age bin
             // and indices of susceptible individuals in each age bin

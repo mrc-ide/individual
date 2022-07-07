@@ -16,7 +16,7 @@ Event <- R6Class(
 
     #' @description Add an event listener.
     #' @param listener the function to be executed on the event, which takes a single
-    #' argument giving the time step when this event is triggered. 
+    #' argument giving the time step when this event is triggered.
     add_listener = function(listener) {
       self$.listeners <- c(self$.listeners, listener)
     },
@@ -29,7 +29,7 @@ Event <- R6Class(
 
     #' @description Stop a future event from triggering.
     clear_schedule = function() event_clear_schedule(self$.event),
-  
+
     .tick = function() event_tick(self$.event),
 
     .process = function() {
@@ -50,10 +50,12 @@ Event <- R6Class(
 
     .process_listener_cpp = function(listener){
       process_listener(
-        event = self$.event, 
+        event = self$.event,
         listener = listener
       )
-    }
+    },
 
+    # NOTE: intentionally empty
+    .resize = function() {}
   )
 )

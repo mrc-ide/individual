@@ -168,58 +168,69 @@ context("Bitset") {
         const auto y = std::vector<size_t>{0, 2, 4};
         expect_error(filter_bitset(x, std::cbegin(y), std::cend(y)));
     }
-}
 
-context("Individual index stochastic") {
-
-    test_that("Insertion and erasure") {
-        auto container_size = 1 << 8;
-        auto data_size = 1 << 4;
-        for (auto _ = 0; _ < 10; ++_) {
-            auto index = individual_index_t(container_size);
-            auto standard = std::unordered_set<size_t>(container_size);
-            auto excluded = std::vector<size_t>(data_size / 2);
-
-            //test insertion and erasure
-            for (auto i = 0; i < data_size; ++i) {
-                auto point = static_cast<size_t>(R::runif(0, container_size));
-                if (i < data_size / 2) {
-                    index.insert(point);
-                    standard.insert(point);
-                } else {
-                    index.erase(point);
-                    standard.erase(point);
-                    excluded[i - data_size / 2] = point;
-                }
-            }
-
-            for (auto point : standard) {
-                expect_true(index.find(point) != index.end());
-            }
-            for (auto point : excluded) {
-                expect_true(index.find(point) == index.end());
-            }
-        }
+    test_that("Bitsets can be extended") {
+        auto x = individual_index_t(100, {1, 36, 73});
+        expect_error(x.insert_safe(101));
+        x.extend(100);
+        const auto expected_bitset = individual_index_t(200, {1, 36, 73});
+        expect_true(x == expected_bitset);
+        x.insert(101);
+        expect_true(x.find(101) != x.end());
+        expect_error(x.insert_safe(201));
     }
 
-    test_that("Stochastic test for iteration") {
-        auto container_size = 1 << 15;
-        auto data_size = 1 << 8;
-        for (auto _ = 0; _ < 10; ++_) {
-            auto index = individual_index_t(container_size);
-            auto standard = std::vector<size_t>(data_size);
+    test_that("Bitsets can be extended across word boundaries") {
+        auto x = individual_index_t(1000, {1, 36, 73});
+        expect_error(x.insert_safe(1025));
+        x.extend(38);
+        const auto expected_bitset = individual_index_t(1038, {1, 36, 73});
+        expect_true(x == expected_bitset);
+        x.insert(1025);
+        expect_true(x.find(1025) != x.end());
+        expect_error(x.insert_safe(1050));
+    }
 
-            for (auto i = 0; i < data_size; ++i) {
-                auto point = static_cast<size_t>(R::runif(0, container_size));
-                index.insert(point);
-                standard[i] = point;
-            }
+    test_that("Bitsets can be shrunk at the beginning") {
+        auto x = individual_index_t(10, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+        const auto index = std::vector<size_t>{0, 1, 2, 3, 4};
+        x.shrink(index);
+        const auto expected_bitset = individual_index_t(5, {0, 1, 2, 3, 4});
+        expect_true(x == expected_bitset);
+    }
 
-            auto iterated = std::unordered_set<size_t>(index.begin(), index.end());
+    test_that("Bitsets can be shrunk with an index containing unset bits") {
+        auto x = individual_index_t(100, {1, 36, 73, 99});
+        const auto index = std::vector<size_t>{2, 4, 37};
+        x.shrink(index);
+        const auto expected_bitset = individual_index_t(97, {1, 34, 70, 96});
+        expect_true(x == expected_bitset);
+    }
 
-            for (auto point : standard) {
-                expect_true(iterated.find(point) != iterated.end());
-            }
+    test_that("Bitsets can be shrunk with an index containing set bits") {
+        auto x = individual_index_t(100, {1, 36, 73, 99});
+        const auto index = std::vector<size_t>{36, 73};
+        x.shrink(index);
+        const auto expected_bitset = individual_index_t(98, {1, 97});
+        expect_true(x == expected_bitset);
+    }
+
+    test_that("Bitsets can be shrunk with an index containing a mix of set and unset bits") {
+        auto x = individual_index_t(100, {1, 36, 73, 99});
+        const auto index = std::vector<size_t>{37, 73};
+        x.shrink(index);
+        const auto expected_bitset = individual_index_t(98, {1, 36, 97});
+        expect_true(x == expected_bitset);
+    }
+
+    test_that("Bitsets can be shrunk over word boundaries") {
+        auto x = individual_index_t(514, {1, 257, 513});
+        auto index = std::vector<size_t>();
+        for (auto i = 258; i < 514; ++i) {
+            index.push_back(i);
         }
+        x.shrink(index);
+        const auto expected_bitset = individual_index_t(258, {1, 257});
+        expect_true(x == expected_bitset);
     }
 }

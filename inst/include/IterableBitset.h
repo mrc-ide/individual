@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include <Rcpp.h>
+#include "utils.h"
 
 template<class A>
 class IterableBitset;
@@ -23,7 +24,6 @@ class IterableBitset;
 //' Each integer stores the existance of sizeof(A) * 8 elements in the set.
 template<class A>
 class IterableBitset {
-private:
     size_t max_n;
     size_t n;
     size_t num_bits;
@@ -96,6 +96,8 @@ public:
     size_type size() const;
     size_type max_size() const;
     bool empty() const;
+    void extend(size_t);
+    void shrink(const std::vector<size_t>&);
 };
 
 
@@ -460,20 +462,13 @@ inline IterableBitset<A> filter_bitset(
     auto result = IterableBitset<A>(source.max_size());
     auto is = std::vector<size_t>(begin, end);
     std::sort(std::begin(is), std::end(is));
-    auto diffs = std::vector<size_t>(is.size());
-    std::adjacent_difference(
+    auto it = FilterIterator<typename IterableBitset<A>::iterator, std::vector<size_t>::iterator, size_t>(
+        std::begin(source),
+        std::end(source),
         std::begin(is),
-        std::end(is),
-        std::begin(diffs)
+        std::end(is)
     );
-    auto it = std::begin(source);
-    for (auto d : diffs) {
-        std::advance(it, d);
-        if (it == std::end(source)) {
-            Rcpp::stop("invalid index for filtering");
-        }
-        result.insert(*it);
-    }
+    result.insert(it.begin(), it.end());
     return result;
 }
 
@@ -562,6 +557,54 @@ inline void bitset_sample_multi_internal(
         ++bitset_it;
     }
 
+}
+
+//' @title extend the bitset
+//' @description adds space in the bitset for more elements
+template<class A>
+inline void IterableBitset<A>::extend(size_t n) {  
+    const auto n_blocks = (max_n + n) / num_bits + 1;
+    if (n_blocks > bitmap.size()) {
+        bitmap.insert(
+            bitmap.end(),
+            n_blocks - bitmap.size(),
+            static_cast<A>(0)
+        );
+    }
+    max_n += n;
+}
+
+//' @title shrink the bitset
+//' @description removes the elements in `index` shifting subsequent elements to
+//fill their position. Assumes `index` is sorted and unique
+template<class A>
+inline void IterableBitset<A>::shrink(const std::vector<size_t>& index) {  
+    if (index.size() == 0) {
+        return;
+    }
+    size_t n_shifts = 0;
+    auto values = std::list<size_t>(this->cbegin(), this->cend());
+    auto it = values.begin();
+    auto removal_it = index.cbegin();
+    while (it != values.end()) {
+        while (removal_it != index.cend() && *it > *removal_it) {
+            ++removal_it;
+            ++n_shifts;
+        }
+        if (removal_it != index.cend() && *it == *removal_it) {
+            it = values.erase(it);
+        } else {
+            (*it) -= n_shifts;
+            ++it;
+        }
+    }
+    auto max_block = (max_n - index.size()) / num_bits + 1;
+    if (max_block < bitmap.size()) {
+        bitmap.erase(bitmap.begin() + max_block, bitmap.end());
+    }
+    clear();
+    insert(values.cbegin(), values.cend());
+    max_n -= index.size();
 }
 
 #endif /* INST_INCLUDE_ITERABLEBITSET_H_ */

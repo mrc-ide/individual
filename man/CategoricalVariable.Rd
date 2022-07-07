@@ -13,18 +13,22 @@ if possible because certain operations will be faster.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{CategoricalVariable$new()}}
-\item \href{#method-get_index_of}{\code{CategoricalVariable$get_index_of()}}
-\item \href{#method-get_size_of}{\code{CategoricalVariable$get_size_of()}}
-\item \href{#method-get_categories}{\code{CategoricalVariable$get_categories()}}
-\item \href{#method-queue_update}{\code{CategoricalVariable$queue_update()}}
-\item \href{#method-.update}{\code{CategoricalVariable$.update()}}
-\item \href{#method-clone}{\code{CategoricalVariable$clone()}}
+\item \href{#method-CategoricalVariable-new}{\code{CategoricalVariable$new()}}
+\item \href{#method-CategoricalVariable-get_index_of}{\code{CategoricalVariable$get_index_of()}}
+\item \href{#method-CategoricalVariable-get_size_of}{\code{CategoricalVariable$get_size_of()}}
+\item \href{#method-CategoricalVariable-get_categories}{\code{CategoricalVariable$get_categories()}}
+\item \href{#method-CategoricalVariable-queue_update}{\code{CategoricalVariable$queue_update()}}
+\item \href{#method-CategoricalVariable-queue_extend}{\code{CategoricalVariable$queue_extend()}}
+\item \href{#method-CategoricalVariable-queue_shrink}{\code{CategoricalVariable$queue_shrink()}}
+\item \href{#method-CategoricalVariable-size}{\code{CategoricalVariable$size()}}
+\item \href{#method-CategoricalVariable-.update}{\code{CategoricalVariable$.update()}}
+\item \href{#method-CategoricalVariable-.resize}{\code{CategoricalVariable$.resize()}}
+\item \href{#method-CategoricalVariable-clone}{\code{CategoricalVariable$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-CategoricalVariable-new"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new CategoricalVariable
 \subsection{Usage}{
@@ -43,8 +47,8 @@ individual}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_index_of"></a>}}
-\if{latex}{\out{\hypertarget{method-get_index_of}{}}}
+\if{html}{\out{<a id="method-CategoricalVariable-get_index_of"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-get_index_of}{}}}
 \subsection{Method \code{get_index_of()}}{
 return a \code{\link[individual]{Bitset}} for individuals with the given \code{values}
 \subsection{Usage}{
@@ -60,8 +64,8 @@ return a \code{\link[individual]{Bitset}} for individuals with the given \code{v
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_size_of"></a>}}
-\if{latex}{\out{\hypertarget{method-get_size_of}{}}}
+\if{html}{\out{<a id="method-CategoricalVariable-get_size_of"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-get_size_of}{}}}
 \subsection{Method \code{get_size_of()}}{
 return the number of individuals with the given \code{values}
 \subsection{Usage}{
@@ -77,8 +81,8 @@ return the number of individuals with the given \code{values}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_categories"></a>}}
-\if{latex}{\out{\hypertarget{method-get_categories}{}}}
+\if{html}{\out{<a id="method-CategoricalVariable-get_categories"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-get_categories}{}}}
 \subsection{Method \code{get_categories()}}{
 return a character vector of possible values.
 Note that the order of the returned vector may not be the same order
@@ -90,8 +94,8 @@ unordered storage type.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-queue_update"></a>}}
-\if{latex}{\out{\hypertarget{method-queue_update}{}}}
+\if{html}{\out{<a id="method-CategoricalVariable-queue_update"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-queue_update}{}}}
 \subsection{Method \code{queue_update()}}{
 queue an update for this variable
 \subsection{Usage}{
@@ -111,8 +115,52 @@ a \code{\link[individual]{Bitset}}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-.update"></a>}}
-\if{latex}{\out{\hypertarget{method-.update}{}}}
+\if{html}{\out{<a id="method-CategoricalVariable-queue_extend"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-queue_extend}{}}}
+\subsection{Method \code{queue_extend()}}{
+extend the variable with new values
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$queue_extend(values)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{values}}{to add to the variable}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CategoricalVariable-queue_shrink"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-queue_shrink}{}}}
+\subsection{Method \code{queue_shrink()}}{
+shrink the variable
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$queue_shrink(index)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{index}}{a bitset or vector representing the individuals to remove}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CategoricalVariable-size"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-size}{}}}
+\subsection{Method \code{size()}}{
+get the size of the variable
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$size()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CategoricalVariable-.update"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-.update}{}}}
 \subsection{Method \code{.update()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$.update()}\if{html}{\out{</div>}}
@@ -120,8 +168,17 @@ a \code{\link[individual]{Bitset}}.}
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-CategoricalVariable-.resize"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-.resize}{}}}
+\subsection{Method \code{.resize()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$.resize()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CategoricalVariable-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

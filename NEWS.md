@@ -2,6 +2,7 @@
 
   * [fix bug](https://github.com/mrc-ide/individual/pull/163) with C++ event
   listeners
+  * All variables are resizable
 
 # individual 0.1.7
 

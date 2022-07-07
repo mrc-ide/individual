@@ -64,6 +64,36 @@ CategoricalVariable <- R6Class(
       }
     },
 
-    .update = function() categorical_variable_update(self$.variable)
+    #' @description extend the variable with new values
+    #' @param values to add to the variable
+    queue_extend = function(values) {
+      stopifnot(is.character(values))
+      categorical_variable_queue_extend(self$.variable, values)
+    },
+
+    #' @description shrink the variable
+    #' @param index a bitset or vector representing the individuals to remove
+    queue_shrink = function(index) {
+      if (inherits(index, 'Bitset')) {
+        if (index$size() > 0){
+          categorical_variable_queue_shrink_bitset(
+            self$.variable,
+            index$.bitset
+          )
+        }
+      } else {
+        if (length(index) != 0) {
+          stopifnot(all(is.finite(index)))
+          stopifnot(all(index > 0))
+          categorical_variable_queue_shrink(self$.variable, index)
+        }
+      }
+    },
+
+    #' @description get the size of the variable
+    size = function() variable_get_size(self$.variable),
+
+    .update = function() variable_update(self$.variable),
+    .resize = function() variable_resize(self$.variable)
   )
 )

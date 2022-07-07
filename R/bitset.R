@@ -1,8 +1,8 @@
 #' @title A Bitset Class
-#' @description This is a data structure that compactly stores the presence of 
-#' integers in some finite set (\code{max_size}), and can 
+#' @description This is a data structure that compactly stores the presence of
+#' integers in some finite set (\code{max_size}), and can
 #' efficiently perform set operations (union, intersection, complement, symmetric
-#' difference, set difference). 
+#' difference, set difference).
 #' WARNING: All operations are in-place so please use \code{$copy}
 #' if you would like to perform an operation without destroying your current bitset.
 #' @importFrom R6 R6Class
@@ -43,13 +43,13 @@ Bitset <- R6Class(
       bitset_remove(self$.bitset, v)
       self
     },
-    
+
     #' @description clear the bitset.
-    clear = function(v) {
+    clear = function() {
       bitset_clear(self$.bitset)
       self
     },
-    
+
     #' @description get the number of elements in the set.
     size = function() bitset_size(self$.bitset),
 
@@ -104,7 +104,7 @@ Bitset <- R6Class(
     #' a single value for all elements or a vector of unique
     #' probabilities for keeping each element.
     sample = function(rate) {
-      stopifnot(is.finite(rate))
+      stopifnot(is.finite(rate), !is.null(rate))
       if (length(rate) == 1) {
         bitset_sample(self$.bitset, rate)
       } else {
@@ -112,7 +112,7 @@ Bitset <- R6Class(
       }
       self
     },
-    
+
     #' @description choose k random items in the bitset
     #' @param k the number of items in the bitset to keep. The selection of
     #' these k items from N total items in the bitset is random, and
@@ -133,7 +133,7 @@ Bitset <- R6Class(
     #' @description return an integer vector of the elements
     #' stored in this bitset.
     to_vector = function() bitset_to_vector(self$.bitset)
-    
+
   )
 )
 
@@ -151,13 +151,13 @@ Bitset <- R6Class(
 filter_bitset = function(bitset, other) {
   if ( inherits(other, "Bitset")) {
     if (other$size() > 0) {
-      return(Bitset$new(from = filter_bitset_bitset(bitset$.bitset, other$.bitset)))  
+      return(Bitset$new(from = filter_bitset_bitset(bitset$.bitset, other$.bitset)))
     } else {
       return(Bitset$new(size = bitset$max_size))
     }
   } else {
     if (length(other) > 0) {
-      return(Bitset$new(from = filter_bitset_vector(bitset$.bitset, as.integer(other))))  
+      return(Bitset$new(from = filter_bitset_vector(bitset$.bitset, as.integer(other))))
     } else {
       return(Bitset$new(size = bitset$max_size))
     }

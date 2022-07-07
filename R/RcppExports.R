@@ -105,6 +105,18 @@ categorical_variable_update <- function(variable) {
     invisible(.Call(`_individual_categorical_variable_update`, variable))
 }
 
+categorical_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_categorical_variable_queue_extend`, variable, values))
+}
+
+categorical_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_categorical_variable_queue_shrink`, variable, index))
+}
+
+categorical_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_categorical_variable_queue_shrink_bitset`, variable, index))
+}
+
 create_double_variable <- function(values) {
     .Call(`_individual_create_double_variable`, values)
 }
@@ -149,6 +161,18 @@ double_variable_update <- function(variable) {
     invisible(.Call(`_individual_double_variable_update`, variable))
 }
 
+double_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_double_variable_queue_extend`, variable, values))
+}
+
+double_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_double_variable_queue_shrink`, variable, index))
+}
+
+double_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_double_variable_queue_shrink_bitset`, variable, index))
+}
+
 create_event <- function() {
     .Call(`_individual_create_event`)
 }
@@ -185,6 +209,22 @@ targeted_event_schedule <- function(event, target, delay) {
     invisible(.Call(`_individual_targeted_event_schedule`, event, target, delay))
 }
 
+targeted_event_queue_shrink_bitset <- function(event, index) {
+    invisible(.Call(`_individual_targeted_event_queue_shrink_bitset`, event, index))
+}
+
+targeted_event_queue_shrink <- function(event, index) {
+    invisible(.Call(`_individual_targeted_event_queue_shrink`, event, index))
+}
+
+targeted_event_queue_extend <- function(event, n) {
+    invisible(.Call(`_individual_targeted_event_queue_extend`, event, n))
+}
+
+targeted_event_queue_extend_with_schedule <- function(event, delays) {
+    invisible(.Call(`_individual_targeted_event_queue_extend_with_schedule`, event, delays))
+}
+
 targeted_event_schedule_vector <- function(event, target, delay) {
     invisible(.Call(`_individual_targeted_event_schedule_vector`, event, target, delay))
 }
@@ -207,6 +247,10 @@ event_should_trigger <- function(event) {
 
 targeted_event_get_target <- function(event) {
     .Call(`_individual_targeted_event_get_target`, event)
+}
+
+targeted_event_resize <- function(event) {
+    invisible(.Call(`_individual_targeted_event_resize`, event))
 }
 
 process_listener <- function(event, listener) {
@@ -277,6 +321,18 @@ integer_variable_update <- function(variable) {
     invisible(.Call(`_individual_integer_variable_update`, variable))
 }
 
+integer_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_integer_variable_queue_extend`, variable, values))
+}
+
+integer_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_integer_variable_queue_shrink`, variable, index))
+}
+
+integer_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_integer_variable_queue_shrink_bitset`, variable, index))
+}
+
 fixed_probability_multinomial_process_internal <- function(variable, source_state, destination_states, rate, destination_probabilities) {
     .Call(`_individual_fixed_probability_multinomial_process_internal`, variable, source_state, destination_states, rate, destination_probabilities)
 }
@@ -295,6 +351,18 @@ infection_age_process_internal <- function(state, susceptible, exposed, infectio
 
 execute_process <- function(process, timestep) {
     invisible(.Call(`_individual_execute_process`, process, timestep))
+}
+
+variable_get_size <- function(variable) {
+    .Call(`_individual_variable_get_size`, variable)
+}
+
+variable_update <- function(variable) {
+    invisible(.Call(`_individual_variable_update`, variable))
+}
+
+variable_resize <- function(variable) {
+    invisible(.Call(`_individual_variable_resize`, variable))
 }
 
 # Register entry points for exported C++ functions

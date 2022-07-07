@@ -5,15 +5,13 @@
  *      Author: gc1610
  */
 
-#ifndef UTILS_H_
-#define UTILS_H_
+#ifndef SRC_UTILS_H_
+#define SRC_UTILS_H_
 
-#include <vector>
-
-inline void decrement(std::vector<size_t>& x) {
-    for (auto i = 0u; i < x.size(); ++i) {
-        --x[i];
-    }
+template<class A>
+inline void decrement(A& x) {
+    for (auto& i : x)
+        --i;
 }
 
-#endif /* UTILS_H_ */
+#endif /* SRC_UTILS_H_ */

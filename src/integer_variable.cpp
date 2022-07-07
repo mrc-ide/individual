@@ -23,7 +23,7 @@ Rcpp::XPtr<IntegerVariable> create_integer_variable(
 size_t integer_variable_get_size(
         Rcpp::XPtr<IntegerVariable> variable
 ) {
-    return variable->size;
+    return variable->size();
 }
 
 //[[Rcpp::export]]
@@ -141,4 +141,29 @@ void integer_variable_queue_update_bitset(
 //[[Rcpp::export]]
 void integer_variable_update(Rcpp::XPtr<IntegerVariable> variable) {
     variable->update();
+}
+
+//[[Rcpp::export]]
+void integer_variable_queue_extend(
+    Rcpp::XPtr<IntegerVariable> variable,
+    std::vector<int>& values
+    ) {
+    variable->queue_extend(values);
+}
+
+//[[Rcpp::export]]
+void integer_variable_queue_shrink(
+    Rcpp::XPtr<IntegerVariable> variable,
+    std::vector<size_t>& index
+    ) {
+    decrement(index);
+    variable->queue_shrink(index);
+}
+
+//[[Rcpp::export]]
+void integer_variable_queue_shrink_bitset(
+    Rcpp::XPtr<IntegerVariable> variable,
+    Rcpp::XPtr<individual_index_t> index
+    ) {
+    variable->queue_shrink(*index);
 }
