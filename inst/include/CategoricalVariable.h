@@ -13,7 +13,7 @@
 #include <Rcpp.h>
 #include <queue>
 
-struct CategoricalVariable;
+class CategoricalVariable;
 
 //' @title a variable object for categorical variables
 //' @description This class provides functionality for variables which takes values

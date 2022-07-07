@@ -39,10 +39,11 @@ inline std::vector<size_t> round_delay(const std::vector<double>& delay) {
 }
 
 //' @title abstract base class for events
-struct EventBase {
+class EventBase {
     size_t t = 1;
-
+public:
     virtual void tick();
+    virtual size_t get_time() const;
     
     virtual bool should_trigger() = 0;
     virtual ~EventBase() = default;
@@ -53,6 +54,10 @@ inline void EventBase::tick() {
     ++t;
 }
 
+inline size_t EventBase::get_time() const {
+    return t;
+}
+
 
 //' @title a general event in the simulation
 //' @description This class provides functionality for general events which are 
@@ -60,10 +65,11 @@ inline void EventBase::tick() {
 //' It contains the following data members:
 //'     * t: current simulation time step
 //'     * simple_schedule: a set of times the event will fire
-struct Event : public EventBase {
+class Event : public EventBase {
 
     std::set<size_t> simple_schedule;
-    
+
+public:
     virtual ~Event() = default;
 
     virtual void process(Rcpp::XPtr<listener_t> listener);
@@ -77,24 +83,24 @@ struct Event : public EventBase {
 
 //' @title process an event by calling a listener
 inline void Event::process(Rcpp::XPtr<listener_t> listener) {
-    (*listener)(t);
+    (*listener)(get_time());
 }
 
 //' @title should first event fire on this timestep?
 inline bool Event::should_trigger() {
-    return *simple_schedule.begin() == t;
+    return *simple_schedule.begin() == get_time();
 }
 
 //' @title delete current time step from simple_schedule and increase time step
 inline void Event::tick() {
-    simple_schedule.erase(t);
+    simple_schedule.erase(get_time());
     EventBase::tick();
 }
 
 //' @title schedule a vector of events
 inline void Event::schedule(std::vector<double> delays) {
     for (auto delay : round_delay(delays)) {
-        simple_schedule.insert(t + delay);
+        simple_schedule.insert(get_time() + delay);
     }
 }
 
@@ -108,8 +114,9 @@ inline void Event::clear_schedule() {
 //' @description This class provides functionality for targeted events which are 
 //' applied to a subset of individuals in the simulation. It inherits from EventBase.
 //' It contains the following data members:
-//'     * t: current simulation time step
 //'     * targeted_schedule: a map of times and bitsets of scheduled individuals
+//'     * extensions: a queue of extension operations
+//'     * shrink_index: an index of individuals to remove
 //'     * size: size of population
 class TargetedEvent : public EventBase {
 
@@ -158,12 +165,12 @@ inline bool TargetedEvent::should_trigger() {
     if (targeted_schedule.begin() == targeted_schedule.end()) {
         return false;
     }
-    return targeted_schedule.begin()->first == t;
+    return targeted_schedule.begin()->first == get_time();
 }
 
 //' @title process an event by calling a listener
 inline void TargetedEvent::process(Rcpp::XPtr<targeted_listener_t> listener) {
-    (*listener)(t, current_target());
+    (*listener)(get_time(), current_target());
 }
 
 //' @title get bitset of individuals scheduled for the next event
@@ -173,7 +180,7 @@ inline individual_index_t& TargetedEvent::current_target() {
 
 //' @title delete current time step from simple_schedule and increase time step
 inline void TargetedEvent::tick() {
-    targeted_schedule.erase(t);
+    targeted_schedule.erase(get_time());
     EventBase::tick();
 }
 
@@ -260,7 +267,7 @@ inline void TargetedEvent::schedule(
     size_t delay
 ) {
     
-    auto target_timestep = t + delay;
+    auto target_timestep = get_time() + delay;
     if (targeted_schedule.find(target_timestep) == targeted_schedule.end()) {
         targeted_schedule.insert(
             {target_timestep, individual_index_t(size())}

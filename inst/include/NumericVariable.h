@@ -14,7 +14,7 @@
 #include <queue>
 
 template <class A>
-struct NumericVariable;
+class NumericVariable;
 
 //' @title a variable object for scalar numbers
 //' @description This class provides functionality for variables which takes values

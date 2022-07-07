@@ -149,7 +149,7 @@ void targeted_event_schedule_multi_delay_vector(
 
 //[[Rcpp::export]]
 size_t event_get_timestep(const Rcpp::XPtr<EventBase> event) {
-    return event->t;
+    return event->get_time();
 }
 
 //[[Rcpp::export]]
@@ -175,7 +175,7 @@ void process_listener(
     const Rcpp::XPtr<Event> event,
     const Rcpp::XPtr<listener_t> listener
 ) {
-    size_t t = event->t;
+    size_t t = event->get_time();
     (*listener)(t);
 }
 
@@ -185,6 +185,6 @@ void process_targeted_listener(
     const Rcpp::XPtr<targeted_listener_t> listener,
     const Rcpp::XPtr<individual_index_t> target
 ) {
-    size_t t = event->t;
+    size_t t = event->get_time();
     (*listener)(t, *target.get());
 }
