@@ -75,9 +75,10 @@ RaggedInteger <- R6Class(
     #' fill options. If using indices, this may be either a vector of integers or
     #' an [individual::Bitset].
     queue_update = function(values, index = NULL) {
+      stopifnot(!is.null(values))
       stopifnot(vapply(X = values, FUN = class, FUN.VALUE = character(1), USE.NAMES = FALSE) %in% c('numeric', 'integer'))
-      if(is.null(index)){
-        if(length(values) == 1){
+      if (is.null(index)) {
+        if (length(values) == 1) {
           # variable fill
           integer_ragged_variable_queue_fill(
             self$.variable,
@@ -122,7 +123,7 @@ RaggedInteger <- R6Class(
     #' @description extend the variable with new values
     #' @param values to add to the variable
     queue_extend = function(values) {
-      stopifnot(is.numeric(values))
+      stopifnot(vapply(X = values, FUN = class, FUN.VALUE = character(1), USE.NAMES = FALSE) %in% c('numeric', 'integer'))
       integer_ragged_variable_queue_extend(self$.variable, values)
     },
     

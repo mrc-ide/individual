@@ -12,9 +12,8 @@ RaggedDouble <- R6Class(
     #' @param initial_values a vector of the initial values for each individual
     initialize = function(initial_values) {
       stopifnot(!is.null(initial_values))
-      stopifnot(vapply(X = initial_values, FUN = class, FUN.VALUE = character(1), USE.NAMES = FALSE) %in% c('numeric', 'integer'))
-      stopifnot(vapply(X = initial_values, FUN = is.finite, FUN.VALUE = logical(1), USE.NAMES = FALSE))
       stopifnot(length(initial_values) > 0L)
+      stopifnot(vapply(X = initial_values, FUN = class, FUN.VALUE = character(1), USE.NAMES = FALSE) %in% c('numeric', 'integer'))
       self$.variable <- create_double_ragged_variable(initial_values)
     },
     
@@ -76,10 +75,10 @@ RaggedDouble <- R6Class(
     #' fill options. If using indices, this may be either a vector of integers or
     #' an [individual::Bitset].
     queue_update = function(values, index = NULL) {
+      stopifnot(!is.null(values))
       stopifnot(vapply(X = values, FUN = class, FUN.VALUE = character(1), USE.NAMES = FALSE) %in% c('numeric', 'integer'))
-      stopifnot(vapply(X = initial_values, FUN = is.finite, FUN.VALUE = logical(1), USE.NAMES = FALSE))
-      if(is.null(index)){
-        if(length(values) == 1){
+      if (is.null(index)) {
+        if (length(values) == 1) {
           # variable fill
           double_ragged_variable_queue_fill(
             self$.variable,
@@ -124,7 +123,7 @@ RaggedDouble <- R6Class(
     #' @description extend the variable with new values
     #' @param values to add to the variable
     queue_extend = function(values) {
-      stopifnot(is.numeric(values))
+      stopifnot(vapply(X = values, FUN = class, FUN.VALUE = character(1), USE.NAMES = FALSE) %in% c('numeric', 'integer'))
       double_ragged_variable_queue_extend(self$.variable, values)
     },
     
