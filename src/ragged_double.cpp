@@ -20,13 +20,6 @@ Rcpp::XPtr<RaggedDouble> create_double_ragged_variable(
 }
 
 // [[Rcpp::export]]
-size_t double_ragged_variable_get_size(
-    Rcpp::XPtr<RaggedDouble> variable
-) {
-  return variable->size();
-}
-
-// [[Rcpp::export]]
 std::vector<std::vector<double>> double_ragged_variable_get_values(
     Rcpp::XPtr<RaggedDouble> variable
 ) {
@@ -103,11 +96,6 @@ void double_ragged_variable_queue_update_bitset(
   }
   auto index_vec = bitset_to_vector_internal(*index, false);
   variable->queue_update(value, index_vec);
-}
-
-//[[Rcpp::export]]
-void double_ragged_variable_update(Rcpp::XPtr<RaggedDouble> variable) {
-  variable->update();
 }
 
 //[[Rcpp::export]]

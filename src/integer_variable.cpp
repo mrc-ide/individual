@@ -20,13 +20,6 @@ Rcpp::XPtr<IntegerVariable> create_integer_variable(
 }
 
 //[[Rcpp::export]]
-size_t integer_variable_get_size(
-        Rcpp::XPtr<IntegerVariable> variable
-) {
-    return variable->size();
-}
-
-//[[Rcpp::export]]
 std::vector<int> integer_variable_get_values(
     Rcpp::XPtr<IntegerVariable> variable
     ) {
@@ -136,11 +129,6 @@ void integer_variable_queue_update_bitset(
 ) {
     auto index_vec = bitset_to_vector_internal(*index, false);
     variable->queue_update(value, index_vec);
-}
-
-//[[Rcpp::export]]
-void integer_variable_update(Rcpp::XPtr<IntegerVariable> variable) {
-    variable->update();
 }
 
 //[[Rcpp::export]]

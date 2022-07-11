@@ -121,10 +121,6 @@ create_double_variable <- function(values) {
     .Call(`_individual_create_double_variable`, values)
 }
 
-double_variable_get_size <- function(variable) {
-    .Call(`_individual_double_variable_get_size`, variable)
-}
-
 double_variable_get_values <- function(variable) {
     .Call(`_individual_double_variable_get_values`, variable)
 }
@@ -155,10 +151,6 @@ double_variable_queue_update <- function(variable, value, index) {
 
 double_variable_queue_update_bitset <- function(variable, value, index) {
     invisible(.Call(`_individual_double_variable_queue_update_bitset`, variable, value, index))
-}
-
-double_variable_update <- function(variable) {
-    invisible(.Call(`_individual_double_variable_update`, variable))
 }
 
 double_variable_queue_extend <- function(variable, values) {
@@ -265,10 +257,6 @@ create_integer_variable <- function(values) {
     .Call(`_individual_create_integer_variable`, values)
 }
 
-integer_variable_get_size <- function(variable) {
-    .Call(`_individual_integer_variable_get_size`, variable)
-}
-
 integer_variable_get_values <- function(variable) {
     .Call(`_individual_integer_variable_get_values`, variable)
 }
@@ -317,10 +305,6 @@ integer_variable_queue_update_bitset <- function(variable, value, index) {
     invisible(.Call(`_individual_integer_variable_queue_update_bitset`, variable, value, index))
 }
 
-integer_variable_update <- function(variable) {
-    invisible(.Call(`_individual_integer_variable_update`, variable))
-}
-
 integer_variable_queue_extend <- function(variable, values) {
     invisible(.Call(`_individual_integer_variable_queue_extend`, variable, values))
 }
@@ -351,10 +335,6 @@ infection_age_process_internal <- function(state, susceptible, exposed, infectio
 
 create_double_ragged_variable <- function(values) {
     .Call(`_individual_create_double_ragged_variable`, values)
-}
-
-double_ragged_variable_get_size <- function(variable) {
-    .Call(`_individual_double_ragged_variable_get_size`, variable)
 }
 
 double_ragged_variable_get_values <- function(variable) {
@@ -393,10 +373,6 @@ double_ragged_variable_queue_update_bitset <- function(variable, value, index) {
     invisible(.Call(`_individual_double_ragged_variable_queue_update_bitset`, variable, value, index))
 }
 
-double_ragged_variable_update <- function(variable) {
-    invisible(.Call(`_individual_double_ragged_variable_update`, variable))
-}
-
 double_ragged_variable_queue_extend <- function(variable, values) {
     invisible(.Call(`_individual_double_ragged_variable_queue_extend`, variable, values))
 }
@@ -411,10 +387,6 @@ double_ragged_variable_queue_shrink_bitset <- function(variable, index) {
 
 create_integer_ragged_variable <- function(values) {
     .Call(`_individual_create_integer_ragged_variable`, values)
-}
-
-integer_ragged_variable_get_size <- function(variable) {
-    .Call(`_individual_integer_ragged_variable_get_size`, variable)
 }
 
 integer_ragged_variable_get_values <- function(variable) {
@@ -451,10 +423,6 @@ integer_ragged_variable_queue_update <- function(variable, value, index) {
 
 integer_ragged_variable_queue_update_bitset <- function(variable, value, index) {
     invisible(.Call(`_individual_integer_ragged_variable_queue_update_bitset`, variable, value, index))
-}
-
-integer_ragged_variable_update <- function(variable) {
-    invisible(.Call(`_individual_integer_ragged_variable_update`, variable))
 }
 
 integer_ragged_variable_queue_extend <- function(variable, values) {

@@ -124,7 +124,7 @@ IntegerVariable <- R6Class(
           )
         } else {
           # variable reset
-          stopifnot(length(values) == integer_variable_get_size(self$.variable))
+          stopifnot(length(values) == variable_get_size(self$.variable))
           integer_variable_queue_update(
             self$.variable,
             values,
@@ -134,7 +134,7 @@ IntegerVariable <- R6Class(
       } else {
         if (inherits(index, 'Bitset')) {
           # subset update/fill: bitset
-          stopifnot(index$max_size == integer_variable_get_size(self$.variable))
+          stopifnot(index$max_size == variable_get_size(self$.variable))
           if (index$size() > 0) {
             integer_variable_queue_update_bitset(
               self$.variable,

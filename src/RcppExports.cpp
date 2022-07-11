@@ -382,17 +382,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// double_variable_get_size
-size_t double_variable_get_size(Rcpp::XPtr<DoubleVariable> variable);
-RcppExport SEXP _individual_double_variable_get_size(SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    rcpp_result_gen = Rcpp::wrap(double_variable_get_size(variable));
-    return rcpp_result_gen;
-END_RCPP
-}
 // double_variable_get_values
 std::vector<double> double_variable_get_values(Rcpp::XPtr<DoubleVariable> variable);
 RcppExport SEXP _individual_double_variable_get_values(SEXP variableSEXP) {
@@ -486,16 +475,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const std::vector<double> >::type value(valueSEXP);
     Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
     double_variable_queue_update_bitset(variable, value, index);
-    return R_NilValue;
-END_RCPP
-}
-// double_variable_update
-void double_variable_update(Rcpp::XPtr<DoubleVariable> variable);
-RcppExport SEXP _individual_double_variable_update(SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    double_variable_update(variable);
     return R_NilValue;
 END_RCPP
 }
@@ -786,17 +765,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// integer_variable_get_size
-size_t integer_variable_get_size(Rcpp::XPtr<IntegerVariable> variable);
-RcppExport SEXP _individual_integer_variable_get_size(SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
-    rcpp_result_gen = Rcpp::wrap(integer_variable_get_size(variable));
-    return rcpp_result_gen;
-END_RCPP
-}
 // integer_variable_get_values
 std::vector<int> integer_variable_get_values(Rcpp::XPtr<IntegerVariable> variable);
 RcppExport SEXP _individual_integer_variable_get_values(SEXP variableSEXP) {
@@ -941,16 +909,6 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// integer_variable_update
-void integer_variable_update(Rcpp::XPtr<IntegerVariable> variable);
-RcppExport SEXP _individual_integer_variable_update(SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
-    integer_variable_update(variable);
-    return R_NilValue;
-END_RCPP
-}
 // integer_variable_queue_extend
 void integer_variable_queue_extend(Rcpp::XPtr<IntegerVariable> variable, std::vector<int>& values);
 RcppExport SEXP _individual_integer_variable_queue_extend(SEXP variableSEXP, SEXP valuesSEXP) {
@@ -1055,17 +1013,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::vector<std::vector<double>>& >::type values(valuesSEXP);
     rcpp_result_gen = Rcpp::wrap(create_double_ragged_variable(values));
-    return rcpp_result_gen;
-END_RCPP
-}
-// double_ragged_variable_get_size
-size_t double_ragged_variable_get_size(Rcpp::XPtr<RaggedDouble> variable);
-RcppExport SEXP _individual_double_ragged_variable_get_size(SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<RaggedDouble> >::type variable(variableSEXP);
-    rcpp_result_gen = Rcpp::wrap(double_ragged_variable_get_size(variable));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1174,16 +1121,6 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// double_ragged_variable_update
-void double_ragged_variable_update(Rcpp::XPtr<RaggedDouble> variable);
-RcppExport SEXP _individual_double_ragged_variable_update(SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<RaggedDouble> >::type variable(variableSEXP);
-    double_ragged_variable_update(variable);
-    return R_NilValue;
-END_RCPP
-}
 // double_ragged_variable_queue_extend
 void double_ragged_variable_queue_extend(Rcpp::XPtr<RaggedDouble> variable, std::vector<std::vector<double>>& values);
 RcppExport SEXP _individual_double_ragged_variable_queue_extend(SEXP variableSEXP, SEXP valuesSEXP) {
@@ -1225,17 +1162,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::vector<std::vector<int>>& >::type values(valuesSEXP);
     rcpp_result_gen = Rcpp::wrap(create_integer_ragged_variable(values));
-    return rcpp_result_gen;
-END_RCPP
-}
-// integer_ragged_variable_get_size
-size_t integer_ragged_variable_get_size(Rcpp::XPtr<RaggedInteger> variable);
-RcppExport SEXP _individual_integer_ragged_variable_get_size(SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<RaggedInteger> >::type variable(variableSEXP);
-    rcpp_result_gen = Rcpp::wrap(integer_ragged_variable_get_size(variable));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1341,16 +1267,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const std::vector<std::vector<int>> >::type value(valueSEXP);
     Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
     integer_ragged_variable_queue_update_bitset(variable, value, index);
-    return R_NilValue;
-END_RCPP
-}
-// integer_ragged_variable_update
-void integer_ragged_variable_update(Rcpp::XPtr<RaggedInteger> variable);
-RcppExport SEXP _individual_integer_ragged_variable_update(SEXP variableSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<RaggedInteger> >::type variable(variableSEXP);
-    integer_ragged_variable_update(variable);
     return R_NilValue;
 END_RCPP
 }
@@ -1480,7 +1396,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_categorical_variable_queue_shrink_bitset", (DL_FUNC) &_individual_categorical_variable_queue_shrink_bitset, 2},
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
     {"_individual_create_double_variable", (DL_FUNC) &_individual_create_double_variable, 1},
-    {"_individual_double_variable_get_size", (DL_FUNC) &_individual_double_variable_get_size, 1},
     {"_individual_double_variable_get_values", (DL_FUNC) &_individual_double_variable_get_values, 1},
     {"_individual_double_variable_get_values_at_index", (DL_FUNC) &_individual_double_variable_get_values_at_index, 2},
     {"_individual_double_variable_get_values_at_index_vector", (DL_FUNC) &_individual_double_variable_get_values_at_index_vector, 2},
@@ -1489,7 +1404,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_double_variable_queue_fill", (DL_FUNC) &_individual_double_variable_queue_fill, 2},
     {"_individual_double_variable_queue_update", (DL_FUNC) &_individual_double_variable_queue_update, 3},
     {"_individual_double_variable_queue_update_bitset", (DL_FUNC) &_individual_double_variable_queue_update_bitset, 3},
-    {"_individual_double_variable_update", (DL_FUNC) &_individual_double_variable_update, 1},
     {"_individual_double_variable_queue_extend", (DL_FUNC) &_individual_double_variable_queue_extend, 2},
     {"_individual_double_variable_queue_shrink", (DL_FUNC) &_individual_double_variable_queue_shrink, 2},
     {"_individual_double_variable_queue_shrink_bitset", (DL_FUNC) &_individual_double_variable_queue_shrink_bitset, 2},
@@ -1516,7 +1430,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_process_listener", (DL_FUNC) &_individual_process_listener, 2},
     {"_individual_process_targeted_listener", (DL_FUNC) &_individual_process_targeted_listener, 3},
     {"_individual_create_integer_variable", (DL_FUNC) &_individual_create_integer_variable, 1},
-    {"_individual_integer_variable_get_size", (DL_FUNC) &_individual_integer_variable_get_size, 1},
     {"_individual_integer_variable_get_values", (DL_FUNC) &_individual_integer_variable_get_values, 1},
     {"_individual_integer_variable_get_values_at_index", (DL_FUNC) &_individual_integer_variable_get_values_at_index, 2},
     {"_individual_integer_variable_get_values_at_index_vector", (DL_FUNC) &_individual_integer_variable_get_values_at_index_vector, 2},
@@ -1529,7 +1442,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_variable_queue_fill", (DL_FUNC) &_individual_integer_variable_queue_fill, 2},
     {"_individual_integer_variable_queue_update", (DL_FUNC) &_individual_integer_variable_queue_update, 3},
     {"_individual_integer_variable_queue_update_bitset", (DL_FUNC) &_individual_integer_variable_queue_update_bitset, 3},
-    {"_individual_integer_variable_update", (DL_FUNC) &_individual_integer_variable_update, 1},
     {"_individual_integer_variable_queue_extend", (DL_FUNC) &_individual_integer_variable_queue_extend, 2},
     {"_individual_integer_variable_queue_shrink", (DL_FUNC) &_individual_integer_variable_queue_shrink, 2},
     {"_individual_integer_variable_queue_shrink_bitset", (DL_FUNC) &_individual_integer_variable_queue_shrink_bitset, 2},
@@ -1538,7 +1450,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_multi_probability_bernoulli_process_internal", (DL_FUNC) &_individual_multi_probability_bernoulli_process_internal, 4},
     {"_individual_infection_age_process_internal", (DL_FUNC) &_individual_infection_age_process_internal, 9},
     {"_individual_create_double_ragged_variable", (DL_FUNC) &_individual_create_double_ragged_variable, 1},
-    {"_individual_double_ragged_variable_get_size", (DL_FUNC) &_individual_double_ragged_variable_get_size, 1},
     {"_individual_double_ragged_variable_get_values", (DL_FUNC) &_individual_double_ragged_variable_get_values, 1},
     {"_individual_double_ragged_variable_get_values_at_index_bitset", (DL_FUNC) &_individual_double_ragged_variable_get_values_at_index_bitset, 2},
     {"_individual_double_ragged_variable_get_values_at_index_vector", (DL_FUNC) &_individual_double_ragged_variable_get_values_at_index_vector, 2},
@@ -1548,12 +1459,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_double_ragged_variable_queue_fill", (DL_FUNC) &_individual_double_ragged_variable_queue_fill, 2},
     {"_individual_double_ragged_variable_queue_update", (DL_FUNC) &_individual_double_ragged_variable_queue_update, 3},
     {"_individual_double_ragged_variable_queue_update_bitset", (DL_FUNC) &_individual_double_ragged_variable_queue_update_bitset, 3},
-    {"_individual_double_ragged_variable_update", (DL_FUNC) &_individual_double_ragged_variable_update, 1},
     {"_individual_double_ragged_variable_queue_extend", (DL_FUNC) &_individual_double_ragged_variable_queue_extend, 2},
     {"_individual_double_ragged_variable_queue_shrink", (DL_FUNC) &_individual_double_ragged_variable_queue_shrink, 2},
     {"_individual_double_ragged_variable_queue_shrink_bitset", (DL_FUNC) &_individual_double_ragged_variable_queue_shrink_bitset, 2},
     {"_individual_create_integer_ragged_variable", (DL_FUNC) &_individual_create_integer_ragged_variable, 1},
-    {"_individual_integer_ragged_variable_get_size", (DL_FUNC) &_individual_integer_ragged_variable_get_size, 1},
     {"_individual_integer_ragged_variable_get_values", (DL_FUNC) &_individual_integer_ragged_variable_get_values, 1},
     {"_individual_integer_ragged_variable_get_values_at_index_bitset", (DL_FUNC) &_individual_integer_ragged_variable_get_values_at_index_bitset, 2},
     {"_individual_integer_ragged_variable_get_values_at_index_vector", (DL_FUNC) &_individual_integer_ragged_variable_get_values_at_index_vector, 2},
@@ -1563,7 +1472,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_ragged_variable_queue_fill", (DL_FUNC) &_individual_integer_ragged_variable_queue_fill, 2},
     {"_individual_integer_ragged_variable_queue_update", (DL_FUNC) &_individual_integer_ragged_variable_queue_update, 3},
     {"_individual_integer_ragged_variable_queue_update_bitset", (DL_FUNC) &_individual_integer_ragged_variable_queue_update_bitset, 3},
-    {"_individual_integer_ragged_variable_update", (DL_FUNC) &_individual_integer_ragged_variable_update, 1},
     {"_individual_integer_ragged_variable_queue_extend", (DL_FUNC) &_individual_integer_ragged_variable_queue_extend, 2},
     {"_individual_integer_ragged_variable_queue_shrink", (DL_FUNC) &_individual_integer_ragged_variable_queue_shrink, 2},
     {"_individual_integer_ragged_variable_queue_shrink_bitset", (DL_FUNC) &_individual_integer_ragged_variable_queue_shrink_bitset, 2},

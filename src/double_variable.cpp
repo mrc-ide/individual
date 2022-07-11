@@ -20,13 +20,6 @@ Rcpp::XPtr<DoubleVariable> create_double_variable(
 }
 
 //[[Rcpp::export]]
-size_t double_variable_get_size(
-        Rcpp::XPtr<DoubleVariable> variable
-) {
-    return variable->size();
-}
-
-//[[Rcpp::export]]
 std::vector<double> double_variable_get_values(
     Rcpp::XPtr<DoubleVariable> variable
     ) {
@@ -100,11 +93,6 @@ void double_variable_queue_update_bitset(
     }
     auto index_vec = bitset_to_vector_internal(*index, false);
     variable->queue_update(value, index_vec);
-}
-
-//[[Rcpp::export]]
-void double_variable_update(Rcpp::XPtr<DoubleVariable> variable) {
-    variable->update();
 }
 
 //[[Rcpp::export]]

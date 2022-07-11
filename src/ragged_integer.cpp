@@ -20,13 +20,6 @@ Rcpp::XPtr<RaggedInteger> create_integer_ragged_variable(
 }
 
 // [[Rcpp::export]]
-size_t integer_ragged_variable_get_size(
-    Rcpp::XPtr<RaggedInteger> variable
-) {
-  return variable->size();
-}
-
-// [[Rcpp::export]]
 std::vector<std::vector<int>> integer_ragged_variable_get_values(
     Rcpp::XPtr<RaggedInteger> variable
 ) {
@@ -103,11 +96,6 @@ void integer_ragged_variable_queue_update_bitset(
   }
   auto index_vec = bitset_to_vector_internal(*index, false);
   variable->queue_update(value, index_vec);
-}
-
-//[[Rcpp::export]]
-void integer_ragged_variable_update(Rcpp::XPtr<RaggedInteger> variable) {
-  variable->update();
 }
 
 //[[Rcpp::export]]

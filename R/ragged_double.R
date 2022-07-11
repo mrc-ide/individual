@@ -1,58 +1,62 @@
-#' @title DoubleVariable Class
-#' @description Represents a continuous variable for an individual.
+#' @title RaggedDouble Class
+#' @description This is a ragged array which stores doubles (numeric values).
 #' @importFrom R6 R6Class
 #' @export
-DoubleVariable <- R6Class(
-  'DoubleVariable',
+RaggedDouble <- R6Class(
+  'RaggedDouble',
   public = list(
+    
     .variable = NULL,
-
-    #' @description Create a new DoubleVariable.
-    #' @param initial_values a numeric vector of the initial value for each
-    #' individual.
+    
+    #' @description Create a new RaggedDouble
+    #' @param initial_values a vector of the initial values for each individual
     initialize = function(initial_values) {
       stopifnot(!is.null(initial_values))
-      stopifnot(is.numeric(initial_values))
-      self$.variable <- create_double_variable(initial_values)
+      stopifnot(vapply(X = initial_values, FUN = class, FUN.VALUE = character(1), USE.NAMES = FALSE) %in% c('numeric', 'integer'))
+      stopifnot(vapply(X = initial_values, FUN = is.finite, FUN.VALUE = logical(1), USE.NAMES = FALSE))
+      stopifnot(length(initial_values) > 0L)
+      self$.variable <- create_double_ragged_variable(initial_values)
     },
-
-    #' @description get the variable values.
+    
+    #' @description Get the variable values.
     #' @param index optionally return a subset of the variable vector. If
-    #' \code{NULL}, return all values; if passed a \code{\link[individual]{Bitset}}
+    #' \code{NULL}, return all values; if passed an [individual::Bitset]
     #' or integer vector, return values of those individuals.
     get_values = function(index = NULL) {
       if (is.null(index)) {
-        return(double_variable_get_values(self$.variable))
-      } else {
-        if (inherits(index, 'Bitset')) {
-          return(double_variable_get_values_at_index(self$.variable, index$.bitset))
+        return(double_ragged_variable_get_values(self$.variable))
+      } else{
+        if (inherits(index, 'Bitset')){
+          return(double_ragged_variable_get_values_at_index_bitset(self$.variable, index$.bitset))
         } else {
-          stopifnot(is.finite(index))
           stopifnot(index > 0)
-          return(double_variable_get_values_at_index_vector(self$.variable, index))
+          stopifnot(is.finite(index))
+          return(double_ragged_variable_get_values_at_index_vector(self$.variable, index))
+        }
+      }
+      
+    },
+    
+    #' @description Get the lengths of the indiviudal elements in the ragged array
+    #' @param index optionally only get lengths for a subset of persons. If
+    #' \code{NULL}, return all lengths; if passed an [individual::Bitset]
+    #' or integer vector, return lengths of arrays for those individuals.
+    get_length = function(index = NULL) {
+      if (is.null(index)) {
+        return(double_ragged_variable_get_length(self$.variable))
+      } else{
+        if (inherits(index, 'Bitset')){
+          return(double_ragged_variable_get_length_at_index_bitset(self$.variable, index$.bitset))
+        } else {
+          stopifnot(index > 0)
+          stopifnot(is.finite(index))
+          return(double_ragged_variable_get_length_at_index_vector(self$.variable, index))
         }
       }
     },
-
-    #' @description return a \code{\link[individual]{Bitset}} giving individuals
-    #' whose value lies in an interval \eqn{[a,b]}.
-    #' @param a lower bound
-    #' @param b upper bound
-    get_index_of = function(a, b) {
-      stopifnot(a < b)
-      return(Bitset$new(from = double_variable_get_index_of_range(self$.variable, a, b)))
-    },
-
-    #' @description return the number of individuals whose value lies in an interval
-    #' Count individuals whose value lies in an interval \eqn{[a,b]}.
-    #' @param a lower bound
-    #' @param b upper bound
-    get_size_of = function(a, b) {
-      stopifnot(a < b)
-      return(double_variable_get_size_of_range(self$.variable, a, b))
-    },
-
+    
     #' @description Queue an update for a variable. There are 4 types of variable update:
+    #'
     #' \enumerate{
     #'  \item{Subset update: }{The argument \code{index} represents a subset of the variable to
     #' update. The argument \code{values} should be a vector whose length matches the size of \code{index},
@@ -67,23 +71,24 @@ DoubleVariable <- R6Class(
     #' should be a single number, which fills all of the variable values in
     #' the population.}
     #' }
-    #' @param values a vector or scalar of values to assign at the index.
+    #' @param values a list of numeric vectors
     #' @param index is the index at which to apply the change, use \code{NULL} for the
     #' fill options. If using indices, this may be either a vector of integers or
-    #' a \code{\link[individual]{Bitset}}.
+    #' an [individual::Bitset].
     queue_update = function(values, index = NULL) {
-      stopifnot(is.numeric(values), !is.null(values))
+      stopifnot(vapply(X = values, FUN = class, FUN.VALUE = character(1), USE.NAMES = FALSE) %in% c('numeric', 'integer'))
+      stopifnot(vapply(X = initial_values, FUN = is.finite, FUN.VALUE = logical(1), USE.NAMES = FALSE))
       if(is.null(index)){
         if(length(values) == 1){
           # variable fill
-          double_variable_queue_fill(
+          double_ragged_variable_queue_fill(
             self$.variable,
             values
           )
         } else {
           # variable reset
           stopifnot(length(values) == variable_get_size(self$.variable))
-          double_variable_queue_update(
+          double_ragged_variable_queue_update(
             self$.variable,
             values,
             integer(0)
@@ -93,41 +98,42 @@ DoubleVariable <- R6Class(
         if (inherits(index, 'Bitset')) {
           # subset update/fill: bitset
           stopifnot(index$max_size == variable_get_size(self$.variable))
-          if (index$size() > 0){
-            double_variable_queue_update_bitset(
+          if (index$size() > 0) {
+            double_ragged_variable_queue_update_bitset(
               self$.variable,
               values,
               index$.bitset
             )
           }
         } else {
-          if (length(index) != 0) {
+          if (length(index) > 0) {
             # subset update/fill: vector
             stopifnot(is.finite(index))
             stopifnot(index > 0)
-            double_variable_queue_update(
+            double_ragged_variable_queue_update(
               self$.variable,
               values,
               index
             )
           }
         }
+        
       }
     },
-
+    
     #' @description extend the variable with new values
     #' @param values to add to the variable
     queue_extend = function(values) {
       stopifnot(is.numeric(values))
-      double_variable_queue_extend(self$.variable, values)
+      double_ragged_variable_queue_extend(self$.variable, values)
     },
-
+    
     #' @description shrink the variable
     #' @param index a bitset or vector representing the individuals to remove
     queue_shrink = function(index) {
       if (inherits(index, 'Bitset')) {
         if (index$size() > 0){
-          double_variable_queue_shrink_bitset(
+          double_ragged_variable_queue_shrink_bitset(
             self$.variable,
             index$.bitset
           )
@@ -136,14 +142,14 @@ DoubleVariable <- R6Class(
         if (length(index) != 0) {
           stopifnot(all(is.finite(index)))
           stopifnot(all(index > 0))
-          double_variable_queue_shrink(self$.variable, index)
+          double_ragged_variable_queue_shrink(self$.variable, index)
         }
       }
     },
-
+    
     #' @description get the size of the variable
     size = function() variable_get_size(self$.variable),
-
+    
     .update = function() variable_update(self$.variable),
     .resize = function() variable_resize(self$.variable)
   )
