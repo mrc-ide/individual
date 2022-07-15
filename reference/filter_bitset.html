@@ -23,7 +23,7 @@ an equivalent vector of integer indices.'><meta property="og:image" content="/lo
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -32,13 +32,16 @@ an equivalent vector of integer indices.'><meta property="og:image" content="/lo
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/API.html">API</a>
+    </li>
+    <li>
+      <a href="../articles/Changing_Populations.html">Changing population</a>
     </li>
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
@@ -84,15 +87,18 @@ an equivalent vector of integer indices.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">filter_bitset</span><span class="op">(</span><span class="va">bitset</span>, <span class="va">other</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filter_bitset</span><span class="op">(</span><span class="va">bitset</span>, <span class="va">other</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>bitset</dt>
 <dd><p>the <code><a href="Bitset.html">Bitset</a></code> to filter</p></dd>
+
+
 <dt>other</dt>
 <dd><p>the values to keep (may be a vector of intergers or another <code><a href="Bitset.html">Bitset</a></code>)</p></dd>
+
 </dl></div>
 
   </div>
@@ -107,7 +113,7 @@ an equivalent vector of integer indices.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

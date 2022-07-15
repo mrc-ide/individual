@@ -13,6 +13,9 @@
     <loc>/articles/API.html</loc>
   </url>
   <url>
+    <loc>/articles/Changing_Populations.html</loc>
+  </url>
+  <url>
     <loc>/articles/Contributing.html</loc>
   </url>
   <url>
@@ -47,6 +50,12 @@
   </url>
   <url>
     <loc>/reference/IntegerVariable.html</loc>
+  </url>
+  <url>
+    <loc>/reference/RaggedDouble.html</loc>
+  </url>
+  <url>
+    <loc>/reference/RaggedInteger.html</loc>
   </url>
   <url>
     <loc>/reference/Render.html</loc>

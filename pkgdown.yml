@@ -1,10 +1,11 @@
 pandoc: 2.7.3
-pkgdown: 2.0.1
+pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
   API: API.html
+  Changing_Populations: Changing_Populations.html
   Contributing: Contributing.html
   Performance: Performance.html
   Tutorial: Tutorial.html
-last_built: 2022-01-05T16:41Z
+last_built: 2022-07-15T12:56Z
 

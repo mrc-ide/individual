@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -50,7 +50,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -58,6 +58,9 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/API.html">API</a>
+    </li>
+    <li>
+      <a href="../articles/Changing_Populations.html">Changing population</a>
     </li>
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
@@ -113,92 +116,92 @@
 </h3>
 <p>To start, we should define some constants. The epidemic will be simulated in a population of 1000, where 5 persons are initially infectious, whose indices are randomly sampled. The effective contact rate <span class="math inline">\(\beta\)</span> will be a function of the deterministic <span class="math inline">\(R_{0}\)</span> and recovery rate <span class="math inline">\(\gamma\)</span>. We also specify <code>dt</code>, which is the size of the time step <span class="math inline">\((\Delta t)\)</span>. Because individual’s time steps are all of unit length, we scale transition probabilities by <code>dt</code> to create models with different sized steps, interpreting the discrete time model as a discretization of a continuous time model. If the maximum time is <code>tmax</code> then the overall number of time steps is <code>tmax/dt</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">1e3</span>
-<span class="va">I0</span> <span class="op">&lt;-</span> <span class="fl">5</span>
-<span class="va">S0</span> <span class="op">&lt;-</span> <span class="va">N</span> <span class="op">-</span> <span class="va">I0</span>
-<span class="va">dt</span> <span class="op">&lt;-</span> <span class="fl">0.1</span>
-<span class="va">tmax</span> <span class="op">&lt;-</span> <span class="fl">100</span>
-<span class="va">steps</span> <span class="op">&lt;-</span> <span class="va">tmax</span><span class="op">/</span><span class="va">dt</span>
-<span class="va">gamma</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="fl">10</span>
-<span class="va">R0</span> <span class="op">&lt;-</span> <span class="fl">2.5</span>
-<span class="va">beta</span> <span class="op">&lt;-</span> <span class="va">R0</span> <span class="op">*</span> <span class="va">gamma</span>
-<span class="va">health_states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>,<span class="st">"I"</span>,<span class="st">"R"</span><span class="op">)</span>
-<span class="va">health_states_t0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"S"</span>,<span class="va">N</span><span class="op">)</span>
-<span class="va">health_states_t0</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">N</span>,size <span class="op">=</span> <span class="va">I0</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"I"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">1e3</span></span>
+<span><span class="va">I0</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
+<span><span class="va">S0</span> <span class="op">&lt;-</span> <span class="va">N</span> <span class="op">-</span> <span class="va">I0</span></span>
+<span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
+<span><span class="va">tmax</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span><span class="va">steps</span> <span class="op">&lt;-</span> <span class="va">tmax</span><span class="op">/</span><span class="va">dt</span></span>
+<span><span class="va">gamma</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="fl">10</span></span>
+<span><span class="va">R0</span> <span class="op">&lt;-</span> <span class="fl">2.5</span></span>
+<span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="va">R0</span> <span class="op">*</span> <span class="va">gamma</span></span>
+<span><span class="va">health_states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>,<span class="st">"I"</span>,<span class="st">"R"</span><span class="op">)</span></span>
+<span><span class="va">health_states_t0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"S"</span>,<span class="va">N</span><span class="op">)</span></span>
+<span><span class="va">health_states_t0</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">N</span>,size <span class="op">=</span> <span class="va">I0</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"I"</span></span></code></pre></div>
 <p>Next, we will define the <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> which should store the model’s “state”.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">health</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CategoricalVariable.html">CategoricalVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>categories <span class="op">=</span> <span class="va">health_states</span>,initial_values <span class="op">=</span> <span class="va">health_states_t0</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">health</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CategoricalVariable.html">CategoricalVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>categories <span class="op">=</span> <span class="va">health_states</span>,initial_values <span class="op">=</span> <span class="va">health_states_t0</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="proc">Processes<a class="anchor" aria-label="anchor" href="#proc"></a>
 </h3>
 <p>In order to model infection, we need a process. This is a function that takes only a single argument, <code>t</code>, for the current time step (unused here, but can model time-dependent processes, such as seasonality or school holiday). Within the function, we get the current number of infectious individuals, then calculate the <em>per-capita</em> force of infection on each susceptible person, <span class="math inline">\(\lambda = \beta I/N\)</span>. Next we get a <code><a href="../reference/Bitset.html">individual::Bitset</a></code> containing those susceptible individuals and use the <code>sample</code> method to randomly select those who will be infected on this time step. The probability is given by <span class="math inline">\(1 - e^{-\lambda\Delta t}\)</span>. This is the same as the CDF of an exponential random variate so we use <code><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">stats::pexp</a></code> to compute that quantity. Finally, we queue a state update for those individuals who were sampled.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">infection_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">I</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_size_of</span><span class="op">(</span><span class="st">"I"</span><span class="op">)</span>
-  <span class="va">foi</span> <span class="op">&lt;-</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">I</span><span class="op">/</span><span class="va">N</span>
-  <span class="va">S</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">"S"</span><span class="op">)</span>
-  <span class="va">S</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span>rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">foi</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">health</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>value <span class="op">=</span> <span class="st">"I"</span>,index <span class="op">=</span> <span class="va">S</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">infection_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">I</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_size_of</span><span class="op">(</span><span class="st">"I"</span><span class="op">)</span></span>
+<span>  <span class="va">foi</span> <span class="op">&lt;-</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">I</span><span class="op">/</span><span class="va">N</span></span>
+<span>  <span class="va">S</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">"S"</span><span class="op">)</span></span>
+<span>  <span class="va">S</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span>rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">foi</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">health</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>value <span class="op">=</span> <span class="st">"I"</span>,index <span class="op">=</span> <span class="va">S</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="event">Events<a class="anchor" aria-label="anchor" href="#event"></a>
 </h3>
 <p>Now we need to model recovery. For geometrically distributed infectious periods, we could use another process that randomly samples some individuals each time step to recover, but we’ll use a <code><a href="../reference/TargetedEvent.html">individual::TargetedEvent</a></code> to illustrate their use. The recovery event is quite simple, and the “listener” which is added is a function that is called when the event triggers, taking <code>target</code>, a <code><a href="../reference/Bitset.html">individual::Bitset</a></code> of scheduled individuals, as its second argument. Those individuals are scheduled for a state update within the listener function body.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">recovery_event</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/TargetedEvent.html">TargetedEvent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>population_size <span class="op">=</span> <span class="va">N</span><span class="op">)</span>
-<span class="va">recovery_event</span><span class="op">$</span><span class="fu">add_listener</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">target</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">health</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span><span class="st">"R"</span>, <span class="va">target</span><span class="op">)</span>
-<span class="op">}</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">recovery_event</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/TargetedEvent.html">TargetedEvent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>population_size <span class="op">=</span> <span class="va">N</span><span class="op">)</span></span>
+<span><span class="va">recovery_event</span><span class="op">$</span><span class="fu">add_listener</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">target</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">health</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span><span class="st">"R"</span>, <span class="va">target</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, we need to define a recovery process that queues future recovery events. We first get <code><a href="../reference/Bitset.html">individual::Bitset</a></code> objects of those currently infectious individuals and those who have already been scheduled for a recovery. Then, using bitwise operations, we get the intersection of already infectious persons with persons who have not been scheduled, precisely those who need to have recovery times sampled and recoveries scheduled. We sample those times from <code><a href="https://rdrr.io/r/stats/Geometric.html" class="external-link">stats::rgeom</a></code>, where the probability for recovery is <span class="math inline">\(1-e^{-\gamma \Delta t}\)</span>. Note that we add one to the resulting vector, because by default R uses a “number of failures” parameterization rather than “number of trials”, meaning it would be possible for an individual to be infectious for 0 time steps without the correction. Finally we schedule the recovery using the recovery event object.</p>
 <p>We note at this point would be possible to queue the recovery event at the same time the infection state update was made, but we separate event and process for illustration of how the package works.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">recovery_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">I</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">"I"</span><span class="op">)</span>
-  <span class="va">already_scheduled</span> <span class="op">&lt;-</span> <span class="va">recovery_event</span><span class="op">$</span><span class="fu">get_scheduled</span><span class="op">(</span><span class="op">)</span>
-  <span class="va">I</span><span class="op">$</span><span class="fu">and</span><span class="op">(</span><span class="va">already_scheduled</span><span class="op">$</span><span class="fu">not</span><span class="op">(</span>inplace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">rec_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Geometric.html" class="external-link">rgeom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">I</span><span class="op">$</span><span class="fu">size</span><span class="op">(</span><span class="op">)</span>,prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">gamma</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>
-  <span class="va">recovery_event</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span>target <span class="op">=</span> <span class="va">I</span>,delay <span class="op">=</span> <span class="va">rec_times</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">recovery_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">I</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">"I"</span><span class="op">)</span></span>
+<span>  <span class="va">already_scheduled</span> <span class="op">&lt;-</span> <span class="va">recovery_event</span><span class="op">$</span><span class="fu">get_scheduled</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">I</span><span class="op">$</span><span class="fu">and</span><span class="op">(</span><span class="va">already_scheduled</span><span class="op">$</span><span class="fu">not</span><span class="op">(</span>inplace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">rec_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Geometric.html" class="external-link">rgeom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">I</span><span class="op">$</span><span class="fu">size</span><span class="op">(</span><span class="op">)</span>,prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">gamma</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span>  <span class="va">recovery_event</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span>target <span class="op">=</span> <span class="va">I</span>,delay <span class="op">=</span> <span class="va">rec_times</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="render">Rendering<a class="anchor" aria-label="anchor" href="#render"></a>
 </h3>
 <p>The last thing to do before simulating the model is rendering output to plot. We use a <code><a href="../reference/Render.html">individual::Render</a></code> object which stores output from the model, which is tracked each time step. To do so requires another process, for which we use the “prefab” <code><a href="../reference/categorical_count_renderer_process.html">individual::categorical_count_renderer_process</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">health_render</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Render.html">Render</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>timesteps <span class="op">=</span> <span class="va">steps</span><span class="op">)</span>
-<span class="va">health_render_process</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/categorical_count_renderer_process.html">categorical_count_renderer_process</a></span><span class="op">(</span>
-  renderer <span class="op">=</span> <span class="va">health_render</span>,
-  variable <span class="op">=</span> <span class="va">health</span>,
-  categories <span class="op">=</span> <span class="va">health_states</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">health_render</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Render.html">Render</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>timesteps <span class="op">=</span> <span class="va">steps</span><span class="op">)</span></span>
+<span><span class="va">health_render_process</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/categorical_count_renderer_process.html">categorical_count_renderer_process</a></span><span class="op">(</span></span>
+<span>  renderer <span class="op">=</span> <span class="va">health_render</span>,</span>
+<span>  variable <span class="op">=</span> <span class="va">health</span>,</span>
+<span>  categories <span class="op">=</span> <span class="va">health_states</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="sim">Simulation<a class="anchor" aria-label="anchor" href="#sim"></a>
 </h3>
 <p>Finally, the simulation can be run by passing objects to the <code><a href="../reference/simulation_loop.html">individual::simulation_loop</a></code> function:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/simulation_loop.html">simulation_loop</a></span><span class="op">(</span>
-  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">health</span><span class="op">)</span>,
-  events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">recovery_event</span><span class="op">)</span>,
-  processes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">infection_process</span>,<span class="va">recovery_process</span>,<span class="va">health_render_process</span><span class="op">)</span>,
-  timesteps <span class="op">=</span> <span class="va">steps</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/simulation_loop.html">simulation_loop</a></span><span class="op">(</span></span>
+<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">health</span><span class="op">)</span>,</span>
+<span>  events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">recovery_event</span><span class="op">)</span>,</span>
+<span>  processes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">infection_process</span>,<span class="va">recovery_process</span>,<span class="va">health_render_process</span><span class="op">)</span>,</span>
+<span>  timesteps <span class="op">=</span> <span class="va">steps</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>We can easily plot the results by accessing the renderer.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">states</span> <span class="op">&lt;-</span> <span class="va">health_render</span><span class="op">$</span><span class="fu">to_dataframe</span><span class="op">(</span><span class="op">)</span>
-<span class="va">health_cols</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"royalblue3"</span>,<span class="st">"firebrick3"</span>,<span class="st">"darkorchid3"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span>
-  x <span class="op">=</span> <span class="va">states</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">*</span><span class="va">dt</span>, y <span class="op">=</span> <span class="va">states</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
-  type<span class="op">=</span><span class="st">"l"</span>,lwd<span class="op">=</span><span class="fl">2</span>,lty <span class="op">=</span> <span class="fl">1</span>,col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html" class="external-link">adjustcolor</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">health_cols</span>, alpha.f <span class="op">=</span> <span class="fl">0.85</span><span class="op">)</span>,
-  xlab <span class="op">=</span> <span class="st">"Time"</span>,ylab <span class="op">=</span> <span class="st">"Count"</span>
-<span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span>
-  x <span class="op">=</span> <span class="st">"topright"</span>,pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">16</span>,<span class="fl">3</span><span class="op">)</span>,
-  col <span class="op">=</span> <span class="va">health_cols</span>,bg <span class="op">=</span> <span class="st">"transparent"</span>,
-  legend <span class="op">=</span> <span class="va">health_states</span>, cex <span class="op">=</span> <span class="fl">1.5</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">states</span> <span class="op">&lt;-</span> <span class="va">health_render</span><span class="op">$</span><span class="fu">to_dataframe</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">health_cols</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"royalblue3"</span>,<span class="st">"firebrick3"</span>,<span class="st">"darkorchid3"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">states</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">*</span><span class="va">dt</span>, y <span class="op">=</span> <span class="va">states</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>  type<span class="op">=</span><span class="st">"l"</span>,lwd<span class="op">=</span><span class="fl">2</span>,lty <span class="op">=</span> <span class="fl">1</span>,col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html" class="external-link">adjustcolor</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">health_cols</span>, alpha.f <span class="op">=</span> <span class="fl">0.85</span><span class="op">)</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="st">"Time"</span>,ylab <span class="op">=</span> <span class="st">"Count"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="st">"topright"</span>,pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">16</span>,<span class="fl">3</span><span class="op">)</span>,</span>
+<span>  col <span class="op">=</span> <span class="va">health_cols</span>,bg <span class="op">=</span> <span class="st">"transparent"</span>,</span>
+<span>  legend <span class="op">=</span> <span class="va">health_states</span>, cex <span class="op">=</span> <span class="fl">1.5</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="Tutorial_files/figure-html/unnamed-chunk-9-1.png" width="1800"></p>
 </div>
 </div>
@@ -221,7 +224,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>

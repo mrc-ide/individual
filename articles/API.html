@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -50,7 +50,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -58,6 +58,9 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/API.html">API</a>
+    </li>
+    <li>
+      <a href="../articles/Changing_Populations.html">Changing population</a>
     </li>
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
@@ -139,46 +142,46 @@
 <p>In “individual”, processes are functions which are called on each time step with a single argument, <code>t</code>, the current time step of the simulation. Processes are how most of the dynamics of a model are specified, and are implemented as <a href="http://adv-r.had.co.nz/Functional-programming.html#closures" class="external-link">closures</a>, which are functions that are able to access data not included in the list of function arguments.</p>
 <p>An illustrative example can be found in the provided <code><a href="../reference/bernoulli_process.html">individual::bernoulli_process</a></code>, which moves individuals from one value (source) of a <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> to another (destination) at a constant probability (such that the dwell time in the <code>from</code> state follows a <a href="https://en.wikipedia.org/wiki/Geometric_distribution" class="external-link">geometric distribution</a>).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bernoulli_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">variable</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">rate</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">variable</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>
-      <span class="va">to</span>,
-      <span class="va">variable</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="va">from</span><span class="op">)</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span><span class="va">rate</span><span class="op">)</span>
-    <span class="op">)</span>
-  <span class="op">}</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">bernoulli_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">variable</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">rate</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">variable</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span></span>
+<span>      <span class="va">to</span>,</span>
+<span>      <span class="va">variable</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="va">from</span><span class="op">)</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span><span class="va">rate</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>We can test empirically that dwell times do indeed follow a geometric distribution (and demonstrate uses of <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> objects) by modifying slightly the function to take <code>int_variable</code>, an object of class <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code>. Each time the returned function closure is called it randomly samples a subset of individuals to move to the destination state, and records the time step at which those individuals move in the <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code>. We run the simple simulation loop until there are no more individuals left in the source state, and compare the dwell times in the source state to the results of <code><a href="https://rdrr.io/r/stats/Geometric.html" class="external-link">stats::rgeom</a></code>, and see that they are from the same distribution, using <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">stats::chisq.test</a></code> for comparison of discrete distributions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bernoulli_process_time</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">variable</span>, <span class="va">int_variable</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">rate</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">to_move</span> <span class="op">&lt;-</span> <span class="va">variable</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="va">from</span><span class="op">)</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span><span class="va">rate</span><span class="op">)</span>
-    <span class="va">int_variable</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>values <span class="op">=</span> <span class="va">t</span>, index <span class="op">=</span> <span class="va">to_move</span><span class="op">)</span>
-    <span class="va">variable</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span><span class="va">to</span>, <span class="va">to_move</span><span class="op">)</span>
-  <span class="op">}</span>
-<span class="op">}</span>
-
-<span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">5e4</span>
-<span class="va">state</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CategoricalVariable.html">CategoricalVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span>
-<span class="va">time</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/IntegerVariable.html">IntegerVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>initial_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">proc</span> <span class="op">&lt;-</span> <span class="fu">bernoulli_process_time</span><span class="op">(</span>variable <span class="op">=</span> <span class="va">state</span>,int_variable <span class="op">=</span> <span class="va">time</span>,from <span class="op">=</span> <span class="st">'S'</span>,to <span class="op">=</span> <span class="st">'I'</span>,rate <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>
-
-<span class="va">t</span> <span class="op">&lt;-</span> <span class="fl">0</span>
-<span class="kw">while</span> <span class="op">(</span><span class="va">state</span><span class="op">$</span><span class="fu">get_size_of</span><span class="op">(</span><span class="st">'S'</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu">proc</span><span class="op">(</span>t <span class="op">=</span> <span class="va">t</span><span class="op">)</span>
-  <span class="va">state</span><span class="op">$</span><span class="fu">.update</span><span class="op">(</span><span class="op">)</span>
-  <span class="va">time</span><span class="op">$</span><span class="fu">.update</span><span class="op">(</span><span class="op">)</span>
-  <span class="va">t</span> <span class="op">&lt;-</span> <span class="va">t</span> <span class="op">+</span> <span class="fl">1</span>
-<span class="op">}</span>
-
-<span class="va">times</span> <span class="op">&lt;-</span> <span class="va">time</span><span class="op">$</span><span class="fu">get_values</span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test</a></span><span class="op">(</span><span class="va">times</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Geometric.html" class="external-link">rgeom</a></span><span class="op">(</span><span class="va">n</span>,prob <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>,simulate.p.value <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Pearson's Chi-squared test with simulated p-value (based on 2000</span>
-<span class="co">#&gt;  replicates)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; data:  times and rgeom(n, prob = 0.1)</span>
-<span class="co">#&gt; X-squared = 6443.4, df = NA, p-value = 0.5612</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">bernoulli_process_time</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">variable</span>, <span class="va">int_variable</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">rate</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">to_move</span> <span class="op">&lt;-</span> <span class="va">variable</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="va">from</span><span class="op">)</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span><span class="va">rate</span><span class="op">)</span></span>
+<span>    <span class="va">int_variable</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>values <span class="op">=</span> <span class="va">t</span>, index <span class="op">=</span> <span class="va">to_move</span><span class="op">)</span></span>
+<span>    <span class="va">variable</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span><span class="va">to</span>, <span class="va">to_move</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">5e4</span></span>
+<span><span class="va">state</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CategoricalVariable.html">CategoricalVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">time</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/IntegerVariable.html">IntegerVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>initial_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">proc</span> <span class="op">&lt;-</span> <span class="fu">bernoulli_process_time</span><span class="op">(</span>variable <span class="op">=</span> <span class="va">state</span>,int_variable <span class="op">=</span> <span class="va">time</span>,from <span class="op">=</span> <span class="st">'S'</span>,to <span class="op">=</span> <span class="st">'I'</span>,rate <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span><span class="kw">while</span> <span class="op">(</span><span class="va">state</span><span class="op">$</span><span class="fu">get_size_of</span><span class="op">(</span><span class="st">'S'</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">proc</span><span class="op">(</span>t <span class="op">=</span> <span class="va">t</span><span class="op">)</span></span>
+<span>  <span class="va">state</span><span class="op">$</span><span class="fu">.update</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">time</span><span class="op">$</span><span class="fu">.update</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">t</span> <span class="op">&lt;-</span> <span class="va">t</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="va">time</span><span class="op">$</span><span class="fu">get_values</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test</a></span><span class="op">(</span><span class="va">times</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Geometric.html" class="external-link">rgeom</a></span><span class="op">(</span><span class="va">n</span>,prob <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>,simulate.p.value <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Pearson's Chi-squared test with simulated p-value (based on 2000</span></span>
+<span><span class="co">#&gt;  replicates)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; data:  times and rgeom(n, prob = 0.1)</span></span>
+<span><span class="co">#&gt; X-squared = 9725.5, df = NA, p-value = 0.1164</span></span></code></pre></div>
 <p>By using <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> and <code><a href="../reference/DoubleVariable.html">individual::DoubleVariable</a></code> objects to modify the probability with which individuals move between states, as well as counters for recording previous state transitions and times, complex dynamics can be specified from simple building blocks. Several “prefab” functions are provided to make function closures corresponding to state transition processes common in epidemiological models.</p>
 <div class="section level3">
 <h3 id="rend">Render<a class="anchor" aria-label="anchor" href="#rend"></a>
@@ -186,13 +189,13 @@
 <p>During each time step we often want to record (render) certain output from the simulation. Because rendering output occurs each time step, they are called as other processes during the simulation loop (this is another way we could have implemented the time counters in the previous example).</p>
 <p>In “individual”, rendering output is handled by <code><a href="../reference/Render.html">individual::Render</a></code> class objects, which build up the recorded data and can return a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">base::data.frame</a></code> object for plotting and analysis. A <code><a href="../reference/Render.html">individual::Render</a></code> object is then stored in a function closure that is called each time step like other processes, and into which data may be recorded. Please note that the function closure must also store any variable objects whose values should be tracked, such as the prefab rendering process <code><a href="../reference/categorical_count_renderer_process.html">individual::categorical_count_renderer_process</a></code>, taking a <code><a href="../reference/Render.html">individual::Render</a></code> object as the first argument and a <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> object as the second.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">categorical_count_renderer_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">renderer</span>, <span class="va">variable</span>, <span class="va">categories</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span>
-    <span class="kw">for</span> <span class="op">(</span><span class="va">c</span> <span class="kw">in</span> <span class="va">categories</span><span class="op">)</span> <span class="op">{</span>
-      <span class="va">renderer</span><span class="op">$</span><span class="fu">render</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">c</span>, <span class="st">'_count'</span><span class="op">)</span>, <span class="va">variable</span><span class="op">$</span><span class="fu">get_size_of</span><span class="op">(</span><span class="va">c</span><span class="op">)</span>, <span class="va">t</span><span class="op">)</span>
-    <span class="op">}</span>
-  <span class="op">}</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">categorical_count_renderer_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">renderer</span>, <span class="va">variable</span>, <span class="va">categories</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">c</span> <span class="kw">in</span> <span class="va">categories</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">renderer</span><span class="op">$</span><span class="fu">render</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">c</span>, <span class="st">'_count'</span><span class="op">)</span>, <span class="va">variable</span><span class="op">$</span><span class="fu">get_size_of</span><span class="op">(</span><span class="va">c</span><span class="op">)</span>, <span class="va">t</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -207,10 +210,10 @@
 <p>Much like regular <a href="#event">Events</a>, previously scheduled targeted events can be canceled, requiring either a <code><a href="../reference/Bitset.html">individual::Bitset</a></code> or vector of indices for individuals whose events should be canceled.</p>
 <p>The code to define events is typically quite brief, although typically another process must be defined that queues them. A recovery event in an SIR model for example, might look like this, where <code>state</code> is a <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">recovery_event</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/TargetedEvent.html">TargetedEvent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>population_size <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
-<span class="va">recovery_event</span><span class="op">$</span><span class="fu">add_listener</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">timestep</span>, <span class="va">target</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">state</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span><span class="st">'R'</span>, <span class="va">target</span><span class="op">)</span>
-<span class="op">}</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">recovery_event</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/TargetedEvent.html">TargetedEvent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>population_size <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">recovery_event</span><span class="op">$</span><span class="fu">add_listener</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">timestep</span>, <span class="va">target</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">state</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span><span class="st">'R'</span>, <span class="va">target</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -225,30 +228,30 @@ Simulation loop flowchart
 </div>
 <p>The equivalent code used in the simulation loop is below.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">simulation_loop</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span>
-  <span class="va">variables</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  <span class="va">events</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  <span class="va">processes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  <span class="va">timesteps</span>
-  <span class="op">)</span> <span class="op">{</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="va">timesteps</span> <span class="op">&lt;=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">'End timestep must be &gt; 0'</span><span class="op">)</span>
-  <span class="op">}</span>
-  <span class="kw">for</span> <span class="op">(</span><span class="va">t</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">timesteps</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-    <span class="kw">for</span> <span class="op">(</span><span class="va">process</span> <span class="kw">in</span> <span class="va">processes</span><span class="op">)</span> <span class="op">{</span>
-      <span class="fu">execute_any_process</span><span class="op">(</span><span class="va">process</span>, <span class="va">t</span><span class="op">)</span>
-    <span class="op">}</span>
-    <span class="kw">for</span> <span class="op">(</span><span class="va">event</span> <span class="kw">in</span> <span class="va">events</span><span class="op">)</span> <span class="op">{</span>
-      <span class="va">event</span><span class="op">$</span><span class="fu">.process</span><span class="op">(</span><span class="op">)</span>
-    <span class="op">}</span>
-    <span class="kw">for</span> <span class="op">(</span><span class="va">variable</span> <span class="kw">in</span> <span class="va">variables</span><span class="op">)</span> <span class="op">{</span>
-      <span class="va">variable</span><span class="op">$</span><span class="fu">.update</span><span class="op">(</span><span class="op">)</span>
-    <span class="op">}</span>
-    <span class="kw">for</span> <span class="op">(</span><span class="va">event</span> <span class="kw">in</span> <span class="va">events</span><span class="op">)</span> <span class="op">{</span>
-      <span class="va">event</span><span class="op">$</span><span class="fu">.tick</span><span class="op">(</span><span class="op">)</span>
-    <span class="op">}</span>
-  <span class="op">}</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">simulation_loop</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
+<span>  <span class="va">variables</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">events</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">processes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">timesteps</span></span>
+<span>  <span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">timesteps</span> <span class="op">&lt;=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">'End timestep must be &gt; 0'</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">t</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">timesteps</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">process</span> <span class="kw">in</span> <span class="va">processes</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu">execute_any_process</span><span class="op">(</span><span class="va">process</span>, <span class="va">t</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">event</span> <span class="kw">in</span> <span class="va">events</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">event</span><span class="op">$</span><span class="fu">.process</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">variable</span> <span class="kw">in</span> <span class="va">variables</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">variable</span><span class="op">$</span><span class="fu">.update</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">event</span> <span class="kw">in</span> <span class="va">events</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">event</span><span class="op">$</span><span class="fu">.tick</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
   </div>
 
@@ -269,7 +272,7 @@ Simulation loop flowchart
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>

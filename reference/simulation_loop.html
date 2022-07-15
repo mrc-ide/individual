@@ -18,7 +18,7 @@ over processes for state changes."><meta property="og:image" content="/logo.png"
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -27,13 +27,16 @@ over processes for state changes."><meta property="og:image" content="/logo.png"
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/API.html">API</a>
+    </li>
+    <li>
+      <a href="../articles/Changing_Populations.html">Changing population</a>
     </li>
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
@@ -74,58 +77,65 @@ over processes for state changes.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">simulation_loop</span><span class="op">(</span>
-  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  processes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  <span class="va">timesteps</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simulation_loop</span><span class="op">(</span></span>
+<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  processes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">timesteps</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>variables</dt>
 <dd><p>a list of Variables</p></dd>
+
+
 <dt>events</dt>
 <dd><p>a list of Events</p></dd>
+
+
 <dt>processes</dt>
 <dd><p>a list of processes to execute on each timestep</p></dd>
+
+
 <dt>timesteps</dt>
 <dd><p>the number of timesteps to simulate</p></dd>
+
 </dl></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">population</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
-<span class="r-in"><span class="va">timesteps</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
-<span class="r-in"><span class="va">state</span> <span class="op">&lt;-</span> <span class="va"><a href="CategoricalVariable.html">CategoricalVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span>, <span class="st">'R'</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="va">population</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">renderer</span> <span class="op">&lt;-</span> <span class="va"><a href="Render.html">Render</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">timesteps</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">transition</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">from</span>, <span class="va">to</span>, <span class="va">rate</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="va">from_state</span> <span class="op">&lt;-</span> <span class="va">state</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="va">from</span><span class="op">)</span></span>
-<span class="r-in">    <span class="va">state</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span></span>
-<span class="r-in">      <span class="va">to</span>,</span>
-<span class="r-in">      <span class="va">from_state</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span><span class="va">rate</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">processes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu">transition</span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span>, <span class="fl">.2</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="fu">transition</span><span class="op">(</span><span class="st">'I'</span>, <span class="st">'R'</span>, <span class="fl">.1</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="fu">transition</span><span class="op">(</span><span class="st">'R'</span>, <span class="st">'S'</span>, <span class="fl">.05</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="fu"><a href="categorical_count_renderer_process.html">categorical_count_renderer_process</a></span><span class="op">(</span><span class="va">renderer</span>, <span class="va">state</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span>, <span class="st">'R'</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">simulation_loop</span><span class="op">(</span>variables<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span>, processes<span class="op">=</span><span class="va">processes</span>, timesteps<span class="op">=</span><span class="va">timesteps</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">renderer</span><span class="op">$</span><span class="fu">to_dataframe</span><span class="op">(</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">population</span> <span class="op">&lt;-</span> <span class="fl">4</span></span></span>
+<span class="r-in"><span><span class="va">timesteps</span> <span class="op">&lt;-</span> <span class="fl">5</span></span></span>
+<span class="r-in"><span><span class="va">state</span> <span class="op">&lt;-</span> <span class="va"><a href="CategoricalVariable.html">CategoricalVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span>, <span class="st">'R'</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="va">population</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">renderer</span> <span class="op">&lt;-</span> <span class="va"><a href="Render.html">Render</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">timesteps</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">transition</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">from</span>, <span class="va">to</span>, <span class="va">rate</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">from_state</span> <span class="op">&lt;-</span> <span class="va">state</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="va">from</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">state</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="va">to</span>,</span></span>
+<span class="r-in"><span>      <span class="va">from_state</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span><span class="va">rate</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">processes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu">transition</span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span>, <span class="fl">.2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu">transition</span><span class="op">(</span><span class="st">'I'</span>, <span class="st">'R'</span>, <span class="fl">.1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu">transition</span><span class="op">(</span><span class="st">'R'</span>, <span class="st">'S'</span>, <span class="fl">.05</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="categorical_count_renderer_process.html">categorical_count_renderer_process</a></span><span class="op">(</span><span class="va">renderer</span>, <span class="va">state</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'S'</span>, <span class="st">'I'</span>, <span class="st">'R'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">simulation_loop</span><span class="op">(</span>variables<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span>, processes<span class="op">=</span><span class="va">processes</span>, timesteps<span class="op">=</span><span class="va">timesteps</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">renderer</span><span class="op">$</span><span class="fu">to_dataframe</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   timestep S_count I_count R_count</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        1       4       0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        2       2       2       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        3       2       2       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        4       0       3       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        5       0       3       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        2       3       1       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        3       3       1       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        4       3       1       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        5       2       2       0</span>
 </code></pre></div>
     </div>
   </div>
@@ -140,7 +150,7 @@ over processes for state changes.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

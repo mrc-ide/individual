@@ -21,7 +21,7 @@ if possible because certain operations will be faster."><meta property="og:image
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -30,13 +30,16 @@ if possible because certain operations will be faster."><meta property="og:image
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/API.html">API</a>
+    </li>
+    <li>
+      <a href="../articles/Changing_Populations.html">Changing population</a>
     </li>
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
@@ -86,18 +89,22 @@ if possible because certain operations will be faster.</p>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>CategoricalVariable$new()</code></a></p></li>
-<li><p><a href="#method-get_index_of"><code>CategoricalVariable$get_index_of()</code></a></p></li>
-<li><p><a href="#method-get_size_of"><code>CategoricalVariable$get_size_of()</code></a></p></li>
-<li><p><a href="#method-get_categories"><code>CategoricalVariable$get_categories()</code></a></p></li>
-<li><p><a href="#method-queue_update"><code>CategoricalVariable$queue_update()</code></a></p></li>
-<li><p><a href="#method-.update"><code>CategoricalVariable$.update()</code></a></p></li>
-<li><p><a href="#method-clone"><code>CategoricalVariable$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-CategoricalVariable-new"><code>CategoricalVariable$new()</code></a></p></li>
+<li><p><a href="#method-CategoricalVariable-get_index_of"><code>CategoricalVariable$get_index_of()</code></a></p></li>
+<li><p><a href="#method-CategoricalVariable-get_size_of"><code>CategoricalVariable$get_size_of()</code></a></p></li>
+<li><p><a href="#method-CategoricalVariable-get_categories"><code>CategoricalVariable$get_categories()</code></a></p></li>
+<li><p><a href="#method-CategoricalVariable-queue_update"><code>CategoricalVariable$queue_update()</code></a></p></li>
+<li><p><a href="#method-CategoricalVariable-queue_extend"><code>CategoricalVariable$queue_extend()</code></a></p></li>
+<li><p><a href="#method-CategoricalVariable-queue_shrink"><code>CategoricalVariable$queue_shrink()</code></a></p></li>
+<li><p><a href="#method-CategoricalVariable-size"><code>CategoricalVariable$size()</code></a></p></li>
+<li><p><a href="#method-CategoricalVariable-.update"><code>CategoricalVariable$.update()</code></a></p></li>
+<li><p><a href="#method-CategoricalVariable-.resize"><code>CategoricalVariable$.resize()</code></a></p></li>
+<li><p><a href="#method-CategoricalVariable-clone"><code>CategoricalVariable$clone()</code></a></p></li>
+</ul></div><p></p><hr><a id="method-CategoricalVariable-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Create a new CategoricalVariable</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va"><a href="../reference/CategoricalVariable.html">CategoricalVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">categories</span>, <span class="va">initial_values</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/CategoricalVariable.html">CategoricalVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">categories</span>, <span class="va">initial_values</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -114,11 +121,11 @@ individual</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-get_index_of"></a><div class="section">
+</div><p></p><hr><a id="method-CategoricalVariable-get_index_of"></a><div class="section">
 <h3 id="method-get-index-of-">Method <code>get_index_of()</code><a class="anchor" aria-label="anchor" href="#method-get-index-of-"></a></h3>
 <p>return a <code><a href="Bitset.html">Bitset</a></code> for individuals with the given <code>values</code></p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="va">values</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="va">values</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -130,11 +137,11 @@ individual</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-get_size_of"></a><div class="section">
+</div><p></p><hr><a id="method-CategoricalVariable-get_size_of"></a><div class="section">
 <h3 id="method-get-size-of-">Method <code>get_size_of()</code><a class="anchor" aria-label="anchor" href="#method-get-size-of-"></a></h3>
 <p>return the number of individuals with the given <code>values</code></p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">get_size_of</span><span class="op">(</span><span class="va">values</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">get_size_of</span><span class="op">(</span><span class="va">values</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -146,22 +153,22 @@ individual</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-get_categories"></a><div class="section">
+</div><p></p><hr><a id="method-CategoricalVariable-get_categories"></a><div class="section">
 <h3 id="method-get-categories-">Method <code>get_categories()</code><a class="anchor" aria-label="anchor" href="#method-get-categories-"></a></h3>
 <p>return a character vector of possible values.
 Note that the order of the returned vector may not be the same order
 that was given when the variable was intitialized, due to the underlying
 unordered storage type.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">get_categories</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">get_categories</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-queue_update"></a><div class="section">
+</div><p></p><hr><a id="method-CategoricalVariable-queue_update"></a><div class="section">
 <h3 id="method-queue-update-">Method <code>queue_update()</code><a class="anchor" aria-label="anchor" href="#method-queue-update-"></a></h3>
 <p>queue an update for this variable</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span><span class="va">value</span>, <span class="va">index</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span><span class="va">value</span>, <span class="va">index</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -179,24 +186,73 @@ a <code><a href="Bitset.html">Bitset</a></code>.</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-.update"></a><div class="section">
-<h3 id="method-update-">Method <code>.update()</code><a class="anchor" aria-label="anchor" href="#method-update-"></a></h3>
-
-<div class="section">
+</div><p></p><hr><a id="method-CategoricalVariable-queue_extend"></a><div class="section">
+<h3 id="method-queue-extend-">Method <code>queue_extend()</code><a class="anchor" aria-label="anchor" href="#method-queue-extend-"></a></h3>
+<p>extend the variable with new values</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">.update</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
-</div>
-
-
-</div><p></p><hr><a id="method-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
-<p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">queue_extend</span><span class="op">(</span><span class="va">values</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>values</code></dt>
+<dd><p>to add to the variable</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-CategoricalVariable-queue_shrink"></a><div class="section">
+<h3 id="method-queue-shrink-">Method <code>queue_shrink()</code><a class="anchor" aria-label="anchor" href="#method-queue-shrink-"></a></h3>
+<p>shrink the variable</p><div class="section">
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">queue_shrink</span><span class="op">(</span><span class="va">index</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>index</code></dt>
+<dd><p>a bitset or vector representing the individuals to remove</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-CategoricalVariable-size"></a><div class="section">
+<h3 id="method-size-">Method <code>size()</code><a class="anchor" aria-label="anchor" href="#method-size-"></a></h3>
+<p>get the size of the variable</p><div class="section">
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">size</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-CategoricalVariable-.update"></a><div class="section">
+<h3 id="method-update-">Method <code>.update()</code><a class="anchor" aria-label="anchor" href="#method-update-"></a></h3>
+
+<div class="section">
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">.update</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-CategoricalVariable-.resize"></a><div class="section">
+<h3 id="method-resize-">Method <code>.resize()</code><a class="anchor" aria-label="anchor" href="#method-resize-"></a></h3>
+
+<div class="section">
+<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">.resize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-CategoricalVariable-clone"></a><div class="section">
+<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+<p>The objects of this class are cloneable with this method.</p><div class="section">
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CategoricalVariable</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
@@ -220,7 +276,7 @@ a <code><a href="Bitset.html">Bitset</a></code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

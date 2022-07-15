@@ -21,7 +21,7 @@ probabilities contained in the vector destination_probabilities."><meta property
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -30,13 +30,16 @@ probabilities contained in the vector destination_probabilities."><meta property
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/API.html">API</a>
+    </li>
+    <li>
+      <a href="../articles/Changing_Populations.html">Changing population</a>
     </li>
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
@@ -80,31 +83,42 @@ probabilities contained in the vector <code>destination_probabilities</code>.</p
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">multi_probability_multinomial_process</span><span class="op">(</span>
-  <span class="va">variable</span>,
-  <span class="va">source_state</span>,
-  <span class="va">destination_states</span>,
-  <span class="va">rate_variable</span>,
-  <span class="va">destination_probabilities</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">multi_probability_multinomial_process</span><span class="op">(</span></span>
+<span>  <span class="va">variable</span>,</span>
+<span>  <span class="va">source_state</span>,</span>
+<span>  <span class="va">destination_states</span>,</span>
+<span>  <span class="va">rate_variable</span>,</span>
+<span>  <span class="va">destination_probabilities</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>variable</dt>
 <dd><p>a <code><a href="CategoricalVariable.html">CategoricalVariable</a></code> object.</p></dd>
+
+
 <dt>source_state</dt>
 <dd><p>a string representing the source state.</p></dd>
+
+
 <dt>destination_states</dt>
 <dd><p>a vector of strings representing the destination states.</p></dd>
+
+
 <dt>rate_variable</dt>
 <dd><p><code><a href="DoubleVariable.html">DoubleVariable</a></code> giving individual probability of each individual in source state to leave</p></dd>
+
+
 <dt>destination_probabilities</dt>
 <dd><p>probability vector of destination states.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a function which can be passed as a process to <code><a href="simulation_loop.html">simulation_loop</a></code>.</p>
+    
+
+<p>a function which can be passed as a process to <code><a href="simulation_loop.html">simulation_loop</a></code>.</p>
     </div>
 
   </div>
@@ -119,7 +133,7 @@ probabilities contained in the vector <code>destination_probabilities</code>.</p
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

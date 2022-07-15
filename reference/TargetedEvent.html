@@ -18,7 +18,7 @@ This is useful for events which are triggered for a sub-population."><meta prope
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -27,13 +27,16 @@ This is useful for events which are triggered for a sub-population."><meta prope
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/API.html">API</a>
+    </li>
+    <li>
+      <a href="../articles/Changing_Populations.html">Changing population</a>
     </li>
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
@@ -84,21 +87,25 @@ This is useful for events which are triggered for a sub-population.</p>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>TargetedEvent$new()</code></a></p></li>
-<li><p><a href="#method-schedule"><code>TargetedEvent$schedule()</code></a></p></li>
-<li><p><a href="#method-get_scheduled"><code>TargetedEvent$get_scheduled()</code></a></p></li>
-<li><p><a href="#method-clear_schedule"><code>TargetedEvent$clear_schedule()</code></a></p></li>
-<li><p><a href="#method-.process_listener"><code>TargetedEvent$.process_listener()</code></a></p></li>
-<li><p><a href="#method-.process_listener_cpp"><code>TargetedEvent$.process_listener_cpp()</code></a></p></li>
-<li><p><a href="#method-clone"><code>TargetedEvent$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><p><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id=".process"><a href="Event.html#method-.process"><code>individual::Event$.process()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id=".tick"><a href="Event.html#method-.tick"><code>individual::Event$.tick()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id="add_listener"><a href="Event.html#method-add_listener"><code>individual::Event$add_listener()</code></a></span></p></li>
-</ul></details></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-TargetedEvent-new"><code>TargetedEvent$new()</code></a></p></li>
+<li><p><a href="#method-TargetedEvent-schedule"><code>TargetedEvent$schedule()</code></a></p></li>
+<li><p><a href="#method-TargetedEvent-get_scheduled"><code>TargetedEvent$get_scheduled()</code></a></p></li>
+<li><p><a href="#method-TargetedEvent-clear_schedule"><code>TargetedEvent$clear_schedule()</code></a></p></li>
+<li><p><a href="#method-TargetedEvent-queue_extend"><code>TargetedEvent$queue_extend()</code></a></p></li>
+<li><p><a href="#method-TargetedEvent-queue_extend_with_schedule"><code>TargetedEvent$queue_extend_with_schedule()</code></a></p></li>
+<li><p><a href="#method-TargetedEvent-queue_shrink"><code>TargetedEvent$queue_shrink()</code></a></p></li>
+<li><p><a href="#method-TargetedEvent-.process_listener"><code>TargetedEvent$.process_listener()</code></a></p></li>
+<li><p><a href="#method-TargetedEvent-.process_listener_cpp"><code>TargetedEvent$.process_listener_cpp()</code></a></p></li>
+<li><p><a href="#method-TargetedEvent-.resize"><code>TargetedEvent$.resize()</code></a></p></li>
+<li><p><a href="#method-TargetedEvent-clone"><code>TargetedEvent$clone()</code></a></p></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id=".process"><a href="Event.html#method-.process"><code>individual::Event$.process()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id=".tick"><a href="Event.html#method-.tick"><code>individual::Event$.tick()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id="add_listener"><a href="Event.html#method-add_listener"><code>individual::Event$add_listener()</code></a></span></li>
+</ul></details></p><hr><a id="method-TargetedEvent-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Initialise a TargetedEvent.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va"><a href="../reference/TargetedEvent.html">TargetedEvent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">population_size</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/TargetedEvent.html">TargetedEvent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">population_size</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -110,17 +117,17 @@ This is useful for events which are triggered for a sub-population.</p>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-schedule"></a><div class="section">
+</div><p></p><hr><a id="method-TargetedEvent-schedule"></a><div class="section">
 <h3 id="method-schedule-">Method <code>schedule()</code><a class="anchor" aria-label="anchor" href="#method-schedule-"></a></h3>
 <p>Schedule this event to occur in the future.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span><span class="va">target</span>, <span class="va">delay</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span><span class="va">target</span>, <span class="va">delay</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>target</code></dt>
-<dd><p>the individuals to pass to the listener, this may be 
+<dd><p>the individuals to pass to the listener, this may be
 either a vector of integers or a <code><a href="Bitset.html">Bitset</a></code>.</p></dd>
 
 
@@ -134,19 +141,19 @@ individual.</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-get_scheduled"></a><div class="section">
+</div><p></p><hr><a id="method-TargetedEvent-get_scheduled"></a><div class="section">
 <h3 id="method-get-scheduled-">Method <code>get_scheduled()</code><a class="anchor" aria-label="anchor" href="#method-get-scheduled-"></a></h3>
 <p>Get the individuals who are scheduled as a <code><a href="Bitset.html">Bitset</a></code>.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">get_scheduled</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">get_scheduled</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-clear_schedule"></a><div class="section">
+</div><p></p><hr><a id="method-TargetedEvent-clear_schedule"></a><div class="section">
 <h3 id="method-clear-schedule-">Method <code>clear_schedule()</code><a class="anchor" aria-label="anchor" href="#method-clear-schedule-"></a></h3>
 <p>Stop a future event from triggering for a subset of individuals.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">clear_schedule</span><span class="op">(</span><span class="va">target</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">clear_schedule</span><span class="op">(</span><span class="va">target</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -159,33 +166,90 @@ a <code><a href="Bitset.html">Bitset</a></code>.</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-.process_listener"></a><div class="section">
-<h3 id="method-process-listener-">Method <code>.process_listener()</code><a class="anchor" aria-label="anchor" href="#method-process-listener-"></a></h3>
-
-<div class="section">
+</div><p></p><hr><a id="method-TargetedEvent-queue_extend"></a><div class="section">
+<h3 id="method-queue-extend-">Method <code>queue_extend()</code><a class="anchor" aria-label="anchor" href="#method-queue-extend-"></a></h3>
+<p>Extend the target size</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">.process_listener</span><span class="op">(</span><span class="va">listener</span><span class="op">)</span></code></pre></div><p></p></div>
-</div>
-
-
-</div><p></p><hr><a id="method-.process_listener_cpp"></a><div class="section">
-<h3 id="method-process-listener-cpp-">Method <code>.process_listener_cpp()</code><a class="anchor" aria-label="anchor" href="#method-process-listener-cpp-"></a></h3>
-
-<div class="section">
-<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">.process_listener_cpp</span><span class="op">(</span><span class="va">listener</span><span class="op">)</span></code></pre></div><p></p></div>
-</div>
-
-
-</div><p></p><hr><a id="method-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
-<p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">queue_extend</span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>n</code></dt>
+<dd><p>the number of new elements to add to the index</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-TargetedEvent-queue_extend_with_schedule"></a><div class="section">
+<h3 id="method-queue-extend-with-schedule-">Method <code>queue_extend_with_schedule()</code><a class="anchor" aria-label="anchor" href="#method-queue-extend-with-schedule-"></a></h3>
+<p>Extend the target size and schedule for the new population</p><div class="section">
+<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">queue_extend_with_schedule</span><span class="op">(</span><span class="va">delays</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>delays</code></dt>
+<dd><p>the delay for each new individual</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-TargetedEvent-queue_shrink"></a><div class="section">
+<h3 id="method-queue-shrink-">Method <code>queue_shrink()</code><a class="anchor" aria-label="anchor" href="#method-queue-shrink-"></a></h3>
+<p>Shrink the targeted event</p><div class="section">
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">queue_shrink</span><span class="op">(</span><span class="va">index</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>index</code></dt>
+<dd><p>the individuals to remove from the event</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-TargetedEvent-.process_listener"></a><div class="section">
+<h3 id="method-process-listener-">Method <code>.process_listener()</code><a class="anchor" aria-label="anchor" href="#method-process-listener-"></a></h3>
+
+<div class="section">
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">.process_listener</span><span class="op">(</span><span class="va">listener</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-TargetedEvent-.process_listener_cpp"></a><div class="section">
+<h3 id="method-process-listener-cpp-">Method <code>.process_listener_cpp()</code><a class="anchor" aria-label="anchor" href="#method-process-listener-cpp-"></a></h3>
+
+<div class="section">
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">.process_listener_cpp</span><span class="op">(</span><span class="va">listener</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-TargetedEvent-.resize"></a><div class="section">
+<h3 id="method-resize-">Method <code>.resize()</code><a class="anchor" aria-label="anchor" href="#method-resize-"></a></h3>
+
+<div class="section">
+<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">.resize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-TargetedEvent-clone"></a><div class="section">
+<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+<p>The objects of this class are cloneable with this method.</p><div class="section">
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">TargetedEvent</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
@@ -209,7 +273,7 @@ a <code><a href="Bitset.html">Bitset</a></code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

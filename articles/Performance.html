@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -50,7 +50,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -58,6 +58,9 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/API.html">API</a>
+    </li>
+    <li>
+      <a href="../articles/Changing_Populations.html">Changing population</a>
     </li>
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
@@ -114,40 +117,40 @@
 <p>The <a href="https://en.wikipedia.org/wiki/Bit_array" class="external-link">bitset</a> data structure is used to record the presence or absence of an element in a finite set. <code><a href="../reference/Bitset.html">individual::Bitset</a></code> implements this data structure and is able to preform set operations extremely quickly using <a href="https://en.wikipedia.org/wiki/Bitwise_operation" class="external-link">bitwise operations</a>. Taking advantage of these operations can lead to very fast processes, when you need to find some particular subset of individuals.</p>
 <p>Let’s take a look at the recovery process in <code><a href="../articles/Tutorial.html">vignette("Tutorial")</a></code>. A crucial operation here is to get all infectious individuals who are not already scheduled for recovery. The object <code>I</code> is a bitset containing all those individuals currently infectious, and <code>already_scheduled</code> is another bitset containing those individuals scheduled for a recovery event. Using <code>already_scheduled$not()</code> returns a new bitset of those individuals <em>not</em> in the set of already scheduled persons. This is passed to the <code>I$and()</code>, which modifies <code>I</code> in-place so that the result is the intersection of currently infectious persons and persons who have not yet been scheduled for a recovery event, which is precisely the set of people we want.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">recovery_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">I</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">"I"</span><span class="op">)</span>
-  <span class="va">already_scheduled</span> <span class="op">&lt;-</span> <span class="va">recovery_event</span><span class="op">$</span><span class="fu">get_scheduled</span><span class="op">(</span><span class="op">)</span>
-  <span class="va">I</span><span class="op">$</span><span class="fu">and</span><span class="op">(</span><span class="va">already_scheduled</span><span class="op">$</span><span class="fu">not</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">rec_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Geometric.html" class="external-link">rgeom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">I</span><span class="op">$</span><span class="fu">size</span><span class="op">(</span><span class="op">)</span>,prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">gamma</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>
-  <span class="va">recovery_event</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span>target <span class="op">=</span> <span class="va">I</span>,delay <span class="op">=</span> <span class="va">rec_times</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">recovery_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">I</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">"I"</span><span class="op">)</span></span>
+<span>  <span class="va">already_scheduled</span> <span class="op">&lt;-</span> <span class="va">recovery_event</span><span class="op">$</span><span class="fu">get_scheduled</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">I</span><span class="op">$</span><span class="fu">and</span><span class="op">(</span><span class="va">already_scheduled</span><span class="op">$</span><span class="fu">not</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">rec_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Geometric.html" class="external-link">rgeom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">I</span><span class="op">$</span><span class="fu">size</span><span class="op">(</span><span class="op">)</span>,prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">gamma</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span>  <span class="va">recovery_event</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span>target <span class="op">=</span> <span class="va">I</span>,delay <span class="op">=</span> <span class="va">rec_times</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Bitsets can also be efficiently sampled using <code>Bitset$sample()</code>. This is used in the infection process of <code><a href="../articles/Tutorial.html">vignette("Tutorial")</a></code>. Once the per-capita force of infection (probability of moving from S to I during this time step) is calculated, the bitset <code>S</code> is sampled with that probability which modifies it in-place. The number of elements remaining after being sampled is binomially distributed. The argument <code>rate</code> can also be specified as a vector of probabilities, one for each element in the bitset.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">infection_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">I</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_size_of</span><span class="op">(</span><span class="st">"I"</span><span class="op">)</span>
-  <span class="va">foi</span> <span class="op">&lt;-</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">I</span><span class="op">/</span><span class="va">N</span>
-  <span class="va">S</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">"S"</span><span class="op">)</span>
-  <span class="va">S</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span>rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">foi</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">health</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>value <span class="op">=</span> <span class="st">"I"</span>,index <span class="op">=</span> <span class="va">S</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">infection_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">I</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_size_of</span><span class="op">(</span><span class="st">"I"</span><span class="op">)</span></span>
+<span>  <span class="va">foi</span> <span class="op">&lt;-</span> <span class="va">beta</span> <span class="op">*</span> <span class="va">I</span><span class="op">/</span><span class="va">N</span></span>
+<span>  <span class="va">S</span> <span class="op">&lt;-</span> <span class="va">health</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">"S"</span><span class="op">)</span></span>
+<span>  <span class="va">S</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span>rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">pexp</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">foi</span> <span class="op">*</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">health</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>value <span class="op">=</span> <span class="st">"I"</span>,index <span class="op">=</span> <span class="va">S</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>When creating a new Bitset, a user must specify the maximum size of the bitset. This is the maximum number of positive integers which the bitset can store. For example, if calling <code>Bitset$new(size = 100)</code>, the resulting object is able to store the presence or absence of integers between 1 and 100 (inclusive). Attempting to insert or remove elements outside of this range will result in an error.</p>
 <p>Bitsets offer methods to preform unions (<code>Bitset$or()</code>), intersections (<code>Bitset$and()</code>), symmetric set difference (also known as exclusive or, <code>Bitset$xor()</code>), and set difference (<code>Bitset$set_difference()</code>) with other bitsets. These methods modify the bitset in-place. The method <code>Bitset$not()</code> gives the complement of a bitset, and returns a new <code><a href="../reference/Bitset.html">individual::Bitset</a></code> object, leaving the original bitset intact. Because these set operations use bitwise operations directly rather than more expensive relational operators, computations with bitsets are extremely fast. Taking advantage of bitset operations can help make processes in “individual” much faster.</p>
 <p>This can be seen when implementing a common pattern in epidemiological models: sampling success or failure for a bitset of individuals, and then generating two bitsets to hold individuals sampled one way or the other. A first method might use <code><a href="../reference/filter_bitset.html">individual::filter_bitset</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e4</span>
-<span class="va">bset</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Bitset.html">Bitset</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">$</span><span class="fu">insert</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">)</span>
-<span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>
-
-<span class="va">keep</span> <span class="op">&lt;-</span> <span class="va">probs</span> <span class="op">&gt;=</span> <span class="fl">0.5</span>
-
-<span class="va">stay</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_bitset.html">filter_bitset</a></span><span class="op">(</span>bitset <span class="op">=</span> <span class="va">bset</span>,other <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">keep</span><span class="op">)</span><span class="op">)</span>
-<span class="va">leave</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_bitset.html">filter_bitset</a></span><span class="op">(</span>bitset <span class="op">=</span> <span class="va">bset</span>,other <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="op">!</span><span class="va">keep</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1e4</span></span>
+<span><span class="va">bset</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Bitset.html">Bitset</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">$</span><span class="fu">insert</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">)</span></span>
+<span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="va">probs</span> <span class="op">&gt;=</span> <span class="fl">0.5</span></span>
+<span></span>
+<span><span class="va">stay</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_bitset.html">filter_bitset</a></span><span class="op">(</span>bitset <span class="op">=</span> <span class="va">bset</span>,other <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">keep</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">leave</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_bitset.html">filter_bitset</a></span><span class="op">(</span>bitset <span class="op">=</span> <span class="va">bset</span>,other <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="op">!</span><span class="va">keep</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>This pattern is almost always slower than using the sample method with a set difference:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">stay</span> <span class="op">&lt;-</span> <span class="va">bset</span><span class="op">$</span><span class="fu">copy</span><span class="op">(</span><span class="op">)</span>
-<span class="va">stay</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span>rate <span class="op">=</span> <span class="va">probs</span><span class="op">)</span>
-
-<span class="va">leave</span> <span class="op">&lt;-</span> <span class="va">bset</span><span class="op">$</span><span class="fu">copy</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">set_difference</span><span class="op">(</span><span class="va">stay</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">stay</span> <span class="op">&lt;-</span> <span class="va">bset</span><span class="op">$</span><span class="fu">copy</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">stay</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span>rate <span class="op">=</span> <span class="va">probs</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">leave</span> <span class="op">&lt;-</span> <span class="va">bset</span><span class="op">$</span><span class="fu">copy</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">set_difference</span><span class="op">(</span><span class="va">stay</span><span class="op">)</span></span></code></pre></div>
 <p>In both instances the original bitset object <code>bset</code> is not modified. The latter pattern can be made even faster if the original may be modified by directly taking the set difference with it. For models with large population sizes, the speed differences can be substantial.</p>
 <p>Because a bitset stores integers in some finite set, it can be returned as an integer vector by using <code>Bitset$to_vector()</code>. However, this is a slow and expensive operation, as data must be copied into a new vector which is returned to R. If your model’s dynamics require the frequent returning of integer vectors, an <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> object will be more appropriate. However, for most discrete variables, and especially those which mirror compartments in mathematical models, bitset operations and <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> (which uses bitsets internally) should be preferred.</p>
 </div>
@@ -228,11 +231,11 @@
 <span id="cb6-26"><a href="#cb6-26"></a>};</span></code></pre></div>
 <p>The exported function can be used normally in R when creating the list of processes:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">processes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="fu">multi_probability_bernoulli_process_cpp</span><span class="op">(</span><span class="va">state</span>, <span class="st">"I"</span>, <span class="st">"R"</span>, <span class="va">prob</span><span class="op">)</span>,
-  <span class="va">other_process_1</span>,
-  <span class="va">other_process_2</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">processes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="fu">multi_probability_bernoulli_process_cpp</span><span class="op">(</span><span class="va">state</span>, <span class="st">"I"</span>, <span class="st">"R"</span>, <span class="va">prob</span><span class="op">)</span>,</span>
+<span>  <span class="va">other_process_1</span>,</span>
+<span>  <span class="va">other_process_2</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>That’s everything you need to scale your models up to millions of individuals!</p>
 </div>
 </div>
@@ -255,7 +258,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>
