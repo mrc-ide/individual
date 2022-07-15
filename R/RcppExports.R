@@ -105,12 +105,20 @@ categorical_variable_update <- function(variable) {
     invisible(.Call(`_individual_categorical_variable_update`, variable))
 }
 
-create_double_variable <- function(values) {
-    .Call(`_individual_create_double_variable`, values)
+categorical_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_categorical_variable_queue_extend`, variable, values))
 }
 
-double_variable_get_size <- function(variable) {
-    .Call(`_individual_double_variable_get_size`, variable)
+categorical_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_categorical_variable_queue_shrink`, variable, index))
+}
+
+categorical_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_categorical_variable_queue_shrink_bitset`, variable, index))
+}
+
+create_double_variable <- function(values) {
+    .Call(`_individual_create_double_variable`, values)
 }
 
 double_variable_get_values <- function(variable) {
@@ -145,8 +153,16 @@ double_variable_queue_update_bitset <- function(variable, value, index) {
     invisible(.Call(`_individual_double_variable_queue_update_bitset`, variable, value, index))
 }
 
-double_variable_update <- function(variable) {
-    invisible(.Call(`_individual_double_variable_update`, variable))
+double_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_double_variable_queue_extend`, variable, values))
+}
+
+double_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_double_variable_queue_shrink`, variable, index))
+}
+
+double_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_double_variable_queue_shrink_bitset`, variable, index))
 }
 
 create_event <- function() {
@@ -185,6 +201,22 @@ targeted_event_schedule <- function(event, target, delay) {
     invisible(.Call(`_individual_targeted_event_schedule`, event, target, delay))
 }
 
+targeted_event_queue_shrink_bitset <- function(event, index) {
+    invisible(.Call(`_individual_targeted_event_queue_shrink_bitset`, event, index))
+}
+
+targeted_event_queue_shrink <- function(event, index) {
+    invisible(.Call(`_individual_targeted_event_queue_shrink`, event, index))
+}
+
+targeted_event_queue_extend <- function(event, n) {
+    invisible(.Call(`_individual_targeted_event_queue_extend`, event, n))
+}
+
+targeted_event_queue_extend_with_schedule <- function(event, delays) {
+    invisible(.Call(`_individual_targeted_event_queue_extend_with_schedule`, event, delays))
+}
+
 targeted_event_schedule_vector <- function(event, target, delay) {
     invisible(.Call(`_individual_targeted_event_schedule_vector`, event, target, delay))
 }
@@ -209,6 +241,10 @@ targeted_event_get_target <- function(event) {
     .Call(`_individual_targeted_event_get_target`, event)
 }
 
+targeted_event_resize <- function(event) {
+    invisible(.Call(`_individual_targeted_event_resize`, event))
+}
+
 process_listener <- function(event, listener) {
     invisible(.Call(`_individual_process_listener`, event, listener))
 }
@@ -219,10 +255,6 @@ process_targeted_listener <- function(event, listener, target) {
 
 create_integer_variable <- function(values) {
     .Call(`_individual_create_integer_variable`, values)
-}
-
-integer_variable_get_size <- function(variable) {
-    .Call(`_individual_integer_variable_get_size`, variable)
 }
 
 integer_variable_get_values <- function(variable) {
@@ -273,8 +305,16 @@ integer_variable_queue_update_bitset <- function(variable, value, index) {
     invisible(.Call(`_individual_integer_variable_queue_update_bitset`, variable, value, index))
 }
 
-integer_variable_update <- function(variable) {
-    invisible(.Call(`_individual_integer_variable_update`, variable))
+integer_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_integer_variable_queue_extend`, variable, values))
+}
+
+integer_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_integer_variable_queue_shrink`, variable, index))
+}
+
+integer_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_integer_variable_queue_shrink_bitset`, variable, index))
 }
 
 fixed_probability_multinomial_process_internal <- function(variable, source_state, destination_states, rate, destination_probabilities) {
@@ -293,8 +333,124 @@ infection_age_process_internal <- function(state, susceptible, exposed, infectio
     .Call(`_individual_infection_age_process_internal`, state, susceptible, exposed, infectious, age, age_bins, p, dt, mixing)
 }
 
+create_double_ragged_variable <- function(values) {
+    .Call(`_individual_create_double_ragged_variable`, values)
+}
+
+double_ragged_variable_get_values <- function(variable) {
+    .Call(`_individual_double_ragged_variable_get_values`, variable)
+}
+
+double_ragged_variable_get_values_at_index_bitset <- function(variable, index) {
+    .Call(`_individual_double_ragged_variable_get_values_at_index_bitset`, variable, index)
+}
+
+double_ragged_variable_get_values_at_index_vector <- function(variable, index) {
+    .Call(`_individual_double_ragged_variable_get_values_at_index_vector`, variable, index)
+}
+
+double_ragged_variable_get_length <- function(variable) {
+    .Call(`_individual_double_ragged_variable_get_length`, variable)
+}
+
+double_ragged_variable_get_length_at_index_bitset <- function(variable, index) {
+    .Call(`_individual_double_ragged_variable_get_length_at_index_bitset`, variable, index)
+}
+
+double_ragged_variable_get_length_at_index_vector <- function(variable, index) {
+    .Call(`_individual_double_ragged_variable_get_length_at_index_vector`, variable, index)
+}
+
+double_ragged_variable_queue_fill <- function(variable, value) {
+    invisible(.Call(`_individual_double_ragged_variable_queue_fill`, variable, value))
+}
+
+double_ragged_variable_queue_update <- function(variable, value, index) {
+    invisible(.Call(`_individual_double_ragged_variable_queue_update`, variable, value, index))
+}
+
+double_ragged_variable_queue_update_bitset <- function(variable, value, index) {
+    invisible(.Call(`_individual_double_ragged_variable_queue_update_bitset`, variable, value, index))
+}
+
+double_ragged_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_double_ragged_variable_queue_extend`, variable, values))
+}
+
+double_ragged_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_double_ragged_variable_queue_shrink`, variable, index))
+}
+
+double_ragged_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_double_ragged_variable_queue_shrink_bitset`, variable, index))
+}
+
+create_integer_ragged_variable <- function(values) {
+    .Call(`_individual_create_integer_ragged_variable`, values)
+}
+
+integer_ragged_variable_get_values <- function(variable) {
+    .Call(`_individual_integer_ragged_variable_get_values`, variable)
+}
+
+integer_ragged_variable_get_values_at_index_bitset <- function(variable, index) {
+    .Call(`_individual_integer_ragged_variable_get_values_at_index_bitset`, variable, index)
+}
+
+integer_ragged_variable_get_values_at_index_vector <- function(variable, index) {
+    .Call(`_individual_integer_ragged_variable_get_values_at_index_vector`, variable, index)
+}
+
+integer_ragged_variable_get_length <- function(variable) {
+    .Call(`_individual_integer_ragged_variable_get_length`, variable)
+}
+
+integer_ragged_variable_get_length_at_index_bitset <- function(variable, index) {
+    .Call(`_individual_integer_ragged_variable_get_length_at_index_bitset`, variable, index)
+}
+
+integer_ragged_variable_get_length_at_index_vector <- function(variable, index) {
+    .Call(`_individual_integer_ragged_variable_get_length_at_index_vector`, variable, index)
+}
+
+integer_ragged_variable_queue_fill <- function(variable, value) {
+    invisible(.Call(`_individual_integer_ragged_variable_queue_fill`, variable, value))
+}
+
+integer_ragged_variable_queue_update <- function(variable, value, index) {
+    invisible(.Call(`_individual_integer_ragged_variable_queue_update`, variable, value, index))
+}
+
+integer_ragged_variable_queue_update_bitset <- function(variable, value, index) {
+    invisible(.Call(`_individual_integer_ragged_variable_queue_update_bitset`, variable, value, index))
+}
+
+integer_ragged_variable_queue_extend <- function(variable, values) {
+    invisible(.Call(`_individual_integer_ragged_variable_queue_extend`, variable, values))
+}
+
+integer_ragged_variable_queue_shrink <- function(variable, index) {
+    invisible(.Call(`_individual_integer_ragged_variable_queue_shrink`, variable, index))
+}
+
+integer_ragged_variable_queue_shrink_bitset <- function(variable, index) {
+    invisible(.Call(`_individual_integer_ragged_variable_queue_shrink_bitset`, variable, index))
+}
+
 execute_process <- function(process, timestep) {
     invisible(.Call(`_individual_execute_process`, process, timestep))
+}
+
+variable_get_size <- function(variable) {
+    .Call(`_individual_variable_get_size`, variable)
+}
+
+variable_update <- function(variable) {
+    invisible(.Call(`_individual_variable_update`, variable))
+}
+
+variable_resize <- function(variable) {
+    invisible(.Call(`_individual_variable_resize`, variable))
 }
 
 # Register entry points for exported C++ functions

@@ -12,6 +12,8 @@
 #include "CategoricalVariable.h"
 #include "IntegerVariable.h"
 #include "DoubleVariable.h"
+#include "RaggedInteger.h"
+#include "RaggedDouble.h"
 #include "Event.h"
 
 #endif /* INDIVIDUAL_TYPES_H_ */

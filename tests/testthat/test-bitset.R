@@ -272,11 +272,28 @@ test_that("bitset choose errors with incorrect input", {
 })
 
 # bitset filter
+test_that("bitset filtering works for NULL", {
+  b <- Bitset$new(10)$insert(c(1, 5, 6))
+  f <- numeric(0)
+  expect_equal(filter_bitset(b, f)$to_vector(), numeric(0))
+})
+
+test_that("bitset filtering works for one element", {
+  b <- Bitset$new(10)$insert(c(1, 5, 6))
+  f <- 2
+  expect_equal(filter_bitset(b, f)$to_vector(), 5)
+})
 
 test_that("bitset filtering works for vector input", {
   b <- Bitset$new(10)$insert(c(1, 5, 6))
   f <- c(1, 3)
   expect_equal(filter_bitset(b, f)$to_vector(), c(1, 6))
+})
+
+test_that("bitset filtering works for vector input with jump at the start", {
+  b <- Bitset$new(10)$insert(c(1, 5, 6, 10))
+  f <- c(2, 4)
+  expect_equal(filter_bitset(b, f)$to_vector(), c(5, 10))
 })
 
 test_that("bitset filtering works for bitset input", {

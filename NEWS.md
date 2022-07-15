@@ -1,3 +1,8 @@
+# individual 0.1.9
+
+  * All variables and targeted events are resizable
+  * Ragged variables for integers and doubles
+
 # individual 0.1.8
 
   * [fix bug](https://github.com/mrc-ide/individual/pull/163) with C++ event

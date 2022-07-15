@@ -9,20 +9,21 @@ Describes a general event in the simulation.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Event$new()}}
-\item \href{#method-add_listener}{\code{Event$add_listener()}}
-\item \href{#method-schedule}{\code{Event$schedule()}}
-\item \href{#method-clear_schedule}{\code{Event$clear_schedule()}}
-\item \href{#method-.tick}{\code{Event$.tick()}}
-\item \href{#method-.process}{\code{Event$.process()}}
-\item \href{#method-.process_listener}{\code{Event$.process_listener()}}
-\item \href{#method-.process_listener_cpp}{\code{Event$.process_listener_cpp()}}
-\item \href{#method-clone}{\code{Event$clone()}}
+\item \href{#method-Event-new}{\code{Event$new()}}
+\item \href{#method-Event-add_listener}{\code{Event$add_listener()}}
+\item \href{#method-Event-schedule}{\code{Event$schedule()}}
+\item \href{#method-Event-clear_schedule}{\code{Event$clear_schedule()}}
+\item \href{#method-Event-.tick}{\code{Event$.tick()}}
+\item \href{#method-Event-.process}{\code{Event$.process()}}
+\item \href{#method-Event-.process_listener}{\code{Event$.process_listener()}}
+\item \href{#method-Event-.process_listener_cpp}{\code{Event$.process_listener_cpp()}}
+\item \href{#method-Event-.resize}{\code{Event$.resize()}}
+\item \href{#method-Event-clone}{\code{Event$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Event-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-new}{}}}
 \subsection{Method \code{new()}}{
 Initialise an Event.
 \subsection{Usage}{
@@ -31,8 +32,8 @@ Initialise an Event.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_listener"></a>}}
-\if{latex}{\out{\hypertarget{method-add_listener}{}}}
+\if{html}{\out{<a id="method-Event-add_listener"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-add_listener}{}}}
 \subsection{Method \code{add_listener()}}{
 Add an event listener.
 \subsection{Usage}{
@@ -49,8 +50,8 @@ argument giving the time step when this event is triggered.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-schedule"></a>}}
-\if{latex}{\out{\hypertarget{method-schedule}{}}}
+\if{html}{\out{<a id="method-Event-schedule"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-schedule}{}}}
 \subsection{Method \code{schedule()}}{
 Schedule this event to occur in the future.
 \subsection{Usage}{
@@ -68,8 +69,8 @@ multiple times.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clear_schedule"></a>}}
-\if{latex}{\out{\hypertarget{method-clear_schedule}{}}}
+\if{html}{\out{<a id="method-Event-clear_schedule"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-clear_schedule}{}}}
 \subsection{Method \code{clear_schedule()}}{
 Stop a future event from triggering.
 \subsection{Usage}{
@@ -78,8 +79,8 @@ Stop a future event from triggering.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-.tick"></a>}}
-\if{latex}{\out{\hypertarget{method-.tick}{}}}
+\if{html}{\out{<a id="method-Event-.tick"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-.tick}{}}}
 \subsection{Method \code{.tick()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$.tick()}\if{html}{\out{</div>}}
@@ -87,8 +88,8 @@ Stop a future event from triggering.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-.process"></a>}}
-\if{latex}{\out{\hypertarget{method-.process}{}}}
+\if{html}{\out{<a id="method-Event-.process"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-.process}{}}}
 \subsection{Method \code{.process()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$.process()}\if{html}{\out{</div>}}
@@ -96,8 +97,8 @@ Stop a future event from triggering.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-.process_listener"></a>}}
-\if{latex}{\out{\hypertarget{method-.process_listener}{}}}
+\if{html}{\out{<a id="method-Event-.process_listener"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-.process_listener}{}}}
 \subsection{Method \code{.process_listener()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$.process_listener(listener)}\if{html}{\out{</div>}}
@@ -105,8 +106,8 @@ Stop a future event from triggering.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-.process_listener_cpp"></a>}}
-\if{latex}{\out{\hypertarget{method-.process_listener_cpp}{}}}
+\if{html}{\out{<a id="method-Event-.process_listener_cpp"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-.process_listener_cpp}{}}}
 \subsection{Method \code{.process_listener_cpp()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$.process_listener_cpp(listener)}\if{html}{\out{</div>}}
@@ -114,8 +115,17 @@ Stop a future event from triggering.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Event-.resize"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-.resize}{}}}
+\subsection{Method \code{.resize()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Event$.resize()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Event-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

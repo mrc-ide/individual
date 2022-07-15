@@ -9,16 +9,16 @@ Class to render output for the simulation.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Render$new()}}
-\item \href{#method-set_default}{\code{Render$set_default()}}
-\item \href{#method-render}{\code{Render$render()}}
-\item \href{#method-to_dataframe}{\code{Render$to_dataframe()}}
-\item \href{#method-clone}{\code{Render$clone()}}
+\item \href{#method-Render-new}{\code{Render$new()}}
+\item \href{#method-Render-set_default}{\code{Render$set_default()}}
+\item \href{#method-Render-render}{\code{Render$render()}}
+\item \href{#method-Render-to_dataframe}{\code{Render$to_dataframe()}}
+\item \href{#method-Render-clone}{\code{Render$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Render-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Render-new}{}}}
 \subsection{Method \code{new()}}{
 Initialise a renderer for the simulation, creates the default state
 renderers.
@@ -35,8 +35,8 @@ renderers.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_default"></a>}}
-\if{latex}{\out{\hypertarget{method-set_default}{}}}
+\if{html}{\out{<a id="method-Render-set_default"></a>}}
+\if{latex}{\out{\hypertarget{method-Render-set_default}{}}}
 \subsection{Method \code{set_default()}}{
 Set a default value for a rendered output
 renderers.
@@ -55,8 +55,8 @@ renderers.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-render"></a>}}
-\if{latex}{\out{\hypertarget{method-render}{}}}
+\if{html}{\out{<a id="method-Render-render"></a>}}
+\if{latex}{\out{\hypertarget{method-Render-render}{}}}
 \subsection{Method \code{render()}}{
 Update the render with new simulation data.
 \subsection{Usage}{
@@ -76,8 +76,8 @@ Update the render with new simulation data.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-to_dataframe"></a>}}
-\if{latex}{\out{\hypertarget{method-to_dataframe}{}}}
+\if{html}{\out{<a id="method-Render-to_dataframe"></a>}}
+\if{latex}{\out{\hypertarget{method-Render-to_dataframe}{}}}
 \subsection{Method \code{to_dataframe()}}{
 Return the render as a \code{\link[base]{data.frame}}.
 \subsection{Usage}{
@@ -86,8 +86,8 @@ Return the render as a \code{\link[base]{data.frame}}.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Render-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Render-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
