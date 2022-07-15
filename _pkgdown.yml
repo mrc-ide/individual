@@ -8,6 +8,8 @@ reference:
   - CategoricalVariable
   - IntegerVariable
   - DoubleVariable
+  - RaggedInteger
+  - RaggedDouble
   - Bitset
   - filter_bitset
 - title: "Events & Rendering"
