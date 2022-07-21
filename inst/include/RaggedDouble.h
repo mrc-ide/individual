@@ -10,18 +10,6 @@
 
 #include "RaggedVariable.h"
 
-struct RaggedDouble;
-
-
-//' @title A variable class for ragged double arrays
-//' @description This class is inherits from RaggedVariable
-struct RaggedDouble : public RaggedVariable<double> {
-  RaggedDouble(const std::vector<std::vector<double>>& values);
-  virtual ~RaggedDouble() = default;
-};
-
-inline RaggedDouble::RaggedDouble(const std::vector<std::vector<double>>& values)
-  : RaggedVariable<double>(values) {}
-
+using RaggedDouble = RaggedVariable<double>;
 
 #endif

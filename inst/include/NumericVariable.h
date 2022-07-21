@@ -10,6 +10,7 @@
 
 #include "Variable.h"
 #include "common_types.h"
+#include "vector_variables.h"
 #include <Rcpp.h>
 #include <queue>
 
@@ -70,7 +71,7 @@ inline std::vector<A> NumericVariable<A>::get_values() const {
 template<class A>
 inline std::vector<A> NumericVariable<A>::get_values(const individual_index_t& index) const {
     if (size() != index.max_size()) {
-        Rcpp::stop("incompatible size bitset used to get values from NumericVariable<A>");
+        Rcpp::stop("incompatible size bitset used to get values from NumericVariable");
     }
     auto result = std::vector<A>(index.size());
     auto result_i = 0u;
@@ -153,38 +154,7 @@ inline void NumericVariable<A>::queue_update(
 //' @title apply all queued state updates in FIFO order
 template<class A>
 inline void NumericVariable<A>::update() {
-    while(updates.size() > 0) {
-        const auto& update = updates.front();
-        const auto& values = update.first;
-        const auto& index = update.second;
-        
-        auto vector_replacement = (index.size() == 0);
-        auto value_fill = (values.size() == 1);
-        
-        auto& to_update = this->values;
-        
-        if (vector_replacement) {
-            // For a full vector replacement
-            if (value_fill) {
-                std::fill(to_update.begin(), to_update.end(), values[0]);
-            } else {
-                to_update = values;
-            }
-        } else {
-            if (value_fill) {
-                // For a fill update
-                for (auto i : index) {
-                    to_update[i] = values[0];
-                }
-            } else {
-                // Subset assignment
-                for (auto i = 0u; i < index.size(); ++i) {
-                    to_update[index[i]] = values[i];
-                }
-            }
-        }
-        updates.pop();
-    }
+    vector_update(updates, values);
 }
 
 //' @title queue new values to add to the variable
@@ -225,42 +195,7 @@ inline void NumericVariable<A>::queue_shrink(
 
 template<class A>
 inline void NumericVariable<A>::resize() {
-    auto size_changed = false;
-
-    // Apply shrink updates
-    if (shrink_index.size() > 0) {
-        auto index = std::vector<size_t>(
-            shrink_index.cbegin(),
-            shrink_index.cend()
-        );
-        auto new_values = std::vector<A>();
-        new_values.reserve(values.size() - index.size());
-        auto it = index.cbegin();
-        for (auto i = 0u; i < values.size(); ++i) {
-            if (i == *it) {
-                ++it;
-            } else {
-                new_values.push_back(values[i]);
-            }
-        }
-        values = new_values;
-        shrink_index.clear();
-        size_changed = true;
-    }
-
-    // Apply extension updates
-    if (extend_values.size() > 0) {
-        values.insert(
-            values.cend(), 
-            extend_values.cbegin(),
-            extend_values.cend()
-        );
-        extend_values.clear();
-    }
-
-    if (size_changed) {
-        shrink_index = individual_index_t(size());
-    }
+    resize_vector(values, shrink_index, extend_values);
 }
 
 template<class A>
