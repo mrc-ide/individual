@@ -131,7 +131,7 @@ contribute :)
 
 ### R based Epi
 
- - [EpiModel](https://github.com/statnet/EpiModel)
+ - [EpiModel](https://github.com/EpiModel/EpiModel)
  - [SimInf](https://github.com/stewid/SimInf)
  - [hybridModels](https://github.com/fernandosm/hybridModels)
  - epinet
