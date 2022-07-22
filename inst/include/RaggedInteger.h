@@ -10,18 +10,6 @@
 
 #include "RaggedVariable.h"
 
-struct RaggedInteger;
-
-
-//' @title A variable class for ragged integer arrays
-//' @description This class is inherits from RaggedVariable
-struct RaggedInteger : public RaggedVariable<int> {
-  RaggedInteger(const std::vector<std::vector<int>>& values);
-  virtual ~RaggedInteger() = default;
-};
-
-inline RaggedInteger::RaggedInteger(const std::vector<std::vector<int>>& values)
-  : RaggedVariable<int>(values) {}
-
+using RaggedInteger = RaggedVariable<int>;
 
 #endif
