@@ -201,7 +201,7 @@
 <li><p>Write your process!</p></li>
 </ol>
 <p>Processes in C++ are of type <code>process_t</code>, defined in <code>inst/include/common_types.h</code>. Types for listeners for <code><a href="../reference/Event.html">individual::Event</a></code> and <code><a href="../reference/TargetedEvent.html">individual::TargetedEvent</a></code> are <code>listener_t</code> and <code>targeted_listener_t</code>, defined in <code>inst/include/Event.h</code>. Below is how the C++ implementation of <code>multi_probability_bernoulli_process</code> is coded.</p>
-<p>Note that the return type is a <code>Rcpp::XPtr</code> <a href="https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1XPtr.html" class="external-link">(see here)</a> to a <code>process_t</code>, which is implemented as a <code>std::function</code> <a href="http://www.cplusplus.com/reference/functional/function/" class="external-link">(see here)</a> object, a C++ class that can hold any callable type. The <code>Rcpp::XPtr</code> is initialized with a pointer to a <code>process_t</code> object, which itself holds a C++ <a href="https://en.cppreference.com/w/cpp/language/lambda" class="external-link">lambda function</a>, basically a function closure.</p>
+<p>Note that the return type is a <code>Rcpp::XPtr</code> <a href="https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1XPtr.html" class="external-link">(see here)</a> to a <code>process_t</code>, which is implemented as a <code>std::function</code> <a href="https://cplusplus.com/reference/functional/function/" class="external-link">(see here)</a> object, a C++ class that can hold any callable type. The <code>Rcpp::XPtr</code> is initialized with a pointer to a <code>process_t</code> object, which itself holds a C++ <a href="https://en.cppreference.com/w/cpp/language/lambda" class="external-link">lambda function</a>, basically a function closure.</p>
 <p>The lambda function captures the input arguments by value, and takes a single argument when called <code>t</code>, giving the current time step (just like process functions in R). Sampling those individuals to change state is implemented with the C++ API for these objects.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1"></a><span class="pp">#include </span><span class="im">&lt;individual.h&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
@@ -258,7 +258,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
