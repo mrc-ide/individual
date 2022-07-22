@@ -1,3 +1,9 @@
+# individual 0.1.10
+
+  * Vector-based updates are consolidated into one place
+  * Resizing memory bug fixed
+  * Simplifed RaggedVariable instantiations to aliases until implementations are implemented
+    
 # individual 0.1.9
 
   * All variables and targeted events are resizable
