@@ -135,7 +135,7 @@ These are the basic steps to add C++ processes to your R package:
 Processes in C++ are of type `process_t`, defined in `inst/include/common_types.h`. Types for listeners for `individual::Event` and `individual::TargetedEvent` are `listener_t` and `targeted_listener_t`, defined in `inst/include/Event.h`. Below is how the C++ implementation of
 `multi_probability_bernoulli_process` is coded.
 
-Note that the return type is a `Rcpp::XPtr` [(see here)](https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1XPtr.html) to a `process_t`, which is implemented as a `std::function` [(see here)](http://www.cplusplus.com/reference/functional/function/) object, a C++ class that can
+Note that the return type is a `Rcpp::XPtr` [(see here)](https://dirk.eddelbuettel.com/code/rcpp/html/classRcpp_1_1XPtr.html) to a `process_t`, which is implemented as a `std::function` [(see here)](https://cplusplus.com/reference/functional/function/) object, a C++ class that can
 hold any callable type. The `Rcpp::XPtr` is initialized with a pointer to a `process_t` object, which itself holds a C++ [lambda function](https://en.cppreference.com/w/cpp/language/lambda), basically a function closure.
 
 The lambda function captures the input arguments by value, and takes a single argument when called `t`, giving the current time step (just like process functions in R). Sampling those individuals to change state is implemented with the C++ API for these objects.
