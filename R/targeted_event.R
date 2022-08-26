@@ -7,6 +7,7 @@ TargetedEvent <- R6Class(
   'TargetedEvent',
   inherit = Event,
   public = list(
+
     #' @description Initialise a TargetedEvent.
     #' @param population_size the size of the population.
     initialize = function(population_size) {
@@ -15,7 +16,7 @@ TargetedEvent <- R6Class(
 
     #' @description Schedule this event to occur in the future.
     #' @param target the individuals to pass to the listener, this may be
-    #' either a vector of integers or a \code{\link[individual]{Bitset}}.
+    #' either a vector of integers or a [individual::Bitset].
     #' @param delay the number of time steps to wait before triggering the event,
     #' can be a scalar in which case all targeted individuals are scheduled for
     #' for the same delay or a vector of values giving the delay for that
@@ -50,14 +51,14 @@ TargetedEvent <- R6Class(
       }
     },
 
-    #' @description Get the individuals who are scheduled as a \code{\link[individual]{Bitset}}.
+    #' @description Get the individuals who are scheduled as a [individual::Bitset].
     get_scheduled = function() {
       Bitset$new(from = targeted_event_get_scheduled(self$.event))
     },
 
     #' @description Stop a future event from triggering for a subset of individuals.
     #' @param target the individuals to clear, this may be either a vector of integers or
-    #' a \code{\link[individual]{Bitset}}.
+    #' a [individual::Bitset].
     clear_schedule = function(target) {
       if (inherits(target, "Bitset")){
         targeted_event_clear_schedule(self$.event, target$.bitset)
@@ -66,23 +67,23 @@ TargetedEvent <- R6Class(
       }
     },
 
-    #' @description Extend the target size
-    #' @param n the number of new elements to add to the index
+    #' @description Extend the target size.
+    #' @param n the number of new elements to add to the index.
     queue_extend = function(n) {
       stopifnot(is.finite(n))
       stopifnot(n > 0)
       targeted_event_queue_extend(self$.event, n)
     },
 
-    #' @description Extend the target size and schedule for the new population
-    #' @param delays the delay for each new individual
+    #' @description Extend the target size and schedule for the new population.
+    #' @param delays the delay for each new individual.
     queue_extend_with_schedule = function(delays) {
       stopifnot(is.finite(delays))
       targeted_event_queue_extend_with_schedule(self$.event, delays)
     },
 
-    #' @description Shrink the targeted event
-    #' @param index the individuals to remove from the event
+    #' @description Shrink the TargetedEvent.
+    #' @param index the individuals to remove from the event.
     queue_shrink = function(index) {
       if (inherits(index, 'Bitset')) {
         if (index$size() > 0){

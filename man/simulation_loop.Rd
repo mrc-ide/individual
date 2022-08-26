@@ -21,7 +21,7 @@ simulation_loop(
 \item{timesteps}{the number of timesteps to simulate}
 }
 \description{
-Run a simulation where event listeners take precedence 
+Run a simulation where event listeners take precedence
 over processes for state changes.
 }
 \examples{

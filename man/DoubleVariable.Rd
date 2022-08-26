@@ -105,16 +105,16 @@ Count individuals whose value lies in an interval \eqn{[a,b]}.
 \subsection{Method \code{queue_update()}}{
 Queue an update for a variable. There are 4 types of variable update:
 \enumerate{
- \item{Subset update: }{The argument \code{index} represents a subset of the variable to
+\item{Subset update: }{The argument \code{index} represents a subset of the variable to
 update. The argument \code{values} should be a vector whose length matches the size of \code{index},
 which represents the new values for that subset.}
- \item{Subset fill: }{The argument \code{index} represents a subset of the variable to
+\item{Subset fill: }{The argument \code{index} represents a subset of the variable to
 update. The argument \code{values} should be a single number, which fills the specified subset.}
- \item{Variable reset: }{The index vector is set to \code{NULL} and the argument \code{values}
+\item{Variable reset: }{The index vector is set to \code{NULL} and the argument \code{values}
 replaces all of the current values in the simulation. \code{values} should be a vector
 whose length should match the size of the population, which fills all the variable values in
 the population}
- \item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
+\item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
 should be a single number, which fills all of the variable values in
 the population.}
 }
