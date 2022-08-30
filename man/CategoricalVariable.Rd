@@ -5,7 +5,7 @@
 \title{CategoricalVariable Class}
 \description{
 Represents a categorical variable for an individual.
-This class should be used for discrete variables taking values in 
+This class should be used for discrete variables taking values in
 a finite set, such as infection, health, or behavioral state. It should
 be used in preference to \code{\link[individual]{IntegerVariable}}
 if possible because certain operations will be faster.
