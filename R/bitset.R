@@ -68,17 +68,10 @@ Bitset <- R6Class(
     },
 
     #' @description to "bitwise not" or complement a bitset.
-    #' @param inplace whether to overwrite the current bitset.
+    #' @param inplace whether to overwrite the current bitset, default = TRUE
     not = function(inplace) {
       if (missing(inplace)) {
-        warning(paste(
-          "DEPRECATED: Future versions of Bitset$not will be in place",
-          "to be consistent with other bitset operations.",
-          "To copy this bitset please use the copy method.",
-          "To suppress this warning, please set the `inplace` argument.",
-          sep = " "
-        ))
-        inplace <- FALSE
+        inplace <- TRUE
       }
       Bitset$new(from = bitset_not(self$.bitset, inplace))
     },
