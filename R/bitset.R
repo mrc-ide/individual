@@ -69,10 +69,7 @@ Bitset <- R6Class(
 
     #' @description to "bitwise not" or complement a bitset.
     #' @param inplace whether to overwrite the current bitset, default = TRUE
-    not = function(inplace) {
-      if (missing(inplace)) {
-        inplace <- TRUE
-      }
+    not = function(inplace = TRUE) {
       Bitset$new(from = bitset_not(self$.bitset, inplace))
     },
 
