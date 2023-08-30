@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.10</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
 
       
 
-      </header><script src="Contributing_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Contributing</h1>
@@ -107,11 +107,16 @@
 
     
     
-<p>Thank you for taking the time to contribute to Individual. We’re grateful that you would take some time to make Individual-Based Modeling easier in R. Pull requests are very welcome.</p>
+<p>Thank you for taking the time to contribute to Individual. We’re
+grateful that you would take some time to make Individual-Based Modeling
+easier in R. Pull requests are very welcome.</p>
 <div class="section level2">
 <h2 id="issues">Issues<a class="anchor" aria-label="anchor" href="#issues"></a>
 </h2>
-<p>For major changes, please open an issue first to give other developers a heads up on what you would like to add or change. That way we can reduce any redundant efforts and give any resources if needed.</p>
+<p>For major changes, please open an issue first to give other
+developers a heads up on what you would like to add or change. That way
+we can reduce any redundant efforts and give any resources if
+needed.</p>
 <p>For bug reports please include:</p>
 <ul>
 <li>R version</li>
@@ -124,21 +129,42 @@
 <div class="section level2">
 <h2 id="git">Git<a class="anchor" aria-label="anchor" href="#git"></a>
 </h2>
-<p>We use Git on this project. Which means we use <code>master</code>, <code>dev</code>, <code>feat/*</code>, <code>bug/*</code>, <code>hotfix/*</code> and <code>release/*</code> branches. Please refer to <a href="https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow" class="external-link">this post</a> for more information of each type of branch. NOTE: <code>bug/*</code> branches are <code>feat/*</code> branches which fix a bug.</p>
-<p>Practically speaking, <em>all</em> new code contributions should be feature branches. You should branch off of the <code>dev</code> branch into one called <code>feat/[your feature name here]</code>. When we consider pull requests from forked repositories to the mrc-ide/individual repository, we will expect this convention.</p>
-<p>We periodically merge <code>dev</code> into <code>master</code> for small release updates. These releases will appear on the <a href="https://github.com/mrc-ide/individual/releases" class="external-link">GitHub releases page</a>. Please use <a href="https://www.conventionalcommits.org/en/v1.0.0/" class="external-link">Conventional Commits</a> as it helps us version Individual properly.</p>
-<p>Large releases will have a <code>release/*</code> branch to manage the transition. No new features will be merged into <code>release/*</code> branches. Only documentation and bug fixes will be considered.</p>
+<p>We use Git on this project. Which means we use <code>master</code>,
+<code>dev</code>, <code>feat/*</code>, <code>bug/*</code>,
+<code>hotfix/*</code> and <code>release/*</code> branches. Please refer
+to <a href="https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow" class="external-link">this
+post</a> for more information of each type of branch. NOTE:
+<code>bug/*</code> branches are <code>feat/*</code> branches which fix a
+bug.</p>
+<p>Practically speaking, <em>all</em> new code contributions should be
+feature branches. You should branch off of the <code>dev</code> branch
+into one called <code>feat/[your feature name here]</code>. When we
+consider pull requests from forked repositories to the
+mrc-ide/individual repository, we will expect this convention.</p>
+<p>We periodically merge <code>dev</code> into <code>master</code> for
+small release updates. These releases will appear on the <a href="https://github.com/mrc-ide/individual/releases" class="external-link">GitHub releases
+page</a>. Please use <a href="https://www.conventionalcommits.org/en/v1.0.0/" class="external-link">Conventional
+Commits</a> as it helps us version Individual properly.</p>
+<p>Large releases will have a <code>release/*</code> branch to manage
+the transition. No new features will be merged into
+<code>release/*</code> branches. Only documentation and bug fixes will
+be considered.</p>
 </div>
 <div class="section level2">
 <h2 id="code-organisation">Code organisation<a class="anchor" aria-label="anchor" href="#code-organisation"></a>
 </h2>
-<p><em>R/simulation.R</em> - Contains the main entry point and configuration for models</p>
-<p><em>R/variables.R</em> - Defines classes for the available variables</p>
+<p><em>R/simulation.R</em> - Contains the main entry point and
+configuration for models</p>
+<p><em>R/variables.R</em> - Defines classes for the available
+variables</p>
 <p><em>R/events.R</em> - Defines classes for the available events</p>
 <p><em>src/</em> - The C++ side of the R interface and tests</p>
-<p><em>inst/include/Variable.h</em> - The implementations of Variables</p>
+<p><em>inst/include/Variable.h</em> - The implementations of
+Variables</p>
 <p><em>inst/include/Event.h</em> - The implementations of Events</p>
-<p><em>tests/</em> - are divided into unit, integration and performance tests. Integration tests are strongly recommended for large functions and unit tests for everything else</p>
+<p><em>tests/</em> - are divided into unit, integration and performance
+tests. Integration tests are strongly recommended for large functions
+and unit tests for everything else</p>
 </div>
 <div class="section level2">
 <h2 id="pull-requests">Pull Requests<a class="anchor" aria-label="anchor" href="#pull-requests"></a>
@@ -159,12 +185,15 @@
 <li>Is it tested enough?</li>
 <li>Is it documented enough?</li>
 </ul>
-<p>Our review process is based off of <a href="https://reside-ic.github.io/articles/pull-requests/" class="external-link">RESIDE’s PR review process</a></p>
+<p>Our review process is based off of <a href="https://reside-ic.github.io/articles/pull-requests/" class="external-link">RESIDE’s PR
+review process</a></p>
 </div>
 <div class="section level2">
 <h2 id="microbenchmarks">Microbenchmarks<a class="anchor" aria-label="anchor" href="#microbenchmarks"></a>
 </h2>
-<p>We use <a href="https://github.com/google/benchmark" class="external-link">google benchmark</a> for our microbenchmarks. You can compile and run the benchmarks like this:</p>
+<p>We use <a href="https://github.com/google/benchmark" class="external-link">google
+benchmark</a> for our microbenchmarks. You can compile and run the
+benchmarks like this:</p>
 <pre><code>cd tests/performance
 g++ *_benchmark.cpp -std=c++14 -lbenchmark -lpthread -o benchmark.out
 ./benchmark.out</code></pre>
@@ -199,7 +228,7 @@ g++ *_benchmark.cpp -std=c++14 -lbenchmark -lpthread -o benchmark.out
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

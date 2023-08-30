@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.10</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
 
       
 
-      </header><script src="Changing_Populations_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Changing population</h1>
@@ -110,20 +110,45 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This tutorial will present a toy model for simulating infectious disease in populations which change in size. We will build on the SIR model we created in the <a href="Tutorial.html">first tutorial</a> to show how to model a growing and shrinking population.</p>
+<p>This tutorial will present a toy model for simulating infectious
+disease in populations which change in size. We will build on the SIR
+model we created in the <a href="Tutorial.html">first tutorial</a> to
+show how to model a growing and shrinking population.</p>
 </div>
 <div class="section level2">
 <h2 id="resizing-variables">Resizing variables<a class="anchor" aria-label="anchor" href="#resizing-variables"></a>
 </h2>
-<p>As of individual v0.1.8, all variables and targeted events can be extended and shrunk. Extending a variable requires the user to specify new values to add to the end of the variable. This can be used to model births in a population. Shrinking a variable requires the user to specify which indices to remove, the indices of subsequent values will be shifted downwards to replace the removed element. This can be used to model deaths or displacement from a population.</p>
-<p>Targeted events can similarly be resized to match a changing population. You can simply add new individuals with <code>$queue_extend</code>. If you would like to schedule the event for new individuals, you can use <code>$queue_extend_with_schedule</code> with a vector of delays to make sure the event is triggered for new individuals.</p>
-<p>Resizing updates, shrinking and extending, are queued until after all processes <em>and</em> event listeners are executed and are applied after other updates. All the shrink updates for a variable or event are combined and are applied before extend updates. This ensures that the indices used to shrink a variable are the correct size for the variable. After which, extension updates are applied in the order they were called.</p>
-<p>From a performance perspective, shrinking updates should be used sparingly, since the re-indexing of a variable can be more computationally expensive than other updates. Consider applying shrinking updates over longer intervals instead of every time step if performance becomes an issue for your model.</p>
+<p>As of individual v0.1.8, all variables and targeted events can be
+extended and shrunk. Extending a variable requires the user to specify
+new values to add to the end of the variable. This can be used to model
+births in a population. Shrinking a variable requires the user to
+specify which indices to remove, the indices of subsequent values will
+be shifted downwards to replace the removed element. This can be used to
+model deaths or displacement from a population.</p>
+<p>Targeted events can similarly be resized to match a changing
+population. You can simply add new individuals with
+<code>$queue_extend</code>. If you would like to schedule the event for
+new individuals, you can use <code>$queue_extend_with_schedule</code>
+with a vector of delays to make sure the event is triggered for new
+individuals.</p>
+<p>Resizing updates, shrinking and extending, are queued until after all
+processes <em>and</em> event listeners are executed and are applied
+after other updates. All the shrink updates for a variable or event are
+combined and are applied before extend updates. This ensures that the
+indices used to shrink a variable are the correct size for the variable.
+After which, extension updates are applied in the order they were
+called.</p>
+<p>From a performance perspective, shrinking updates should be used
+sparingly, since the re-indexing of a variable can be more
+computationally expensive than other updates. Consider applying
+shrinking updates over longer intervals instead of every time step if
+performance becomes an issue for your model.</p>
 </div>
 <div class="section level2">
 <h2 id="birth-and-death-processes">Birth and death processes<a class="anchor" aria-label="anchor" href="#birth-and-death-processes"></a>
 </h2>
-<p>Let’s try to model a system with a constant birth rate and the probability of death each time step is uniform for each individual.</p>
+<p>Let’s try to model a system with a constant birth rate and the
+probability of death each time step is uniform for each individual.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">birth_rate</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
 <span><span class="va">death_rate</span> <span class="op">&lt;-</span> <span class="fl">.001</span></span>
@@ -144,7 +169,8 @@
 <div class="section level2">
 <h2 id="simulation">Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a>
 </h2>
-<p>We can now add these processes to our previous model and plot the new results.</p>
+<p>We can now add these processes to our previous model and plot the new
+results.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/simulation_loop.html">simulation_loop</a></span><span class="op">(</span></span>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">health</span><span class="op">)</span>,</span>
@@ -179,7 +205,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

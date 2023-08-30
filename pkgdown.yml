@@ -1,5 +1,5 @@
-pandoc: 2.7.3
-pkgdown: 2.0.6
+pandoc: 2.19.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   API: API.html
@@ -7,5 +7,5 @@ articles:
   Contributing: Contributing.html
   Performance: Performance.html
   Tutorial: Tutorial.html
-last_built: 2022-07-22T09:44Z
+last_built: 2023-08-30T14:21Z
 

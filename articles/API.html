@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.10</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
 
       
 
-      </header><script src="API_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>API</h1>
@@ -110,37 +110,103 @@
 <div class="section level2">
 <h2 id="intro">Introduction<a class="anchor" aria-label="anchor" href="#intro"></a>
 </h2>
-<p>This package defines a set of useful primitives for structuring and simulating individual based mechanistic models, with special emphasis on infectious disease modelling. <em>Structuring</em> means that the package lets you specify the state space of the model and transition rules for how state changes over time, and <em>simulating</em> means that the package defines a principled way to put state and transitions together to update state over a time step. Transitions are any functions that change state, and in “individual” come in two forms: <a href="#proc">processes</a>, which occur each time step and <a href="#event">events</a>, which are scheduled. The simulation updates over a discrete time step of unit length.</p>
-<p>This vignette provides a description of the various primitive elements provided by the “individual” package for modelling and explains how they work together. Please see the <code><a href="../articles/Tutorial.html">vignette("Tutorial")</a></code> for a practical example.</p>
+<p>This package defines a set of useful primitives for structuring and
+simulating individual based mechanistic models, with special emphasis on
+infectious disease modelling. <em>Structuring</em> means that the
+package lets you specify the state space of the model and transition
+rules for how state changes over time, and <em>simulating</em> means
+that the package defines a principled way to put state and transitions
+together to update state over a time step. Transitions are any functions
+that change state, and in “individual” come in two forms: <a href="#proc">processes</a>, which occur each time step and <a href="#event">events</a>, which are scheduled. The simulation updates
+over a discrete time step of unit length.</p>
+<p>This vignette provides a description of the various primitive
+elements provided by the “individual” package for modelling and explains
+how they work together. Please see the <code><a href="../articles/Tutorial.html">vignette("Tutorial")</a></code>
+for a practical example.</p>
 </div>
 <div class="section level2">
 <h2 id="var">Variables<a class="anchor" aria-label="anchor" href="#var"></a>
 </h2>
-<p>In “individual”, variables are how one defines state, and represent any attribute of an individual. While many variables will be dynamically updated throughout a simulation, they don’t have to be. Specifying a baseline characteristic for each individual that doesn’t change over a simulation will still be specified using a variable object.</p>
-<p>There are 3 types of variable objects: <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> can represent a set of mutually exclusive categories, <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> for representing integers, and <code><a href="../reference/DoubleVariable.html">individual::DoubleVariable</a></code> for continuous values (real numbers).</p>
+<p>In “individual”, variables are how one defines state, and represent
+any attribute of an individual. While many variables will be dynamically
+updated throughout a simulation, they don’t have to be. Specifying a
+baseline characteristic for each individual that doesn’t change over a
+simulation will still be specified using a variable object.</p>
+<p>There are 3 types of variable objects:
+<code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> can represent a set of
+mutually exclusive categories, <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code>
+for representing integers, and <code><a href="../reference/DoubleVariable.html">individual::DoubleVariable</a></code>
+for continuous values (real numbers).</p>
 <div class="section level3">
 <h3 id="cat_var">Categorical Variable<a class="anchor" aria-label="anchor" href="#cat_var"></a>
 </h3>
-<p>Most epidemiological models will <em>require</em> use of categorical variables to define state, for example, the Susceptible, Infectious, and Recovered classes in the classic <a href="https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model" class="external-link">SIR model</a>. In general, for compartmental models, each set of compartments which describes an aspect of an individual should be mapped to a single <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code>. For example, a model which classifies individuals as in an SIR state <em>and</em> in a high or low risk groups could be represented with two categorical variable objects</p>
-<p>There can be an unlimited number of categorical variable objects, but every individual can only take on a single value for each of them at any time. The allowable (categorical) state space for each individual is a contingency table where the margins are given by the values for each <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code>.</p>
-<p><code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> objects internally store state as a hash table of category values (with string keys), each of which contains a <code><a href="../reference/Bitset.html">individual::Bitset</a></code> recording the individuals in that state, making operations on <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> objects, or chains of operations extremely fast, and therefore should be the preferred variable type for discrete variables. However, cases in which discrete variables have a large number of values or when many values have few or no individuals in that category should use the <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> instead.</p>
+<p>Most epidemiological models will <em>require</em> use of categorical
+variables to define state, for example, the Susceptible, Infectious, and
+Recovered classes in the classic <a href="https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model" class="external-link">SIR
+model</a>. In general, for compartmental models, each set of
+compartments which describes an aspect of an individual should be mapped
+to a single <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code>. For example, a
+model which classifies individuals as in an SIR state <em>and</em> in a
+high or low risk groups could be represented with two categorical
+variable objects</p>
+<p>There can be an unlimited number of categorical variable objects, but
+every individual can only take on a single value for each of them at any
+time. The allowable (categorical) state space for each individual is a
+contingency table where the margins are given by the values for each
+<code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code>.</p>
+<p><code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> objects internally store
+state as a hash table of category values (with string keys), each of
+which contains a <code><a href="../reference/Bitset.html">individual::Bitset</a></code> recording the
+individuals in that state, making operations on
+<code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> objects, or chains of
+operations extremely fast, and therefore should be the preferred
+variable type for discrete variables. However, cases in which discrete
+variables have a large number of values or when many values have few or
+no individuals in that category should use the
+<code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> instead.</p>
 </div>
 <div class="section level3">
 <h3 id="int_var">Integer Variable<a class="anchor" aria-label="anchor" href="#int_var"></a>
 </h3>
-<p>An <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> should be used for discrete variables that may either be technically unbounded, or whose set of possible values is so large that a <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> is impractical. <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> objects internally stores state as a vector of integers of length equal to the number of individuals in the simulation, to be contrasted with the hash table and bitsets used in <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code>. Examples of this variable type might include household for a model that simulated transmission of disease between a community of households, or age group for an age-structured model.</p>
+<p>An <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> should be used for
+discrete variables that may either be technically unbounded, or whose
+set of possible values is so large that a
+<code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> is impractical.
+<code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> objects internally stores state
+as a vector of integers of length equal to the number of individuals in
+the simulation, to be contrasted with the hash table and bitsets used in
+<code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code>. Examples of this variable
+type might include household for a model that simulated transmission of
+disease between a community of households, or age group for an
+age-structured model.</p>
 </div>
 <div class="section level3">
 <h3 id="dbl_var">Double Variable<a class="anchor" aria-label="anchor" href="#dbl_var"></a>
 </h3>
-<p>A <code><a href="../reference/DoubleVariable.html">individual::DoubleVariable</a></code> can be used for continuous variables that are represented as double precision floating-point numbers (hence, “double”). Such variables are internally stored as a vector of doubles of length equal to the number of individuals in the simulation. Examples of this variable type might include levels of immune response or concentration of some environmental pollutant in the blood.</p>
+<p>A <code><a href="../reference/DoubleVariable.html">individual::DoubleVariable</a></code> can be used for continuous
+variables that are represented as double precision floating-point
+numbers (hence, “double”). Such variables are internally stored as a
+vector of doubles of length equal to the number of individuals in the
+simulation. Examples of this variable type might include levels of
+immune response or concentration of some environmental pollutant in the
+blood.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="proc">Processes<a class="anchor" aria-label="anchor" href="#proc"></a>
 </h2>
-<p>In “individual”, processes are functions which are called on each time step with a single argument, <code>t</code>, the current time step of the simulation. Processes are how most of the dynamics of a model are specified, and are implemented as <a href="http://adv-r.had.co.nz/Functional-programming.html#closures" class="external-link">closures</a>, which are functions that are able to access data not included in the list of function arguments.</p>
-<p>An illustrative example can be found in the provided <code><a href="../reference/bernoulli_process.html">individual::bernoulli_process</a></code>, which moves individuals from one value (source) of a <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> to another (destination) at a constant probability (such that the dwell time in the <code>from</code> state follows a <a href="https://en.wikipedia.org/wiki/Geometric_distribution" class="external-link">geometric distribution</a>).</p>
+<p>In “individual”, processes are functions which are called on each
+time step with a single argument, <code>t</code>, the current time step
+of the simulation. Processes are how most of the dynamics of a model are
+specified, and are implemented as <a href="http://adv-r.had.co.nz/Functional-programming.html#closures" class="external-link">closures</a>,
+which are functions that are able to access data not included in the
+list of function arguments.</p>
+<p>An illustrative example can be found in the provided
+<code><a href="../reference/bernoulli_process.html">individual::bernoulli_process</a></code>, which moves individuals from
+one value (source) of a <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> to
+another (destination) at a constant probability (such that the dwell
+time in the <code>from</code> state follows a <a href="https://en.wikipedia.org/wiki/Geometric_distribution" class="external-link">geometric
+distribution</a>).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bernoulli_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">variable</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">rate</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span></span>
@@ -150,7 +216,19 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>We can test empirically that dwell times do indeed follow a geometric distribution (and demonstrate uses of <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> objects) by modifying slightly the function to take <code>int_variable</code>, an object of class <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code>. Each time the returned function closure is called it randomly samples a subset of individuals to move to the destination state, and records the time step at which those individuals move in the <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code>. We run the simple simulation loop until there are no more individuals left in the source state, and compare the dwell times in the source state to the results of <code><a href="https://rdrr.io/r/stats/Geometric.html" class="external-link">stats::rgeom</a></code>, and see that they are from the same distribution, using <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">stats::chisq.test</a></code> for comparison of discrete distributions.</p>
+<p>We can test empirically that dwell times do indeed follow a geometric
+distribution (and demonstrate uses of
+<code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> objects) by modifying slightly
+the function to take <code>int_variable</code>, an object of class
+<code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code>. Each time the returned
+function closure is called it randomly samples a subset of individuals
+to move to the destination state, and records the time step at which
+those individuals move in the <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code>.
+We run the simple simulation loop until there are no more individuals
+left in the source state, and compare the dwell times in the source
+state to the results of <code><a href="https://rdrr.io/r/stats/Geometric.html" class="external-link">stats::rgeom</a></code>, and see that they are
+from the same distribution, using <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">stats::chisq.test</a></code> for
+comparison of discrete distributions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bernoulli_process_time</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">variable</span>, <span class="va">int_variable</span>, <span class="va">from</span>, <span class="va">to</span>, <span class="va">rate</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span></span>
@@ -181,13 +259,33 @@
 <span><span class="co">#&gt;  replicates)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; data:  times and rgeom(n, prob = 0.1)</span></span>
-<span><span class="co">#&gt; X-squared = 6393.3, df = NA, p-value = 0.5612</span></span></code></pre></div>
-<p>By using <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> and <code><a href="../reference/DoubleVariable.html">individual::DoubleVariable</a></code> objects to modify the probability with which individuals move between states, as well as counters for recording previous state transitions and times, complex dynamics can be specified from simple building blocks. Several “prefab” functions are provided to make function closures corresponding to state transition processes common in epidemiological models.</p>
+<span><span class="co">#&gt; X-squared = 6480.5, df = NA, p-value = 0.5892</span></span></code></pre></div>
+<p>By using <code><a href="../reference/IntegerVariable.html">individual::IntegerVariable</a></code> and
+<code><a href="../reference/DoubleVariable.html">individual::DoubleVariable</a></code> objects to modify the
+probability with which individuals move between states, as well as
+counters for recording previous state transitions and times, complex
+dynamics can be specified from simple building blocks. Several “prefab”
+functions are provided to make function closures corresponding to state
+transition processes common in epidemiological models.</p>
 <div class="section level3">
 <h3 id="rend">Render<a class="anchor" aria-label="anchor" href="#rend"></a>
 </h3>
-<p>During each time step we often want to record (render) certain output from the simulation. Because rendering output occurs each time step, they are called as other processes during the simulation loop (this is another way we could have implemented the time counters in the previous example).</p>
-<p>In “individual”, rendering output is handled by <code><a href="../reference/Render.html">individual::Render</a></code> class objects, which build up the recorded data and can return a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">base::data.frame</a></code> object for plotting and analysis. A <code><a href="../reference/Render.html">individual::Render</a></code> object is then stored in a function closure that is called each time step like other processes, and into which data may be recorded. Please note that the function closure must also store any variable objects whose values should be tracked, such as the prefab rendering process <code><a href="../reference/categorical_count_renderer_process.html">individual::categorical_count_renderer_process</a></code>, taking a <code><a href="../reference/Render.html">individual::Render</a></code> object as the first argument and a <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> object as the second.</p>
+<p>During each time step we often want to record (render) certain output
+from the simulation. Because rendering output occurs each time step,
+they are called as other processes during the simulation loop (this is
+another way we could have implemented the time counters in the previous
+example).</p>
+<p>In “individual”, rendering output is handled by
+<code><a href="../reference/Render.html">individual::Render</a></code> class objects, which build up the
+recorded data and can return a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">base::data.frame</a></code> object for
+plotting and analysis. A <code><a href="../reference/Render.html">individual::Render</a></code> object is then
+stored in a function closure that is called each time step like other
+processes, and into which data may be recorded. Please note that the
+function closure must also store any variable objects whose values
+should be tracked, such as the prefab rendering process
+<code><a href="../reference/categorical_count_renderer_process.html">individual::categorical_count_renderer_process</a></code>, taking a
+<code><a href="../reference/Render.html">individual::Render</a></code> object as the first argument and a
+<code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code> object as the second.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">categorical_count_renderer_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">renderer</span>, <span class="va">variable</span>, <span class="va">categories</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span></span>
@@ -201,14 +299,51 @@
 <div class="section level2">
 <h2 id="event">Events<a class="anchor" aria-label="anchor" href="#event"></a>
 </h2>
-<p>While technically nothing more than variables and processes is required to simulate complex models in “individual”, keeping track of auxiliary state, such as counters which track the amount of time until something happens (e.g., a non-geometric waiting time distribution) can quickly add unnecessary frustration and complexity. The <code><a href="../reference/Event.html">individual::Event</a></code> class is a way to model events that don’t occur every time step, but are instead scheduled to fire at some future time after a delay. The scheduled events can be canceled, if something occurs first that should preempt them.</p>
-<p>Events can be scheduled by processes; when an event fires, the event listener is called. The event listener is an arbitrary function that is called with the current time step <code>t</code> as its sole argument. Listeners can execute any state changes, and can themselves schedule future events (not necessarily of the same type). Listeners are implemented as function closures, just like <a href="#proc">processes</a>. Events can have any number of listeners attached to them which are called when the event fires.</p>
+<p>While technically nothing more than variables and processes is
+required to simulate complex models in “individual”, keeping track of
+auxiliary state, such as counters which track the amount of time until
+something happens (e.g., a non-geometric waiting time distribution) can
+quickly add unnecessary frustration and complexity. The
+<code><a href="../reference/Event.html">individual::Event</a></code> class is a way to model events that don’t
+occur every time step, but are instead scheduled to fire at some future
+time after a delay. The scheduled events can be canceled, if something
+occurs first that should preempt them.</p>
+<p>Events can be scheduled by processes; when an event fires, the event
+listener is called. The event listener is an arbitrary function that is
+called with the current time step <code>t</code> as its sole argument.
+Listeners can execute any state changes, and can themselves schedule
+future events (not necessarily of the same type). Listeners are
+implemented as function closures, just like <a href="#proc">processes</a>. Events can have any number of listeners
+attached to them which are called when the event fires.</p>
 <div class="section level3">
 <h3 id="t_event">Targeted Events<a class="anchor" aria-label="anchor" href="#t_event"></a>
 </h3>
-<p>Unlike <code><a href="../reference/Event.html">individual::Event</a></code> objects, whose listeners are called with a single argument <code>t</code>, when the listeners of <code><a href="../reference/TargetedEvent.html">individual::TargetedEvent</a></code> objects are called, two arguments are passed. The first is the current time step <code>t</code>, and the second is a <code><a href="../reference/Bitset.html">individual::Bitset</a></code> object giving the indies of individuals which will be affected by the event. Because it stores these objects internally to schedule future updates, initialization of <code><a href="../reference/TargetedEvent.html">individual::TargetedEvent</a></code> objects requires the total population size as an argument. When scheduling a <code><a href="../reference/TargetedEvent.html">individual::TargetedEvent</a></code>, a user provides a vector or <code><a href="../reference/Bitset.html">individual::Bitset</a></code> of indicies for those individuals which will have the event scheduled. In addition, a user provides a delay which the event will occur after. The delay can either be a single value, so all individuals will experience the event after that delay, or a vector of values equal to the number of individuals who were scheduled. This allows, for example individual heterogeneity in distribution of waiting times for some event.</p>
-<p>Much like regular <a href="#event">Events</a>, previously scheduled targeted events can be canceled, requiring either a <code><a href="../reference/Bitset.html">individual::Bitset</a></code> or vector of indices for individuals whose events should be canceled.</p>
-<p>The code to define events is typically quite brief, although typically another process must be defined that queues them. A recovery event in an SIR model for example, might look like this, where <code>state</code> is a <code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code>:</p>
+<p>Unlike <code><a href="../reference/Event.html">individual::Event</a></code> objects, whose listeners are
+called with a single argument <code>t</code>, when the listeners of
+<code><a href="../reference/TargetedEvent.html">individual::TargetedEvent</a></code> objects are called, two arguments
+are passed. The first is the current time step <code>t</code>, and the
+second is a <code><a href="../reference/Bitset.html">individual::Bitset</a></code> object giving the indies of
+individuals which will be affected by the event. Because it stores these
+objects internally to schedule future updates, initialization of
+<code><a href="../reference/TargetedEvent.html">individual::TargetedEvent</a></code> objects requires the total
+population size as an argument. When scheduling a
+<code><a href="../reference/TargetedEvent.html">individual::TargetedEvent</a></code>, a user provides a vector or
+<code><a href="../reference/Bitset.html">individual::Bitset</a></code> of indicies for those individuals which
+will have the event scheduled. In addition, a user provides a delay
+which the event will occur after. The delay can either be a single
+value, so all individuals will experience the event after that delay, or
+a vector of values equal to the number of individuals who were
+scheduled. This allows, for example individual heterogeneity in
+distribution of waiting times for some event.</p>
+<p>Much like regular <a href="#event">Events</a>, previously scheduled
+targeted events can be canceled, requiring either a
+<code><a href="../reference/Bitset.html">individual::Bitset</a></code> or vector of indices for individuals
+whose events should be canceled.</p>
+<p>The code to define events is typically quite brief, although
+typically another process must be defined that queues them. A recovery
+event in an SIR model for example, might look like this, where
+<code>state</code> is a
+<code><a href="../reference/CategoricalVariable.html">individual::CategoricalVariable</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">recovery_event</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/TargetedEvent.html">TargetedEvent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>population_size <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">recovery_event</span><span class="op">$</span><span class="fu">add_listener</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">timestep</span>, <span class="va">target</span><span class="op">)</span> <span class="op">{</span></span>
@@ -219,8 +354,20 @@
 <div class="section level2">
 <h2 id="sim">Simulate<a class="anchor" aria-label="anchor" href="#sim"></a>
 </h2>
-<p>Using a combination of <a href="#var">variables</a>, <a href="#proc">processes</a>, and <a href="#events">events</a>, highly complex individual based models can be specified, and simulated with the function <code><a href="../reference/simulation_loop.html">individual::simulation_loop</a></code>, which defines the order in which state updates are preformed.</p>
-<p>It is possible to create conflicts between different processes, for example, if a single individual is subject to a death process and infection process, then both death and infection state changes could be scheduled for that individual during a time step. When processes or events create conflicting state updates, the <em>last</em> update will take precedence. Another way to make sure conflicts do not exist is to ensure only a single process is called for each state which samples each individual’s update among all possible updates which could happen for those individuals, so that conflicting updates cannot be scheduled for individuals in a state.</p>
+<p>Using a combination of <a href="#var">variables</a>, <a href="#proc">processes</a>, and <a href="#events">events</a>, highly
+complex individual based models can be specified, and simulated with the
+function <code><a href="../reference/simulation_loop.html">individual::simulation_loop</a></code>, which defines the
+order in which state updates are preformed.</p>
+<p>It is possible to create conflicts between different processes, for
+example, if a single individual is subject to a death process and
+infection process, then both death and infection state changes could be
+scheduled for that individual during a time step. When processes or
+events create conflicting state updates, the <em>last</em> update will
+take precedence. Another way to make sure conflicts do not exist is to
+ensure only a single process is called for each state which samples each
+individual’s update among all possible updates which could happen for
+those individuals, so that conflicting updates cannot be scheduled for
+individuals in a state.</p>
 <div class="figure" style="text-align: center">
 <img src="sim_loop.png" alt="Simulation loop flowchart" width="100%"><p class="caption">
 Simulation loop flowchart
@@ -272,7 +419,7 @@ Simulation loop flowchart
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
