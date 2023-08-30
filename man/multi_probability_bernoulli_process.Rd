@@ -20,7 +20,7 @@ a function which can be passed as a process to \code{\link{simulation_loop}}.
 }
 \description{
 Simulates a Bernoulli process where all individuals
-in a given source state \code{from} sample whether or not 
+in a given source state \code{from} sample whether or not
 to transition to destination state \code{to} with a
 individual probability specified by the \code{\link{DoubleVariable}}
 object \code{rate_variable}.

@@ -1,6 +1,6 @@
 Package: individual
 Title: Framework for Specifying and Simulating Individual Based Models
-Version: 0.1.9
+Version: 0.1.10
 Authors@R: c(
   person(
     given = "Giovanni",
@@ -45,6 +45,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 URL: https://github.com/mrc-ide/individual, https://mrc-ide.github.io/individual/
 BugReports: https://github.com/mrc-ide/individual/issues
+Roxygen: list(markdown = TRUE)
 Imports:
   R6,
   Rcpp
@@ -57,7 +58,7 @@ Suggests:
     testthat (>= 2.1.0),
     xml2,
     bench
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1.9000
 VignetteBuilder: knitr
 LinkingTo:
   Rcpp,

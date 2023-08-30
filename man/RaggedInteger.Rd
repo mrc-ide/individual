@@ -51,7 +51,7 @@ Get the variable values.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{index}}{optionally return a subset of the variable vector. If
-\code{NULL}, return all values; if passed an [individual::Bitset]
+\code{NULL}, return all values; if passed an \link{Bitset}
 or integer vector, return values of those individuals.}
 }
 \if{html}{\out{</div>}}
@@ -70,7 +70,7 @@ Get the lengths of the indiviudal elements in the ragged array
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{index}}{optionally only get lengths for a subset of persons. If
-\code{NULL}, return all lengths; if passed an [individual::Bitset]
+\code{NULL}, return all lengths; if passed an \link{Bitset}
 or integer vector, return lengths of arrays for those individuals.}
 }
 \if{html}{\out{</div>}}
@@ -83,16 +83,16 @@ or integer vector, return lengths of arrays for those individuals.}
 Queue an update for a variable. There are 4 types of variable update:
 
 \enumerate{
- \item{Subset update: }{The argument \code{index} represents a subset of the variable to
+\item{Subset update: }{The argument \code{index} represents a subset of the variable to
 update. The argument \code{values} should be a vector whose length matches the size of \code{index},
 which represents the new values for that subset.}
- \item{Subset fill: }{The argument \code{index} represents a subset of the variable to
+\item{Subset fill: }{The argument \code{index} represents a subset of the variable to
 update. The argument \code{values} should be a single number, which fills the specified subset.}
- \item{Variable reset: }{The index vector is set to \code{NULL} and the argument \code{values}
+\item{Variable reset: }{The index vector is set to \code{NULL} and the argument \code{values}
 replaces all of the current values in the simulation. \code{values} should be a vector
 whose length should match the size of the population, which fills all the variable values in
 the population}
- \item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
+\item{Variable fill: }{The index vector is set to \code{NULL} and the argument \code{values}
 should be a single number, which fills all of the variable values in
 the population.}
 }
@@ -107,7 +107,7 @@ the population.}
 
 \item{\code{index}}{is the index at which to apply the change, use \code{NULL} for the
 fill options. If using indices, this may be either a vector of integers or
-an [individual::Bitset].}
+an \link{Bitset}.}
 }
 \if{html}{\out{</div>}}
 }

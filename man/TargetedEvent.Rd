@@ -29,9 +29,9 @@ This is useful for events which are triggered for a sub-population.
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id=".process"><a href='../../individual/html/Event.html#method-Event-.process'><code>individual::Event$.process()</code></a></li>
-<li><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id=".tick"><a href='../../individual/html/Event.html#method-Event-.tick'><code>individual::Event$.tick()</code></a></li>
-<li><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id="add_listener"><a href='../../individual/html/Event.html#method-Event-add_listener'><code>individual::Event$add_listener()</code></a></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id=".process"><a href='../../individual/html/Event.html#method-Event-.process'><code>individual::Event$.process()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id=".tick"><a href='../../individual/html/Event.html#method-Event-.tick'><code>individual::Event$.tick()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id="add_listener"><a href='../../individual/html/Event.html#method-Event-add_listener'><code>individual::Event$add_listener()</code></a></span></li>
 </ul>
 </details>
 }}
@@ -65,7 +65,7 @@ Schedule this event to occur in the future.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{target}}{the individuals to pass to the listener, this may be
-either a vector of integers or a \code{\link[individual]{Bitset}}.}
+either a vector of integers or a \link{Bitset}.}
 
 \item{\code{delay}}{the number of time steps to wait before triggering the event,
 can be a scalar in which case all targeted individuals are scheduled for
@@ -79,7 +79,7 @@ individual.}
 \if{html}{\out{<a id="method-TargetedEvent-get_scheduled"></a>}}
 \if{latex}{\out{\hypertarget{method-TargetedEvent-get_scheduled}{}}}
 \subsection{Method \code{get_scheduled()}}{
-Get the individuals who are scheduled as a \code{\link[individual]{Bitset}}.
+Get the individuals who are scheduled as a \link{Bitset}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$get_scheduled()}\if{html}{\out{</div>}}
 }
@@ -98,7 +98,7 @@ Stop a future event from triggering for a subset of individuals.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{target}}{the individuals to clear, this may be either a vector of integers or
-a \code{\link[individual]{Bitset}}.}
+a \link{Bitset}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -107,7 +107,7 @@ a \code{\link[individual]{Bitset}}.}
 \if{html}{\out{<a id="method-TargetedEvent-queue_extend"></a>}}
 \if{latex}{\out{\hypertarget{method-TargetedEvent-queue_extend}{}}}
 \subsection{Method \code{queue_extend()}}{
-Extend the target size
+Extend the target size.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$queue_extend(n)}\if{html}{\out{</div>}}
 }
@@ -115,7 +115,7 @@ Extend the target size
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{n}}{the number of new elements to add to the index}
+\item{\code{n}}{the number of new elements to add to the index.}
 }
 \if{html}{\out{</div>}}
 }
@@ -124,7 +124,7 @@ Extend the target size
 \if{html}{\out{<a id="method-TargetedEvent-queue_extend_with_schedule"></a>}}
 \if{latex}{\out{\hypertarget{method-TargetedEvent-queue_extend_with_schedule}{}}}
 \subsection{Method \code{queue_extend_with_schedule()}}{
-Extend the target size and schedule for the new population
+Extend the target size and schedule for the new population.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$queue_extend_with_schedule(delays)}\if{html}{\out{</div>}}
 }
@@ -132,7 +132,7 @@ Extend the target size and schedule for the new population
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{delays}}{the delay for each new individual}
+\item{\code{delays}}{the delay for each new individual.}
 }
 \if{html}{\out{</div>}}
 }
@@ -141,7 +141,7 @@ Extend the target size and schedule for the new population
 \if{html}{\out{<a id="method-TargetedEvent-queue_shrink"></a>}}
 \if{latex}{\out{\hypertarget{method-TargetedEvent-queue_shrink}{}}}
 \subsection{Method \code{queue_shrink()}}{
-Shrink the targeted event
+Shrink the TargetedEvent.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$queue_shrink(index)}\if{html}{\out{</div>}}
 }
@@ -149,7 +149,7 @@ Shrink the targeted event
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{index}}{the individuals to remove from the event}
+\item{\code{index}}{the individuals to remove from the event.}
 }
 \if{html}{\out{</div>}}
 }
