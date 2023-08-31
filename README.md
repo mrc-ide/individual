@@ -1,4 +1,4 @@
-# Individual <img src='man/figures/logo.png' align="right" height="139" />
+# Individual <img src='man/figures/logo.png' align="right" style="height:139px !important" />
 
 <!-- badges: start -->
 [![R build status](https://github.com/mrc-ide/individual/workflows/R-CMD-check/badge.svg)](https://github.com/mrc-ide/individual/actions)
