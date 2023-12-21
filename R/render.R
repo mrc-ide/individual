@@ -16,7 +16,7 @@ Render <- R6Class(
     #' @param timesteps number of timesteps in the simulation.
     initialize = function(timesteps) {
       private$.timesteps = timesteps
-      private$.vectors[['timestep']] <- seq_len(timesteps)
+      private$.vectors[['timestep']] <- create_render_vector(seq_len(timesteps))
     },
     
     #' @description
@@ -28,7 +28,7 @@ Render <- R6Class(
       if (name == 'timestep') {
         stop("Cannot set default value for variable 'timestep'")
       }
-      private$.vectors[[name]] = rep(value, private$.timesteps)
+      private$.vectors[[name]] = create_render_vector(rep(value, private$.timesteps))
     },
 
     #' @description
@@ -41,15 +41,15 @@ Render <- R6Class(
         stop("Please don't name your variable 'timestep'")
       }
       if (!(name %in% names(private$.vectors))) {
-        private$.vectors[[name]] = rep(NA, private$.timesteps)
+        private$.vectors[[name]] = create_render_vector(rep(NA, private$.timesteps))
       }
-      private$.vectors[[name]][[timestep]] = value
+      render_vector_update(private$.vectors[[name]], timestep, value)
     },
 
     #' @description
     #' Return the render as a \code{\link[base]{data.frame}}.
     to_dataframe = function() {
-      data.frame(private$.vectors)
+      data.frame(lapply(private$.vectors, render_vector_data))
     }
   )
 )
