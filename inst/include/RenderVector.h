@@ -18,7 +18,7 @@
 struct RenderVector {
     RenderVector(Rcpp::NumericVector data) : _data(data) { }
 
-    void update(size_t index, float value) {
+    void update(size_t index, double value) {
         if (index < 1 || index > _data.size()) {
             Rcpp::stop("index out-of-bounds");
         }

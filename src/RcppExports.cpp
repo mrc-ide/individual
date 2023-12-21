@@ -1315,13 +1315,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // render_vector_update
-void render_vector_update(Rcpp::XPtr<RenderVector> v, size_t index, float value);
+void render_vector_update(Rcpp::XPtr<RenderVector> v, size_t index, double value);
 RcppExport SEXP _individual_render_vector_update(SEXP vSEXP, SEXP indexSEXP, SEXP valueSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<RenderVector> >::type v(vSEXP);
     Rcpp::traits::input_parameter< size_t >::type index(indexSEXP);
-    Rcpp::traits::input_parameter< float >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< double >::type value(valueSEXP);
     render_vector_update(v, index, value);
     return R_NilValue;
 END_RCPP

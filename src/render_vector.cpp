@@ -16,7 +16,7 @@ Rcpp::XPtr<RenderVector> create_render_vector(Rcpp::NumericVector data) {
 }
 
 //[[Rcpp::export]]
-void render_vector_update(Rcpp::XPtr<RenderVector> v, size_t index, float value) {
+void render_vector_update(Rcpp::XPtr<RenderVector> v, size_t index, double value) {
     v->update(index, value);
 }
 
