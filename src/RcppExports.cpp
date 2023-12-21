@@ -366,7 +366,7 @@ RcppExport SEXP _individual_dummy() {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -1396,7 +1396,7 @@ RcppExport SEXP _individual_RcppExport_registerCCallable() {
     return R_NilValue;
 }
 
-RcppExport SEXP run_testthat_tests(void *);
+RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_individual_create_bitset", (DL_FUNC) &_individual_create_bitset, 1},
