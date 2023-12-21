@@ -1304,12 +1304,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // create_render_vector
-Rcpp::XPtr<RenderVector> create_render_vector(Rcpp::NumericVector data);
+Rcpp::XPtr<RenderVector> create_render_vector(std::vector<double> data);
 RcppExport SEXP _individual_create_render_vector(SEXP dataSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type data(dataSEXP);
     rcpp_result_gen = Rcpp::wrap(create_render_vector(data));
     return rcpp_result_gen;
 END_RCPP
@@ -1327,7 +1327,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // render_vector_data
-Rcpp::NumericVector render_vector_data(Rcpp::XPtr<RenderVector> v);
+std::vector<double> render_vector_data(Rcpp::XPtr<RenderVector> v);
 RcppExport SEXP _individual_render_vector_data(SEXP vSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

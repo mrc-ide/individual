@@ -11,8 +11,8 @@
 
 
 //[[Rcpp::export]]
-Rcpp::XPtr<RenderVector> create_render_vector(Rcpp::NumericVector data) {
-    return Rcpp::XPtr<RenderVector>(new RenderVector(data), true);
+Rcpp::XPtr<RenderVector> create_render_vector(std::vector<double> data) {
+    return Rcpp::XPtr<RenderVector>(new RenderVector(std::move(data)), true);
 }
 
 //[[Rcpp::export]]
@@ -21,6 +21,6 @@ void render_vector_update(Rcpp::XPtr<RenderVector> v, size_t index, double value
 }
 
 //[[Rcpp::export]]
-Rcpp::NumericVector render_vector_data(Rcpp::XPtr<RenderVector> v) {
+std::vector<double> render_vector_data(Rcpp::XPtr<RenderVector> v) {
     return v->data();
 }
