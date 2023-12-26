@@ -437,6 +437,18 @@ integer_ragged_variable_queue_shrink_bitset <- function(variable, index) {
     invisible(.Call(`_individual_integer_ragged_variable_queue_shrink_bitset`, variable, index))
 }
 
+create_render_vector <- function(data) {
+    .Call(`_individual_create_render_vector`, data)
+}
+
+render_vector_update <- function(v, index, value) {
+    invisible(.Call(`_individual_render_vector_update`, v, index, value))
+}
+
+render_vector_data <- function(v) {
+    .Call(`_individual_render_vector_data`, v)
+}
+
 execute_process <- function(process, timestep) {
     invisible(.Call(`_individual_execute_process`, process, timestep))
 }
@@ -455,5 +467,5 @@ variable_resize <- function(variable) {
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call('_individual_RcppExport_registerCCallable', PACKAGE = 'individual')
+    .Call(`_individual_RcppExport_registerCCallable`)
 })

@@ -366,7 +366,7 @@ RcppExport SEXP _individual_dummy() {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -1303,6 +1303,40 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// create_render_vector
+Rcpp::XPtr<RenderVector> create_render_vector(std::vector<double> data);
+RcppExport SEXP _individual_create_render_vector(SEXP dataSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type data(dataSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_render_vector(data));
+    return rcpp_result_gen;
+END_RCPP
+}
+// render_vector_update
+void render_vector_update(Rcpp::XPtr<RenderVector> v, size_t index, double value);
+RcppExport SEXP _individual_render_vector_update(SEXP vSEXP, SEXP indexSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<RenderVector> >::type v(vSEXP);
+    Rcpp::traits::input_parameter< size_t >::type index(indexSEXP);
+    Rcpp::traits::input_parameter< double >::type value(valueSEXP);
+    render_vector_update(v, index, value);
+    return R_NilValue;
+END_RCPP
+}
+// render_vector_data
+std::vector<double> render_vector_data(Rcpp::XPtr<RenderVector> v);
+RcppExport SEXP _individual_render_vector_data(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<RenderVector> >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(render_vector_data(v));
+    return rcpp_result_gen;
+END_RCPP
+}
 // execute_process
 void execute_process(Rcpp::XPtr<process_t> process, size_t timestep);
 RcppExport SEXP _individual_execute_process(SEXP processSEXP, SEXP timestepSEXP) {
@@ -1475,6 +1509,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_integer_ragged_variable_queue_extend", (DL_FUNC) &_individual_integer_ragged_variable_queue_extend, 2},
     {"_individual_integer_ragged_variable_queue_shrink", (DL_FUNC) &_individual_integer_ragged_variable_queue_shrink, 2},
     {"_individual_integer_ragged_variable_queue_shrink_bitset", (DL_FUNC) &_individual_integer_ragged_variable_queue_shrink_bitset, 2},
+    {"_individual_create_render_vector", (DL_FUNC) &_individual_create_render_vector, 1},
+    {"_individual_render_vector_update", (DL_FUNC) &_individual_render_vector_update, 3},
+    {"_individual_render_vector_data", (DL_FUNC) &_individual_render_vector_data, 1},
     {"_individual_execute_process", (DL_FUNC) &_individual_execute_process, 2},
     {"_individual_variable_get_size", (DL_FUNC) &_individual_variable_get_size, 1},
     {"_individual_variable_update", (DL_FUNC) &_individual_variable_update, 1},

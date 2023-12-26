@@ -51,3 +51,9 @@ test_that("Render default works", {
   rendered <- render$to_dataframe()
   expect_mapequal(true_render, rendered)
 })
+
+test_that("Out of range timestep errors", {
+  render <- Render$new(3)
+  expect_error(render$render('S', 10, 0), "index out-of-bounds")
+  expect_error(render$render('S', 10, 4), "index out-of-bounds")
+})
