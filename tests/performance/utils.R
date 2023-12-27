@@ -48,7 +48,7 @@ create_random_index_bitset <- function(size, limit) {
 #' @description Unnest output to generate histograms or density plots, and remove
 #' all runs where any level of garbage collection was executed.
 #' @param out output of [bench::press] function
-simplify_bench_output <- function(out) {
+simplify_bench_output <- function(out, filter_gc=TRUE) {
   x <- lapply(X = seq_len(nrow(out)), FUN = function(i) {
     # get gc level (if run) as factor
     gc <- rep("none", times = nrow(out$gc[[i]]))
@@ -66,7 +66,10 @@ simplify_bench_output <- function(out) {
     return(out_i)
   })
   out_format <- do.call(what = rbind, args = x)
-  out_format <- out_format[out_format$gc == "none", ]
+  if (filter_gc)
+  {
+    out_format <- out_format[out_format$gc == "none", ]
+  }
   out_format$expression <- as.factor(attr(out_format$expression, "description"))
   return(out_format)
 }

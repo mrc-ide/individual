@@ -1,3 +1,8 @@
+# individual 0.1.11
+
+  * Optimised rendering memory usage and speed
+  * Added benchmarks for rendering
+ 
 # individual 0.1.10
 
   * Vector-based updates are consolidated into one place
