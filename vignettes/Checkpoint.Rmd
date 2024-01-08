@@ -1,0 +1,245 @@
+---
+title: "Saving and restoring simulation state"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Saving and restoring simulation state}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo=FALSE}
+library(individual)
+```
+
+```{r conditional_block, eval=!pkgdown::in_pkgdown(),echo=F}
+knitr::asis_output(
+"## Table of Contents {#toc}
+
+  1. [Introduction](#intro)
+  2. [Example](#example)
+  3. [Caveats](#caveats)"
+)
+```
+
+## Introduction {#intro}
+
+When modeling the impact of an intervention on a disease, it is common to have a first simulation phase where the intervention is disabled to achieve steady-state, followed by a second phase during which the intervention is applied. Often, we want to run the second phase many times over, varying the intervention parameters. Simulating the first phase every time is unnecessary and wasteful, since it isn't affected by the intervention parameters.
+
+Individual allows the user to run a simulation for a number of time steps, save the state of the simulation and resume it multiple times, with different parameters each time. This way, the initial phase before the intervention only needs to be simulated once.
+
+The `simulation_loop` function returns a state object. This value can then be passed to subsequent calls.
+
+```{r, eval=FALSE}
+state <- simulation_loop(
+  variables = variables,
+  processes = processes,
+  timesteps = 500
+)
+simulation_loop(
+  variables = variables,
+  processes = processes,
+  timesteps = 1000,
+  state = state
+)
+```
+
+## Example {#example}
+
+To demonstrate the checkpoint and restore functionality of individual in a practical setting, we will use a SIRS model with a vaccination intervention. Our aim is to compare the impact of the vaccination campaign, given different vaccine efficacy scenarios.
+
+Individuals in the simulation move from being susceptible (S) to infectious (I) to recovered (R) and back to susceptible, after their natural immunity wanes off. Out of the entire population `N`, only `I0` individuals are initially infectios, and the rest are susceptible. Orthogonally, an individual can either be vaccinated (Y) or not (N). The vaccination and the immunity it confers never wanes off. All individuals are initially unvaccinated.
+
+```{r}
+make_variables <- function(N, I0) {
+  health_states_t0 <- rep("S",N)
+  health_states_t0[sample.int(n = N,size = I0)] <- "I"
+  health <- CategoricalVariable$new(categories = c("S","I","R"), initial_values = health_states_t0)
+
+  vaccinated <- CategoricalVariable$new(categories = c("Y", "N"), initial_values = rep("N", N))
+  
+  list(health=health, vaccinated=vaccinated)
+}
+```
+
+A vaccinated individual has a reduced probability of becoming infectious, as determined by the vaccine's efficacy. The function below creates the process to model infection. It samples from the susceptible compartments, applying the different rates depending on the whether an individual's vaccinated status.
+
+```{r}
+make_infection_process <- function(health, vaccinated, N, beta, vaccine_efficacy) {
+  function(t) {
+    I <- health$get_size_of("I")
+    foi <- beta * I / N
+  
+    vaccinated_S <- health$get_index_of("S")$and(vaccinated$get_index_of("Y"))
+    non_vaccinated_S <- health$get_index_of("S")$and(vaccinated$get_index_of("N"))
+  
+    vaccinated_S$sample(rate = foi * (1 - vaccine_efficacy))
+    non_vaccinated_S$sample(rate = foi)
+  
+    health$queue_update(value = "I", index = vaccinated_S)
+    health$queue_update(value = "I", index = non_vaccinated_S)
+  }
+}
+```
+
+At the start of the simulation no vaccination takes place. Only after a number of time steps, determined by the `vaccination_ts` parameter, does the intervention begin. At each time step after that, an individual has a fixed probability of becoming vaccinated. If `vaccination_ts` is `NULL`, the intervention never begins.
+
+```{r}
+make_vaccination_process <- function(vaccinated, vaccination_ts, vaccination_rate) {
+  function(t) {
+    if (!is.null(vaccination_ts) && t >= vaccination_ts) {
+      vaccinated$queue_update(value = "Y",
+        vaccinated$get_index_of("N")$sample(vaccination_rate))
+    }
+  }
+}
+```
+
+We will define our simulation as a function, taking the simulation parameters as arguments. The function also accepts a `state` argument, which is passed to `simulation_loop`. This argument will be used when resuming a simulation. The function returns the simulation data as well as the new saved state. 
+
+```{r}
+run_simulation <- function(
+    steps,
+    N = 1e3,
+    I0 = 5,
+    beta = 0.1, # S -> I
+    gamma = 0.05, # I -> R
+    zeta = 0.03, # R -> S
+    vaccination_ts = NULL,
+    vaccine_efficacy = 1,
+    vaccination_rate = 0.005, # N -> Y
+    state = NULL)
+{
+  variables <- make_variables(N, I0)
+  infection_process <- make_infection_process(
+    variables$health,
+    variables$vaccinated,
+    N, beta, vaccine_efficacy)
+  recovery_process <- bernoulli_process(variables$health, "I", "R", gamma)
+  return_process <- bernoulli_process(variables$health, "R", "S", zeta)
+  vaccination_process <- make_vaccination_process(
+    variables$vaccinated, vaccination_ts, vaccination_rate)
+
+  renderer <- Render$new(timesteps = steps)
+  health_render_process <- categorical_count_renderer_process(
+    renderer = renderer,
+    variable = variables$health,
+    categories = variables$health$get_categories()
+  )
+  
+  processes <- list(
+    infection_process,
+    recovery_process,
+    return_process,
+    vaccination_process,
+    health_render_process)
+
+  final_state <- simulation_loop(
+    variables=variables,
+    processes=processes,
+    timesteps=steps,
+    state=state
+  )
+
+  list(result=renderer$to_dataframe(), state=final_state)
+}
+```
+
+We will start by running and plotting our baseline simulation, with the intervention disabled.
+```{r}
+data <- run_simulation(steps=1500)$result
+colours <-  c("royalblue3","firebrick3","darkorchid3")
+matplot(
+  x=data["timestep"],
+  y=data[c("S_count","I_count", "R_count")],
+  xlab="Time", ylab="Count",
+  type="l", lwd=2, lty = 1, col = colours
+)
+legend(
+   x = "topright",
+   pch = rep(16,3),
+   col = colours,
+   legend = c("S", "I", "R"), cex = 1.5,
+   bg='white'
+)
+```
+
+We see that the simulation takes some time to settle from its initial parameters to its steady-state conditions.
+We will now enable the vaccine intervention, but only starting at a point after the simulation has settled, for example at `t=500`.
+
+```{r}
+data <- run_simulation(steps=1500, vaccination_ts = 500, vaccine_efficacy = 1)$result
+colours <-  c("royalblue3","firebrick3","darkorchid3")
+matplot(
+  x=data["timestep"],
+  y=data[c("S_count","I_count", "R_count")],
+  xlab="Time", ylab="Count",
+  type="l", lwd=2, lty = 1, col = colours
+)
+legend(
+   x = "topright",
+   pch = rep(16,3),
+   col = colours,
+   legend = c("S", "I", "R"), cex = 1.5,
+   bg='white'
+)
+```
+
+The simulation above clearly shows the effect of the vaccination campaign, starting at `ts=500`. However, it made the optimistic assumption of a 100% vaccine efficacy. We wish to run the simulation again but with varying levels of efficacy, in order the compare its impact.
+
+While we could run the code above many times over, each simulation would repeat the first 499 timesteps, despite the result being identical each time. Instead we start by running only these timesteps, and saving the result. We omit any intervention parameters, since these are irrelevant anyway.
+```{r}
+initial <- run_simulation(steps=499)
+```
+
+From this initial result, we can resume the simulation, but using different values of vaccine efficacy each time. We also include a control simulation, in which no vaccination takes place. Each of these simulation will skip the first 499 steps and only run the next 1001 time steps.
+```{r}
+control    <- run_simulation(steps=1500, state=initial$state)$result
+vaccine30  <- run_simulation(steps=1500, vaccination_ts = 500, vaccine_efficacy=0.3, state=initial$state)$result
+vaccine50  <- run_simulation(steps=1500, vaccination_ts = 500, vaccine_efficacy=0.5, state=initial$state)$result
+vaccine100 <- run_simulation(steps=1500, vaccination_ts = 500, vaccine_efficacy=1.0, state=initial$state)$result
+```
+
+Finally we aggregate and plot the results from all these simulations. We also need to include the data from our initial run, which we will plot the same colour as our control simulation.
+
+```{r}
+colours <-  c("royalblue3","firebrick3","darkorchid3", "seagreen3")
+
+# Pad the initial data to make it easier to plot with the rest.
+initial$result[500:nrow(control),] <- NA
+matplot(
+  data.frame(
+    initial$result[,"I_count"],
+    control[,"I_count"],
+    vaccine30[,"I_count"],
+    vaccine50[,"I_count"],
+    vaccine100[,"I_count"]),
+  xlab = "Time", ylab = "Susceptible count",
+  type="l", lwd=2, lty = 1, col = c(colours[1], colours)
+)
+legend(
+   x = "topright", pch = rep(16,3),
+   col = colours,
+   legend = c("Control", "30%", "50%", "100%"), cex = 1.5,
+   bg='white'
+)
+```
+
+## Caveats {#caveats}
+Saving and restoring the simulation state comes with a number of caveats.
+
+- All simulation state must be represented as objects managed by individual. Any state maintained externally will not be saved nor restored.
+- The state object's structure is not stable and is expected to change. One should not expect to serialize the state to disk and have it work with future versions of the individual package.
+- The simulation must be re-created in an identical way, with the same variables and events. In particular, the number, order and type of these, as passed to the `run_simulation` function, must remain stable.
+- Restoring a simulation state also restores R's global random number generator state. This can have side effects on other parts of a program.
+- Events are not yet supported, although this is planned.
+
+While parameters of the simulation can be changed between the initial run and the subsequent runs (as demonstrated with the `vaccine_efficacy` parameter above), in general you should not modify parameters that would have been already had an impact on the first part of the simulation. Doing so would produce results that can only be produced through checkpoint and resume, and not as a single simulation.
+
+For example, in our SIRS model, it may be tempting the model a time-varying parameter by running half of the simulation with one value and then resuming it with a different value. While this would probably work, it would be brittle and hard to compose. As more time-varying parameters are introduced to the model, the simulation would need to be saved and restored each time a value changes.

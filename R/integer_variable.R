@@ -188,6 +188,12 @@ IntegerVariable <- R6Class(
     size = function() variable_get_size(self$.variable),
 
     .update = function() variable_update(self$.variable),
-    .resize = function() variable_resize(self$.variable)
+    .resize = function() variable_resize(self$.variable),
+
+    .checkpoint = function() self$get_values(),
+    .restore = function(values) {
+      self$queue_update(values)
+      self$.update()
+    }
   )
 )

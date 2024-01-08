@@ -94,6 +94,20 @@ CategoricalVariable <- R6Class(
     size = function() variable_get_size(self$.variable),
 
     .update = function() variable_update(self$.variable),
-    .resize = function() variable_resize(self$.variable)
+    .resize = function() variable_resize(self$.variable),
+
+    .checkpoint = function() {
+      categories <- self$get_categories()
+      values <- lapply(categories, function(c) self$get_index_of(c)$to_vector())
+      names(values) <- categories
+      values
+    },
+
+    .restore = function(values) {
+      for (c in names(values)) {
+        self$queue_update(c, values[[c]])
+      }
+      self$.update()
+    }
   )
 )

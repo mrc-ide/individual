@@ -5,6 +5,7 @@
 #' @param events a list of Events
 #' @param processes a list of processes to execute on each timestep
 #' @param timesteps the number of timesteps to simulate
+#' @param state a checkpoint from which to resume the simulation
 #' @examples
 #' population <- 4
 #' timesteps <- 5
@@ -35,12 +36,22 @@ simulation_loop <- function(
   variables = list(),
   events = list(),
   processes = list(),
-  timesteps
+  timesteps,
+  state = NULL
   ) {
   if (timesteps <= 0) {
     stop('End timestep must be > 0')
   }
-  for (t in seq_len(timesteps)) {
+
+  start <- 1
+  if (!is.null(state)) {
+    start <- restore_state(state, variables, events)
+    if (start > timesteps) {
+      stop("Restored state is already longer than timesteps")
+    }
+  }
+
+  for (t in seq(start, timesteps)) {
     for (process in processes) {
       execute_any_process(process, t)
     }
@@ -60,6 +71,40 @@ simulation_loop <- function(
       event$.tick()
     }
   }
+
+  checkpoint_state(timesteps, variables, events)
+}
+
+#' @title Save the simulation state
+#' @description Save the simulation state in an R object, allowing it to be
+#' resumed later using \code{\link[individual]{restore_state}}.
+#' @param variables the list of Variables
+#' @param events the list of Events
+checkpoint_state <- function(timesteps, variables, events) {
+  random_state <- .GlobalEnv$.Random.seed
+  list(
+    variables=lapply(variables, function(v) v$.checkpoint()),
+    timesteps=timesteps,
+    random_state=random_state
+  )
+}
+
+#' @title Restore the simulation state
+#' @description Restore the simulation state from a previous checkpoint.
+#' The state of passed events and variables is overwritten to match the state they
+#' had when the simulation was checkpointed. Returns the timestep at which the
+#' simulation should resume.
+#' @param state the simulation state to restore, as returned by \code{\link[individual]{restore_state}}.
+#' @param variables the list of Variables
+#' @param events the list of Events
+restore_state <- function(state, variables, events) {
+  for (i in seq_along(variables)) {
+    variables[[i]]$.restore(state$variables[[i]])
+  }
+
+  .GlobalEnv$.Random.seed <- state$random_state
+
+  state$timesteps + 1
 }
 
 #' @title Execute a C++ or R process in the simulation
