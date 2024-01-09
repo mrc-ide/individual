@@ -189,3 +189,19 @@ test_that("IntegerVariable get size and index of set in bounds [a,b] and set giv
   expect_equal(variable$get_size_of(a = 5, b = 7), variable$get_size_of(set = 5:7))
   expect_equal(variable$get_index_of(a = 5, b = 7)$to_vector(), variable$get_index_of(set = 5:7)$to_vector())
 })
+
+test_that("IntegerVariable supports checkpoint and restore", {
+  size <- 10
+
+  old_variable <- IntegerVariable$new(rep(0, size))
+  old_variable$queue_update(values = seq_len(size))
+  old_variable$.update()
+
+  state <- old_variable$.checkpoint()
+
+  new_variable <- IntegerVariable$new(rep(0, size))
+  new_variable$.restore(state)
+
+  expect_equal(new_variable$get_values(), seq_len(size))
+  expect_equal(new_variable$.checkpoint(), state)
+})

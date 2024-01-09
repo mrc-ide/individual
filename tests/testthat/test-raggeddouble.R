@@ -92,3 +92,22 @@ test_that("RaggedDouble get values fails with incorrect index", {
   expect_error(variable$get_length(Inf))
   expect_error(variable$get_length("10"))
 })
+
+test_that("RaggedDouble supports checkpoint and restore", {
+  size <- 10
+
+  old_variable <- RaggedDouble$new(rep(list(0), size))
+  old_variable$queue_update(values = list(c(1,2)), index = c(3,4))
+  old_variable$queue_update(values = list(c(7,3)), index = c(6,8))
+  old_variable$.update()
+
+  state <- old_variable$.checkpoint()
+
+  new_variable <- RaggedDouble$new(rep(list(0), size))
+  new_variable$.restore(state)
+
+  expect_equal(new_variable$get_values(), list(
+    0, 0, c(1,2), c(1,2), 0, c(7,3), 0, c(7,3), 0, 0
+  ))
+  expect_equal(new_variable$.checkpoint(), state)
+})

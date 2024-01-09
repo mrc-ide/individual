@@ -152,3 +152,19 @@ test_that("DoubleVariable get size of set in bounds [a,b] fails with incorrect i
   expect_error(variable$get_size_of(a = 50,b = 10))
   expect_error(variable$get_size_of(a = 0,b = -5))
 })
+
+test_that("DoubleVariable supports checkpoint and restore", {
+  size <- 10
+
+  old_variable <- DoubleVariable$new(rep(0, size))
+  old_variable$queue_update(values = seq_len(size))
+  old_variable$.update()
+
+  state <- old_variable$.checkpoint()
+
+  new_variable <- DoubleVariable$new(rep(0, size))
+  new_variable$.restore(state)
+
+  expect_equal(new_variable$get_values(), seq_len(size))
+  expect_equal(new_variable$.checkpoint(), state)
+})

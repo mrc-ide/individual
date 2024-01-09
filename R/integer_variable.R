@@ -192,6 +192,7 @@ IntegerVariable <- R6Class(
 
     .checkpoint = function() self$get_values(),
     .restore = function(values) {
+      stopifnot(length(values) == variable_get_size(self$.variable))
       self$queue_update(values)
       self$.update()
     }

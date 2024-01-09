@@ -72,7 +72,7 @@ simulation_loop <- function(
     }
   }
 
-  checkpoint_state(timesteps, variables, events)
+  invisible(checkpoint_state(timesteps, variables, events))
 }
 
 #' @title Save the simulation state
@@ -98,8 +98,14 @@ checkpoint_state <- function(timesteps, variables, events) {
 #' @param variables the list of Variables
 #' @param events the list of Events
 restore_state <- function(state, variables, events) {
+  if (length(variables) != length(state$variables)) {
+    stop("Checkpoint's variables do not match simulation's")
+  }
   for (i in seq_along(variables)) {
     variables[[i]]$.restore(state$variables[[i]])
+  }
+  if (length(events) > 0) {
+    stop("Events cannot be restored yet")
   }
 
   .GlobalEnv$.Random.seed <- state$random_state

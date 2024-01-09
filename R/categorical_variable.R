@@ -38,7 +38,7 @@ CategoricalVariable <- R6Class(
     #' @description return a character vector of possible values.
     #' Note that the order of the returned vector may not be the same order
     #' that was given when the variable was intitialized, due to the underlying
-    #' unordered storage type. 
+    #' unordered storage type.
     get_categories = function() {
       categorical_variable_get_categories(self$.variable)
     },
@@ -104,6 +104,9 @@ CategoricalVariable <- R6Class(
     },
 
     .restore = function(values) {
+      stopifnot(names(values) == self$get_categories())
+      stopifnot(sum(sapply(values, length)) == categorical_variable_get_size(self$.variable))
+
       for (c in names(values)) {
         self$queue_update(c, values[[c]])
       }
