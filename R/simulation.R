@@ -78,6 +78,7 @@ simulation_loop <- function(
 #' @title Save the simulation state
 #' @description Save the simulation state in an R object, allowing it to be
 #' resumed later using \code{\link[individual]{restore_state}}.
+#' @param timesteps <- the number of time steps that have already been simulated
 #' @param variables the list of Variables
 #' @param events the list of Events
 checkpoint_state <- function(timesteps, variables, events) {
@@ -92,7 +93,7 @@ checkpoint_state <- function(timesteps, variables, events) {
 #' @title Restore the simulation state
 #' @description Restore the simulation state from a previous checkpoint.
 #' The state of passed events and variables is overwritten to match the state they
-#' had when the simulation was checkpointed. Returns the timestep at which the
+#' had when the simulation was checkpointed. Returns the time step at which the
 #' simulation should resume.
 #' @param state the simulation state to restore, as returned by \code{\link[individual]{restore_state}}.
 #' @param variables the list of Variables

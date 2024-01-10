@@ -16,6 +16,6 @@ restore_state(state, variables, events)
 \description{
 Restore the simulation state from a previous checkpoint.
 The state of passed events and variables is overwritten to match the state they
-had when the simulation was checkpointed. Returns the timestep at which the
+had when the simulation was checkpointed. Returns the time step at which the
 simulation should resume.
 }

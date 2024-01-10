@@ -7,6 +7,8 @@
 checkpoint_state(timesteps, variables, events)
 }
 \arguments{
+\item{timesteps}{<- the number of time steps that have already been simulated}
+
 \item{variables}{the list of Variables}
 
 \item{events}{the list of Events}
