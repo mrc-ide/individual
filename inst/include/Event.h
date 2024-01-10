@@ -12,6 +12,7 @@
 #include <Rcpp.h>
 #include <set>
 #include <map>
+#include <vector>
 #include <functional>
 #include <unordered_set>
 #include <queue>
@@ -40,6 +41,7 @@ inline std::vector<size_t> round_delay(const std::vector<double>& delay) {
 
 //' @title abstract base class for events
 class EventBase {
+protected:
     size_t t = 1;
 public:
     virtual void tick();
@@ -78,7 +80,9 @@ public:
 
     virtual void schedule(std::vector<double> delays);
     virtual void clear_schedule();
-    
+
+    virtual std::vector<size_t> checkpoint();
+    virtual void restore(size_t time, std::vector<size_t> schedule);
 };
 
 //' @title process an event by calling a listener
@@ -109,6 +113,17 @@ inline void Event::clear_schedule() {
     simple_schedule.clear();
 }
 
+//' @title save this event's state
+inline std::vector<size_t> Event::checkpoint() {
+    return {simple_schedule.begin(), simple_schedule.end()};
+}
+
+//' @title restore this event's state from a previous checkpoint
+inline void Event::restore(size_t time, std::vector<size_t> schedule) {
+    t = time;
+    simple_schedule.clear();
+    simple_schedule.insert(schedule.begin(), schedule.end());
+}
 
 //' @title a targeted event in the simulation
 //' @description This class provides functionality for targeted events which are 
@@ -155,6 +170,8 @@ public:
     virtual void clear_schedule(const individual_index_t&);
     virtual individual_index_t get_scheduled() const;
 
+    virtual std::vector<std::pair<size_t, individual_index_t>> checkpoint() const;
+    virtual void restore(size_t time, std::vector<std::pair<size_t, individual_index_t>> schedule);
 };
 
 inline TargetedEvent::TargetedEvent(size_t size)
@@ -362,6 +379,22 @@ inline void TargetedEvent::resize() {
     if (size_changed) {
         shrink_index = individual_index_t(size());
     }
+}
+
+//' @title save this event's state
+inline std::vector<std::pair<size_t, individual_index_t>>
+TargetedEvent::checkpoint() const {
+    return {targeted_schedule.begin(), targeted_schedule.end()};
+}
+
+//' @title restore this event's state from a previous checkpoint
+inline void TargetedEvent::restore(
+        size_t time,
+        std::vector<std::pair<size_t, individual_index_t>> schedule
+) {
+    t = time;
+    targeted_schedule.clear();
+    targeted_schedule.insert(schedule.begin(), schedule.end());
 }
 
 #endif /* INST_INCLUDE_EVENT_H_ */

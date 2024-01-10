@@ -5,7 +5,7 @@
 #' @export
 TargetedEvent <- R6Class(
   'TargetedEvent',
-  inherit = Event,
+  inherit = EventBase,
   public = list(
 
     #' @description Initialise a TargetedEvent.
@@ -103,7 +103,7 @@ TargetedEvent <- R6Class(
 
     .process_listener = function(listener) {
       listener(
-        event_get_timestep(self$.event),
+        self$.timestep(),
         Bitset$new(from=targeted_event_get_target(self$.event))
       )
     },
@@ -116,6 +116,13 @@ TargetedEvent <- R6Class(
       )
     },
 
-    .resize = function() targeted_event_resize(self$.event)
+    .resize = function() targeted_event_resize(self$.event),
+
+    .checkpoint = function() {
+      targeted_event_checkpoint(self$.event)
+    },
+    .restore = function(time, schedule) {
+      targeted_event_restore(self$.event, time, schedule)
+    }
   )
 )
