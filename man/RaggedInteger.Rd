@@ -18,6 +18,8 @@ This is a ragged array which stores integers (numeric values).
 \item \href{#method-RaggedInteger-size}{\code{RaggedInteger$size()}}
 \item \href{#method-RaggedInteger-.update}{\code{RaggedInteger$.update()}}
 \item \href{#method-RaggedInteger-.resize}{\code{RaggedInteger$.resize()}}
+\item \href{#method-RaggedInteger-.checkpoint}{\code{RaggedInteger$.checkpoint()}}
+\item \href{#method-RaggedInteger-.restore}{\code{RaggedInteger$.restore()}}
 \item \href{#method-RaggedInteger-clone}{\code{RaggedInteger$clone()}}
 }
 }
@@ -171,6 +173,24 @@ get the size of the variable
 \subsection{Method \code{.resize()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RaggedInteger$.resize()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-RaggedInteger-.checkpoint"></a>}}
+\if{latex}{\out{\hypertarget{method-RaggedInteger-.checkpoint}{}}}
+\subsection{Method \code{.checkpoint()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RaggedInteger$.checkpoint()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-RaggedInteger-.restore"></a>}}
+\if{latex}{\out{\hypertarget{method-RaggedInteger-.restore}{}}}
+\subsection{Method \code{.restore()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RaggedInteger$.restore(values)}\if{html}{\out{</div>}}
 }
 
 }

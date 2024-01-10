@@ -8,7 +8,8 @@ simulation_loop(
   variables = list(),
   events = list(),
   processes = list(),
-  timesteps
+  timesteps,
+  state = NULL
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ simulation_loop(
 \item{processes}{a list of processes to execute on each timestep}
 
 \item{timesteps}{the number of timesteps to simulate}
+
+\item{state}{a checkpoint from which to resume the simulation}
 }
 \description{
 Run a simulation where event listeners take precedence

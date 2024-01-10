@@ -19,6 +19,8 @@ Represents a continuous variable for an individual.
 \item \href{#method-DoubleVariable-size}{\code{DoubleVariable$size()}}
 \item \href{#method-DoubleVariable-.update}{\code{DoubleVariable$.update()}}
 \item \href{#method-DoubleVariable-.resize}{\code{DoubleVariable$.resize()}}
+\item \href{#method-DoubleVariable-.checkpoint}{\code{DoubleVariable$.checkpoint()}}
+\item \href{#method-DoubleVariable-.restore}{\code{DoubleVariable$.restore()}}
 \item \href{#method-DoubleVariable-clone}{\code{DoubleVariable$clone()}}
 }
 }
@@ -193,6 +195,24 @@ get the size of the variable
 \subsection{Method \code{.resize()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$.resize()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DoubleVariable-.checkpoint"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-.checkpoint}{}}}
+\subsection{Method \code{.checkpoint()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$.checkpoint()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DoubleVariable-.restore"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-.restore}{}}}
+\subsection{Method \code{.restore()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$.restore(values)}\if{html}{\out{</div>}}
 }
 
 }

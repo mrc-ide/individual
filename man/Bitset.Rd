@@ -154,13 +154,13 @@ to "bitwise and" or intersect two bitsets.
 \subsection{Method \code{not()}}{
 to "bitwise not" or complement a bitset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$not(inplace)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Bitset$not(inplace = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{inplace}}{whether to overwrite the current bitset.}
+\item{\code{inplace}}{whether to overwrite the current bitset, default = TRUE}
 }
 \if{html}{\out{</div>}}
 }

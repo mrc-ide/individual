@@ -64,7 +64,7 @@ Suggests:
     testthat (>= 2.1.0),
     xml2,
     bench
-RoxygenNote: 7.2.1.9000
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 LinkingTo:
   Rcpp,
