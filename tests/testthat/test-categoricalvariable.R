@@ -82,3 +82,22 @@ test_that("CategoricalVariables get categories works", {
   state <- CategoricalVariable$new(SIR, rep('S', size))
   expect_length(setdiff(state$get_categories(), SIR), 0)
 })
+
+test_that("CategoricalVariables supports checkpoint and restore", {
+  size <- 10
+
+  old_variable <- CategoricalVariable$new(SIR, rep('S', size))
+  old_variable$queue_update('I', c(1, 3))
+  old_variable$queue_update('R', c(2, 7))
+  old_variable$.update()
+
+  state <- old_variable$.checkpoint()
+
+  new_variable <- CategoricalVariable$new(SIR, rep('S', size))
+  new_variable$.restore(state)
+
+  expect_equal(new_variable$get_index_of('S')$to_vector(), c(4,5,6,8,9,10))
+  expect_equal(new_variable$get_index_of('I')$to_vector(), c(1,3))
+  expect_equal(new_variable$get_index_of('R')$to_vector(), c(2,7))
+  expect_equal(new_variable$.checkpoint(), state)
+})

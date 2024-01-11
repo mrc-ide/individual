@@ -23,6 +23,8 @@ if possible because certain operations will be faster.
 \item \href{#method-CategoricalVariable-size}{\code{CategoricalVariable$size()}}
 \item \href{#method-CategoricalVariable-.update}{\code{CategoricalVariable$.update()}}
 \item \href{#method-CategoricalVariable-.resize}{\code{CategoricalVariable$.resize()}}
+\item \href{#method-CategoricalVariable-.checkpoint}{\code{CategoricalVariable$.checkpoint()}}
+\item \href{#method-CategoricalVariable-.restore}{\code{CategoricalVariable$.restore()}}
 \item \href{#method-CategoricalVariable-clone}{\code{CategoricalVariable$clone()}}
 }
 }
@@ -173,6 +175,24 @@ get the size of the variable
 \subsection{Method \code{.resize()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$.resize()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CategoricalVariable-.checkpoint"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-.checkpoint}{}}}
+\subsection{Method \code{.checkpoint()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$.checkpoint()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CategoricalVariable-.restore"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-.restore}{}}}
+\subsection{Method \code{.restore()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$.restore(values)}\if{html}{\out{</div>}}
 }
 
 }
