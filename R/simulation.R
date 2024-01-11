@@ -4,7 +4,7 @@
 #' @param variables a list of Variables
 #' @param events a list of Events
 #' @param processes a list of processes to execute on each timestep
-#' @param timesteps the number of timesteps to simulate
+#' @param timesteps the end timestep of the simulation. If `state` is not NULL, timesteps must be greater than `state$timestep`
 #' @param state a checkpoint from which to resume the simulation
 #' @examples
 #' population <- 4
