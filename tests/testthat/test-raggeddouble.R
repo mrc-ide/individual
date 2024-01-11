@@ -107,7 +107,7 @@ test_that("RaggedDouble supports checkpoint and restore", {
   new_variable$.restore(state)
 
   expect_equal(new_variable$get_values(), list(
-    0, 0, c(1,2), c(1,2), 0, c(7,3), 0, c(7,3), 0, 0
+    0, 0, c(1.1,2.2), c(1.1,2.2), 0, c(7.1,3.2), 0, c(7.1,3.2), 0, 0
   ))
   expect_equal(new_variable$.checkpoint(), state)
 })
