@@ -97,8 +97,8 @@ test_that("RaggedDouble supports checkpoint and restore", {
   size <- 10
 
   old_variable <- RaggedDouble$new(rep(list(0), size))
-  old_variable$queue_update(values = list(c(1,2)), index = c(3,4))
-  old_variable$queue_update(values = list(c(7,3)), index = c(6,8))
+  old_variable$queue_update(values = list(c(1.1,2.2)), index = c(3,4))
+  old_variable$queue_update(values = list(c(7.1,3.2)), index = c(6,8))
   old_variable$.update()
 
   state <- old_variable$.checkpoint()
