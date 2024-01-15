@@ -138,7 +138,7 @@ test_that("events can be saved and restored", {
   mockery::expect_args(listener, 2, t = 4)
 })
 
-test_that("events are cleared on restore", {
+test_that("events are cleared when restored", {
   listener <- mockery::mock()
 
   old_event <- Event$new()

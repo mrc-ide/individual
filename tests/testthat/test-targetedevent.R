@@ -567,7 +567,7 @@ test_that("targeted events can be saved and restored", {
   expect_targeted_listener(listener, 2, t = 5, target = c(5, 7))
 })
 
-test_that("targeted events are cleared on restored", {
+test_that("targeted events are cleared when restored", {
   listener <- mockery::mock()
   old_event <- TargetedEvent$new(5)
   old_event$schedule(c(2, 4), 2)
