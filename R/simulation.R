@@ -85,6 +85,7 @@ checkpoint_state <- function(timesteps, variables, events) {
   random_state <- .GlobalEnv$.Random.seed
   list(
     variables=lapply(variables, function(v) v$.checkpoint()),
+    events=lapply(events, function(e) e$.checkpoint()),
     timesteps=timesteps,
     random_state=random_state
   )
@@ -99,19 +100,25 @@ checkpoint_state <- function(timesteps, variables, events) {
 #' @param variables the list of Variables
 #' @param events the list of Events
 restore_state <- function(state, variables, events) {
+  timesteps <- state$timesteps + 1
+
   if (length(variables) != length(state$variables)) {
     stop("Checkpoint's variables do not match simulation's")
   }
   for (i in seq_along(variables)) {
     variables[[i]]$.restore(state$variables[[i]])
   }
-  if (length(events) > 0) {
-    stop("Events cannot be restored yet")
+
+  if (length(events) != length(state$events)) {
+    stop("Checkpoint's events do not match simulation's")
+  }
+  for (i in seq_along(events)) {
+    events[[i]]$.restore(timesteps, state$events[[i]])
   }
 
   .GlobalEnv$.Random.seed <- state$random_state
 
-  state$timesteps + 1
+  timesteps
 }
 
 #' @title Execute a C++ or R process in the simulation

@@ -35,7 +35,7 @@ When modeling the impact of an intervention on a disease, it is common to have a
 
 Individual allows the user to run a simulation for a number of time steps, save the state of the simulation and resume it multiple times, with different parameters each time. This way, the initial phase before the intervention only needs to be simulated once.
 
-## Usage {usage}
+## Usage {#usage}
 
 The typical way to use this feature is to define a simulation function which creates all the relevant simulation data and then calls `simulation_loop`. The function we define takes in an optional `state` parameter that is passed through to `simulation_loop`.
 
@@ -57,7 +57,7 @@ state <- run_simulation(timesteps = 50)
 ```
 
 Finally, the simulation is resumed with a larger number of time steps, passing in the state object as an argument. The `timesteps` argument refers to the total number of time steps, including both the original simulation run and the new one. In this case, `run_simulation` will only simulate 50 extra steps. Before running the actual simulation, `simulation_loop` will reload the simulation state from its argument, overwriting any values we had set when initializing the variables.
-```{r}
+```{r, results='hide'}
 run_simulation(timesteps = 100, state=state)
 ```
 
@@ -99,16 +99,20 @@ make_infection_process <- function(health, vaccinated, N, beta, vaccine_efficacy
 }
 ```
 
-At the start of the simulation no vaccination takes place. Only after a number of time steps, determined by the `vaccination_ts` parameter, does the intervention begin. At each time step after that, an individual has a fixed probability of becoming vaccinated. If `vaccination_ts` is `NULL`, the intervention never begins.
+For a while at the start of the simulation no vaccination takes place. Only after a number of time steps, determined by the `vaccination_start` parameter, does the intervention begin. Periodically, an event will fire and every individual has a fixed probability of becoming vaccinated. If `vaccination_start` is `NULL`, the intervention never begins.
 
 ```{r}
-make_vaccination_process <- function(vaccinated, vaccination_ts, vaccination_rate) {
-  function(t) {
-    if (!is.null(vaccination_ts) && t >= vaccination_ts) {
-      vaccinated$queue_update(value = "Y",
-        vaccinated$get_index_of("N")$sample(vaccination_rate))
-    }
+make_vaccination_event <- function(vaccinated, vaccination_start, vaccination_interval, vaccination_rate) {
+  e <- Event$new()
+  e$add_listener(function(t) {
+    vaccinated$queue_update(value = "Y",
+      vaccinated$get_index_of("N")$sample(vaccination_rate))
+    e$schedule(vaccination_interval)
+  })
+  if (!is.null(vaccination_start)) {
+    e$schedule(vaccination_start - 1)
   }
+  e
 }
 ```
 
@@ -122,9 +126,10 @@ run_simulation <- function(
     beta = 0.1, # S -> I
     gamma = 0.05, # I -> R
     xi = 0.03, # R -> S
-    vaccination_ts = NULL,
+    vaccination_start = NULL,
+    vaccination_interval = 10,
+    vaccination_rate = 0.05, # N -> Y
     vaccine_efficacy = 1,
-    vaccination_rate = 0.005, # N -> Y
     state = NULL)
 {
   variables <- make_variables(N, I0)
@@ -134,8 +139,8 @@ run_simulation <- function(
     N, beta, vaccine_efficacy)
   recovery_process <- bernoulli_process(variables$health, "I", "R", gamma)
   return_process <- bernoulli_process(variables$health, "R", "S", xi)
-  vaccination_process <- make_vaccination_process(
-    variables$vaccinated, vaccination_ts, vaccination_rate)
+  vaccination_event <- make_vaccination_event(
+    variables$vaccinated, vaccination_start, vaccination_interval, vaccination_rate)
 
   renderer <- Render$new(timesteps = steps)
   health_render_process <- categorical_count_renderer_process(
@@ -148,11 +153,11 @@ run_simulation <- function(
     infection_process,
     recovery_process,
     return_process,
-    vaccination_process,
     health_render_process)
 
   final_state <- simulation_loop(
     variables=variables,
+    events=list(vaccination_event),
     processes=processes,
     timesteps=steps,
     state=state
@@ -185,7 +190,7 @@ We see that the simulation takes some time to settle from its initial parameters
 We will now enable the vaccine intervention, but only starting at a point after the simulation has settled, for example at `t=500`.
 
 ```{r}
-data <- run_simulation(steps=1500, vaccination_ts = 500, vaccine_efficacy = 1)$result
+data <- run_simulation(steps=1500, vaccination_start = 500, vaccine_efficacy = 1)$result
 colours <-  c("royalblue3","firebrick3","darkorchid3")
 matplot(
   x=data["timestep"],
@@ -202,19 +207,19 @@ legend(
 )
 ```
 
-The simulation above clearly shows the effect of the vaccination campaign, starting at `ts=500`. However, it made the optimistic assumption of a 100% vaccine efficacy. We wish to run the simulation again but with varying levels of efficacy, in order the compare its impact.
+The simulation above clearly shows the effect of the vaccination campaign, starting at `t=500`. However, it made the optimistic assumption of a 100% vaccine efficacy. We wish to run the simulation again but with varying levels of efficacy, in order the compare its impact.
 
-While we could run the code above many times over, each simulation would repeat the first 499 timesteps, despite the result being identical each time. Instead we start by running only these timesteps, and saving the result. We omit any intervention parameters, since these are irrelevant anyway.
+While we could run the code above many times over, each simulation would repeat the first 499 timesteps, despite the result being identical each time. Instead we start by running only these timesteps, and saving the result. We do need to specify the start of the intervention, as it is necessary to schedule the first vaccination event. However the details of the intervention (ie. `vaccine_efficacy`) are irrelevant and can be omitted.
 ```{r}
-initial <- run_simulation(steps=499)
+initial <- run_simulation(steps=1, vaccination_start = 500)
 ```
 
 From this initial result, we can resume the simulation, but using different values of vaccine efficacy each time. We also include a control simulation, in which no vaccination takes place. Each of these simulation will skip the first 499 steps and only run the next 1001 time steps.
 ```{r}
-control    <- run_simulation(steps=1500, state=initial$state)$result
-vaccine30  <- run_simulation(steps=1500, vaccination_ts = 500, vaccine_efficacy=0.3, state=initial$state)$result
-vaccine50  <- run_simulation(steps=1500, vaccination_ts = 500, vaccine_efficacy=0.5, state=initial$state)$result
-vaccine100 <- run_simulation(steps=1500, vaccination_ts = 500, vaccine_efficacy=1.0, state=initial$state)$result
+control    <- run_simulation(steps=1500, vaccination_start = 500, state=initial$state)$result
+vaccine30  <- run_simulation(steps=1500, vaccination_start = 500, vaccine_efficacy=0.3, state=initial$state)$result
+vaccine50  <- run_simulation(steps=1500, vaccination_start = 500, vaccine_efficacy=0.5, state=initial$state)$result
+vaccine100 <- run_simulation(steps=1500, vaccination_start = 500, vaccine_efficacy=1.0, state=initial$state)$result
 ```
 
 Finally we aggregate and plot the results from all these simulations. We also need to include the data from our initial run, which we will plot the same colour as our control simulation.
@@ -249,7 +254,7 @@ Saving and restoring the simulation state comes with a number of caveats.
 - The state object's structure is not stable and is expected to change. One should not expect to serialize the state to disk and have it work with future versions of the individual package.
 - The simulation must be re-created in an identical way. Variables and events may not be added or removed, variable sizes must remain constant, the list of categories in a `CategoricalVariable` cannot be modified, etc. The order of variables and events passed to the `run_simulation` function must remain stable.
 - Restoring a simulation state also restores R's global random number generator state. This can have side effects on other parts of a program.
-- Events are not yet supported, although this is planned.
+- If an event is scheduled before the checkpoint, the time at which it will execute cannot be changed when resuming, even if that time is in the future. For example in the SIRS model above, we would not be able to resume the simulation with different values for `vaccination_start`; changing that parameter would have no effect.
 
 While parameters of the simulation can be changed between the initial run and the subsequent runs (as demonstrated with the `vaccine_efficacy` parameter above), in general you should not modify parameters that would have been already had an impact on the first part of the simulation. Doing so would produce results that can only be produced through checkpoint and resume, and not as a single simulation.
 

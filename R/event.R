@@ -1,24 +1,48 @@
-#' @title Event Class
-#' @description Describes a general event in the simulation.
+#' @title EventBase Class
+#' @description Common functionality shared between simple and targeted events.
 #' @importFrom R6 R6Class
-#' @export
-Event <- R6Class(
-  'Event',
+EventBase <- R6Class(
+  'EventBase',
   public = list(
-
     .event = NULL,
     .listeners = list(),
-
-    #' @description Initialise an Event.
-    initialize = function() {
-      self$.event <- create_event()
-    },
 
     #' @description Add an event listener.
     #' @param listener the function to be executed on the event, which takes a single
     #' argument giving the time step when this event is triggered.
     add_listener = function(listener) {
       self$.listeners <- c(self$.listeners, listener)
+    },
+
+    .timestep = function() event_base_get_timestep(self$.event),
+
+    .tick = function() event_base_tick(self$.event),
+
+    .process = function() {
+      for (listener in self$.listeners) {
+        if (event_base_should_trigger(self$.event)) {
+          if (inherits(listener, "externalptr")) {
+            self$.process_listener_cpp(listener)
+          } else {
+            self$.process_listener(listener)
+          }
+        }
+      }
+    }
+  )
+)
+
+#' @title Event Class
+#' @description Describes a general event in the simulation.
+#' @importFrom R6 R6Class
+#' @export
+Event <- R6Class(
+  'Event',
+  inherit=EventBase,
+  public = list(
+    #' @description Initialise an Event.
+    initialize = function() {
+      self$.event <- create_event()
     },
 
     #' @description Schedule this event to occur in the future.
@@ -30,25 +54,11 @@ Event <- R6Class(
     #' @description Stop a future event from triggering.
     clear_schedule = function() event_clear_schedule(self$.event),
 
-    .tick = function() event_tick(self$.event),
-
-    .process = function() {
-      for (listener in self$.listeners) {
-        if (event_should_trigger(self$.event)) {
-          if (inherits(listener, "externalptr")) {
-            self$.process_listener_cpp(listener)
-          } else {
-            self$.process_listener(listener)
-          }
-        }
-      }
-    },
-
     .process_listener = function(listener) {
-      listener(event_get_timestep(self$.event))
+      listener(self$.timestep())
     },
 
-    .process_listener_cpp = function(listener){
+    .process_listener_cpp = function(listener) {
       process_listener(
         event = self$.event,
         listener = listener
@@ -56,6 +66,13 @@ Event <- R6Class(
     },
 
     # NOTE: intentionally empty
-    .resize = function() {}
+    .resize = function() {},
+
+    .checkpoint = function() {
+      event_checkpoint(self$.event)
+    },
+    .restore = function(time, schedule) {
+      event_restore(self$.event, time, schedule)
+    }
   )
 )

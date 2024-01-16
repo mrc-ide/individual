@@ -526,3 +526,79 @@ test_that("targeted events work for vector delay, bitset target", {
   expect_error(event$schedule(target = target,delay = delay))
   
 })
+
+test_that("targeted events can be saved and restored", {
+  listener <- mockery::mock()
+  old_event <- TargetedEvent$new(10)
+  old_event$add_listener(listener)
+  old_event$schedule(c(2, 4), 2)
+  old_event$schedule(c(5, 7), 4)
+
+  #time = 1
+  old_event$.process()
+  mockery::expect_called(listener, 0)
+  old_event$.tick()
+
+  #time = 2
+  old_event$.process()
+  mockery::expect_called(listener, 0)
+  old_event$.tick()
+
+  #time = 3
+  old_event$.process()
+  mockery::expect_called(listener, 1)
+  expect_targeted_listener(listener, 1, t = 3, target = c(2, 4))
+  old_event$.tick()
+
+  new_event <- TargetedEvent$new(10)
+  new_event$add_listener(listener)
+  new_event$.restore(
+    old_event$.timestep(),
+    old_event$.checkpoint())
+
+  #time = 4
+  new_event$.process()
+  mockery::expect_called(listener, 1)
+  new_event$.tick()
+
+  #time = 5
+  new_event$.process()
+  mockery::expect_called(listener, 2)
+  expect_targeted_listener(listener, 2, t = 5, target = c(5, 7))
+})
+
+test_that("targeted events are cleared when restored", {
+  listener <- mockery::mock()
+  old_event <- TargetedEvent$new(5)
+  old_event$schedule(c(2, 4), 2)
+
+  new_event <- TargetedEvent$new(10)
+  new_event$add_listener(listener)
+  new_event$schedule(c(1, 3), 2)
+  new_event$schedule(c(5), 3)
+
+  new_event$.restore(
+    old_event$.timestep(),
+    old_event$.checkpoint())
+
+  #time=1
+  new_event$.process()
+  mockery::expect_called(listener, 0)
+  new_event$.tick()
+
+  #time=2
+  new_event$.process()
+  mockery::expect_called(listener, 0)
+  new_event$.tick()
+
+  #time=3
+  new_event$.process()
+  mockery::expect_called(listener, 1)
+  # Only the individuals from the first round of scheduling are targeted.
+  expect_targeted_listener(listener, 1, t = 3, target = c(2, 4))
+  new_event$.tick()
+
+  #time=4
+  new_event$.process()
+  mockery::expect_called(listener, 1)
+})
