@@ -25,7 +25,8 @@ knitr::asis_output(
   1. [Introduction](#intro)
   2. [Usage](#usage)
   3. [Example](#example)
-  4. [Caveats](#caveats)"
+  4. [Caveats](#caveats)
+      1. [Restoring random number generator state](#rng)"
 )
 ```
 
@@ -116,7 +117,7 @@ make_vaccination_event <- function(vaccinated, vaccination_start, vaccination_in
 }
 ```
 
-We will define our simulation as a function, taking the simulation parameters as arguments. The function also accepts a `state` argument, which is passed to `simulation_loop`. This argument will be used when resuming a simulation. The function returns the simulation data as well as the new saved state.
+We will define our simulation as a function, taking the simulation parameters as arguments. Any additional arguments to the function, as denoted by `...`, will be passed on to `simulation_loop`. This will allow us to pass the `state` argument in. The function returns the simulation data as well as the new saved state.
 
 ```{r}
 run_simulation <- function(
@@ -130,7 +131,7 @@ run_simulation <- function(
     vaccination_interval = 10,
     vaccination_rate = 0.05, # N -> Y
     vaccine_efficacy = 1,
-    state = NULL)
+    ...)
 {
   variables <- make_variables(N, I0)
   infection_process <- make_infection_process(
@@ -156,12 +157,11 @@ run_simulation <- function(
     health_render_process)
 
   final_state <- simulation_loop(
-    variables=variables,
-    events=list(vaccination_event),
-    processes=processes,
-    timesteps=steps,
-    state=state
-  )
+    variables = variables,
+    events = list(vaccination_event),
+    processes = processes,
+    timesteps = steps,
+    ...)
 
   list(result=renderer$to_dataframe(), state=final_state)
 }
@@ -227,17 +227,17 @@ Finally we aggregate and plot the results from all these simulations. We also ne
 ```{r}
 colours <-  c("royalblue3","firebrick3","darkorchid3", "seagreen3")
 
-# Pad the initial data to make it easier to plot with the rest.
-initial$result[500:nrow(control),] <- NA
+# Pad initial out to ensure it has the same shape as other series.
+initial$result[500:1500,] <- NA
 matplot(
   data.frame(
     initial$result[,"I_count"],
-    control[,"I_count"],
-    vaccine30[,"I_count"],
-    vaccine50[,"I_count"],
-    vaccine100[,"I_count"]),
-  xlab = "Time", ylab = "Susceptible count",
-  type="l", lwd=2, lty = 1, col = c(colours[1], colours)
+    vaccine50$result[,"I_count"],
+    vaccine80$result[,"I_count"],
+    vaccine100$result[,"I_count"],
+    control$result[,"I_count"]),
+  xlab = "Time", ylab = "Infected count",
+  type = "l", lwd = 1.5, lty = 1, col = colours,
 )
 legend(
    x = "topright", pch = rep(16,3),
@@ -253,9 +253,91 @@ Saving and restoring the simulation state comes with a number of caveats.
 - All simulation state must be represented as objects managed by individual. Any state maintained externally will not be saved nor restored.
 - The state object's structure is not stable and is expected to change. One should not expect to serialize the state to disk and have it work with future versions of the individual package.
 - The simulation must be re-created in an identical way. Variables and events may not be added or removed, variable sizes must remain constant, the list of categories in a `CategoricalVariable` cannot be modified, etc. The order of variables and events passed to the `run_simulation` function must remain stable.
-- Restoring a simulation state also restores R's global random number generator state. This can have side effects on other parts of a program.
 - If an event is scheduled before the checkpoint, the time at which it will execute cannot be changed when resuming, even if that time is in the future. For example in the SIRS model above, we would not be able to resume the simulation with different values for `vaccination_start`; changing that parameter would have no effect.
 
 While parameters of the simulation can be changed between the initial run and the subsequent runs (as demonstrated with the `vaccine_efficacy` parameter above), in general you should not modify parameters that would have been already had an impact on the first part of the simulation. Doing so would produce results that can only be produced through checkpoint and resume, and not as a single simulation.
 
-For example, in our SIRS model, it may be tempting the model a time-varying parameter by running half of the simulation with one value and then resuming it with a different value. While this would probably work, it would be brittle and hard to compose. As more time-varying parameters are introduced to the model, the simulation would need to be saved and restored each time a value changes.
+For example, in our SIRS model, it may be tempting to model a time-varying parameter by running half of the simulation with one value and then resuming it with a different value. While this would probably work, it would be brittle and hard to compose. As more time-varying parameters are introduced to the model, the simulation would need to be saved and restored each time a value changes.
+
+<<<<<<< HEAD
+### Restoring random number generator state
+=======
+### Saving and restoring events {#events}
+
+The `Event` and `TargetedEvent` classes save their schedules in the checkpoint and restore them when loading from a previous simulation state. As a consequence of this, resuming a simulation with a different schedule for an event may not work as intended, even if the scheduled time is in the future.
+
+For example in the code below, the simulation is first initialized with an event scheduled at `t=10` and is run for only 5 steps, hence the event does not yet trigger. On the second run, the event is seemingly scheduled for `t=15`. However, by resuming the simulation, the event's schedule is overwritten with the saved state, clearing the newly scheduled time. The event is triggered at `t=10` only.
+
+```{r}
+e <- Event$new()
+e$schedule(9)
+state <- simulation_loop(timesteps = 5, events = list(e))
+
+e <- Event$new()
+e$schedule(14)
+e$add_listener(function(t) cat("Triggered at timestep", t))
+simulation_loop(timesteps = 30, events = list(e), state = state)
+```
+
+`StaticEvent` provides alternative semantics, allowing their schedule to be modified reliably when resuming the simulation. Static events don't save or restore their schedule, instead it is only dependent on their initialization, which can be modified when resuming. In the modified example below, the event triggers at `t=15` as intended.
+
+```{r}
+e <- StaticEvent$new(10)
+state <- simulation_loop(timesteps = 5, events = list(e))
+
+e <- StaticEvent$new(15)
+e$add_listener(function(t, index) cat("Triggered at timestep", t))
+simulation_loop(timesteps = 30, events = list(e), state = state)
+```
+
+### Restoring random number generator state {#rng}
+>>>>>>> f240a32 (Add missing headline.)
+
+By default resuming a simulation does not restore R's random number generator's state. Every resumed run from the same saved state will be independent and, if the model is stochastic, will produce different results.
+
+We can demonstrate that by running the baseline of our SIRS model multiple times and plotting the results. All three runs start off from the same state, inherited from our original model run, but quickly diverge based on the outcome of random draws.
+
+```{r}
+run1 <- run_simulation(steps = 1500, state = initial$state)$result
+run2 <- run_simulation(steps = 1500, state = initial$state)$result
+run3 <- run_simulation(steps = 1500, state = initial$state)$result
+
+matplot(
+  data.frame(
+    initial$result[,"I_count"],
+    run1[,"I_count"],
+    run2[,"I_count"],
+    run3[,"I_count"]),
+  xlab = "Time", ylab = "Infected count",
+  type = "l", lwd = 1.5, lty = 1, col = colours
+)
+```
+
+Sometimes this behaviour may not be desirable, and we would instead like to restore the state of the random number generator exactly where it was when we stopped the first part of the run. One example of this is when checking that our model behaves the same whether or not it was saved and resumed.
+
+The code below show an attempt at running the model twice, once as a continous run and once in a piecewise manner. We would hope that seeding the random generator at the start of the simulation would be enough to get identical results out of it.  Unfortunately we don't, because the random number generator state's at the intermediate point isn't being preserved.
+
+```{r}
+set.seed(123)
+uninterrupted_run <- run_simulation(steps = 1500)$result
+
+set.seed(123)
+piecewise_run_initial <- run_simulation(steps = 499)
+piecewise_run_final <- run_simulation(steps = 1500, state = piecewise_run_initial$state)
+piecewise_run <- rbind(piecewise_run_initial$result, piecewise_run_final$result[500:1500,])
+
+all.equal(uninterrupted_run, piecewise_run)
+```
+
+We can try the same again, but this time set `restore_random_state = TRUE` to enable restoring the simulation state. This time we've successfully managed to reproduce the data from our uninterrupted run.
+
+```{r}
+set.seed(123)
+piecewise_run_initial <- run_simulation(steps = 499)
+piecewise_run_final <- run_simulation(steps = 1500, state = piecewise_run_initial$state, restore_random_state = TRUE)
+piecewise_run <- rbind(piecewise_run_initial$result, piecewise_run_final$result[500:1500,])
+
+all.equal(uninterrupted_run, piecewise_run)
+```
+
+Using `restore_random_state = TRUE` resets the global random number generator's state, which could have surprising and undesirable side effects. It is generally useful in tests, but should be used carefully elsewhere.

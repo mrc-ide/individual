@@ -37,7 +37,8 @@ simulation_loop <- function(
   events = list(),
   processes = list(),
   timesteps,
-  state = NULL
+  state = NULL,
+  restore_random_state = FALSE
   ) {
   if (timesteps <= 0) {
     stop('End timestep must be > 0')
@@ -45,7 +46,7 @@ simulation_loop <- function(
 
   start <- 1
   if (!is.null(state)) {
-    start <- restore_state(state, variables, events)
+    start <- restore_state(state, variables, events, restore_random_state)
     if (start > timesteps) {
       stop("Restored state is already longer than timesteps")
     }
@@ -99,7 +100,7 @@ checkpoint_state <- function(timesteps, variables, events) {
 #' @param state the simulation state to restore, as returned by \code{\link[individual]{restore_state}}.
 #' @param variables the list of Variables
 #' @param events the list of Events
-restore_state <- function(state, variables, events) {
+restore_state <- function(state, variables, events, restore_random_state) {
   timesteps <- state$timesteps + 1
 
   if (length(variables) != length(state$variables)) {
@@ -116,7 +117,9 @@ restore_state <- function(state, variables, events) {
     events[[i]]$.restore(timesteps, state$events[[i]])
   }
 
-  .GlobalEnv$.Random.seed <- state$random_state
+  if (restore_random_state) {
+    .GlobalEnv$.Random.seed <- state$random_state
+  }
 
   timesteps
 }
