@@ -8,7 +8,7 @@ Describes a targeted event in the simulation.
 This is useful for events which are triggered for a sub-population.
 }
 \section{Super class}{
-\code{individual::EventBase} -> \code{TargetedEvent}
+\code{\link[individual:EventBase]{individual::EventBase}} -> \code{TargetedEvent}
 }
 \section{Methods}{
 \subsection{Public methods}{

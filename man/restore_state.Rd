@@ -4,7 +4,7 @@
 \alias{restore_state}
 \title{Restore the simulation state}
 \usage{
-restore_state(state, variables, events)
+restore_state(state, variables, events, restore_random_state)
 }
 \arguments{
 \item{state}{the simulation state to restore, as returned by \code{\link[individual]{restore_state}}.}
@@ -12,6 +12,8 @@ restore_state(state, variables, events)
 \item{variables}{the list of Variables}
 
 \item{events}{the list of Events}
+
+\item{restore_random_state}{if TRUE, restore R's global random number generator's state from the checkpoint.}
 }
 \description{
 Restore the simulation state from a previous checkpoint.
