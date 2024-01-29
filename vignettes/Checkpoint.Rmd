@@ -211,15 +211,15 @@ The simulation above clearly shows the effect of the vaccination campaign, start
 
 While we could run the code above many times over, each simulation would repeat the first 499 timesteps, despite the result being identical each time. Instead we start by running only these timesteps, and saving the result. We do need to specify the start of the intervention, as it is necessary to schedule the first vaccination event. However the details of the intervention (ie. `vaccine_efficacy`) are irrelevant and can be omitted.
 ```{r}
-initial <- run_simulation(steps=1, vaccination_start = 500)
+initial <- run_simulation(steps=499, vaccination_start = 500)
 ```
 
 From this initial result, we can resume the simulation, but using different values of vaccine efficacy each time. We also include a control simulation, in which no vaccination takes place. Each of these simulation will skip the first 499 steps and only run the next 1001 time steps.
 ```{r}
-control    <- run_simulation(steps=1500, vaccination_start = 500, state=initial$state)$result
-vaccine30  <- run_simulation(steps=1500, vaccination_start = 500, vaccine_efficacy=0.3, state=initial$state)$result
-vaccine50  <- run_simulation(steps=1500, vaccination_start = 500, vaccine_efficacy=0.5, state=initial$state)$result
-vaccine100 <- run_simulation(steps=1500, vaccination_start = 500, vaccine_efficacy=1.0, state=initial$state)$result
+control    <- run_simulation(steps=1500, vaccination_start = 500, vaccine_efficacy=0.0, state=initial$state)
+vaccine30  <- run_simulation(steps=1500, vaccination_start = 500, vaccine_efficacy=0.3, state=initial$state)
+vaccine50  <- run_simulation(steps=1500, vaccination_start = 500, vaccine_efficacy=0.5, state=initial$state)
+vaccine100 <- run_simulation(steps=1500, vaccination_start = 500, vaccine_efficacy=1.0, state=initial$state)
 ```
 
 Finally we aggregate and plot the results from all these simulations. We also need to include the data from our initial run, which we will plot the same colour as our control simulation.
@@ -232,8 +232,8 @@ initial$result[500:1500,] <- NA
 matplot(
   data.frame(
     initial$result[,"I_count"],
+    vaccine30$result[,"I_count"],
     vaccine50$result[,"I_count"],
-    vaccine80$result[,"I_count"],
     vaccine100$result[,"I_count"],
     control$result[,"I_count"]),
   xlab = "Time", ylab = "Infected count",
@@ -259,55 +259,25 @@ While parameters of the simulation can be changed between the initial run and th
 
 For example, in our SIRS model, it may be tempting to model a time-varying parameter by running half of the simulation with one value and then resuming it with a different value. While this would probably work, it would be brittle and hard to compose. As more time-varying parameters are introduced to the model, the simulation would need to be saved and restored each time a value changes.
 
-<<<<<<< HEAD
-### Restoring random number generator state
-=======
-### Saving and restoring events {#events}
-
-The `Event` and `TargetedEvent` classes save their schedules in the checkpoint and restore them when loading from a previous simulation state. As a consequence of this, resuming a simulation with a different schedule for an event may not work as intended, even if the scheduled time is in the future.
-
-For example in the code below, the simulation is first initialized with an event scheduled at `t=10` and is run for only 5 steps, hence the event does not yet trigger. On the second run, the event is seemingly scheduled for `t=15`. However, by resuming the simulation, the event's schedule is overwritten with the saved state, clearing the newly scheduled time. The event is triggered at `t=10` only.
-
-```{r}
-e <- Event$new()
-e$schedule(9)
-state <- simulation_loop(timesteps = 5, events = list(e))
-
-e <- Event$new()
-e$schedule(14)
-e$add_listener(function(t) cat("Triggered at timestep", t))
-simulation_loop(timesteps = 30, events = list(e), state = state)
-```
-
-`StaticEvent` provides alternative semantics, allowing their schedule to be modified reliably when resuming the simulation. Static events don't save or restore their schedule, instead it is only dependent on their initialization, which can be modified when resuming. In the modified example below, the event triggers at `t=15` as intended.
-
-```{r}
-e <- StaticEvent$new(10)
-state <- simulation_loop(timesteps = 5, events = list(e))
-
-e <- StaticEvent$new(15)
-e$add_listener(function(t, index) cat("Triggered at timestep", t))
-simulation_loop(timesteps = 30, events = list(e), state = state)
-```
-
 ### Restoring random number generator state {#rng}
->>>>>>> f240a32 (Add missing headline.)
 
 By default resuming a simulation does not restore R's random number generator's state. Every resumed run from the same saved state will be independent and, if the model is stochastic, will produce different results.
 
 We can demonstrate that by running the baseline of our SIRS model multiple times and plotting the results. All three runs start off from the same state, inherited from our original model run, but quickly diverge based on the outcome of random draws.
 
 ```{r}
-run1 <- run_simulation(steps = 1500, state = initial$state)$result
-run2 <- run_simulation(steps = 1500, state = initial$state)$result
-run3 <- run_simulation(steps = 1500, state = initial$state)$result
+initial <- run_simulation(steps=499)
+run1 <- run_simulation(steps = 1500, state = initial$state)
+run2 <- run_simulation(steps = 1500, state = initial$state)
+run3 <- run_simulation(steps = 1500, state = initial$state)
 
+initial$result[500:1500,] <- NA
 matplot(
   data.frame(
     initial$result[,"I_count"],
-    run1[,"I_count"],
-    run2[,"I_count"],
-    run3[,"I_count"]),
+    run1$result[,"I_count"],
+    run2$result[,"I_count"],
+    run3$result[,"I_count"]),
   xlab = "Time", ylab = "Infected count",
   type = "l", lwd = 1.5, lty = 1, col = colours
 )
