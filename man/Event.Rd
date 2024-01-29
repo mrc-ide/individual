@@ -7,7 +7,7 @@
 Describes a general event in the simulation.
 }
 \section{Super class}{
-\code{individual::EventBase} -> \code{Event}
+\code{\link[individual:EventBase]{individual::EventBase}} -> \code{Event}
 }
 \section{Methods}{
 \subsection{Public methods}{

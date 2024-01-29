@@ -6,6 +6,7 @@
 #' @param processes a list of processes to execute on each timestep
 #' @param timesteps the end timestep of the simulation. If `state` is not NULL, timesteps must be greater than `state$timestep`
 #' @param state a checkpoint from which to resume the simulation
+#' @param restore_random_state if TRUE, restore R's global random number generator's state from the checkpoint.
 #' @examples
 #' population <- 4
 #' timesteps <- 5
@@ -100,6 +101,7 @@ checkpoint_state <- function(timesteps, variables, events) {
 #' @param state the simulation state to restore, as returned by \code{\link[individual]{restore_state}}.
 #' @param variables the list of Variables
 #' @param events the list of Events
+#' @param restore_random_state if TRUE, restore R's global random number generator's state from the checkpoint.
 restore_state <- function(state, variables, events, restore_random_state) {
   timesteps <- state$timesteps + 1
 
