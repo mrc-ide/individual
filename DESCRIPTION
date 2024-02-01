@@ -1,6 +1,6 @@
 Package: individual
 Title: Framework for Specifying and Simulating Individual Based Models
-Version: 0.1.11
+Version: 0.1.12
 Authors@R: c(
   person(
     given = "Giovanni",
@@ -27,6 +27,7 @@ Authors@R: c(
     given = "Paul",
     family = "Liétar",
     role = c('aut'),
+    comment = c(ORCID = "0009-0000-3813-6227"),
     email = 'paul.lietar13@imperial.ac.uk'
   ),
   person(
