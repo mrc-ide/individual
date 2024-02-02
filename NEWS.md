@@ -1,3 +1,7 @@
+# individual 0.1.13
+
+  * Fixed the website generation.
+
 # individual 0.1.12
 
   * Simulation state can be saved and restored, allowing the simulation to be resumed.

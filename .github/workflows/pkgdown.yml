@@ -3,6 +3,11 @@ on:
     branches:
       - master
 
+  pull_request:
+    branches:
+      - dev 
+      - master
+
 name: pkgdown
 
 jobs:
@@ -40,7 +45,12 @@ jobs:
       - name: Install package
         run: R CMD INSTALL .
 
+      - name: Build site
+        run: |
+          Rscript -e 'pkgdown::build_site()'
+
       - name: Deploy package
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
