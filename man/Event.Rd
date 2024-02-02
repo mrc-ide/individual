@@ -6,21 +6,33 @@
 \description{
 Describes a general event in the simulation.
 }
+\section{Super class}{
+\code{\link[individual:EventBase]{individual::EventBase}} -> \code{Event}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Event-new}{\code{Event$new()}}
-\item \href{#method-Event-add_listener}{\code{Event$add_listener()}}
 \item \href{#method-Event-schedule}{\code{Event$schedule()}}
 \item \href{#method-Event-clear_schedule}{\code{Event$clear_schedule()}}
-\item \href{#method-Event-.tick}{\code{Event$.tick()}}
-\item \href{#method-Event-.process}{\code{Event$.process()}}
 \item \href{#method-Event-.process_listener}{\code{Event$.process_listener()}}
 \item \href{#method-Event-.process_listener_cpp}{\code{Event$.process_listener_cpp()}}
 \item \href{#method-Event-.resize}{\code{Event$.resize()}}
+\item \href{#method-Event-.checkpoint}{\code{Event$.checkpoint()}}
+\item \href{#method-Event-.restore}{\code{Event$.restore()}}
 \item \href{#method-Event-clone}{\code{Event$clone()}}
 }
 }
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="individual" data-topic="EventBase" data-id=".process"><a href='../../individual/html/EventBase.html#method-EventBase-.process'><code>individual::EventBase$.process()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="EventBase" data-id=".tick"><a href='../../individual/html/EventBase.html#method-EventBase-.tick'><code>individual::EventBase$.tick()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="EventBase" data-id=".timestep"><a href='../../individual/html/EventBase.html#method-EventBase-.timestep'><code>individual::EventBase$.timestep()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="EventBase" data-id="add_listener"><a href='../../individual/html/EventBase.html#method-EventBase-add_listener'><code>individual::EventBase$add_listener()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Event-new"></a>}}
 \if{latex}{\out{\hypertarget{method-Event-new}{}}}
@@ -30,24 +42,6 @@ Initialise an Event.
 \if{html}{\out{<div class="r">}}\preformatted{Event$new()}\if{html}{\out{</div>}}
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Event-add_listener"></a>}}
-\if{latex}{\out{\hypertarget{method-Event-add_listener}{}}}
-\subsection{Method \code{add_listener()}}{
-Add an event listener.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Event$add_listener(listener)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{listener}}{the function to be executed on the event, which takes a single
-argument giving the time step when this event is triggered.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Event-schedule"></a>}}
@@ -79,24 +73,6 @@ Stop a future event from triggering.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Event-.tick"></a>}}
-\if{latex}{\out{\hypertarget{method-Event-.tick}{}}}
-\subsection{Method \code{.tick()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Event$.tick()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Event-.process"></a>}}
-\if{latex}{\out{\hypertarget{method-Event-.process}{}}}
-\subsection{Method \code{.process()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Event$.process()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Event-.process_listener"></a>}}
 \if{latex}{\out{\hypertarget{method-Event-.process_listener}{}}}
 \subsection{Method \code{.process_listener()}}{
@@ -120,6 +96,24 @@ Stop a future event from triggering.
 \subsection{Method \code{.resize()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$.resize()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Event-.checkpoint"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-.checkpoint}{}}}
+\subsection{Method \code{.checkpoint()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Event$.checkpoint()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Event-.restore"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-.restore}{}}}
+\subsection{Method \code{.restore()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Event$.restore(time, schedule)}\if{html}{\out{</div>}}
 }
 
 }

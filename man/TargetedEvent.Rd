@@ -8,7 +8,7 @@ Describes a targeted event in the simulation.
 This is useful for events which are triggered for a sub-population.
 }
 \section{Super class}{
-\code{\link[individual:Event]{individual::Event}} -> \code{TargetedEvent}
+\code{\link[individual:EventBase]{individual::EventBase}} -> \code{TargetedEvent}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -23,15 +23,18 @@ This is useful for events which are triggered for a sub-population.
 \item \href{#method-TargetedEvent-.process_listener}{\code{TargetedEvent$.process_listener()}}
 \item \href{#method-TargetedEvent-.process_listener_cpp}{\code{TargetedEvent$.process_listener_cpp()}}
 \item \href{#method-TargetedEvent-.resize}{\code{TargetedEvent$.resize()}}
+\item \href{#method-TargetedEvent-.checkpoint}{\code{TargetedEvent$.checkpoint()}}
+\item \href{#method-TargetedEvent-.restore}{\code{TargetedEvent$.restore()}}
 \item \href{#method-TargetedEvent-clone}{\code{TargetedEvent$clone()}}
 }
 }
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id=".process"><a href='../../individual/html/Event.html#method-Event-.process'><code>individual::Event$.process()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id=".tick"><a href='../../individual/html/Event.html#method-Event-.tick'><code>individual::Event$.tick()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="individual" data-topic="Event" data-id="add_listener"><a href='../../individual/html/Event.html#method-Event-add_listener'><code>individual::Event$add_listener()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="EventBase" data-id=".process"><a href='../../individual/html/EventBase.html#method-EventBase-.process'><code>individual::EventBase$.process()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="EventBase" data-id=".tick"><a href='../../individual/html/EventBase.html#method-EventBase-.tick'><code>individual::EventBase$.tick()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="EventBase" data-id=".timestep"><a href='../../individual/html/EventBase.html#method-EventBase-.timestep'><code>individual::EventBase$.timestep()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="EventBase" data-id="add_listener"><a href='../../individual/html/EventBase.html#method-EventBase-add_listener'><code>individual::EventBase$add_listener()</code></a></span></li>
 </ul>
 </details>
 }}
@@ -178,6 +181,24 @@ Shrink the TargetedEvent.
 \subsection{Method \code{.resize()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$.resize()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TargetedEvent-.checkpoint"></a>}}
+\if{latex}{\out{\hypertarget{method-TargetedEvent-.checkpoint}{}}}
+\subsection{Method \code{.checkpoint()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$.checkpoint()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TargetedEvent-.restore"></a>}}
+\if{latex}{\out{\hypertarget{method-TargetedEvent-.restore}{}}}
+\subsection{Method \code{.restore()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$.restore(time, schedule)}\if{html}{\out{</div>}}
 }
 
 }

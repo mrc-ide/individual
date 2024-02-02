@@ -18,6 +18,8 @@ This is a ragged array which stores doubles (numeric values).
 \item \href{#method-RaggedDouble-size}{\code{RaggedDouble$size()}}
 \item \href{#method-RaggedDouble-.update}{\code{RaggedDouble$.update()}}
 \item \href{#method-RaggedDouble-.resize}{\code{RaggedDouble$.resize()}}
+\item \href{#method-RaggedDouble-.checkpoint}{\code{RaggedDouble$.checkpoint()}}
+\item \href{#method-RaggedDouble-.restore}{\code{RaggedDouble$.restore()}}
 \item \href{#method-RaggedDouble-clone}{\code{RaggedDouble$clone()}}
 }
 }
@@ -171,6 +173,24 @@ get the size of the variable
 \subsection{Method \code{.resize()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RaggedDouble$.resize()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-RaggedDouble-.checkpoint"></a>}}
+\if{latex}{\out{\hypertarget{method-RaggedDouble-.checkpoint}{}}}
+\subsection{Method \code{.checkpoint()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RaggedDouble$.checkpoint()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-RaggedDouble-.restore"></a>}}
+\if{latex}{\out{\hypertarget{method-RaggedDouble-.restore}{}}}
+\subsection{Method \code{.restore()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RaggedDouble$.restore(values)}\if{html}{\out{</div>}}
 }
 
 }

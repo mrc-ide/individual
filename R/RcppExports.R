@@ -173,8 +173,16 @@ create_targeted_event <- function(size) {
     .Call(`_individual_create_targeted_event`, size)
 }
 
-event_tick <- function(event) {
-    invisible(.Call(`_individual_event_tick`, event))
+event_base_tick <- function(event) {
+    invisible(.Call(`_individual_event_base_tick`, event))
+}
+
+event_base_get_timestep <- function(event) {
+    .Call(`_individual_event_base_get_timestep`, event)
+}
+
+event_base_should_trigger <- function(event) {
+    .Call(`_individual_event_base_should_trigger`, event)
 }
 
 event_schedule <- function(event, delays) {
@@ -183,6 +191,14 @@ event_schedule <- function(event, delays) {
 
 event_clear_schedule <- function(event) {
     invisible(.Call(`_individual_event_clear_schedule`, event))
+}
+
+event_checkpoint <- function(event) {
+    .Call(`_individual_event_checkpoint`, event)
+}
+
+event_restore <- function(event, time, schedule) {
+    invisible(.Call(`_individual_event_restore`, event, time, schedule))
 }
 
 targeted_event_clear_schedule_vector <- function(event, target) {
@@ -229,20 +245,20 @@ targeted_event_schedule_multi_delay_vector <- function(event, target, delay) {
     invisible(.Call(`_individual_targeted_event_schedule_multi_delay_vector`, event, target, delay))
 }
 
-event_get_timestep <- function(event) {
-    .Call(`_individual_event_get_timestep`, event)
-}
-
-event_should_trigger <- function(event) {
-    .Call(`_individual_event_should_trigger`, event)
-}
-
 targeted_event_get_target <- function(event) {
     .Call(`_individual_targeted_event_get_target`, event)
 }
 
 targeted_event_resize <- function(event) {
     invisible(.Call(`_individual_targeted_event_resize`, event))
+}
+
+targeted_event_checkpoint <- function(event) {
+    .Call(`_individual_targeted_event_checkpoint`, event)
+}
+
+targeted_event_restore <- function(event, time, state) {
+    invisible(.Call(`_individual_targeted_event_restore`, event, time, state))
 }
 
 process_listener <- function(event, listener) {

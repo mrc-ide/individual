@@ -4,7 +4,9 @@
 #' @param variables a list of Variables
 #' @param events a list of Events
 #' @param processes a list of processes to execute on each timestep
-#' @param timesteps the number of timesteps to simulate
+#' @param timesteps the end timestep of the simulation. If `state` is not NULL, timesteps must be greater than `state$timestep`
+#' @param state a checkpoint from which to resume the simulation
+#' @param restore_random_state if TRUE, restore R's global random number generator's state from the checkpoint.
 #' @examples
 #' population <- 4
 #' timesteps <- 5
@@ -35,12 +37,23 @@ simulation_loop <- function(
   variables = list(),
   events = list(),
   processes = list(),
-  timesteps
+  timesteps,
+  state = NULL,
+  restore_random_state = FALSE
   ) {
   if (timesteps <= 0) {
     stop('End timestep must be > 0')
   }
-  for (t in seq_len(timesteps)) {
+
+  start <- 1
+  if (!is.null(state)) {
+    start <- restore_state(state, variables, events, restore_random_state)
+    if (start > timesteps) {
+      stop("Restored state is already longer than timesteps")
+    }
+  }
+
+  for (t in seq(start, timesteps)) {
     for (process in processes) {
       execute_any_process(process, t)
     }
@@ -60,6 +73,57 @@ simulation_loop <- function(
       event$.tick()
     }
   }
+
+  invisible(checkpoint_state(timesteps, variables, events))
+}
+
+#' @title Save the simulation state
+#' @description Save the simulation state in an R object, allowing it to be
+#' resumed later using \code{\link[individual]{restore_state}}.
+#' @param timesteps <- the number of time steps that have already been simulated
+#' @param variables the list of Variables
+#' @param events the list of Events
+checkpoint_state <- function(timesteps, variables, events) {
+  random_state <- .GlobalEnv$.Random.seed
+  list(
+    variables=lapply(variables, function(v) v$.checkpoint()),
+    events=lapply(events, function(e) e$.checkpoint()),
+    timesteps=timesteps,
+    random_state=random_state
+  )
+}
+
+#' @title Restore the simulation state
+#' @description Restore the simulation state from a previous checkpoint.
+#' The state of passed events and variables is overwritten to match the state they
+#' had when the simulation was checkpointed. Returns the time step at which the
+#' simulation should resume.
+#' @param state the simulation state to restore, as returned by \code{\link[individual]{restore_state}}.
+#' @param variables the list of Variables
+#' @param events the list of Events
+#' @param restore_random_state if TRUE, restore R's global random number generator's state from the checkpoint.
+restore_state <- function(state, variables, events, restore_random_state) {
+  timesteps <- state$timesteps + 1
+
+  if (length(variables) != length(state$variables)) {
+    stop("Checkpoint's variables do not match simulation's")
+  }
+  for (i in seq_along(variables)) {
+    variables[[i]]$.restore(state$variables[[i]])
+  }
+
+  if (length(events) != length(state$events)) {
+    stop("Checkpoint's events do not match simulation's")
+  }
+  for (i in seq_along(events)) {
+    events[[i]]$.restore(timesteps, state$events[[i]])
+  }
+
+  if (restore_random_state) {
+    .GlobalEnv$.Random.seed <- state$random_state
+  }
+
+  timesteps
 }
 
 #' @title Execute a C++ or R process in the simulation

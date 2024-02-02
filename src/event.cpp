@@ -9,18 +9,28 @@
 #include "utils.h"
 
 //[[Rcpp::export]]
-Rcpp::XPtr<EventBase> create_event() {
-    return Rcpp::XPtr<EventBase>(new Event(), true);
+Rcpp::XPtr<Event> create_event() {
+    return Rcpp::XPtr<Event>(new Event(), true);
 }
 
 //[[Rcpp::export]]
-Rcpp::XPtr<EventBase> create_targeted_event(size_t size) {
-    return Rcpp::XPtr<EventBase>(new TargetedEvent(size), true);
+Rcpp::XPtr<TargetedEvent> create_targeted_event(size_t size) {
+    return Rcpp::XPtr<TargetedEvent>(new TargetedEvent(size), true);
 }
 
 //[[Rcpp::export]]
-void event_tick(const Rcpp::XPtr<EventBase> event) {
+void event_base_tick(const Rcpp::XPtr<EventBase> event) {
     event->tick();
+}
+
+//[[Rcpp::export]]
+size_t event_base_get_timestep(const Rcpp::XPtr<EventBase> event) {
+    return event->get_time();
+}
+
+//[[Rcpp::export]]
+bool event_base_should_trigger(const Rcpp::XPtr<EventBase> event) {
+    return event->should_trigger();
 }
 
 //[[Rcpp::export]]
@@ -31,6 +41,21 @@ void event_schedule(const Rcpp::XPtr<Event> event, std::vector<double> delays) {
 //[[Rcpp::export]]
 void event_clear_schedule(const Rcpp::XPtr<Event> event) {
     event->clear_schedule();
+}
+
+//[[Rcpp::export]]
+std::vector<size_t> event_checkpoint(const Rcpp::XPtr<Event> event) {
+    return event->checkpoint();
+}
+
+//[[Rcpp::export]]
+void event_restore(const Rcpp::XPtr<Event> event, size_t time, std::vector<size_t> schedule) {
+    for (size_t event_ts: schedule) {
+        if (event_ts < time) {
+            Rcpp::stop("schedule is in the past");
+        }
+    }
+    event->restore(time, schedule);
 }
 
 //[[Rcpp::export]]
@@ -148,16 +173,6 @@ void targeted_event_schedule_multi_delay_vector(
 }
 
 //[[Rcpp::export]]
-size_t event_get_timestep(const Rcpp::XPtr<EventBase> event) {
-    return event->get_time();
-}
-
-//[[Rcpp::export]]
-bool event_should_trigger(const Rcpp::XPtr<EventBase> event) {
-    return event->should_trigger();
-}
-
-//[[Rcpp::export]]
 Rcpp::XPtr<individual_index_t> targeted_event_get_target(const Rcpp::XPtr<TargetedEvent> event) {
     return Rcpp::XPtr<individual_index_t>(
         new individual_index_t(event->current_target()),
@@ -168,6 +183,45 @@ Rcpp::XPtr<individual_index_t> targeted_event_get_target(const Rcpp::XPtr<Target
 // [[Rcpp::export]]
 void targeted_event_resize(const Rcpp::XPtr<TargetedEvent> event) {
     event->resize();
+}
+
+//[[Rcpp::export]]
+Rcpp::List targeted_event_checkpoint(const Rcpp::XPtr<TargetedEvent> event) {
+    std::vector<size_t> timesteps;
+    std::vector<std::vector<size_t>> targets;
+
+    const auto schedule = event->checkpoint();
+    for (const auto& it: schedule) {
+        timesteps.push_back(it.first);
+        targets.push_back(bitset_to_vector_internal(it.second));
+    }
+
+    return Rcpp::List::create(
+            Rcpp::Named("timesteps") = timesteps,
+            Rcpp::Named("targets") = targets);
+}
+
+//[[Rcpp::export]]
+void targeted_event_restore(const Rcpp::XPtr<TargetedEvent> event, size_t time, Rcpp::List state) {
+    std::vector<size_t> timesteps = state["timesteps"];
+    std::vector<std::vector<size_t>> targets = state["targets"];;
+
+    if (timesteps.size() != targets.size()) {
+        Rcpp::stop("length mismatch between timesteps and targets");
+    }
+
+    std::vector<std::pair<size_t, individual_index_t>> schedule;
+    for (size_t i = 0; i < timesteps.size(); i++) {
+        if (timesteps[i] < time) {
+            Rcpp::stop("schedule is in the past");
+        }
+        decrement(targets[i]);
+        auto bitmap = individual_index_t(event->size());
+        bitmap.insert_safe(targets[i].cbegin(), targets[i].cend());
+        schedule.push_back({timesteps[i], bitmap});
+    }
+
+    event->restore(time, schedule);
 }
 
 // [[Rcpp::export]]

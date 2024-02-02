@@ -1,3 +1,7 @@
+# individual 0.1.12
+
+  * Simulation state can be saved and restored, allowing the simulation to be resumed.
+
 # individual 0.1.11
 
   * Optimised rendering memory usage and speed

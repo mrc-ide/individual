@@ -8,7 +8,9 @@ simulation_loop(
   variables = list(),
   events = list(),
   processes = list(),
-  timesteps
+  timesteps,
+  state = NULL,
+  restore_random_state = FALSE
 )
 }
 \arguments{
@@ -18,7 +20,11 @@ simulation_loop(
 
 \item{processes}{a list of processes to execute on each timestep}
 
-\item{timesteps}{the number of timesteps to simulate}
+\item{timesteps}{the end timestep of the simulation. If \code{state} is not NULL, timesteps must be greater than \code{state$timestep}}
+
+\item{state}{a checkpoint from which to resume the simulation}
+
+\item{restore_random_state}{if TRUE, restore R's global random number generator's state from the checkpoint.}
 }
 \description{
 Run a simulation where event listeners take precedence

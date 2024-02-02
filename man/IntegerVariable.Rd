@@ -23,6 +23,8 @@ household or age bin.
 \item \href{#method-IntegerVariable-size}{\code{IntegerVariable$size()}}
 \item \href{#method-IntegerVariable-.update}{\code{IntegerVariable$.update()}}
 \item \href{#method-IntegerVariable-.resize}{\code{IntegerVariable$.resize()}}
+\item \href{#method-IntegerVariable-.checkpoint}{\code{IntegerVariable$.checkpoint()}}
+\item \href{#method-IntegerVariable-.restore}{\code{IntegerVariable$.restore()}}
 \item \href{#method-IntegerVariable-clone}{\code{IntegerVariable$clone()}}
 }
 }
@@ -205,6 +207,24 @@ get the size of the variable
 \subsection{Method \code{.resize()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$.resize()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-IntegerVariable-.checkpoint"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-.checkpoint}{}}}
+\subsection{Method \code{.checkpoint()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$.checkpoint()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-IntegerVariable-.restore"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-.restore}{}}}
+\subsection{Method \code{.restore()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$.restore(values)}\if{html}{\out{</div>}}
 }
 
 }
