@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.12</span>
       </span>
     </div>
 
@@ -36,6 +36,9 @@
     </li>
     <li>
       <a href="../articles/Changing_Populations.html">Changing population</a>
+    </li>
+    <li>
+      <a href="../articles/Checkpoint.html">Saving and restoring simulation state</a>
     </li>
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
@@ -75,6 +78,10 @@
     </div>
 
 
+    <div id="super-class">
+    <h2>Super class</h2>
+    <p><code><a href="EventBase.html">individual::EventBase</a></code> -&gt; <code>Event</code></p>
+    </div>
     <div id="methods">
     <h2>Methods</h2>
     
@@ -82,16 +89,19 @@
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
 <ul><li><p><a href="#method-Event-new"><code>Event$new()</code></a></p></li>
-<li><p><a href="#method-Event-add_listener"><code>Event$add_listener()</code></a></p></li>
 <li><p><a href="#method-Event-schedule"><code>Event$schedule()</code></a></p></li>
 <li><p><a href="#method-Event-clear_schedule"><code>Event$clear_schedule()</code></a></p></li>
-<li><p><a href="#method-Event-.tick"><code>Event$.tick()</code></a></p></li>
-<li><p><a href="#method-Event-.process"><code>Event$.process()</code></a></p></li>
 <li><p><a href="#method-Event-.process_listener"><code>Event$.process_listener()</code></a></p></li>
 <li><p><a href="#method-Event-.process_listener_cpp"><code>Event$.process_listener_cpp()</code></a></p></li>
 <li><p><a href="#method-Event-.resize"><code>Event$.resize()</code></a></p></li>
+<li><p><a href="#method-Event-.checkpoint"><code>Event$.checkpoint()</code></a></p></li>
+<li><p><a href="#method-Event-.restore"><code>Event$.restore()</code></a></p></li>
 <li><p><a href="#method-Event-clone"><code>Event$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-Event-new"></a><div class="section">
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="individual" data-topic="EventBase" data-id=".process"><a href="EventBase.html#method-.process"><code>individual::EventBase$.process()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="EventBase" data-id=".tick"><a href="EventBase.html#method-.tick"><code>individual::EventBase$.tick()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="EventBase" data-id=".timestep"><a href="EventBase.html#method-.timestep"><code>individual::EventBase$.timestep()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="individual" data-topic="EventBase" data-id="add_listener"><a href="EventBase.html#method-add_listener"><code>individual::EventBase$add_listener()</code></a></span></li>
+</ul></details></p><hr><a id="method-Event-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Initialise an Event.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
@@ -99,32 +109,15 @@
 </div>
 
 
-</div><p></p><hr><a id="method-Event-add_listener"></a><div class="section">
-<h3 id="method-add-listener-">Method <code>add_listener()</code><a class="anchor" aria-label="anchor" href="#method-add-listener-"></a></h3>
-<p>Add an event listener.</p><div class="section">
-<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Event</span><span class="op">$</span><span class="fu">add_listener</span><span class="op">(</span><span class="va">listener</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
-<h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>listener</code></dt>
-<dd><p>the function to be executed on the event, which takes a single
-argument giving the time step when this event is triggered.</p></dd>
-
-
-</dl><p></p></div>
-</div>
-
 </div><p></p><hr><a id="method-Event-schedule"></a><div class="section">
 <h3 id="method-schedule-">Method <code>schedule()</code><a class="anchor" aria-label="anchor" href="#method-schedule-"></a></h3>
 <p>Schedule this event to occur in the future.</p><div class="section">
-<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
+<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Event</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span><span class="va">delay</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
+<h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>delay</code></dt>
 <dd><p>the number of time steps to wait before triggering the event,
 can be a scalar or a vector of values for events that should be triggered
@@ -137,26 +130,8 @@ multiple times.</p></dd>
 </div><p></p><hr><a id="method-Event-clear_schedule"></a><div class="section">
 <h3 id="method-clear-schedule-">Method <code>clear_schedule()</code><a class="anchor" aria-label="anchor" href="#method-clear-schedule-"></a></h3>
 <p>Stop a future event from triggering.</p><div class="section">
-<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Event</span><span class="op">$</span><span class="fu">clear_schedule</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-
-</div><p></p><hr><a id="method-Event-.tick"></a><div class="section">
-<h3 id="method-tick-">Method <code>.tick()</code><a class="anchor" aria-label="anchor" href="#method-tick-"></a></h3>
-
-<div class="section">
-<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Event</span><span class="op">$</span><span class="fu">.tick</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-
-</div><p></p><hr><a id="method-Event-.process"></a><div class="section">
-<h3 id="method-process-">Method <code>.process()</code><a class="anchor" aria-label="anchor" href="#method-process-"></a></h3>
-
-<div class="section">
-<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Event</span><span class="op">$</span><span class="fu">.process</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
@@ -164,7 +139,7 @@ multiple times.</p></dd>
 <h3 id="method-process-listener-">Method <code>.process_listener()</code><a class="anchor" aria-label="anchor" href="#method-process-listener-"></a></h3>
 
 <div class="section">
-<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Event</span><span class="op">$</span><span class="fu">.process_listener</span><span class="op">(</span><span class="va">listener</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -173,7 +148,7 @@ multiple times.</p></dd>
 <h3 id="method-process-listener-cpp-">Method <code>.process_listener_cpp()</code><a class="anchor" aria-label="anchor" href="#method-process-listener-cpp-"></a></h3>
 
 <div class="section">
-<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Event</span><span class="op">$</span><span class="fu">.process_listener_cpp</span><span class="op">(</span><span class="va">listener</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -182,20 +157,38 @@ multiple times.</p></dd>
 <h3 id="method-resize-">Method <code>.resize()</code><a class="anchor" aria-label="anchor" href="#method-resize-"></a></h3>
 
 <div class="section">
-<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
+<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Event</span><span class="op">$</span><span class="fu">.resize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Event-.checkpoint"></a><div class="section">
+<h3 id="method-checkpoint-">Method <code>.checkpoint()</code><a class="anchor" aria-label="anchor" href="#method-checkpoint-"></a></h3>
+
+<div class="section">
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Event</span><span class="op">$</span><span class="fu">.checkpoint</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-Event-.restore"></a><div class="section">
+<h3 id="method-restore-">Method <code>.restore()</code><a class="anchor" aria-label="anchor" href="#method-restore-"></a></h3>
+
+<div class="section">
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Event</span><span class="op">$</span><span class="fu">.restore</span><span class="op">(</span><span class="va">time</span>, <span class="va">schedule</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
 </div><p></p><hr><a id="method-Event-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Event</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
+<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 

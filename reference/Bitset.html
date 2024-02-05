@@ -22,7 +22,7 @@ if you would like to perform an operation without destroying your current bitset
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.12</span>
       </span>
     </div>
 
@@ -41,6 +41,9 @@ if you would like to perform an operation without destroying your current bitset
     </li>
     <li>
       <a href="../articles/Changing_Populations.html">Changing population</a>
+    </li>
+    <li>
+      <a href="../articles/Checkpoint.html">Saving and restoring simulation state</a>
     </li>
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
@@ -223,13 +226,13 @@ make empty bitset, otherwise copy existing bitset.</p></dd>
 <h3 id="method-not-">Method <code>not()</code><a class="anchor" aria-label="anchor" href="#method-not-"></a></h3>
 <p>to "bitwise not" or complement a bitset.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Bitset</span><span class="op">$</span><span class="fu">not</span><span class="op">(</span><span class="va">inplace</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Bitset</span><span class="op">$</span><span class="fu">not</span><span class="op">(</span>inplace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>inplace</code></dt>
-<dd><p>whether to overwrite the current bitset.</p></dd>
+<dd><p>whether to overwrite the current bitset, default = TRUE</p></dd>
 
 
 </dl><p></p></div>

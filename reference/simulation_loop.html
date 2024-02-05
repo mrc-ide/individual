@@ -18,7 +18,7 @@ over processes for state changes."><meta property="og:image" content="/logo.png"
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.12</span>
       </span>
     </div>
 
@@ -37,6 +37,9 @@ over processes for state changes."><meta property="og:image" content="/logo.png"
     </li>
     <li>
       <a href="../articles/Changing_Populations.html">Changing population</a>
+    </li>
+    <li>
+      <a href="../articles/Checkpoint.html">Saving and restoring simulation state</a>
     </li>
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
@@ -81,7 +84,9 @@ over processes for state changes.</p>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  processes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  <span class="va">timesteps</span></span>
+<span>  <span class="va">timesteps</span>,</span>
+<span>  state <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  restore_random_state <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -100,7 +105,15 @@ over processes for state changes.</p>
 
 
 <dt>timesteps</dt>
-<dd><p>the number of timesteps to simulate</p></dd>
+<dd><p>the end timestep of the simulation. If <code>state</code> is not NULL, timesteps must be greater than <code>state$timestep</code></p></dd>
+
+
+<dt>state</dt>
+<dd><p>a checkpoint from which to resume the simulation</p></dd>
+
+
+<dt>restore_random_state</dt>
+<dd><p>if TRUE, restore R's global random number generator's state from the checkpoint.</p></dd>
 
 </dl></div>
 
@@ -132,10 +145,10 @@ over processes for state changes.</p>
 <span class="r-in"><span><span class="va">renderer</span><span class="op">$</span><span class="fu">to_dataframe</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   timestep S_count I_count R_count</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        1       4       0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        2       3       1       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        3       2       2       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        2       4       0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        3       3       1       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4        4       2       2       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        5       1       3       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        5       2       2       0</span>
 </code></pre></div>
     </div>
   </div>

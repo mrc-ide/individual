@@ -21,7 +21,7 @@ household or age bin."><meta property="og:image" content="/logo.png"><!-- mathja
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.12</span>
       </span>
     </div>
 
@@ -40,6 +40,9 @@ household or age bin."><meta property="og:image" content="/logo.png"><!-- mathja
     </li>
     <li>
       <a href="../articles/Changing_Populations.html">Changing population</a>
+    </li>
+    <li>
+      <a href="../articles/Checkpoint.html">Saving and restoring simulation state</a>
     </li>
     <li>
       <a href="../articles/Contributing.html">Contributing</a>
@@ -99,6 +102,8 @@ household or age bin.</p>
 <li><p><a href="#method-IntegerVariable-size"><code>IntegerVariable$size()</code></a></p></li>
 <li><p><a href="#method-IntegerVariable-.update"><code>IntegerVariable$.update()</code></a></p></li>
 <li><p><a href="#method-IntegerVariable-.resize"><code>IntegerVariable$.resize()</code></a></p></li>
+<li><p><a href="#method-IntegerVariable-.checkpoint"><code>IntegerVariable$.checkpoint()</code></a></p></li>
+<li><p><a href="#method-IntegerVariable-.restore"><code>IntegerVariable$.restore()</code></a></p></li>
 <li><p><a href="#method-IntegerVariable-clone"><code>IntegerVariable$clone()</code></a></p></li>
 </ul></div><p></p><hr><a id="method-IntegerVariable-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
@@ -281,10 +286,28 @@ a <code><a href="Bitset.html">Bitset</a></code>.</p></dd>
 </div>
 
 
+</div><p></p><hr><a id="method-IntegerVariable-.checkpoint"></a><div class="section">
+<h3 id="method-checkpoint-">Method <code>.checkpoint()</code><a class="anchor" aria-label="anchor" href="#method-checkpoint-"></a></h3>
+
+<div class="section">
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">IntegerVariable</span><span class="op">$</span><span class="fu">.checkpoint</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-IntegerVariable-.restore"></a><div class="section">
+<h3 id="method-restore-">Method <code>.restore()</code><a class="anchor" aria-label="anchor" href="#method-restore-"></a></h3>
+
+<div class="section">
+<h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">IntegerVariable</span><span class="op">$</span><span class="fu">.restore</span><span class="op">(</span><span class="va">values</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
 </div><p></p><hr><a id="method-IntegerVariable-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
+<h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">IntegerVariable</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
