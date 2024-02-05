@@ -453,9 +453,9 @@ preserved.</p>
 <span><span class="va">piecewise_run</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">piecewise_run_initial</span><span class="op">$</span><span class="va">result</span>, <span class="va">piecewise_run_final</span><span class="op">$</span><span class="va">result</span><span class="op">[</span><span class="fl">500</span><span class="op">:</span><span class="fl">1500</span>,<span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">uninterrupted_run</span>, <span class="va">piecewise_run</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Component \"S_count\": Mean relative difference: 0.3001005"</span></span>
-<span><span class="co">#&gt; [2] "Component \"I_count\": Mean relative difference: 0.822318" </span></span>
-<span><span class="co">#&gt; [3] "Component \"R_count\": Mean relative difference: 0.7948727"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "Component \"S_count\": Mean relative difference: 0.8893245"</span></span>
+<span><span class="co">#&gt; [2] "Component \"I_count\": Mean relative difference: 0.9799042"</span></span>
+<span><span class="co">#&gt; [3] "Component \"R_count\": Mean relative difference: 0.9808928"</span></span></code></pre></div>
 <p>We can try the same again, but this time set
 <code>restore_random_state = TRUE</code> to enable restoring the
 simulation state. This time we’ve successfully managed to reproduce the
@@ -467,9 +467,7 @@ data from our uninterrupted run.</p>
 <span><span class="va">piecewise_run</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">piecewise_run_initial</span><span class="op">$</span><span class="va">result</span>, <span class="va">piecewise_run_final</span><span class="op">$</span><span class="va">result</span><span class="op">[</span><span class="fl">500</span><span class="op">:</span><span class="fl">1500</span>,<span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">uninterrupted_run</span>, <span class="va">piecewise_run</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Component \"S_count\": Mean relative difference: 0.1052539"</span></span>
-<span><span class="co">#&gt; [2] "Component \"I_count\": Mean relative difference: 0.4328062"</span></span>
-<span><span class="co">#&gt; [3] "Component \"R_count\": Mean relative difference: 0.3979314"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>Using <code>restore_random_state = TRUE</code> resets the global
 random number generator’s state, which could have surprising and
 undesirable side effects. It is generally useful in tests, but should be
