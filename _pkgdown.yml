@@ -15,6 +15,7 @@ reference:
 - title: "Events & Rendering"
   desc: "Classes for events and rendering output."
 - contents:
+  - EventBase
   - Event
   - TargetedEvent
   - Render
@@ -26,3 +27,5 @@ reference:
 - title: "Simulation"
 - contents:
   - simulation_loop
+  - checkpoint_state
+  - restore_state
