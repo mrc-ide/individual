@@ -92,6 +92,9 @@ inline void Event::process(Rcpp::XPtr<listener_t> listener) {
 
 //' @title should first event fire on this timestep?
 inline bool Event::should_trigger() {
+    if (simple_schedule.empty()) {
+        return false;
+    }
     return *simple_schedule.begin() == get_time();
 }
 
@@ -179,7 +182,7 @@ inline TargetedEvent::TargetedEvent(size_t size)
 
 //' @title should first event fire on this timestep?
 inline bool TargetedEvent::should_trigger() {
-    if (targeted_schedule.begin() == targeted_schedule.end()) {
+    if (targeted_schedule.empty()) {
         return false;
     }
     return targeted_schedule.begin()->first == get_time();
