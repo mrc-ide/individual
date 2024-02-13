@@ -512,12 +512,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // create_event
-Rcpp::XPtr<Event> create_event();
-RcppExport SEXP _individual_create_event() {
+Rcpp::XPtr<Event> create_event(bool restoreable);
+RcppExport SEXP _individual_create_event(SEXP restoreableSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(create_event());
+    Rcpp::traits::input_parameter< bool >::type restoreable(restoreableSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_event(restoreable));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1487,7 +1488,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_double_variable_queue_extend", (DL_FUNC) &_individual_double_variable_queue_extend, 2},
     {"_individual_double_variable_queue_shrink", (DL_FUNC) &_individual_double_variable_queue_shrink, 2},
     {"_individual_double_variable_queue_shrink_bitset", (DL_FUNC) &_individual_double_variable_queue_shrink_bitset, 2},
-    {"_individual_create_event", (DL_FUNC) &_individual_create_event, 0},
+    {"_individual_create_event", (DL_FUNC) &_individual_create_event, 1},
     {"_individual_create_targeted_event", (DL_FUNC) &_individual_create_targeted_event, 1},
     {"_individual_event_base_tick", (DL_FUNC) &_individual_event_base_tick, 1},
     {"_individual_event_base_get_timestep", (DL_FUNC) &_individual_event_base_get_timestep, 1},

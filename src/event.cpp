@@ -9,8 +9,8 @@
 #include "utils.h"
 
 //[[Rcpp::export]]
-Rcpp::XPtr<Event> create_event() {
-    return Rcpp::XPtr<Event>(new Event(), true);
+Rcpp::XPtr<Event> create_event(bool restoreable) {
+    return Rcpp::XPtr<Event>(new Event(restoreable), true);
 }
 
 //[[Rcpp::export]]
