@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.13</span>
       </span>
     </div>
 
@@ -453,9 +453,9 @@ preserved.</p>
 <span><span class="va">piecewise_run</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">piecewise_run_initial</span><span class="op">$</span><span class="va">result</span>, <span class="va">piecewise_run_final</span><span class="op">$</span><span class="va">result</span><span class="op">[</span><span class="fl">500</span><span class="op">:</span><span class="fl">1500</span>,<span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">uninterrupted_run</span>, <span class="va">piecewise_run</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Component \"S_count\": Mean relative difference: 0.8893245"</span></span>
-<span><span class="co">#&gt; [2] "Component \"I_count\": Mean relative difference: 0.9799042"</span></span>
-<span><span class="co">#&gt; [3] "Component \"R_count\": Mean relative difference: 0.9808928"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "Component \"S_count\": Mean relative difference: 0.06844564"</span></span>
+<span><span class="co">#&gt; [2] "Component \"I_count\": Mean relative difference: 0.1065086" </span></span>
+<span><span class="co">#&gt; [3] "Component \"R_count\": Mean relative difference: 0.07297747"</span></span></code></pre></div>
 <p>We can try the same again, but this time set
 <code>restore_random_state = TRUE</code> to enable restoring the
 simulation state. This time we’ve successfully managed to reproduce the
