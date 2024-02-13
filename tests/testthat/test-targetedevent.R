@@ -602,3 +602,16 @@ test_that("targeted events are cleared when restored", {
   new_event$.process()
   mockery::expect_called(listener, 1)
 })
+
+test_that("empty targeted event never triggers", {
+  event <- TargetedEvent$new(5)
+  listener <- mockery::mock()
+  event$add_listener(listener)
+
+  for (i in seq(100)) {
+    event$.process()
+    event$.tick()
+  }
+
+  mockery::expect_called(listener, 0)
+})

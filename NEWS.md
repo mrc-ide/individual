@@ -1,6 +1,7 @@
 # individual 0.1.13
 
   * Fixed the website generation.
+  * Fix an uninitialized memory-read that could cause spurious event triggers. 
 
 # individual 0.1.12
 
