@@ -103,9 +103,11 @@ make_infection_process <- function(health, vaccinated, N, beta, vaccine_efficacy
 
 Vaccination happens at fixed mass-vaccination event, according to a pre-determined schedule defined by the `vaccination_times` parameter. Each vaccination event affects a percentage of the population, as determined by the `vaccination_coverage` parameter. The coverage may vary from one instance to the next.
 
+Because we intend on saving and restoring the simulation with various vaccination schedules, we pass `restore = FALSE` to the `Event` constructor. See the [Saving and restoring events](#events) section for details.
+
 ```{r}
 make_vaccination_event <- function(vaccinated, vaccination_times, vaccination_coverage) {
-  e <- Event$new(restore=FALSE)
+  e <- Event$new(restore = FALSE)
   e$schedule(vaccination_times - 1)
   e$add_listener(function(t) {
     index <- which(vaccination_times == t)
@@ -127,7 +129,7 @@ run_simulation <- function(
     beta = 0.08, # S -> I
     gamma = 0.05, # I -> R
     xi = 0.02, # R -> S
-    vaccination_times = numeric(0),
+    vaccination_times = NULL,
     vaccination_coverage = rep(0.2, length(vaccination_times)), # N -> Y
     vaccine_efficacy = 1,
     ...)
@@ -306,15 +308,52 @@ piecewise_run <- rbind(piecewise_run_initial$result, piecewise_run_final$result[
 all.equal(uninterrupted_run, piecewise_run)
 ```
 
-We can try the same again, but this time set `restore_random_state = TRUE` to enable restoring the simulation state. This time we've successfully managed to reproduce the data from our uninterrupted run.
+We can try to resume the simulation again, but this time set `restore_random_state = TRUE` to enable restoring the simulation state. This time we've successfully managed to reproduce the data from our uninterrupted run.
 
 ```{r}
-set.seed(123)
-piecewise_run_initial <- run_simulation(steps = 499)
-piecewise_run_final <- run_simulation(steps = 1500, state = piecewise_run_initial$state, restore_random_state = TRUE)
+piecewise_run_final <- run_simulation(
+  steps = 1500,
+  state = piecewise_run_initial$state,
+  restore_random_state = TRUE)
+
 piecewise_run <- rbind(piecewise_run_initial$result, piecewise_run_final$result[500:1500,])
 
 all.equal(uninterrupted_run, piecewise_run)
 ```
 
 Using `restore_random_state = TRUE` resets the global random number generator's state, which could have surprising and undesirable side effects. It is generally useful in tests, but should be used carefully elsewhere.
+
+### Saving and restoring events {#events}
+
+By default, the `Event` and `TargetedEvent` classes save their schedule in the checkpoint and restore them when loading from a previous simulation state.
+When restoring its schedule, the event will clear its existing schedule and overwrite any pending time steps with the schedule found in the saved state.
+
+For example in the code below, the simulation is first initialized with an event scheduled at `t=10` and is run for only 5 steps, hence the event does not yet trigger. On the second run, the event is seemingly scheduled for `t=15`. However, by resuming the simulation, the event's schedule is overwritten with the saved state, clearing the newly scheduled time. The event is triggered at `t=10` only.
+
+```{r}
+e <- Event$new()
+e$schedule(9)
+state <- simulation_loop(timesteps = 5, events = list(e))
+
+e <- Event$new()
+e$schedule(14)
+e$add_listener(function(t) cat("Triggered at timestep", t))
+simulation_loop(timesteps = 30, events = list(e), state = state)
+```
+
+Such a behaviour may prevent some modeling scenarios from being used with the save and restore effectively. For example, in our prior SIRS model, we wanted to be able to simulate historical data, where no intervention took place, and then resume it with different intervention parameters. If the vaccination event were to always restore its state from the original run, we would not be able to set a new schedule on the intervention runs.
+
+This behaviour can be modified on a per-event basis by passing `restore = FALSE` as an argument to the `Event` constructor. In that case, the schedule from the original run is ignored, and instead the schedule of the new run is only determined from its new initialization.
+
+In the modified example below, the event triggers at `t=15` as intended. When restoring the simulation, we had also schedules the event to trigger at `t=3`, but this never happens as it is before the point where the simulation is restored.
+
+```{r}
+e <- Event$new()
+e$schedule(9)
+state <- simulation_loop(timesteps = 5, events = list(e))
+
+e <- Event$new(restore=FALSE)
+e$schedule(c(2, 14))
+e$add_listener(function(t, index) cat("Triggered at timestep", t))
+simulation_loop(timesteps = 30, events = list(e), state = state)
+```
