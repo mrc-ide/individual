@@ -88,6 +88,20 @@ ggplot(data = core_ops_bset) +
 
 limit_args_grid <- data.frame(limit = 10^(3:8))
 
+create_bset <- bench::press(
+  {
+    bench::mark(
+      min_iterations = 100,
+      check = FALSE,
+      filter_gc = TRUE,
+      {Bitset$new(size = limit)}
+    )
+  },
+  .grid = limit_args_grid
+)
+
+create_bset <- simplify_bench_output(create_bset)
+
 # clear
 clear_bset <- bench::press(
   {
@@ -118,6 +132,12 @@ not_bset <- bench::press(
 ) 
 
 not_bset <- simplify_bench_output(out = not_bset)
+
+ggplot(data = create_bset) +
+  geom_violin(aes(x = expression, y = time, color = expression, fill = expression)) +
+  facet_wrap(. ~ limit, scales = "free") +
+  coord_flip() +
+  ggtitle("Create benchmark")
 
 ggplot(data = clear_bset) +
   geom_violin(aes(x = expression, y = time, color = expression, fill = expression)) +
