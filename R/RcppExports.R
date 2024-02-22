@@ -165,8 +165,8 @@ double_variable_queue_shrink_bitset <- function(variable, index) {
     invisible(.Call(`_individual_double_variable_queue_shrink_bitset`, variable, index))
 }
 
-create_event <- function() {
-    .Call(`_individual_create_event`)
+create_event <- function(restoreable) {
+    .Call(`_individual_create_event`, restoreable)
 }
 
 create_targeted_event <- function(size) {

@@ -38,18 +38,24 @@ EventBase <- R6Class(
 #' @export
 Event <- R6Class(
   'Event',
-  inherit=EventBase,
+  inherit = EventBase,
   public = list(
     #' @description Initialise an Event.
-    initialize = function() {
-      self$.event <- create_event()
+    #' @param restore if true, the schedule of this event is restored when restoring from a saved
+    #' simulation.
+    initialize = function(restore = TRUE) {
+      self$.event <- create_event(restore)
     },
 
     #' @description Schedule this event to occur in the future.
     #' @param delay the number of time steps to wait before triggering the event,
     #' can be a scalar or a vector of values for events that should be triggered
     #' multiple times.
-    schedule = function(delay) event_schedule(self$.event, delay),
+    schedule = function(delay) {
+      if (!is.null(delay)) {
+        event_schedule(self$.event, delay)
+      }
+    },
 
     #' @description Stop a future event from triggering.
     clear_schedule = function() event_clear_schedule(self$.event),

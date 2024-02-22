@@ -70,8 +70,10 @@ inline size_t EventBase::get_time() const {
 class Event : public EventBase {
 
     std::set<size_t> simple_schedule;
+    bool restoreable;
 
 public:
+    Event(bool restoreable);
     virtual ~Event() = default;
 
     virtual void process(Rcpp::XPtr<listener_t> listener);
@@ -88,6 +90,9 @@ public:
 //' @title process an event by calling a listener
 inline void Event::process(Rcpp::XPtr<listener_t> listener) {
     (*listener)(get_time());
+}
+
+inline Event::Event(bool restoreable) : restoreable(restoreable) {
 }
 
 //' @title should first event fire on this timestep?
@@ -124,8 +129,15 @@ inline std::vector<size_t> Event::checkpoint() {
 //' @title restore this event's state from a previous checkpoint
 inline void Event::restore(size_t time, std::vector<size_t> schedule) {
     t = time;
-    simple_schedule.clear();
-    simple_schedule.insert(schedule.begin(), schedule.end());
+    if (restoreable) {
+        simple_schedule.clear();
+        simple_schedule.insert(schedule.begin(), schedule.end());
+    } else {
+        // We don't restore the event, but it is possible that the resume time
+        // is beyond some already scheduled timesteps. These need to be removed.
+        auto it = simple_schedule.lower_bound(time);
+        simple_schedule.erase(simple_schedule.begin(), it);
+    }
 }
 
 //' @title a targeted event in the simulation
