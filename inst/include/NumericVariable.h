@@ -39,14 +39,14 @@ public:
     NumericVariable(const std::vector<A>& values);
     virtual ~NumericVariable() = default;
 
-    virtual std::vector<A> get_values() const;
+    virtual const std::vector<A>& get_values() const;
     virtual std::vector<A> get_values(const individual_index_t& index) const;
     virtual std::vector<A> get_values(const std::vector<size_t>& index) const;
 
     virtual individual_index_t get_index_of_range(const A a, const A b) const;
     virtual size_t get_size_of_range(const A a, const A b) const;
 
-    virtual void queue_update(const std::vector<A>& values, const std::vector<size_t>& index);
+    virtual void queue_update(std::vector<A> values, std::vector<size_t> index);
     virtual void queue_extend(const std::vector<A>&);
     virtual void queue_shrink(const std::vector<size_t>&);
     virtual void queue_shrink(const individual_index_t&);
@@ -63,7 +63,7 @@ inline NumericVariable<A>::NumericVariable(const std::vector<A>& values)
 
 //' @title get all values
 template<class A>
-inline std::vector<A> NumericVariable<A>::get_values() const {
+inline const std::vector<A>& NumericVariable<A>::get_values() const {
     return values;
 }
 
@@ -73,11 +73,10 @@ inline std::vector<A> NumericVariable<A>::get_values(const individual_index_t& i
     if (size() != index.max_size()) {
         Rcpp::stop("incompatible size bitset used to get values from NumericVariable");
     }
-    auto result = std::vector<A>(index.size());
-    auto result_i = 0u;
+    auto result = std::vector<A>();
+    result.reserve(index.size());
     for (auto i : index) {
-        result[result_i] = values[i];
-        ++result_i;
+        result.push_back(values[i]);
     }
     return result;
 }
@@ -133,8 +132,8 @@ inline size_t NumericVariable<A>::get_size_of_range(
 //' @title queue a state update for some subset of individuals
 template<class A>
 inline void NumericVariable<A>::queue_update(
-        const std::vector<A>& values,
-        const std::vector<size_t>& index
+        std::vector<A> values,
+        std::vector<size_t> index
 ) {
     if (values.empty()) {
         return;
@@ -148,7 +147,7 @@ inline void NumericVariable<A>::queue_update(
             Rcpp::stop("Index out of bounds");
         }
     }
-    updates.push({ values, index });
+    updates.push({ std::move(values), std::move(index) });
 }
 
 //' @title apply all queued state updates in FIFO order
