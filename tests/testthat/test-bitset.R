@@ -315,3 +315,46 @@ test_that("bitset filtering works when given empty bitset", {
   expect_equal(filter_bitset(b, f)$size(), 0)
   expect_equal(filter_bitset(b, integer(0))$size(), 0)
 })
+
+test_that("bitset sampling with extremes is correct", {
+  size <- 100
+  expect_equal(Bitset$new(size)$not()$sample(0)$size(), 0)
+  expect_equal(Bitset$new(size)$not()$sample(1)$size(), size)
+})
+
+test_that("bitset is evenly sampled", {
+  set.seed(123)
+
+  threshold <- 0.05
+  rates <- c(0.01, 0.1, 0.25, 0.5, 0.75, 0.9, 0.99)
+  size <- 100
+  N <- 1000
+
+  for (rate in rates) {
+    freqs <- rep(0, size)
+    for (i in seq(N)) {
+      b <- Bitset$new(size)$not()$sample(rate)
+      xs <- b$to_vector()
+      freqs[xs] <- freqs[xs] + 1
+    }
+    p <- t.test(freqs, mu=rate*N)$p.value
+    expect_gt(p, threshold)
+  }
+})
+
+test_that("bitset sampling has correctly distributed size", {
+  set.seed(123)
+
+  threshold <- 0.05
+  rates <- c(0.01, 0.1, 0.25, 0.5, 0.75, 0.9, 0.99)
+  size <- 100
+  N <- 1000
+
+  for (rate in rates) {
+    data <- sapply(1:N, function(i) {
+      Bitset$new(size)$not()$sample(rate)$size()
+    })
+    p <- t.test(data, mu=rate*size)$p.value
+    expect_gt(p, threshold)
+  }
+})

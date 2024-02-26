@@ -86,6 +86,7 @@ public:
     const_iterator end() const;
     const_iterator cend() const;
     void erase(size_t);
+    void erase(size_t start, size_t end);
     const_iterator find(size_t) const;
     template<class InputIterator>
     void insert(InputIterator, InputIterator);
@@ -98,6 +99,7 @@ public:
     bool empty() const;
     void extend(size_t);
     void shrink(const std::vector<size_t>&);
+    size_t next_position(size_t start, size_t n) const;
 };
 
 
@@ -131,23 +133,37 @@ inline size_t popcount(uint64_t x) {
     #endif
 }
 
-//' @title find the next set bit
-//' @description given the current element p,
-//' return the integer represented by the next set bit in the bitmap
-template<class A>
-inline size_t next_position(const std::vector<A>& bitmap, size_t num_bits, size_t max_n, size_t p) {
-    ++p;
-    auto bucket = p / num_bits;
-    auto excess = p % num_bits;
-    A bitset = bitmap.at(bucket) >> excess;
+//' Find the nth set bit in a 64bit integer.
+//'
+//' Returns the index of the bit, or 64 if there are not enough bits set.
+inline size_t find_bit(uint64_t x, size_t n) {
+    if (n >= 64) {
+        return 64;
+    }
 
-    while(bitset == 0 && bucket + 1 < bitmap.size()) {
-        bitset = bitmap.at(++bucket);
+    for (size_t i = 0; i < n; i++) {
+        x &= x - 1;
+    }
+    return ctz(x);
+}
+
+//' Find the n-th set bit, starting at position p.
+//'
+//' Returns the index of the bit, ot max_n if there are not enough bits set.
+template<class A>
+inline size_t IterableBitset<A>::next_position(size_t p, size_t n) const {
+    size_t bucket = p / num_bits;
+    size_t excess = p % num_bits;
+
+    A bitset = bitmap[bucket] >> excess;
+    while (n >= popcount(bitset) && bucket + 1 < bitmap.size()) {
+        n -= popcount(bitset);
+        bucket += 1;
+        bitset = bitmap[bucket];
         excess = 0;
     }
 
-    auto lsb = bitset & -bitset;
-    auto r = ctz(lsb);
+    auto r = find_bit(bitset, n);
     return std::min(bucket * num_bits + excess + r, max_n);
 }
 
@@ -158,8 +174,8 @@ inline IterableBitset<A>::const_iterator::const_iterator(
 
 template<class A>
 inline IterableBitset<A>::const_iterator::const_iterator(
-    const IterableBitset& index) : index(index), p(static_cast<size_t>(-1)) {
-    p = next_position(index.bitmap, index.num_bits, index.max_n, p);
+    const IterableBitset& index) : index(index) {
+    p = index.next_position(0, 0);
 }
 
 template<class A>
@@ -176,7 +192,7 @@ inline bool IterableBitset<A>::const_iterator::operator !=(
 
 template<class A>
 inline typename IterableBitset<A>::const_iterator& IterableBitset<A>::const_iterator::operator ++() {
-    p = next_position(index.bitmap, index.num_bits, index.max_n, p);
+    p = index.next_position(p + 1, 0);
     return *this;
 }
 
@@ -357,6 +373,70 @@ inline void IterableBitset<A>::erase(size_t v) {
     }
 }
 
+//' @title Erase all values in a given range.
+//' @description Bits at indices [start, end) are set to zero.
+template<class A>
+inline void IterableBitset<A>::erase(size_t start, size_t end) {
+    // In the general case, bits to erase are split into three regions, a
+    // prefix, a middle part and a postfix. The middle region is always aligned
+    // on word boundaries.
+    //
+    // Consider the following bitset, stored using 4-bit words:
+    //
+    // abcd efgh ijkl mnop
+    //
+    // Erasing the range [2, 14) requires clearing out bit c to n, inclusive.
+    // The prefix is [cd] and the suffix [mn]. The middle section is [efghijkl].
+    //
+    // The middle section can be erased by overwriting the entire word with zeros.
+    // The prefix and suffix parts must be cleared by applying a mask over the
+    // existing bits.
+    //
+    // There are however a few special cases:
+    // - The range could be empty, in which case nothing needs to be done.
+    // - The range falls within a single word. In the example above that could
+    //   be [5, 6), ie. [fg]. A single mask needs to be constructed, covering
+    //   only the relevant bits.
+    // - The middle region ends on a word boundary, in which case there is no
+    //   postfix to erase.
+    //
+    // Anytime bits are cleared, whether by overwriting a word or using a mask,
+    // the bitset's size must be updated accordingly, using popcount to find out
+    // how many bits have actually been cleared.
+
+    if (start == end) {
+        return;
+    } else if (start / num_bits == end / num_bits) {
+        auto mask =
+            (static_cast<A>(1) << (end % num_bits)) -
+            (static_cast<A>(1) << (start % num_bits));
+        n -= popcount(bitmap[start / num_bits] & mask);
+        bitmap[start / num_bits] &= ~mask;
+    } else {
+        // Clear the prefix part, using a mask to preserve bits that are before it.
+        auto mask = -(static_cast<A>(1) << (start % num_bits));
+        n -= popcount(bitmap[start / num_bits] & mask);
+        bitmap[start / num_bits] &= ~mask;
+
+        start = (start + num_bits - 1) / num_bits * num_bits;
+
+        // Now clear the middle chunk. No masking needed since entire words are
+        // being cleared.
+        for (; start + num_bits <= end; start += num_bits) {
+            n -= popcount(bitmap[start / num_bits]);
+            bitmap[start / num_bits] = 0;
+        }
+        start = (end / num_bits) * num_bits;
+
+        // Finally clear the suffix, if applicable, using a mask again.
+        if (start < end) {
+            mask = (static_cast<A>(1) << (end % num_bits)) - 1;
+            n -= popcount(bitmap[end / num_bits] & mask);
+            bitmap[end / num_bits] &= ~mask;
+        }
+    }
+}
+
 //' @title find an element in the bitset
 //' @description checks if the bit for `v` is set
 template<class A>
@@ -501,33 +581,78 @@ inline void bitset_choose_internal(
   }
 }
 
-//' @title sample the bitset
-//' @description retain a subset of values contained in this bitset, 
-//' where each element has probability 'rate' to remain. 
-//' This function modifies the bitset.
+struct fast_bernouilli {
+    fast_bernouilli(double probability) : probability(probability) {
+        double probability_log = log(1 - probability);
+        if (probability_log == 0.0) {
+            probability = 0.;
+        } else {
+            inverse_log = 1 / probability_log;
+        }
+    }
+
+    //' Get the number of subsequent unsuccessful trials, until the next
+    //' successful one.
+    uint64_t skip_count() {
+        if (probability == 1) {
+            return 0;
+        } else if (probability == 0.) {
+            return UINT64_MAX;
+        }
+
+        double x = R::runif(0.0, 1.0);
+        double skip_count = floor(log(x) * inverse_log);
+        if (skip_count < double(UINT64_MAX)) {
+            return skip_count;
+        } else {
+            return UINT64_MAX;
+        }
+    }
+
+    private:
+        double probability;
+        double inverse_log;
+};
+
+//' Sample values from the bitset.
+//'
+//' Each value contained in the bitset is retained with an equal probability
+//' 'rate'. This function modifies the bitset in-place.
+//'
+//' Rather than performing a bernouilli trial for every member of the bitset,
+//' this function is implemented by generating the lengths of the gaps between
+//' two successful trials. This allows it to efficiently skip from one positive
+//' trial to the next.
+//'
+//' This technique comes from the FastBernoulliTrial class in Firefox:
+//' https://searchfox.org/mozilla-central/rev/aff9f084/mfbt/FastBernoulliTrial.h
+//'
+//' As an additional optimization, we flip the behaviour and sampling rate in
+//' order to maximize the lengths, depending on whether the rate was smaller or
+//' greater than 1/2.
 template<class A>
 inline void bitset_sample_internal(
-    IterableBitset<A>& b,
-    const double rate
-){
-    auto to_remove = Rcpp::sample(
-        b.size(),
-        Rcpp::rbinom(1, b.size(), 1 - std::min(rate, 1.))[0],
-        false, // replacement
-        R_NilValue, // evenly distributed
-        false // one based
-    );
-    std::sort(to_remove.begin(), to_remove.end());
-    auto bitset_i = 0;
-    auto bitset_it = b.cbegin();
-    for (auto i : to_remove) {
-      while(bitset_i != i) {
-        ++bitset_i;
-        ++bitset_it;
-      }
-      b.erase(*bitset_it);
-      ++bitset_i;
-      ++bitset_it;
+        IterableBitset<A>& b,
+        const double rate
+        ){
+    if (rate < 0.5) {
+        fast_bernouilli bernouilli(rate);
+        size_t i = 0;
+        while (i < b.max_size()) {
+            size_t next = b.next_position(i, bernouilli.skip_count());
+            b.erase(i, next);
+            i = next + 1;
+        }
+    } else {
+        fast_bernouilli bernouilli(1 - rate);
+        size_t i = 0;
+        while (i < b.max_size()) {
+            size_t next = b.next_position(i, bernouilli.skip_count());
+            if (next < b.max_size()) {
+                b.erase(next);
+            }
+            i = next + 1;
+        }
     }
 }
 
