@@ -1,3 +1,38 @@
+#' Generate documentation for an R6-like method
+#'
+#' The Bitset class is implemented as a named list with closures that capture
+#' the environment. By default, roxygen2 generates terrible documentation for
+#' it since it isn't a typical way of doing things.
+#'
+#' This method generates a snippet of Rd code for a method, in a way that
+#' resembles the code roxygen2 generates for R6 methods.
+#'
+#' @noRd
+bitset_method_doc <- function(name, description, ...) {
+  arguments <- list(...)
+  lines <- character()
+  push <- function(...) lines <<- c(lines, ...)
+
+  push("\\if{html}{\\out{<hr>}}")
+  push(paste0("\\subsection{Method \\code{", name, "()}}{"))
+  push(description)
+  push("\\subsection{Usage}{")
+  argnames <- paste(names(arguments), collapse=", ")
+  push(paste0("\\preformatted{Bitset$", name, "(", argnames, ")}"))
+  push("}")
+  if (length(arguments) > 0) {
+    push("\\subsection{Arguments}{")
+    push("\\describe{")
+    push(sprintf("\\item{\\code{%s}}{%s}", names(arguments), arguments))
+    push("}")
+    push("}")
+  }
+  push("}")
+
+  paste(lines, collapse="\n")
+  # lines
+}
+
 #' @title A Bitset Class
 #' @description This is a data structure that compactly stores the presence of
 #' integers in some finite set (\code{max_size}), and can
@@ -8,13 +43,14 @@
 #'
 #' This class is defined as a named list for performance reasons, but for most
 #' intents and purposes it behaves just like an R6 class.
-#'
+#' @format NULL
+#' @usage NULL
+#' @docType NULL
+#' @keywords NULL
 #' @export
+#' @section Methods:
 Bitset <- list(
-  #' @description create a bitset.
-  #' @param size the size of the bitset.
-  #' @param from pointer to an existing IterableBitset to use; if \code{NULL}
-  #' make empty bitset, otherwise copy existing bitset.
+  #' `r bitset_method_doc("new", "create a bitset.", size = "the size of the bitset.", from="pointer to an existing IterableBitset to use; if \\code{NULL} make empty bitset, otherwise copy existing bitset.")`
   new = function(size, from = NULL) {
     if (is.null(from)) {
       bitset <- create_bitset(size)
@@ -28,69 +64,57 @@ Bitset <- list(
       .bitset = bitset,
       max_size = max_size,
 
-      #' @description insert into the bitset.
-      #' @param v an integer vector of elements to insert.
+      #' `r bitset_method_doc("insert", "insert into the bitset.", v = "an integer vector of elements to insert.")`
       insert = function(v) {
         bitset_insert(self$.bitset, v)
         self
       },
 
-      #' @description remove from the bitset.
-      #' @param v an integer vector of elements (not indices) to remove.
+      #' `r bitset_method_doc("remove", "remove from the bitset.", v = "an integer vector of elements (not indices) to remove.")`
       remove = function(v) {
         bitset_remove(self$.bitset, v)
         self
       },
 
-      #' @description clear the bitset.
+      #' `r bitset_method_doc("clear", "clear the bitset.")`
       clear = function() {
         bitset_clear(self$.bitset)
         self
       },
 
-      #' @description get the number of elements in the set.
+      #' `r bitset_method_doc("size", "get the number of elements in the set.")`
       size = function() bitset_size(self$.bitset),
 
-      #' @description to "bitwise or" or union two bitsets.
-      #' @param other the other bitset.
+      #' `r bitset_method_doc("or", "to \"bitwise or\" or union two bitsets.", other = "the other bitset.")`
       or = function(other) {
         bitset_or(self$.bitset, other$.bitset)
         self
       },
 
-      #' @description to "bitwise and" or intersect two bitsets.
-      #' @param other the other bitset.
+      #' `r bitset_method_doc("and", "to \"bitwise and\" or intersect two bitsets.", other = "the other bitset.")`
       and = function(other) {
         bitset_and(self$.bitset, other$.bitset)
         self
       },
 
-      #' @description to "bitwise not" or complement a bitset.
-      #' @param inplace whether to overwrite the current bitset, default = TRUE
+      #' `r bitset_method_doc("not", "to \"bitwise not\" or complement a bitset.", inplace = "whether to overwrite the current bitset, default = TRUE")`
       not = function(inplace = TRUE) {
         Bitset$new(from = bitset_not(self$.bitset, inplace))
       },
 
-      #' @description to "bitwise xor" or get the symmetric difference of two bitset
-      #' (keep elements in either bitset but not in their intersection).
-      #' @param other the other bitset.
+      #' `r bitset_method_doc("xor", "to \"bitwise xor\" get the symmetric difference of two bitset (keep elements in either bitset but not in their intersection).", other = "the other bitset.")`
       xor = function(other){
         bitset_xor(self$.bitset, other$.bitset)
         self
       },
 
-      #' @description Take the set difference of this bitset with another
-      #' (keep elements of this bitset which are not in \code{other}).
-      #' @param other the other bitset.
+      #' `r bitset_method_doc("set_difference", "Take the set difference of this bitset with another (keep elements of this bitset which are not in \\code{other})", other = "the other bitset.")`
       set_difference = function(other){
         bitset_set_difference(self$.bitset, other$.bitset)
         self
       },
 
-      #' @description sample a bitset.
-      #' @param rate the success probability for keeping each element, can be
-      #' a single value for all elements or a vector of unique
-      #' probabilities for keeping each element.
+      #' `r bitset_method_doc("sample", "sample a bitset.", rate = "the success probability for keeping each element, can be a single value for all elements or a vector of unique probabilities for keeping each element.")`
       sample = function(rate) {
         stopifnot(is.finite(rate), !is.null(rate))
         if (length(rate) == 1) {
@@ -101,10 +125,7 @@ Bitset <- list(
         self
       },
 
-      #' @description choose k random items in the bitset
-      #' @param k the number of items in the bitset to keep. The selection of
-      #' these k items from N total items in the bitset is random, and
-      #' k should be chosen such that \eqn{0 \le k \le N}.
+      #' `r bitset_method_doc("choose", "choose k random items in the bitset.", k = "the number of items in the bitset to keep. The selection of these k items from N total items in the bitset is random, and k should be chosen such that \\eqn{0 \\le k \\le N}.")`
       choose = function(k) {
         stopifnot(is.finite(k))
         stopifnot(k <= bitset_size(self$.bitset))
@@ -115,13 +136,13 @@ Bitset <- list(
         self
       },
 
-      #' @description returns a copy the bitset.
+      #' `r bitset_method_doc("copy", "returns a copy of the bitset.")`
       copy = function() Bitset$new(from = bitset_copy(self$.bitset)),
 
-      #' @description return an integer vector of the elements
-      #' stored in this bitset.
+      #' `r bitset_method_doc("to_vector", "return an integer vector of the elements stored in this bitset.")`
       to_vector = function() bitset_to_vector(self$.bitset)
     )
+
     class(self) <- 'Bitset'
     self
   }
