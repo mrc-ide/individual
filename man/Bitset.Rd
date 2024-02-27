@@ -15,7 +15,6 @@ This class is defined as a named list for performance reasons, but for most
 intents and purposes it behaves just like an R6 class.
 }
 \section{Methods}{
-
 \if{html}{\out{<hr>}}
 \subsection{Method \code{new()}}{
 create a bitset.
@@ -25,7 +24,8 @@ create a bitset.
 \subsection{Arguments}{
 \describe{
 \item{\code{size}}{the size of the bitset.}
-\item{\code{from}}{pointer to an existing IterableBitset to use; if \code{NULL} make empty bitset, otherwise copy existing bitset.}
+\item{\code{from}}{pointer to an existing IterableBitset to use; if \code{NULL}
+make empty bitset, otherwise copy existing bitset.}
 }
 }
 }
@@ -43,7 +43,7 @@ insert into the bitset.
 }
 \if{html}{\out{<hr>}}
 \subsection{Method \code{remove()}}{
-insert from the bitset.
+remove from the bitset.
 \subsection{Usage}{
 \preformatted{Bitset$remove(v)}
 }
@@ -105,7 +105,8 @@ to "bitwise not" or complement a bitset.
 }
 \if{html}{\out{<hr>}}
 \subsection{Method \code{xor()}}{
-to "bitwise xor" get the symmetric difference of two bitset (keep elements in either bitset but not in their intersection).
+to "bitwise xor" get the symmetric difference of two bitset
+(keep elements in either bitset but not in their intersection).
 \subsection{Usage}{
 \preformatted{Bitset$xor(other)}
 }
@@ -117,7 +118,8 @@ to "bitwise xor" get the symmetric difference of two bitset (keep elements in ei
 }
 \if{html}{\out{<hr>}}
 \subsection{Method \code{set_difference()}}{
-Take the set difference of this bitset with another (keep elements of this bitset which are not in \code{other})
+Take the set difference of this bitset with another
+(keep elements of this bitset which are not in \code{other})
 \subsection{Usage}{
 \preformatted{Bitset$set_difference(other)}
 }
@@ -135,7 +137,9 @@ sample a bitset.
 }
 \subsection{Arguments}{
 \describe{
-\item{\code{rate}}{the success probability for keeping each element, can be a single value for all elements or a vector of unique probabilities for keeping each element.}
+\item{\code{rate}}{the success probability for keeping each element, can be
+a single value for all elements or a vector of unique
+probabilities for keeping each element.}
 }
 }
 }
@@ -147,7 +151,9 @@ choose k random items in the bitset.
 }
 \subsection{Arguments}{
 \describe{
-\item{\code{k}}{the number of items in the bitset to keep. The selection of these k items from N total items in the bitset is random, and k should be chosen such that \eqn{0 \le k \le N}.}
+\item{\code{k}}{the number of items in the bitset to keep. The selection of
+these k items from N total items in the bitset is random, and
+k should be chosen such that \eqn{0 \le k \le N}.}
 }
 }
 }
