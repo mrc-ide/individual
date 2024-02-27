@@ -9,6 +9,7 @@
 #'
 #' @noRd
 bitset_method_doc <- function(name, description, static = FALSE, ...) {
+  # nocov start: this is only used for documentation generation
   lines <- character()
   push <- function(...) lines <<- c(lines, ...)
 
@@ -32,6 +33,7 @@ bitset_method_doc <- function(name, description, static = FALSE, ...) {
   push("}")
 
   cat(paste(lines, collapse="\n"))
+  # nocov end
 }
 
 #' @title A Bitset Class
