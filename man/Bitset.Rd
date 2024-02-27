@@ -33,7 +33,7 @@ make empty bitset, otherwise copy existing bitset.}
 \subsection{Method \code{insert()}}{
 insert into the bitset.
 \subsection{Usage}{
-\preformatted{Bitset$insert(v)}
+\preformatted{b$insert(v)}
 }
 \subsection{Arguments}{
 \describe{
@@ -45,7 +45,7 @@ insert into the bitset.
 \subsection{Method \code{remove()}}{
 remove from the bitset.
 \subsection{Usage}{
-\preformatted{Bitset$remove(v)}
+\preformatted{b$remove(v)}
 }
 \subsection{Arguments}{
 \describe{
@@ -57,21 +57,21 @@ remove from the bitset.
 \subsection{Method \code{clear()}}{
 clear the bitset.
 \subsection{Usage}{
-\preformatted{Bitset$clear()}
+\preformatted{b$clear()}
 }
 }
 \if{html}{\out{<hr>}}
 \subsection{Method \code{size()}}{
 get the number of elements in the set.
 \subsection{Usage}{
-\preformatted{Bitset$size()}
+\preformatted{b$size()}
 }
 }
 \if{html}{\out{<hr>}}
 \subsection{Method \code{or()}}{
 to "bitwise or" or union two bitsets.
 \subsection{Usage}{
-\preformatted{Bitset$or(other)}
+\preformatted{b$or(other)}
 }
 \subsection{Arguments}{
 \describe{
@@ -83,7 +83,7 @@ to "bitwise or" or union two bitsets.
 \subsection{Method \code{and()}}{
 to "bitwise and" or intersect two bitsets.
 \subsection{Usage}{
-\preformatted{Bitset$and(other)}
+\preformatted{b$and(other)}
 }
 \subsection{Arguments}{
 \describe{
@@ -95,7 +95,7 @@ to "bitwise and" or intersect two bitsets.
 \subsection{Method \code{not()}}{
 to "bitwise not" or complement a bitset.
 \subsection{Usage}{
-\preformatted{Bitset$not(inplace)}
+\preformatted{b$not(inplace)}
 }
 \subsection{Arguments}{
 \describe{
@@ -108,7 +108,7 @@ to "bitwise not" or complement a bitset.
 to "bitwise xor" get the symmetric difference of two bitset
 (keep elements in either bitset but not in their intersection).
 \subsection{Usage}{
-\preformatted{Bitset$xor(other)}
+\preformatted{b$xor(other)}
 }
 \subsection{Arguments}{
 \describe{
@@ -121,7 +121,7 @@ to "bitwise xor" get the symmetric difference of two bitset
 Take the set difference of this bitset with another
 (keep elements of this bitset which are not in \code{other})
 \subsection{Usage}{
-\preformatted{Bitset$set_difference(other)}
+\preformatted{b$set_difference(other)}
 }
 \subsection{Arguments}{
 \describe{
@@ -133,7 +133,7 @@ Take the set difference of this bitset with another
 \subsection{Method \code{sample()}}{
 sample a bitset.
 \subsection{Usage}{
-\preformatted{Bitset$sample(rate)}
+\preformatted{b$sample(rate)}
 }
 \subsection{Arguments}{
 \describe{
@@ -147,7 +147,7 @@ probabilities for keeping each element.}
 \subsection{Method \code{choose()}}{
 choose k random items in the bitset.
 \subsection{Usage}{
-\preformatted{Bitset$choose(k)}
+\preformatted{b$choose(k)}
 }
 \subsection{Arguments}{
 \describe{
@@ -161,14 +161,14 @@ k should be chosen such that \eqn{0 \le k \le N}.}
 \subsection{Method \code{copy()}}{
 returns a copy of the bitset.
 \subsection{Usage}{
-\preformatted{Bitset$copy()}
+\preformatted{b$copy()}
 }
 }
 \if{html}{\out{<hr>}}
 \subsection{Method \code{to_vector()}}{
 return an integer vector of the elements stored in this bitset.
 \subsection{Usage}{
-\preformatted{Bitset$to_vector()}
+\preformatted{b$to_vector()}
 }
 }
 }

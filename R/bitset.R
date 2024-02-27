@@ -8,17 +8,19 @@
 #' resembles the code roxygen2 generates for R6 methods.
 #'
 #' @noRd
-bitset_method_doc <- function(name, description, ...) {
-  arguments <- list(...)
+bitset_method_doc <- function(name, description, static = FALSE, ...) {
   lines <- character()
   push <- function(...) lines <<- c(lines, ...)
+
+  arguments <- list(...)
+  argnames <- paste(names(arguments), collapse=", ")
+  receiver <- if (static) "Bitset" else "b"
 
   push("\\if{html}{\\out{<hr>}}")
   push(paste0("\\subsection{Method \\code{", name, "()}}{"))
   push(description)
   push("\\subsection{Usage}{")
-  argnames <- paste(names(arguments), collapse=", ")
-  push(paste0("\\preformatted{Bitset$", name, "(", argnames, ")}"))
+  push(sprintf("\\preformatted{%s$%s(%s)}", receiver, name, argnames))
   push("}")
   if (length(arguments) > 0) {
     push("\\subsection{Arguments}{")
@@ -53,6 +55,7 @@ Bitset <- list(
   #' bitset_method_doc(
   #'   "new",
   #'   "create a bitset.",
+  #'   static = TRUE,
   #'   size = "the size of the bitset.",
   #'   from = "pointer to an existing IterableBitset to use; if \\code{NULL}
   #'           make empty bitset, otherwise copy existing bitset."
