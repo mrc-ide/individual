@@ -115,7 +115,7 @@ void bitset_sample(
 //[[Rcpp::export]]
 void bitset_sample_vector(
     const Rcpp::XPtr<individual_index_t> b,
-    const std::vector<double> rate
+    std::vector<double> rate
     ) {
     if(b->size() != rate.size()){
         Rcpp::stop("vector of probabilties must equal the size of the bitset");
