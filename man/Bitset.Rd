@@ -10,271 +10,166 @@ efficiently perform set operations (union, intersection, complement, symmetric
 difference, set difference).
 WARNING: All operations are in-place so please use \code{$copy}
 if you would like to perform an operation without destroying your current bitset.
-}
-\section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{.bitset}}{a pointer to the underlying IterableBitset.}
 
-\item{\code{max_size}}{the maximum size of the bitset.}
-}
-\if{html}{\out{</div>}}
+This class is defined as a named list for performance reasons, but for most
+intents and purposes it behaves just like an R6 class.
 }
 \section{Methods}{
-\subsection{Public methods}{
-\itemize{
-\item \href{#method-Bitset-new}{\code{Bitset$new()}}
-\item \href{#method-Bitset-insert}{\code{Bitset$insert()}}
-\item \href{#method-Bitset-remove}{\code{Bitset$remove()}}
-\item \href{#method-Bitset-clear}{\code{Bitset$clear()}}
-\item \href{#method-Bitset-size}{\code{Bitset$size()}}
-\item \href{#method-Bitset-or}{\code{Bitset$or()}}
-\item \href{#method-Bitset-and}{\code{Bitset$and()}}
-\item \href{#method-Bitset-not}{\code{Bitset$not()}}
-\item \href{#method-Bitset-xor}{\code{Bitset$xor()}}
-\item \href{#method-Bitset-set_difference}{\code{Bitset$set_difference()}}
-\item \href{#method-Bitset-sample}{\code{Bitset$sample()}}
-\item \href{#method-Bitset-choose}{\code{Bitset$choose()}}
-\item \href{#method-Bitset-copy}{\code{Bitset$copy()}}
-\item \href{#method-Bitset-to_vector}{\code{Bitset$to_vector()}}
-\item \href{#method-Bitset-clone}{\code{Bitset$clone()}}
-}
-}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-new"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-new}{}}}
 \subsection{Method \code{new()}}{
 create a bitset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$new(size, from = NULL)}\if{html}{\out{</div>}}
+\preformatted{Bitset$new(size, from)}
 }
-
 \subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{size}}{the size of the bitset.}
-
 \item{\code{from}}{pointer to an existing IterableBitset to use; if \code{NULL}
 make empty bitset, otherwise copy existing bitset.}
 }
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-insert"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-insert}{}}}
 \subsection{Method \code{insert()}}{
 insert into the bitset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$insert(v)}\if{html}{\out{</div>}}
+\preformatted{b$insert(v)}
 }
-
 \subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{v}}{an integer vector of elements to insert.}
 }
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-remove"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-remove}{}}}
 \subsection{Method \code{remove()}}{
 remove from the bitset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$remove(v)}\if{html}{\out{</div>}}
+\preformatted{b$remove(v)}
 }
-
 \subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{v}}{an integer vector of elements (not indices) to remove.}
 }
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-clear"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-clear}{}}}
 \subsection{Method \code{clear()}}{
 clear the bitset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$clear()}\if{html}{\out{</div>}}
+\preformatted{b$clear()}
 }
-
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-size"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-size}{}}}
 \subsection{Method \code{size()}}{
 get the number of elements in the set.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$size()}\if{html}{\out{</div>}}
+\preformatted{b$size()}
 }
-
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-or"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-or}{}}}
 \subsection{Method \code{or()}}{
 to "bitwise or" or union two bitsets.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$or(other)}\if{html}{\out{</div>}}
+\preformatted{b$or(other)}
 }
-
 \subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{other}}{the other bitset.}
 }
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-and"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-and}{}}}
 \subsection{Method \code{and()}}{
 to "bitwise and" or intersect two bitsets.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$and(other)}\if{html}{\out{</div>}}
+\preformatted{b$and(other)}
 }
-
 \subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{other}}{the other bitset.}
 }
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-not"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-not}{}}}
 \subsection{Method \code{not()}}{
 to "bitwise not" or complement a bitset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$not(inplace = TRUE)}\if{html}{\out{</div>}}
+\preformatted{b$not(inplace)}
 }
-
 \subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{inplace}}{whether to overwrite the current bitset, default = TRUE}
 }
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-xor"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-xor}{}}}
 \subsection{Method \code{xor()}}{
-to "bitwise xor" or get the symmetric difference of two bitset
+to "bitwise xor" get the symmetric difference of two bitset
 (keep elements in either bitset but not in their intersection).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$xor(other)}\if{html}{\out{</div>}}
+\preformatted{b$xor(other)}
 }
-
 \subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{other}}{the other bitset.}
 }
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-set_difference"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-set_difference}{}}}
 \subsection{Method \code{set_difference()}}{
 Take the set difference of this bitset with another
-(keep elements of this bitset which are not in \code{other}).
+(keep elements of this bitset which are not in \code{other})
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$set_difference(other)}\if{html}{\out{</div>}}
+\preformatted{b$set_difference(other)}
 }
-
 \subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{other}}{the other bitset.}
 }
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-sample"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-sample}{}}}
 \subsection{Method \code{sample()}}{
 sample a bitset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$sample(rate)}\if{html}{\out{</div>}}
+\preformatted{b$sample(rate)}
 }
-
 \subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{rate}}{the success probability for keeping each element, can be
 a single value for all elements or a vector of unique
 probabilities for keeping each element.}
 }
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-choose"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-choose}{}}}
 \subsection{Method \code{choose()}}{
-choose k random items in the bitset
+choose k random items in the bitset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$choose(k)}\if{html}{\out{</div>}}
+\preformatted{b$choose(k)}
 }
-
 \subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{k}}{the number of items in the bitset to keep. The selection of
 these k items from N total items in the bitset is random, and
 k should be chosen such that \eqn{0 \le k \le N}.}
 }
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-copy"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-copy}{}}}
 \subsection{Method \code{copy()}}{
-returns a copy the bitset.
+returns a copy of the bitset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$copy()}\if{html}{\out{</div>}}
+\preformatted{b$copy()}
 }
-
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-to_vector"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-to_vector}{}}}
 \subsection{Method \code{to_vector()}}{
-return an integer vector of the elements
-stored in this bitset.
+return an integer vector of the elements stored in this bitset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$to_vector()}\if{html}{\out{</div>}}
+\preformatted{b$to_vector()}
+}
+}
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Bitset-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-Bitset-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Bitset$clone(deep = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
-}
