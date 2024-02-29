@@ -337,7 +337,7 @@ test_that("bitset is evenly sampled", {
       xs <- b$to_vector()
       freqs[xs] <- freqs[xs] + 1
     }
-    p <- t.test(freqs, mu=rate*N)$p.value
+    p <- chisq.test(freqs)$p.value
     expect_gt(p, threshold)
   }
 })
