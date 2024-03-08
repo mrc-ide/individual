@@ -1,3 +1,10 @@
+# individual 0.1.14
+
+  * Added a flag to the Event constructor to tweak the restore semantics.
+  * Replaced the Bitset R6 class with named lists, making them faster to instantiate.
+  * Replaced the bitset sampling implementation with a faster algorithm.
+  * Various other performance improvements, mostly avoiding copies of vectors.
+
 # individual 0.1.13
 
   * Fixed the website generation.
