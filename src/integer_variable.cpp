@@ -20,7 +20,7 @@ Rcpp::XPtr<IntegerVariable> create_integer_variable(
 }
 
 //[[Rcpp::export]]
-std::vector<int> integer_variable_get_values(
+const std::vector<int>& integer_variable_get_values(
     Rcpp::XPtr<IntegerVariable> variable
     ) {
     return variable->get_values();
@@ -106,35 +106,35 @@ size_t integer_variable_get_size_of_range(
 //[[Rcpp::export]]
 void integer_variable_queue_fill(
     Rcpp::XPtr<IntegerVariable> variable,
-    const std::vector<int> value
+    std::vector<int> value
 ) {
-    variable->queue_update(value, std::vector<size_t>());
+    variable->queue_update(std::move(value), std::vector<size_t>());
 }
 
 //[[Rcpp::export]]
 void integer_variable_queue_update(
     Rcpp::XPtr<IntegerVariable> variable,
-    const std::vector<int> value,
+    std::vector<int> value,
     std::vector<size_t> index
 ) {
     decrement(index);
-    variable->queue_update(value, index);
+    variable->queue_update(std::move(value), std::move(index));
 }
 
 //[[Rcpp::export]]
 void integer_variable_queue_update_bitset(
         Rcpp::XPtr<IntegerVariable> variable,
-        const std::vector<int> value,
+        std::vector<int> value,
         Rcpp::XPtr<individual_index_t> index
 ) {
     auto index_vec = bitset_to_vector_internal(*index, false);
-    variable->queue_update(value, index_vec);
+    variable->queue_update(std::move(value), std::move(index_vec));
 }
 
 //[[Rcpp::export]]
 void integer_variable_queue_extend(
     Rcpp::XPtr<IntegerVariable> variable,
-    std::vector<int>& values
+    std::vector<int> values
     ) {
     variable->queue_extend(values);
 }
@@ -142,7 +142,7 @@ void integer_variable_queue_extend(
 //[[Rcpp::export]]
 void integer_variable_queue_shrink(
     Rcpp::XPtr<IntegerVariable> variable,
-    std::vector<size_t>& index
+    std::vector<size_t> index
     ) {
     decrement(index);
     variable->queue_shrink(index);

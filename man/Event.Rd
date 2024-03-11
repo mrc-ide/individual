@@ -39,9 +39,17 @@ Describes a general event in the simulation.
 \subsection{Method \code{new()}}{
 Initialise an Event.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Event$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Event$new(restore = TRUE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{restore}}{if true, the schedule of this event is restored when restoring from a saved
+simulation.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Event-schedule"></a>}}

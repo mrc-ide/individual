@@ -20,7 +20,7 @@ Rcpp::XPtr<DoubleVariable> create_double_variable(
 }
 
 //[[Rcpp::export]]
-std::vector<double> double_variable_get_values(
+const std::vector<double>& double_variable_get_values(
     Rcpp::XPtr<DoubleVariable> variable
     ) {
     return variable->get_values();
@@ -67,38 +67,38 @@ size_t double_variable_get_size_of_range(
 //[[Rcpp::export]]
 void double_variable_queue_fill(
     Rcpp::XPtr<DoubleVariable> variable,
-    const std::vector<double> value
+    std::vector<double> value
 ) {
-    variable->queue_update(value, std::vector<size_t>());
+    variable->queue_update(std::move(value), std::vector<size_t>());
 }
 
 //[[Rcpp::export]]
 void double_variable_queue_update(
     Rcpp::XPtr<DoubleVariable> variable,
-    const std::vector<double> value,
+    std::vector<double> value,
     std::vector<size_t> index
 ) {
     decrement(index);
-    variable->queue_update(value, index);
+    variable->queue_update(std::move(value), std::move(index));
 }
 
 //[[Rcpp::export]]
 void double_variable_queue_update_bitset(
         Rcpp::XPtr<DoubleVariable> variable,
-        const std::vector<double> value,
+        std::vector<double> value,
         Rcpp::XPtr<individual_index_t> index
 ) {
     if (index->max_size() != variable->size()) {
         Rcpp::stop("incompatible size bitset used to queue update for DoubleVariable");
     }
     auto index_vec = bitset_to_vector_internal(*index, false);
-    variable->queue_update(value, index_vec);
+    variable->queue_update(std::move(value), std::move(index_vec));
 }
 
 //[[Rcpp::export]]
 void double_variable_queue_extend(
     Rcpp::XPtr<DoubleVariable> variable,
-    std::vector<double>& values
+    std::vector<double> values
     ) {
     variable->queue_extend(values);
 }
@@ -106,7 +106,7 @@ void double_variable_queue_extend(
 //[[Rcpp::export]]
 void double_variable_queue_shrink(
     Rcpp::XPtr<DoubleVariable> variable,
-    std::vector<size_t>& index
+    std::vector<size_t> index
     ) {
     decrement(index);
     variable->queue_shrink(index);

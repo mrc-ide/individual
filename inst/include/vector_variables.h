@@ -22,9 +22,9 @@ inline void vector_update(
     std::vector<A>& values
     ) {
     while(updates.size() > 0) {
-        const auto& update = updates.front();
-        const auto& new_values = update.first;
-        const auto& index = update.second;
+        auto& update = updates.front();
+        auto& new_values = update.first;
+        auto& index = update.second;
         
         auto vector_replacement = (index.size() == 0);
         auto value_fill = (new_values.size() == 1);
@@ -34,7 +34,7 @@ inline void vector_update(
             if (value_fill) {
                 std::fill(values.begin(), values.end(), new_values[0]);
             } else {
-                values = new_values;
+                values = std::move(new_values);
             }
         } else {
             if (value_fill) {

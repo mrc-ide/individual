@@ -158,12 +158,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // bitset_sample_vector
-void bitset_sample_vector(const Rcpp::XPtr<individual_index_t> b, const std::vector<double> rate);
+void bitset_sample_vector(const Rcpp::XPtr<individual_index_t> b, std::vector<double> rate);
 RcppExport SEXP _individual_bitset_sample_vector(SEXP bSEXP, SEXP rateSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double> >::type rate(rateSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type rate(rateSEXP);
     bitset_sample_vector(b, rate);
     return R_NilValue;
 END_RCPP
@@ -383,7 +383,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // double_variable_get_values
-std::vector<double> double_variable_get_values(Rcpp::XPtr<DoubleVariable> variable);
+const std::vector<double>& double_variable_get_values(Rcpp::XPtr<DoubleVariable> variable);
 RcppExport SEXP _individual_double_variable_get_values(SEXP variableSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -444,58 +444,58 @@ BEGIN_RCPP
 END_RCPP
 }
 // double_variable_queue_fill
-void double_variable_queue_fill(Rcpp::XPtr<DoubleVariable> variable, const std::vector<double> value);
+void double_variable_queue_fill(Rcpp::XPtr<DoubleVariable> variable, std::vector<double> value);
 RcppExport SEXP _individual_double_variable_queue_fill(SEXP variableSEXP, SEXP valueSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type value(valueSEXP);
     double_variable_queue_fill(variable, value);
     return R_NilValue;
 END_RCPP
 }
 // double_variable_queue_update
-void double_variable_queue_update(Rcpp::XPtr<DoubleVariable> variable, const std::vector<double> value, std::vector<size_t> index);
+void double_variable_queue_update(Rcpp::XPtr<DoubleVariable> variable, std::vector<double> value, std::vector<size_t> index);
 RcppExport SEXP _individual_double_variable_queue_update(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type value(valueSEXP);
     Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
     double_variable_queue_update(variable, value, index);
     return R_NilValue;
 END_RCPP
 }
 // double_variable_queue_update_bitset
-void double_variable_queue_update_bitset(Rcpp::XPtr<DoubleVariable> variable, const std::vector<double> value, Rcpp::XPtr<individual_index_t> index);
+void double_variable_queue_update_bitset(Rcpp::XPtr<DoubleVariable> variable, std::vector<double> value, Rcpp::XPtr<individual_index_t> index);
 RcppExport SEXP _individual_double_variable_queue_update_bitset(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::vector<double> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type value(valueSEXP);
     Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
     double_variable_queue_update_bitset(variable, value, index);
     return R_NilValue;
 END_RCPP
 }
 // double_variable_queue_extend
-void double_variable_queue_extend(Rcpp::XPtr<DoubleVariable> variable, std::vector<double>& values);
+void double_variable_queue_extend(Rcpp::XPtr<DoubleVariable> variable, std::vector<double> values);
 RcppExport SEXP _individual_double_variable_queue_extend(SEXP variableSEXP, SEXP valuesSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< std::vector<double>& >::type values(valuesSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type values(valuesSEXP);
     double_variable_queue_extend(variable, values);
     return R_NilValue;
 END_RCPP
 }
 // double_variable_queue_shrink
-void double_variable_queue_shrink(Rcpp::XPtr<DoubleVariable> variable, std::vector<size_t>& index);
+void double_variable_queue_shrink(Rcpp::XPtr<DoubleVariable> variable, std::vector<size_t> index);
 RcppExport SEXP _individual_double_variable_queue_shrink(SEXP variableSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<DoubleVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
     double_variable_queue_shrink(variable, index);
     return R_NilValue;
 END_RCPP
@@ -512,12 +512,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // create_event
-Rcpp::XPtr<Event> create_event();
-RcppExport SEXP _individual_create_event() {
+Rcpp::XPtr<Event> create_event(bool restoreable);
+RcppExport SEXP _individual_create_event(SEXP restoreableSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(create_event());
+    Rcpp::traits::input_parameter< bool >::type restoreable(restoreableSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_event(restoreable));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -812,7 +813,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // integer_variable_get_values
-std::vector<int> integer_variable_get_values(Rcpp::XPtr<IntegerVariable> variable);
+const std::vector<int>& integer_variable_get_values(Rcpp::XPtr<IntegerVariable> variable);
 RcppExport SEXP _individual_integer_variable_get_values(SEXP variableSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -921,58 +922,58 @@ BEGIN_RCPP
 END_RCPP
 }
 // integer_variable_queue_fill
-void integer_variable_queue_fill(Rcpp::XPtr<IntegerVariable> variable, const std::vector<int> value);
+void integer_variable_queue_fill(Rcpp::XPtr<IntegerVariable> variable, std::vector<int> value);
 RcppExport SEXP _individual_integer_variable_queue_fill(SEXP variableSEXP, SEXP valueSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::vector<int> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type value(valueSEXP);
     integer_variable_queue_fill(variable, value);
     return R_NilValue;
 END_RCPP
 }
 // integer_variable_queue_update
-void integer_variable_queue_update(Rcpp::XPtr<IntegerVariable> variable, const std::vector<int> value, std::vector<size_t> index);
+void integer_variable_queue_update(Rcpp::XPtr<IntegerVariable> variable, std::vector<int> value, std::vector<size_t> index);
 RcppExport SEXP _individual_integer_variable_queue_update(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::vector<int> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type value(valueSEXP);
     Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
     integer_variable_queue_update(variable, value, index);
     return R_NilValue;
 END_RCPP
 }
 // integer_variable_queue_update_bitset
-void integer_variable_queue_update_bitset(Rcpp::XPtr<IntegerVariable> variable, const std::vector<int> value, Rcpp::XPtr<individual_index_t> index);
+void integer_variable_queue_update_bitset(Rcpp::XPtr<IntegerVariable> variable, std::vector<int> value, Rcpp::XPtr<individual_index_t> index);
 RcppExport SEXP _individual_integer_variable_queue_update_bitset(SEXP variableSEXP, SEXP valueSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< const std::vector<int> >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type value(valueSEXP);
     Rcpp::traits::input_parameter< Rcpp::XPtr<individual_index_t> >::type index(indexSEXP);
     integer_variable_queue_update_bitset(variable, value, index);
     return R_NilValue;
 END_RCPP
 }
 // integer_variable_queue_extend
-void integer_variable_queue_extend(Rcpp::XPtr<IntegerVariable> variable, std::vector<int>& values);
+void integer_variable_queue_extend(Rcpp::XPtr<IntegerVariable> variable, std::vector<int> values);
 RcppExport SEXP _individual_integer_variable_queue_extend(SEXP variableSEXP, SEXP valuesSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< std::vector<int>& >::type values(valuesSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type values(valuesSEXP);
     integer_variable_queue_extend(variable, values);
     return R_NilValue;
 END_RCPP
 }
 // integer_variable_queue_shrink
-void integer_variable_queue_shrink(Rcpp::XPtr<IntegerVariable> variable, std::vector<size_t>& index);
+void integer_variable_queue_shrink(Rcpp::XPtr<IntegerVariable> variable, std::vector<size_t> index);
 RcppExport SEXP _individual_integer_variable_queue_shrink(SEXP variableSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
-    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type index(indexSEXP);
     integer_variable_queue_shrink(variable, index);
     return R_NilValue;
 END_RCPP
@@ -1487,7 +1488,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_double_variable_queue_extend", (DL_FUNC) &_individual_double_variable_queue_extend, 2},
     {"_individual_double_variable_queue_shrink", (DL_FUNC) &_individual_double_variable_queue_shrink, 2},
     {"_individual_double_variable_queue_shrink_bitset", (DL_FUNC) &_individual_double_variable_queue_shrink_bitset, 2},
-    {"_individual_create_event", (DL_FUNC) &_individual_create_event, 0},
+    {"_individual_create_event", (DL_FUNC) &_individual_create_event, 1},
     {"_individual_create_targeted_event", (DL_FUNC) &_individual_create_targeted_event, 1},
     {"_individual_event_base_tick", (DL_FUNC) &_individual_event_base_tick, 1},
     {"_individual_event_base_get_timestep", (DL_FUNC) &_individual_event_base_get_timestep, 1},
