@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.14</span>
       </span>
     </div>
 
@@ -288,10 +288,10 @@ of your package DESCRIPTION.</p></li>
 <p>If you package is named <code>mypackage</code>, create a header
 file containing <code>#include&lt;individual.h&gt;</code> in any of
 these locations:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>src<span class="op">/</span>mypackage_types<span class="op">.</span>h</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>src<span class="op">/</span>mypackage_types<span class="op">.</span>hpp</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>inst<span class="op">/</span>include<span class="op">/</span>mypackage_types<span class="op">.</span>h</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>inst<span class="op">/</span>include<span class="op">/</span>mypackage_types<span class="op">.</span>hpp</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>src<span class="op">/</span>mypackage_types<span class="op">.</span>h</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>src<span class="op">/</span>mypackage_types<span class="op">.</span>hpp</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>inst<span class="op">/</span>include<span class="op">/</span>mypackage_types<span class="op">.</span>h</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>inst<span class="op">/</span>include<span class="op">/</span>mypackage_types<span class="op">.</span>hpp</span></code></pre></div>
 <p>Then this header file will be automatically included in
 <code>RcppExports.cpp</code>. For more information, see section “2.5
 Types in Generated Code” in the <a href="https://CRAN.R-project.org/package=Rcpp/vignettes/Rcpp-attributes.pdf" class="external-link">Rcpp
@@ -322,32 +322,32 @@ function</a>, basically a function closure.</p>
 a single argument when called <code>t</code>, giving the current time
 step (just like process functions in R). Sampling those individuals to
 change state is implemented with the C++ API for these objects.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;individual.h&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="op">::</span>XPtr<span class="op">&lt;</span><span class="dt">process_t</span><span class="op">&gt;</span> multi_probability_bernoulli_process_cpp<span class="op">(</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    Rcpp<span class="op">::</span>XPtr<span class="op">&lt;</span>CategoricalVariable<span class="op">&gt;</span> variable<span class="op">,</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>from<span class="op">,</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string<span class="op"> </span>to<span class="op">,</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">const</span> Rcpp<span class="op">::</span>XPtr<span class="op">&lt;</span>DoubleVariable<span class="op">&gt;</span> rate_variable</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="op">){</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// make pointer to lambda function and return XPtr to R</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Rcpp<span class="op">::</span>XPtr<span class="op">&lt;</span><span class="dt">process_t</span><span class="op">&gt;(</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">new</span> <span class="dt">process_t</span><span class="op">([</span>variable<span class="op">,</span>rate_variable<span class="op">,</span>from<span class="op">,</span>to<span class="op">](</span><span class="dt">size_t</span> t<span class="op">){</span>      </span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>            <span class="co">// sample leavers with their unique prob</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>            <span class="dt">individual_index_t</span> leaving_individuals<span class="op">(</span>variable<span class="op">-&gt;</span>get_index_of<span class="op">(</span><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;{</span>from<span class="op">}));</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>            <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> rate_vector <span class="op">=</span> rate_variable<span class="op">-&gt;</span>get_values<span class="op">(</span>leaving_individuals<span class="op">);</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>            bitset_sample_multi_internal<span class="op">(</span>leaving_individuals<span class="op">,</span> rate_vector<span class="op">.</span>begin<span class="op">(),</span> rate_vector<span class="op">.</span>end<span class="op">());</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>            variable<span class="op">-&gt;</span>queue_update<span class="op">(</span>to<span class="op">,</span> leaving_individuals<span class="op">);</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="op">}),</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>        <span class="kw">true</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span> </span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;individual.h&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;Rcpp.h&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>Rcpp<span class="op">::</span>XPtr<span class="op">&lt;</span><span class="dt">process_t</span><span class="op">&gt;</span> multi_probability_bernoulli_process_cpp<span class="op">(</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>    Rcpp<span class="op">::</span>XPtr<span class="op">&lt;</span>CategoricalVariable<span class="op">&gt;</span> variable<span class="op">,</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string from<span class="op">,</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    <span class="at">const</span> <span class="bu">std::</span>string to<span class="op">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>    <span class="at">const</span> Rcpp<span class="op">::</span>XPtr<span class="op">&lt;</span>DoubleVariable<span class="op">&gt;</span> rate_variable</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="op">){</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>    <span class="co">// make pointer to lambda function and return XPtr to R</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>    <span class="cf">return</span> Rcpp<span class="op">::</span>XPtr<span class="op">&lt;</span><span class="dt">process_t</span><span class="op">&gt;(</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>        <span class="kw">new</span> <span class="dt">process_t</span><span class="op">([</span>variable<span class="op">,</span>rate_variable<span class="op">,</span>from<span class="op">,</span>to<span class="op">](</span><span class="dt">size_t</span> t<span class="op">){</span>      </span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>            <span class="co">// sample leavers with their unique prob</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>            <span class="dt">individual_index_t</span> leaving_individuals<span class="op">(</span>variable<span class="op">-&gt;</span>get_index_of<span class="op">(</span><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="bu">std::</span>string<span class="op">&gt;{</span>from<span class="op">}));</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>            <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> rate_vector <span class="op">=</span> rate_variable<span class="op">-&gt;</span>get_values<span class="op">(</span>leaving_individuals<span class="op">);</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>            bitset_sample_multi_internal<span class="op">(</span>leaving_individuals<span class="op">,</span> rate_vector<span class="op">.</span>begin<span class="op">(),</span> rate_vector<span class="op">.</span>end<span class="op">());</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>            variable<span class="op">-&gt;</span>queue_update<span class="op">(</span>to<span class="op">,</span> leaving_individuals<span class="op">);</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>        <span class="op">}),</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>        <span class="kw">true</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>    <span class="op">);</span> </span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
 <p>The exported function can be used normally in R when creating the
 list of processes:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">

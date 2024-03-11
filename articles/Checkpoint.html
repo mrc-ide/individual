@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">individual</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.14</span>
       </span>
     </div>
 
@@ -134,14 +134,14 @@ function which creates all the relevant simulation data and then calls
 optional <code>state</code> parameter that is passed through to
 <code>simulation_loop</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">run_simulation</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">timesteps</span>, <span class="va">state</span><span class="op">=</span><span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="va">run_simulation</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">timesteps</span>, <span class="va">state</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">health</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CategoricalVariable.html">CategoricalVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"I"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">process</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bernoulli_process.html">bernoulli_process</a></span><span class="op">(</span><span class="va">health</span>, <span class="st">"S"</span>, <span class="st">"I"</span>, <span class="fl">0.01</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="../reference/simulation_loop.html">simulation_loop</a></span><span class="op">(</span></span>
-<span>    variables<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">health</span><span class="op">)</span>,</span>
-<span>    processes<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">process</span><span class="op">)</span>,</span>
-<span>    timesteps<span class="op">=</span><span class="va">timesteps</span>,</span>
-<span>    state<span class="op">=</span><span class="va">state</span><span class="op">)</span></span>
+<span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">health</span><span class="op">)</span>,</span>
+<span>    processes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">process</span><span class="op">)</span>,</span>
+<span>    timesteps <span class="op">=</span> <span class="va">timesteps</span>,</span>
+<span>    state <span class="op">=</span> <span class="va">state</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>The simulation can be run a first time, for a given number of steps.
 It returns a <em>state object</em>, which captures the internal state of
@@ -159,7 +159,7 @@ steps. Before running the actual simulation,
 argument, overwriting any values we had set when initializing the
 variables.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">run_simulation</span><span class="op">(</span>timesteps <span class="op">=</span> <span class="fl">100</span>, state<span class="op">=</span><span class="va">state</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">run_simulation</span><span class="op">(</span>timesteps <span class="op">=</span> <span class="fl">100</span>, state <span class="op">=</span> <span class="va">state</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Practical example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -183,7 +183,7 @@ off. All individuals are initially unvaccinated.</p>
 <span></span>
 <span>  <span class="va">vaccinated</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CategoricalVariable.html">CategoricalVariable</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Y"</span>, <span class="st">"N"</span><span class="op">)</span>, initial_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"N"</span>, <span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>health<span class="op">=</span><span class="va">health</span>, vaccinated<span class="op">=</span><span class="va">vaccinated</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>health <span class="op">=</span> <span class="va">health</span>, vaccinated <span class="op">=</span> <span class="va">vaccinated</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>A vaccinated individual has a reduced probability of becoming
 infectious, as determined by the vaccine’s efficacy. The function below
@@ -206,23 +206,25 @@ individual’s vaccinated status.</p>
 <span>    <span class="va">health</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>value <span class="op">=</span> <span class="st">"I"</span>, index <span class="op">=</span> <span class="va">non_vaccinated_S</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>For a while at the start of the simulation no vaccination takes
-place. Only after a number of time steps, determined by the
-<code>vaccination_start</code> parameter, does the intervention begin.
-Periodically, an event will fire and every individual has a fixed
-probability of becoming vaccinated. If <code>vaccination_start</code> is
-<code>NULL</code>, the intervention never begins.</p>
+<p>Vaccination happens at fixed mass-vaccination event, according to a
+pre-determined schedule defined by the <code>vaccination_times</code>
+parameter. Each vaccination event affects a percentage of the
+population, as determined by the <code>vaccination_coverage</code>
+parameter. The coverage may vary from one instance to the next.</p>
+<p>Because we intend on saving and restoring the simulation with various
+vaccination schedules, we pass <code>restore = FALSE</code> to the
+<code>Event</code> constructor. See the <a href="#events">Saving and
+restoring events</a> section for details.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">make_vaccination_event</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">vaccinated</span>, <span class="va">vaccination_start</span>, <span class="va">vaccination_interval</span>, <span class="va">vaccination_rate</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">e</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Event.html">Event</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">make_vaccination_event</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">vaccinated</span>, <span class="va">vaccination_times</span>, <span class="va">vaccination_coverage</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">e</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Event.html">Event</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>restore <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="va">e</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span><span class="va">vaccination_times</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
 <span>  <span class="va">e</span><span class="op">$</span><span class="fu">add_listener</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">vaccinated</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>value <span class="op">=</span> <span class="st">"Y"</span>,</span>
-<span>      <span class="va">vaccinated</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">"N"</span><span class="op">)</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span><span class="va">vaccination_rate</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="va">e</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span><span class="va">vaccination_interval</span><span class="op">)</span></span>
+<span>    <span class="va">index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">vaccination_times</span> <span class="op">==</span> <span class="va">t</span><span class="op">)</span></span>
+<span>    <span class="va">coverage</span> <span class="op">&lt;-</span> <span class="va">vaccination_coverage</span><span class="op">[[</span><span class="va">index</span><span class="op">]</span><span class="op">]</span></span>
+<span>    <span class="va">targets</span> <span class="op">&lt;-</span> <span class="va">vaccinated</span><span class="op">$</span><span class="fu">get_index_of</span><span class="op">(</span><span class="st">"N"</span><span class="op">)</span><span class="op">$</span><span class="fu">sample</span><span class="op">(</span><span class="va">coverage</span><span class="op">)</span></span>
+<span>    <span class="va">vaccinated</span><span class="op">$</span><span class="fu">queue_update</span><span class="op">(</span>value <span class="op">=</span> <span class="st">"Y"</span>, <span class="va">targets</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">vaccination_start</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">e</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span><span class="va">vaccination_start</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
 <span>  <span class="va">e</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>We will define our simulation as a function, taking the simulation
@@ -235,13 +237,12 @@ as well as the new saved state.</p>
 <code class="sourceCode R"><span><span class="va">run_simulation</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
 <span>    <span class="va">steps</span>,</span>
 <span>    <span class="va">N</span> <span class="op">=</span> <span class="fl">1e3</span>,</span>
-<span>    <span class="va">I0</span> <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>    <span class="va">beta</span> <span class="op">=</span> <span class="fl">0.1</span>, <span class="co"># S -&gt; I</span></span>
+<span>    <span class="va">I0</span> <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    <span class="va">beta</span> <span class="op">=</span> <span class="fl">0.08</span>, <span class="co"># S -&gt; I</span></span>
 <span>    <span class="va">gamma</span> <span class="op">=</span> <span class="fl">0.05</span>, <span class="co"># I -&gt; R</span></span>
-<span>    <span class="va">xi</span> <span class="op">=</span> <span class="fl">0.03</span>, <span class="co"># R -&gt; S</span></span>
-<span>    <span class="va">vaccination_start</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    <span class="va">vaccination_interval</span> <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>    <span class="va">vaccination_rate</span> <span class="op">=</span> <span class="fl">0.05</span>, <span class="co"># N -&gt; Y</span></span>
+<span>    <span class="va">xi</span> <span class="op">=</span> <span class="fl">0.02</span>, <span class="co"># R -&gt; S</span></span>
+<span>    <span class="va">vaccination_times</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    <span class="va">vaccination_coverage</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">vaccination_times</span><span class="op">)</span><span class="op">)</span>, <span class="co"># N -&gt; Y</span></span>
 <span>    <span class="va">vaccine_efficacy</span> <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    <span class="va">...</span><span class="op">)</span></span>
 <span><span class="op">{</span></span>
@@ -253,8 +254,7 @@ as well as the new saved state.</p>
 <span>  <span class="va">recovery_process</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bernoulli_process.html">bernoulli_process</a></span><span class="op">(</span><span class="va">variables</span><span class="op">$</span><span class="va">health</span>, <span class="st">"I"</span>, <span class="st">"R"</span>, <span class="va">gamma</span><span class="op">)</span></span>
 <span>  <span class="va">return_process</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bernoulli_process.html">bernoulli_process</a></span><span class="op">(</span><span class="va">variables</span><span class="op">$</span><span class="va">health</span>, <span class="st">"R"</span>, <span class="st">"S"</span>, <span class="va">xi</span><span class="op">)</span></span>
 <span>  <span class="va">vaccination_event</span> <span class="op">&lt;-</span> <span class="fu">make_vaccination_event</span><span class="op">(</span></span>
-<span>    <span class="va">variables</span><span class="op">$</span><span class="va">vaccinated</span>, <span class="va">vaccination_start</span>, <span class="va">vaccination_interval</span>, <span class="va">vaccination_rate</span><span class="op">)</span></span>
-<span></span>
+<span>    <span class="va">variables</span><span class="op">$</span><span class="va">vaccinated</span>, <span class="va">vaccination_times</span>, <span class="va">vaccination_coverage</span><span class="op">)</span></span>
 <span>  <span class="va">renderer</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Render.html">Render</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>timesteps <span class="op">=</span> <span class="va">steps</span><span class="op">)</span></span>
 <span>  <span class="va">health_render_process</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/categorical_count_renderer_process.html">categorical_count_renderer_process</a></span><span class="op">(</span></span>
 <span>    renderer <span class="op">=</span> <span class="va">renderer</span>,</span>
@@ -275,45 +275,49 @@ as well as the new saved state.</p>
 <span>    timesteps <span class="op">=</span> <span class="va">steps</span>,</span>
 <span>    <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>result<span class="op">=</span><span class="va">renderer</span><span class="op">$</span><span class="fu">to_dataframe</span><span class="op">(</span><span class="op">)</span>, state<span class="op">=</span><span class="va">final_state</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">renderer</span><span class="op">$</span><span class="fu">to_dataframe</span><span class="op">(</span><span class="op">)</span>, state <span class="op">=</span> <span class="va">final_state</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>We will start by running and plotting our baseline simulation, with
 the intervention disabled.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps<span class="op">=</span><span class="fl">1500</span><span class="op">)</span><span class="op">$</span><span class="va">result</span></span>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps <span class="op">=</span> <span class="fl">1500</span><span class="op">)</span><span class="op">$</span><span class="va">result</span></span>
 <span><span class="va">colours</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"royalblue3"</span>,<span class="st">"firebrick3"</span>,<span class="st">"darkorchid3"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span></span>
-<span>  x<span class="op">=</span><span class="va">data</span><span class="op">[</span><span class="st">"timestep"</span><span class="op">]</span>,</span>
-<span>  y<span class="op">=</span><span class="va">data</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S_count"</span>,<span class="st">"I_count"</span>, <span class="st">"R_count"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>  xlab<span class="op">=</span><span class="st">"Time"</span>, ylab<span class="op">=</span><span class="st">"Count"</span>,</span>
-<span>  type<span class="op">=</span><span class="st">"l"</span>, lwd<span class="op">=</span><span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="va">colours</span></span>
+<span>  x <span class="op">=</span> <span class="va">data</span><span class="op">[</span><span class="st">"timestep"</span><span class="op">]</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">data</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S_count"</span>,<span class="st">"I_count"</span>, <span class="st">"R_count"</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="st">"Time"</span>, ylab <span class="op">=</span> <span class="st">"Population count"</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="va">colours</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span>
 <span>   x <span class="op">=</span> <span class="st">"topright"</span>,</span>
 <span>   pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">16</span>,<span class="fl">3</span><span class="op">)</span>,</span>
 <span>   col <span class="op">=</span> <span class="va">colours</span>,</span>
-<span>   legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"I"</span>, <span class="st">"R"</span><span class="op">)</span>, cex <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>   legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"I"</span>, <span class="st">"R"</span><span class="op">)</span>, cex <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>   bg<span class="op">=</span><span class="st">'white'</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="Checkpoint_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>We see that the simulation takes some time to settle from its initial
 parameters to its steady-state conditions. We will now enable the
 vaccine intervention, but only starting at a point after the simulation
-has settled, for example at <code>t=500</code>.</p>
+has settled, for example at <code>t=500</code>, and every 250 steps
+after that.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps<span class="op">=</span><span class="fl">1500</span>, vaccination_start <span class="op">=</span> <span class="fl">500</span>, vaccine_efficacy <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="va">result</span></span>
+<code class="sourceCode R"><span><span class="va">vaccination_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">500</span>,<span class="fl">1500</span>,<span class="fl">250</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps <span class="op">=</span> <span class="fl">1500</span>, vaccination_times <span class="op">=</span> <span class="va">vaccination_times</span><span class="op">)</span><span class="op">$</span><span class="va">result</span></span>
 <span><span class="va">colours</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"royalblue3"</span>,<span class="st">"firebrick3"</span>,<span class="st">"darkorchid3"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span></span>
-<span>  x<span class="op">=</span><span class="va">data</span><span class="op">[</span><span class="st">"timestep"</span><span class="op">]</span>,</span>
-<span>  y<span class="op">=</span><span class="va">data</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S_count"</span>,<span class="st">"I_count"</span>, <span class="st">"R_count"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>  xlab<span class="op">=</span><span class="st">"Time"</span>, ylab<span class="op">=</span><span class="st">"Count"</span>,</span>
-<span>  type<span class="op">=</span><span class="st">"l"</span>, lwd<span class="op">=</span><span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="va">colours</span></span>
+<span>  x <span class="op">=</span> <span class="va">data</span><span class="op">[</span><span class="st">"timestep"</span><span class="op">]</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">data</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S_count"</span>,<span class="st">"I_count"</span>, <span class="st">"R_count"</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="st">"Time"</span>, ylab <span class="op">=</span> <span class="st">"Count"</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="va">colours</span></span>
 <span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">vaccination_times</span>, col <span class="op">=</span> <span class="st">"snow4"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span>
 <span>   x <span class="op">=</span> <span class="st">"topright"</span>,</span>
 <span>   pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">16</span>,<span class="fl">3</span><span class="op">)</span>,</span>
 <span>   col <span class="op">=</span> <span class="va">colours</span>,</span>
-<span>   legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"I"</span>, <span class="st">"R"</span><span class="op">)</span>, cex <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>   legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"I"</span>, <span class="st">"R"</span><span class="op">)</span>,</span>
+<span>   cex <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>   bg<span class="op">=</span><span class="st">'white'</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="Checkpoint_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
@@ -325,44 +329,51 @@ compare its impact.</p>
 <p>While we could run the code above many times over, each simulation
 would repeat the first 499 timesteps, despite the result being identical
 each time. Instead we start by running only these timesteps, and saving
-the result. We do need to specify the start of the intervention, as it
-is necessary to schedule the first vaccination event. However the
-details of the intervention (ie. <code>vaccine_efficacy</code>) are
+the result. The details of the intervention (ie.
+<code>vaccination_times</code> and <code>vaccine_efficacy</code>) are
 irrelevant and can be omitted.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">initial</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps<span class="op">=</span><span class="fl">499</span>, vaccination_start <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">initial</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps <span class="op">=</span> <span class="fl">499</span><span class="op">)</span></span></code></pre></div>
 <p>From this initial result, we can resume the simulation, but using
 different values of vaccine efficacy each time. We also include a
 control simulation, in which no vaccination takes place. Each of these
 simulation will skip the first 499 steps and only run the next 1001 time
 steps.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">control</span>    <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps<span class="op">=</span><span class="fl">1500</span>, vaccination_start <span class="op">=</span> <span class="fl">500</span>, vaccine_efficacy<span class="op">=</span><span class="fl">0.0</span>, state<span class="op">=</span><span class="va">initial</span><span class="op">$</span><span class="va">state</span><span class="op">)</span></span>
-<span><span class="va">vaccine30</span>  <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps<span class="op">=</span><span class="fl">1500</span>, vaccination_start <span class="op">=</span> <span class="fl">500</span>, vaccine_efficacy<span class="op">=</span><span class="fl">0.3</span>, state<span class="op">=</span><span class="va">initial</span><span class="op">$</span><span class="va">state</span><span class="op">)</span></span>
-<span><span class="va">vaccine50</span>  <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps<span class="op">=</span><span class="fl">1500</span>, vaccination_start <span class="op">=</span> <span class="fl">500</span>, vaccine_efficacy<span class="op">=</span><span class="fl">0.5</span>, state<span class="op">=</span><span class="va">initial</span><span class="op">$</span><span class="va">state</span><span class="op">)</span></span>
-<span><span class="va">vaccine100</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps<span class="op">=</span><span class="fl">1500</span>, vaccination_start <span class="op">=</span> <span class="fl">500</span>, vaccine_efficacy<span class="op">=</span><span class="fl">1.0</span>, state<span class="op">=</span><span class="va">initial</span><span class="op">$</span><span class="va">state</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">control</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps <span class="op">=</span> <span class="fl">1500</span>, state <span class="op">=</span> <span class="va">initial</span><span class="op">$</span><span class="va">state</span><span class="op">)</span></span>
+<span><span class="va">vaccine50</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span></span>
+<span>  steps <span class="op">=</span> <span class="fl">1500</span>, vaccination_times <span class="op">=</span> <span class="va">vaccination_times</span>, vaccine_efficacy <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  state <span class="op">=</span> <span class="va">initial</span><span class="op">$</span><span class="va">state</span><span class="op">)</span></span>
+<span><span class="va">vaccine80</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span></span>
+<span>  steps <span class="op">=</span> <span class="fl">1500</span>, vaccination_times <span class="op">=</span> <span class="va">vaccination_times</span>, vaccine_efficacy <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  state <span class="op">=</span> <span class="va">initial</span><span class="op">$</span><span class="va">state</span><span class="op">)</span></span>
+<span><span class="va">vaccine100</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span></span>
+<span>  steps <span class="op">=</span> <span class="fl">1500</span>, vaccination_times <span class="op">=</span> <span class="va">vaccination_times</span>, vaccine_efficacy <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>  state <span class="op">=</span> <span class="va">initial</span><span class="op">$</span><span class="va">state</span><span class="op">)</span></span></code></pre></div>
 <p>Finally we aggregate and plot the results from all these simulations.
 We also need to include the data from our initial run, which we will
 plot the same colour as our control simulation.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">colours</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"royalblue3"</span>,<span class="st">"firebrick3"</span>,<span class="st">"darkorchid3"</span>, <span class="st">"seagreen3"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">colours</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"royalblue3"</span>, <span class="st">"firebrick3"</span>,<span class="st">"darkorchid3"</span>, <span class="st">"seagreen3"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Pad initial out to ensure it has the same shape as other series.</span></span>
 <span><span class="va">initial</span><span class="op">$</span><span class="va">result</span><span class="op">[</span><span class="fl">500</span><span class="op">:</span><span class="fl">1500</span>,<span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>    <span class="va">initial</span><span class="op">$</span><span class="va">result</span><span class="op">[</span>,<span class="st">"I_count"</span><span class="op">]</span>,</span>
-<span>    <span class="va">vaccine30</span><span class="op">$</span><span class="va">result</span><span class="op">[</span>,<span class="st">"I_count"</span><span class="op">]</span>,</span>
 <span>    <span class="va">vaccine50</span><span class="op">$</span><span class="va">result</span><span class="op">[</span>,<span class="st">"I_count"</span><span class="op">]</span>,</span>
+<span>    <span class="va">vaccine80</span><span class="op">$</span><span class="va">result</span><span class="op">[</span>,<span class="st">"I_count"</span><span class="op">]</span>,</span>
 <span>    <span class="va">vaccine100</span><span class="op">$</span><span class="va">result</span><span class="op">[</span>,<span class="st">"I_count"</span><span class="op">]</span>,</span>
 <span>    <span class="va">control</span><span class="op">$</span><span class="va">result</span><span class="op">[</span>,<span class="st">"I_count"</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="st">"Time"</span>, ylab <span class="op">=</span> <span class="st">"Infected count"</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">1.5</span>, lty <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="va">colours</span>,</span>
 <span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">vaccination_times</span>, col <span class="op">=</span> <span class="st">"snow4"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span>
 <span>   x <span class="op">=</span> <span class="st">"topright"</span>, pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">16</span>,<span class="fl">3</span><span class="op">)</span>,</span>
 <span>   col <span class="op">=</span> <span class="va">colours</span>,</span>
-<span>   legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Control"</span>, <span class="st">"30%"</span>, <span class="st">"50%"</span>, <span class="st">"100%"</span><span class="op">)</span>, cex <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>   legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Control"</span>, <span class="st">"50%"</span>, <span class="st">"80%"</span>, <span class="st">"100%"</span><span class="op">)</span>,</span>
+<span>   cex <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>   bg<span class="op">=</span><span class="st">'white'</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="Checkpoint_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
@@ -384,12 +395,6 @@ events may not be added or removed, variable sizes must remain constant,
 the list of categories in a <code>CategoricalVariable</code> cannot be
 modified, etc. The order of variables and events passed to the
 <code>run_simulation</code> function must remain stable.</li>
-<li>If an event is scheduled before the checkpoint, the time at which it
-will execute cannot be changed when resuming, even if that time is in
-the future. For example in the SIRS model above, we would not be able to
-resume the simulation with different values for
-<code>vaccination_start</code>; changing that parameter would have no
-effect.</li>
 </ul>
 <p>While parameters of the simulation can be changed between the initial
 run and the subsequent runs (as demonstrated with the
@@ -453,17 +458,19 @@ preserved.</p>
 <span><span class="va">piecewise_run</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">piecewise_run_initial</span><span class="op">$</span><span class="va">result</span>, <span class="va">piecewise_run_final</span><span class="op">$</span><span class="va">result</span><span class="op">[</span><span class="fl">500</span><span class="op">:</span><span class="fl">1500</span>,<span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">uninterrupted_run</span>, <span class="va">piecewise_run</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Component \"S_count\": Mean relative difference: 0.06844564"</span></span>
-<span><span class="co">#&gt; [2] "Component \"I_count\": Mean relative difference: 0.1065086" </span></span>
-<span><span class="co">#&gt; [3] "Component \"R_count\": Mean relative difference: 0.07297747"</span></span></code></pre></div>
-<p>We can try the same again, but this time set
+<span><span class="co">#&gt; [1] "Component \"S_count\": Mean relative difference: 0.07121431"</span></span>
+<span><span class="co">#&gt; [2] "Component \"I_count\": Mean relative difference: 0.2255931" </span></span>
+<span><span class="co">#&gt; [3] "Component \"R_count\": Mean relative difference: 0.1328323"</span></span></code></pre></div>
+<p>We can try to resume the simulation again, but this time set
 <code>restore_random_state = TRUE</code> to enable restoring the
 simulation state. This time we’ve successfully managed to reproduce the
 data from our uninterrupted run.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">piecewise_run_initial</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps <span class="op">=</span> <span class="fl">499</span><span class="op">)</span></span>
-<span><span class="va">piecewise_run_final</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span>steps <span class="op">=</span> <span class="fl">1500</span>, state <span class="op">=</span> <span class="va">piecewise_run_initial</span><span class="op">$</span><span class="va">state</span>, restore_random_state <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">piecewise_run_final</span> <span class="op">&lt;-</span> <span class="fu">run_simulation</span><span class="op">(</span></span>
+<span>  steps <span class="op">=</span> <span class="fl">1500</span>,</span>
+<span>  state <span class="op">=</span> <span class="va">piecewise_run_initial</span><span class="op">$</span><span class="va">state</span>,</span>
+<span>  restore_random_state <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">piecewise_run</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">piecewise_run_initial</span><span class="op">$</span><span class="va">result</span>, <span class="va">piecewise_run_final</span><span class="op">$</span><span class="va">result</span><span class="op">[</span><span class="fl">500</span><span class="op">:</span><span class="fl">1500</span>,<span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">uninterrupted_run</span>, <span class="va">piecewise_run</span><span class="op">)</span></span>
@@ -472,6 +479,58 @@ data from our uninterrupted run.</p>
 random number generator’s state, which could have surprising and
 undesirable side effects. It is generally useful in tests, but should be
 used carefully elsewhere.</p>
+</div>
+<div class="section level3">
+<h3 id="events">Saving and restoring events<a class="anchor" aria-label="anchor" href="#events"></a>
+</h3>
+<p>By default, the <code>Event</code> and <code>TargetedEvent</code>
+classes save their schedule in the checkpoint and restore them when
+loading from a previous simulation state. When restoring its schedule,
+the event will clear its existing schedule and overwrite any pending
+time steps with the schedule found in the saved state.</p>
+<p>For example in the code below, the simulation is first initialized
+with an event scheduled at <code>t=10</code> and is run for only 5
+steps, hence the event does not yet trigger. On the second run, the
+event is seemingly scheduled for <code>t=15</code>. However, by resuming
+the simulation, the event’s schedule is overwritten with the saved
+state, clearing the newly scheduled time. The event is triggered at
+<code>t=10</code> only.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">e</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Event.html">Event</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">e</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span><span class="fl">9</span><span class="op">)</span></span>
+<span><span class="va">state</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulation_loop.html">simulation_loop</a></span><span class="op">(</span>timesteps <span class="op">=</span> <span class="fl">5</span>, events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">e</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Event.html">Event</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">e</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span><span class="fl">14</span><span class="op">)</span></span>
+<span><span class="va">e</span><span class="op">$</span><span class="fu">add_listener</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">t</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Triggered at timestep"</span>, <span class="va">t</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/simulation_loop.html">simulation_loop</a></span><span class="op">(</span>timesteps <span class="op">=</span> <span class="fl">30</span>, events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span>, state <span class="op">=</span> <span class="va">state</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Triggered at timestep 10</span></span></code></pre></div>
+<p>Such a behaviour may prevent some modeling scenarios from being used
+with the save and restore effectively. For example, in our prior SIRS
+model, we wanted to be able to simulate historical data, where no
+intervention took place, and then resume it with different intervention
+parameters. If the vaccination event were to always restore its state
+from the original run, we would not be able to set a new schedule on the
+intervention runs.</p>
+<p>This behaviour can be modified on a per-event basis by passing
+<code>restore = FALSE</code> as an argument to the <code>Event</code>
+constructor. In that case, the schedule from the original run is
+ignored, and instead the schedule of the new run is only determined from
+its new initialization.</p>
+<p>In the modified example below, the event triggers at
+<code>t=15</code> as intended. When restoring the simulation, we had
+also schedules the event to trigger at <code>t=3</code>, but this never
+happens as it is before the point where the simulation is restored.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">e</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Event.html">Event</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">e</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span><span class="fl">9</span><span class="op">)</span></span>
+<span><span class="va">state</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulation_loop.html">simulation_loop</a></span><span class="op">(</span>timesteps <span class="op">=</span> <span class="fl">5</span>, events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">e</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Event.html">Event</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>restore<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">e</span><span class="op">$</span><span class="fu">schedule</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">14</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">e</span><span class="op">$</span><span class="fu">add_listener</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">t</span>, <span class="va">index</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Triggered at timestep"</span>, <span class="va">t</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/simulation_loop.html">simulation_loop</a></span><span class="op">(</span>timesteps <span class="op">=</span> <span class="fl">30</span>, events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span>, state <span class="op">=</span> <span class="va">state</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Triggered at timestep 15</span></span></code></pre></div>
 </div>
 </div>
   </div>
