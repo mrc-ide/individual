@@ -230,6 +230,10 @@ Bitset <- list(
 #' @export
 #' @method all.equal Bitset
 all.equal.Bitset <- function(target, current, ...) {
+  if (!inherits(current, "Bitset")) {
+    return("'current' is not a Bitset")
+  }
+
   if (target$max_size != current$max_size) {
     return(paste0(
       "Bitset capacity differs (", target$max_size, " vs ",
