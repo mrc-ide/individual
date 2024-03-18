@@ -227,6 +227,21 @@ Bitset <- list(
   }
 )
 
+#' @export
+#' @method all.equal Bitset
+all.equal.Bitset <- function(target, current, ...) {
+  if (!inherits(current, "Bitset")) {
+    return("'current' is not a Bitset")
+  }
+
+  if (target$max_size != current$max_size) {
+    return(paste0(
+      "Bitset capacity differs (", target$max_size, " vs ",
+      current$max_size,  ")"))
+  }
+  all.equal(target$to_vector(), current$to_vector(), ...)
+}
+
 #' @title Filter a bitset
 #' @description This non-modifying function returns a new \code{\link{Bitset}}
 #' object of the same maximum size as the original but which only contains

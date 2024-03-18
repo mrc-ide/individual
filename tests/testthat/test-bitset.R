@@ -358,3 +358,44 @@ test_that("bitset sampling has correctly distributed size", {
     expect_gt(p, threshold)
   }
 })
+
+test_that("bitset equality works", {
+  a <- Bitset$new(10)
+  b <- Bitset$new(10)
+  c <- Bitset$new(10)
+  d <- Bitset$new(10)
+  e <- Bitset$new(10)
+  f <- Bitset$new(10)
+
+  c$insert(c(1, 2, 3))
+  d$insert(c(1, 2, 3))
+  e$insert(c(4, 5, 6))
+  f$insert(c(4, 7))
+
+  expect_equal(a, b)
+  expect_equal(c, d)
+
+  expect_false(isTRUE(all.equal(a, c)))
+  expect_false(isTRUE(all.equal(a, e)))
+  expect_false(isTRUE(all.equal(a, f)))
+  expect_false(isTRUE(all.equal(c, e)))
+  expect_false(isTRUE(all.equal(c, f)))
+  expect_false(isTRUE(all.equal(e, f)))
+
+  expect_equal(a, a$copy())
+  expect_equal(c, c$copy())
+  expect_equal(e, e$copy())
+  expect_equal(f, f$copy())
+})
+
+test_that("bitsets with different capacities are not equal", {
+  a <- Bitset$new(10)
+  b <- Bitset$new(11)
+  expect_match(all.equal(a, b), "Bitset capacity differs")
+})
+
+test_that("bitset is not equal to other types", {
+  a <- Bitset$new(10)
+  a$insert(c(1,4,5))
+  expect_equal(all.equal(a, c(1,4,5)), "'current' is not a Bitset")
+})
