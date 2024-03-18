@@ -1,3 +1,7 @@
+# individual 0.1.15
+
+  * Added an `all.equal` implementation for bitsets.
+
 # individual 0.1.14
 
   * Added a flag to the Event constructor to tweak the restore semantics.
