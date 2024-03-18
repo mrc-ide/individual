@@ -388,8 +388,14 @@ test_that("bitset equality works", {
   expect_equal(f, f$copy())
 })
 
-test_that("bitset with different sizes are not equal", {
+test_that("bitsets with different capacities are not equal", {
   a <- Bitset$new(10)
   b <- Bitset$new(11)
-  expect_false(isTRUE(all.equal(a, b)))
+  expect_match(all.equal(a, b), "Bitset capacity differs")
+})
+
+test_that("bitset is not equal to other types", {
+  a <- Bitset$new(10)
+  a$insert(c(1,4,5))
+  expect_equal(all.equal(a, c(1,4,5)), "'current' is not a Bitset")
 })
