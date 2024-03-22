@@ -23,8 +23,8 @@ This is useful for events which are triggered for a sub-population.
 \item \href{#method-TargetedEvent-.process_listener}{\code{TargetedEvent$.process_listener()}}
 \item \href{#method-TargetedEvent-.process_listener_cpp}{\code{TargetedEvent$.process_listener_cpp()}}
 \item \href{#method-TargetedEvent-.resize}{\code{TargetedEvent$.resize()}}
-\item \href{#method-TargetedEvent-.checkpoint}{\code{TargetedEvent$.checkpoint()}}
-\item \href{#method-TargetedEvent-.restore}{\code{TargetedEvent$.restore()}}
+\item \href{#method-TargetedEvent-save_state}{\code{TargetedEvent$save_state()}}
+\item \href{#method-TargetedEvent-restore_state}{\code{TargetedEvent$restore_state()}}
 \item \href{#method-TargetedEvent-clone}{\code{TargetedEvent$clone()}}
 }
 }
@@ -185,22 +185,35 @@ Shrink the TargetedEvent.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TargetedEvent-.checkpoint"></a>}}
-\if{latex}{\out{\hypertarget{method-TargetedEvent-.checkpoint}{}}}
-\subsection{Method \code{.checkpoint()}}{
+\if{html}{\out{<a id="method-TargetedEvent-save_state"></a>}}
+\if{latex}{\out{\hypertarget{method-TargetedEvent-save_state}{}}}
+\subsection{Method \code{save_state()}}{
+save the state of the event
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$.checkpoint()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$save_state()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TargetedEvent-.restore"></a>}}
-\if{latex}{\out{\hypertarget{method-TargetedEvent-.restore}{}}}
-\subsection{Method \code{.restore()}}{
+\if{html}{\out{<a id="method-TargetedEvent-restore_state"></a>}}
+\if{latex}{\out{\hypertarget{method-TargetedEvent-restore_state}{}}}
+\subsection{Method \code{restore_state()}}{
+restore the event from a previously saved state.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$.restore(time, schedule)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$restore_state(time, state)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{the previously saved state, as returned by the
+\code{save_state} method. NULL is passed when restoring from a saved
+simulation in which this variable did not exist.}
+
+\item{\code{timestep}}{the timestep at which simulation is resumed.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TargetedEvent-clone"></a>}}

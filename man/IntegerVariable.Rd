@@ -23,8 +23,8 @@ household or age bin.
 \item \href{#method-IntegerVariable-size}{\code{IntegerVariable$size()}}
 \item \href{#method-IntegerVariable-.update}{\code{IntegerVariable$.update()}}
 \item \href{#method-IntegerVariable-.resize}{\code{IntegerVariable$.resize()}}
-\item \href{#method-IntegerVariable-.checkpoint}{\code{IntegerVariable$.checkpoint()}}
-\item \href{#method-IntegerVariable-.restore}{\code{IntegerVariable$.restore()}}
+\item \href{#method-IntegerVariable-save_state}{\code{IntegerVariable$save_state()}}
+\item \href{#method-IntegerVariable-restore_state}{\code{IntegerVariable$restore_state()}}
 \item \href{#method-IntegerVariable-clone}{\code{IntegerVariable$clone()}}
 }
 }
@@ -211,22 +211,37 @@ get the size of the variable
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-IntegerVariable-.checkpoint"></a>}}
-\if{latex}{\out{\hypertarget{method-IntegerVariable-.checkpoint}{}}}
-\subsection{Method \code{.checkpoint()}}{
+\if{html}{\out{<a id="method-IntegerVariable-save_state"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-save_state}{}}}
+\subsection{Method \code{save_state()}}{
+save the state of the variable
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$.checkpoint()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$save_state()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-IntegerVariable-.restore"></a>}}
-\if{latex}{\out{\hypertarget{method-IntegerVariable-.restore}{}}}
-\subsection{Method \code{.restore()}}{
+\if{html}{\out{<a id="method-IntegerVariable-restore_state"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-restore_state}{}}}
+\subsection{Method \code{restore_state()}}{
+restore the variable from a previously saved state.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$.restore(values)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$restore_state(timestep, state)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{timestep}}{the timestep at which simulation is resumed. This
+parameter's value is ignored, it only exists to conform to a uniform
+interface with events.}
+
+\item{\code{state}}{the previously saved state, as returned by the
+\code{save_state} method. NULL is passed when restoring from a saved
+simulation in which this variable did not exist.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-IntegerVariable-clone"></a>}}

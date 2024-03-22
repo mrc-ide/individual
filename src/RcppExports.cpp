@@ -512,13 +512,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // create_event
-Rcpp::XPtr<Event> create_event(bool restoreable);
-RcppExport SEXP _individual_create_event(SEXP restoreableSEXP) {
+Rcpp::XPtr<Event> create_event();
+RcppExport SEXP _individual_create_event() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< bool >::type restoreable(restoreableSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_event(restoreable));
+    rcpp_result_gen = Rcpp::wrap(create_event());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -552,6 +551,17 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::XPtr<EventBase> >::type event(eventSEXP);
     rcpp_result_gen = Rcpp::wrap(event_base_get_timestep(event));
     return rcpp_result_gen;
+END_RCPP
+}
+// event_base_set_timestep
+void event_base_set_timestep(const Rcpp::XPtr<EventBase> event, size_t time);
+RcppExport SEXP _individual_event_base_set_timestep(SEXP eventSEXP, SEXP timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<EventBase> >::type event(eventSEXP);
+    Rcpp::traits::input_parameter< size_t >::type time(timeSEXP);
+    event_base_set_timestep(event, time);
+    return R_NilValue;
 END_RCPP
 }
 // event_base_should_trigger
@@ -598,14 +608,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // event_restore
-void event_restore(const Rcpp::XPtr<Event> event, size_t time, std::vector<size_t> schedule);
-RcppExport SEXP _individual_event_restore(SEXP eventSEXP, SEXP timeSEXP, SEXP scheduleSEXP) {
+void event_restore(const Rcpp::XPtr<Event> event, std::vector<size_t> schedule);
+RcppExport SEXP _individual_event_restore(SEXP eventSEXP, SEXP scheduleSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<Event> >::type event(eventSEXP);
-    Rcpp::traits::input_parameter< size_t >::type time(timeSEXP);
     Rcpp::traits::input_parameter< std::vector<size_t> >::type schedule(scheduleSEXP);
-    event_restore(event, time, schedule);
+    event_restore(event, schedule);
     return R_NilValue;
 END_RCPP
 }
@@ -767,14 +776,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // targeted_event_restore
-void targeted_event_restore(const Rcpp::XPtr<TargetedEvent> event, size_t time, Rcpp::List state);
-RcppExport SEXP _individual_targeted_event_restore(SEXP eventSEXP, SEXP timeSEXP, SEXP stateSEXP) {
+void targeted_event_restore(const Rcpp::XPtr<TargetedEvent> event, Rcpp::List state);
+RcppExport SEXP _individual_targeted_event_restore(SEXP eventSEXP, SEXP stateSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<TargetedEvent> >::type event(eventSEXP);
-    Rcpp::traits::input_parameter< size_t >::type time(timeSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type state(stateSEXP);
-    targeted_event_restore(event, time, state);
+    targeted_event_restore(event, state);
     return R_NilValue;
 END_RCPP
 }
@@ -1488,15 +1496,16 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_double_variable_queue_extend", (DL_FUNC) &_individual_double_variable_queue_extend, 2},
     {"_individual_double_variable_queue_shrink", (DL_FUNC) &_individual_double_variable_queue_shrink, 2},
     {"_individual_double_variable_queue_shrink_bitset", (DL_FUNC) &_individual_double_variable_queue_shrink_bitset, 2},
-    {"_individual_create_event", (DL_FUNC) &_individual_create_event, 1},
+    {"_individual_create_event", (DL_FUNC) &_individual_create_event, 0},
     {"_individual_create_targeted_event", (DL_FUNC) &_individual_create_targeted_event, 1},
     {"_individual_event_base_tick", (DL_FUNC) &_individual_event_base_tick, 1},
     {"_individual_event_base_get_timestep", (DL_FUNC) &_individual_event_base_get_timestep, 1},
+    {"_individual_event_base_set_timestep", (DL_FUNC) &_individual_event_base_set_timestep, 2},
     {"_individual_event_base_should_trigger", (DL_FUNC) &_individual_event_base_should_trigger, 1},
     {"_individual_event_schedule", (DL_FUNC) &_individual_event_schedule, 2},
     {"_individual_event_clear_schedule", (DL_FUNC) &_individual_event_clear_schedule, 1},
     {"_individual_event_checkpoint", (DL_FUNC) &_individual_event_checkpoint, 1},
-    {"_individual_event_restore", (DL_FUNC) &_individual_event_restore, 3},
+    {"_individual_event_restore", (DL_FUNC) &_individual_event_restore, 2},
     {"_individual_targeted_event_clear_schedule_vector", (DL_FUNC) &_individual_targeted_event_clear_schedule_vector, 2},
     {"_individual_targeted_event_clear_schedule", (DL_FUNC) &_individual_targeted_event_clear_schedule, 2},
     {"_individual_targeted_event_get_scheduled", (DL_FUNC) &_individual_targeted_event_get_scheduled, 1},
@@ -1511,7 +1520,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_targeted_event_get_target", (DL_FUNC) &_individual_targeted_event_get_target, 1},
     {"_individual_targeted_event_resize", (DL_FUNC) &_individual_targeted_event_resize, 1},
     {"_individual_targeted_event_checkpoint", (DL_FUNC) &_individual_targeted_event_checkpoint, 1},
-    {"_individual_targeted_event_restore", (DL_FUNC) &_individual_targeted_event_restore, 3},
+    {"_individual_targeted_event_restore", (DL_FUNC) &_individual_targeted_event_restore, 2},
     {"_individual_process_listener", (DL_FUNC) &_individual_process_listener, 2},
     {"_individual_process_targeted_listener", (DL_FUNC) &_individual_process_targeted_listener, 3},
     {"_individual_create_integer_variable", (DL_FUNC) &_individual_create_integer_variable, 1},

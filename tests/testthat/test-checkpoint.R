@@ -153,19 +153,47 @@ test_that("stochastic simulation can be resumed deterministically", {
   expect_mapequal(contiguous_run[6:10,], second_run[6:10,])
 })
 
-test_that("cannot add nor remove variables when resuming", {
-  make_variables <- function(count) {
-    lapply(seq_len(count), function(i) DoubleVariable$new(1:10))
-  }
+test_that("can add named variables when resuming", {
+  state <- simulation_loop(timesteps = 5, variables = list(
+    a = DoubleVariable$new(1:10)
+  ))
+  expect_no_error(simulation_loop(timesteps = 10, state = state, variables = list(
+    a = DoubleVariable$new(1:10),
+    b = DoubleVariable$new(1:10)
+  )))
+})
 
-  state <- simulation_loop(timesteps = 5, variables = make_variables(2))
+test_that("cannot add unnamed variables when resuming", {
+  state <- simulation_loop(timesteps = 5, variables = list(
+    DoubleVariable$new(1:10)
+  ))
+  expect_error(simulation_loop(timesteps = 10, state = state, variables = list(
+    DoubleVariable$new(1:10),
+    DoubleVariable$new(1:10)
+  )), "Saved state does not match resumed objects")
+})
 
-  expect_error(
-    simulation_loop(timesteps = 10, variables = make_variables(1), state = state),
-    "Checkpoint's variables do not match simulation's")
-  expect_error(
-    simulation_loop(timesteps = 10, variables = make_variables(3), state = state),
-    "Checkpoint's variables do not match simulation's")
+test_that("cannot remove variables when resuming", {
+  state <- simulation_loop(timesteps = 5, variables = list(
+    a = DoubleVariable$new(1:10),
+    b = DoubleVariable$new(1:10)
+  ))
+  expect_error(simulation_loop(timesteps = 10, state = state, variables = list(
+    a = DoubleVariable$new(1:10)
+  )), "Saved state contains more objects than expected: b")
+})
+
+test_that("can add events when resuming", {
+  state <- simulation_loop(timesteps = 5, events = list())
+
+  listener <- mockery::mock()
+  event <- Event$new()
+  event$schedule(7)
+  event$add_listener(listener)
+  simulation_loop(timesteps = 10, events = list(a=event))
+
+  mockery::expect_called(listener, 1)
+  mockery::expect_args(listener, 1, t = 8)
 })
 
 test_that("cannot resume with smaller timesteps", {

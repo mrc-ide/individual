@@ -23,8 +23,8 @@ if possible because certain operations will be faster.
 \item \href{#method-CategoricalVariable-size}{\code{CategoricalVariable$size()}}
 \item \href{#method-CategoricalVariable-.update}{\code{CategoricalVariable$.update()}}
 \item \href{#method-CategoricalVariable-.resize}{\code{CategoricalVariable$.resize()}}
-\item \href{#method-CategoricalVariable-.checkpoint}{\code{CategoricalVariable$.checkpoint()}}
-\item \href{#method-CategoricalVariable-.restore}{\code{CategoricalVariable$.restore()}}
+\item \href{#method-CategoricalVariable-save_state}{\code{CategoricalVariable$save_state()}}
+\item \href{#method-CategoricalVariable-restore_state}{\code{CategoricalVariable$restore_state()}}
 \item \href{#method-CategoricalVariable-clone}{\code{CategoricalVariable$clone()}}
 }
 }
@@ -179,22 +179,37 @@ get the size of the variable
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CategoricalVariable-.checkpoint"></a>}}
-\if{latex}{\out{\hypertarget{method-CategoricalVariable-.checkpoint}{}}}
-\subsection{Method \code{.checkpoint()}}{
+\if{html}{\out{<a id="method-CategoricalVariable-save_state"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-save_state}{}}}
+\subsection{Method \code{save_state()}}{
+save the state of the variable
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$.checkpoint()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$save_state()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CategoricalVariable-.restore"></a>}}
-\if{latex}{\out{\hypertarget{method-CategoricalVariable-.restore}{}}}
-\subsection{Method \code{.restore()}}{
+\if{html}{\out{<a id="method-CategoricalVariable-restore_state"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-restore_state}{}}}
+\subsection{Method \code{restore_state()}}{
+restore the variable from a previously saved state.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$.restore(values)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$restore_state(timestep, state)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{timestep}}{the timestep at which simulation is resumed. This
+parameter's value is ignored, it only exists to conform to a uniform
+interface with events.}
+
+\item{\code{state}}{the previously saved state, as returned by the
+\code{save_state} method. NULL is passed when restoring from a saved
+simulation in which this variable did not exist.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CategoricalVariable-clone"></a>}}
