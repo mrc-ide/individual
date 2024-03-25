@@ -122,6 +122,8 @@ save the state of the event
 \if{latex}{\out{\hypertarget{method-Event-restore_state}{}}}
 \subsection{Method \code{restore_state()}}{
 restore the event from a previously saved state.
+If the event was constructed with \code{restore = FALSE}, the state
+argument is ignored.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Event$restore_state(timestep, state)}\if{html}{\out{</div>}}
 }

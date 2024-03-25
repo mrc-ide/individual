@@ -113,14 +113,20 @@ save_object_state <- function(objects) {
 
 #' @title Restore the simulation state
 #' @description Restore the simulation state from a previous checkpoint.
-#' The state of passed events and variables is overwritten to match the state they
-#' had when the simulation was checkpointed. Returns the time step at which the
-#' simulation should resume.
-#' @param state the simulation state to restore, as returned by \code{\link[individual]{restore_state}}.
+#' The state of passed events and variables is overwritten to match the state
+#' they had when the simulation was checkpointed.
+#' @param state the simulation state to restore, as returned by
+#' \code{\link[individual]{restore_simulation_state}}.
 #' @param variables the list of Variables
 #' @param events the list of Events
-#' @param restore_random_state if TRUE, restore R's global random number generator's state from the checkpoint.
-restore_simulation_state <- function(state, variables, events, restore_random_state) {
+#' @param restore_random_state if TRUE, restore R's global random number
+#' generator's state from the checkpoint.
+#' @return  the time step at which the simulation should resume.
+restore_simulation_state <- function(
+  state,
+  variables,
+  events,
+  restore_random_state) {
   timesteps <- state$timesteps + 1
 
   restore_object_state(timesteps, variables, state$variables)

@@ -200,17 +200,17 @@ save the state of the event
 \subsection{Method \code{restore_state()}}{
 restore the event from a previously saved state.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$restore_state(time, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{TargetedEvent$restore_state(timestep, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{timestep}}{the timestep at which simulation is resumed.}
+
 \item{\code{state}}{the previously saved state, as returned by the
 \code{save_state} method. NULL is passed when restoring from a saved
 simulation in which this variable did not exist.}
-
-\item{\code{timestep}}{the timestep at which simulation is resumed.}
 }
 \if{html}{\out{</div>}}
 }
