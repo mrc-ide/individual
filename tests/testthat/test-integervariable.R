@@ -197,11 +197,11 @@ test_that("IntegerVariable supports checkpoint and restore", {
   old_variable$queue_update(values = seq_len(size))
   old_variable$.update()
 
-  state <- old_variable$.checkpoint()
+  state <- old_variable$save_state()
 
   new_variable <- IntegerVariable$new(rep(0, size))
-  new_variable$.restore(state)
+  new_variable$restore_state(1, state)
 
   expect_equal(new_variable$get_values(), seq_len(size))
-  expect_equal(new_variable$.checkpoint(), state)
+  expect_equal(new_variable$save_state(), state)
 })

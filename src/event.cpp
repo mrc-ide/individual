@@ -9,8 +9,8 @@
 #include "utils.h"
 
 //[[Rcpp::export]]
-Rcpp::XPtr<Event> create_event(bool restoreable) {
-    return Rcpp::XPtr<Event>(new Event(restoreable), true);
+Rcpp::XPtr<Event> create_event() {
+    return Rcpp::XPtr<Event>(new Event(), true);
 }
 
 //[[Rcpp::export]]
@@ -26,6 +26,11 @@ void event_base_tick(const Rcpp::XPtr<EventBase> event) {
 //[[Rcpp::export]]
 size_t event_base_get_timestep(const Rcpp::XPtr<EventBase> event) {
     return event->get_time();
+}
+
+//[[Rcpp::export]]
+void event_base_set_timestep(const Rcpp::XPtr<EventBase> event, size_t time) {
+    return event->set_time(time);
 }
 
 //[[Rcpp::export]]
@@ -49,13 +54,13 @@ std::vector<size_t> event_checkpoint(const Rcpp::XPtr<Event> event) {
 }
 
 //[[Rcpp::export]]
-void event_restore(const Rcpp::XPtr<Event> event, size_t time, std::vector<size_t> schedule) {
+void event_restore(const Rcpp::XPtr<Event> event, std::vector<size_t> schedule) {
     for (size_t event_ts: schedule) {
-        if (event_ts < time) {
+        if (event_ts < event->get_time()) {
             Rcpp::stop("schedule is in the past");
         }
     }
-    event->restore(time, schedule);
+    event->restore(schedule);
 }
 
 //[[Rcpp::export]]
@@ -202,7 +207,7 @@ Rcpp::List targeted_event_checkpoint(const Rcpp::XPtr<TargetedEvent> event) {
 }
 
 //[[Rcpp::export]]
-void targeted_event_restore(const Rcpp::XPtr<TargetedEvent> event, size_t time, Rcpp::List state) {
+void targeted_event_restore(const Rcpp::XPtr<TargetedEvent> event, Rcpp::List state) {
     std::vector<size_t> timesteps = state["timesteps"];
     std::vector<std::vector<size_t>> targets = state["targets"];;
 
@@ -212,7 +217,7 @@ void targeted_event_restore(const Rcpp::XPtr<TargetedEvent> event, size_t time, 
 
     std::vector<std::pair<size_t, individual_index_t>> schedule;
     for (size_t i = 0; i < timesteps.size(); i++) {
-        if (timesteps[i] < time) {
+        if (timesteps[i] < event->get_time()) {
             Rcpp::stop("schedule is in the past");
         }
         decrement(targets[i]);
@@ -221,7 +226,7 @@ void targeted_event_restore(const Rcpp::XPtr<TargetedEvent> event, size_t time, 
         schedule.push_back({timesteps[i], bitmap});
     }
 
-    event->restore(time, schedule);
+    event->restore(schedule);
 }
 
 // [[Rcpp::export]]

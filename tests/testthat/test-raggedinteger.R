@@ -100,13 +100,13 @@ test_that("RaggedInteger supports checkpoint and restore", {
   old_variable$queue_update(values = list(c(1,2)), index = c(3,4))
   old_variable$queue_update(values = list(c(7,3)), index = c(6,8))
   old_variable$.update()
-  state <- old_variable$.checkpoint()
+  state <- old_variable$save_state()
 
   new_variable <- RaggedInteger$new(rep(list(0), size))
-  new_variable$.restore(state)
+  new_variable$restore_state(1, state)
 
   expect_equal(new_variable$get_values(), list(
     0, 0, c(1,2), c(1,2), 0, c(7,3), 0, c(7,3), 0, 0
   ))
-  expect_equal(new_variable$.checkpoint(), state)
+  expect_equal(new_variable$save_state(), state)
 })

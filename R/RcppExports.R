@@ -165,8 +165,8 @@ double_variable_queue_shrink_bitset <- function(variable, index) {
     invisible(.Call(`_individual_double_variable_queue_shrink_bitset`, variable, index))
 }
 
-create_event <- function(restoreable) {
-    .Call(`_individual_create_event`, restoreable)
+create_event <- function() {
+    .Call(`_individual_create_event`)
 }
 
 create_targeted_event <- function(size) {
@@ -179,6 +179,10 @@ event_base_tick <- function(event) {
 
 event_base_get_timestep <- function(event) {
     .Call(`_individual_event_base_get_timestep`, event)
+}
+
+event_base_set_timestep <- function(event, time) {
+    invisible(.Call(`_individual_event_base_set_timestep`, event, time))
 }
 
 event_base_should_trigger <- function(event) {
@@ -197,8 +201,8 @@ event_checkpoint <- function(event) {
     .Call(`_individual_event_checkpoint`, event)
 }
 
-event_restore <- function(event, time, schedule) {
-    invisible(.Call(`_individual_event_restore`, event, time, schedule))
+event_restore <- function(event, schedule) {
+    invisible(.Call(`_individual_event_restore`, event, schedule))
 }
 
 targeted_event_clear_schedule_vector <- function(event, target) {
@@ -257,8 +261,8 @@ targeted_event_checkpoint <- function(event) {
     .Call(`_individual_targeted_event_checkpoint`, event)
 }
 
-targeted_event_restore <- function(event, time, state) {
-    invisible(.Call(`_individual_targeted_event_restore`, event, time, state))
+targeted_event_restore <- function(event, state) {
+    invisible(.Call(`_individual_targeted_event_restore`, event, state))
 }
 
 process_listener <- function(event, listener) {

@@ -152,11 +152,22 @@ RaggedDouble <- R6Class(
     .update = function() variable_update(self$.variable),
     .resize = function() variable_resize(self$.variable),
 
-    .checkpoint = function() self$get_values(),
-    .restore = function(values) {
-      stopifnot(length(values) == variable_get_size(self$.variable))
-      self$queue_update(values)
-      self$.update()
+    #' @description save the state of the variable
+    save_state = function() self$get_values(),
+
+    #' @description restore the variable from a previously saved state.
+    #' @param timestep the timestep at which simulation is resumed. This
+    #' parameter's value is ignored, it only exists to conform to a uniform
+    #' interface with events.
+    #' @param state the previously saved state, as returned by the
+    #' \code{save_state} method. NULL is passed when restoring from a saved
+    #' simulation in which this variable did not exist.
+    restore_state = function(timestep, state) {
+      if (!is.null(state)) {
+        stopifnot(length(state) == variable_get_size(self$.variable))
+        self$queue_update(state)
+        self$.update()
+      }
     }
   )
 )

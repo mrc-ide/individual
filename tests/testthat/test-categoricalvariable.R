@@ -91,13 +91,13 @@ test_that("CategoricalVariables supports checkpoint and restore", {
   old_variable$queue_update('R', c(2, 7))
   old_variable$.update()
 
-  state <- old_variable$.checkpoint()
+  state <- old_variable$save_state()
 
   new_variable <- CategoricalVariable$new(SIR, rep('S', size))
-  new_variable$.restore(state)
+  new_variable$restore_state(1, state)
 
   expect_equal(new_variable$get_index_of('S')$to_vector(), c(4,5,6,8,9,10))
   expect_equal(new_variable$get_index_of('I')$to_vector(), c(1,3))
   expect_equal(new_variable$get_index_of('R')$to_vector(), c(2,7))
-  expect_equal(new_variable$.checkpoint(), state)
+  expect_equal(new_variable$save_state(), state)
 })

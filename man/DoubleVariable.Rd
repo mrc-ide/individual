@@ -19,8 +19,8 @@ Represents a continuous variable for an individual.
 \item \href{#method-DoubleVariable-size}{\code{DoubleVariable$size()}}
 \item \href{#method-DoubleVariable-.update}{\code{DoubleVariable$.update()}}
 \item \href{#method-DoubleVariable-.resize}{\code{DoubleVariable$.resize()}}
-\item \href{#method-DoubleVariable-.checkpoint}{\code{DoubleVariable$.checkpoint()}}
-\item \href{#method-DoubleVariable-.restore}{\code{DoubleVariable$.restore()}}
+\item \href{#method-DoubleVariable-save_state}{\code{DoubleVariable$save_state()}}
+\item \href{#method-DoubleVariable-restore_state}{\code{DoubleVariable$restore_state()}}
 \item \href{#method-DoubleVariable-clone}{\code{DoubleVariable$clone()}}
 }
 }
@@ -199,22 +199,37 @@ get the size of the variable
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DoubleVariable-.checkpoint"></a>}}
-\if{latex}{\out{\hypertarget{method-DoubleVariable-.checkpoint}{}}}
-\subsection{Method \code{.checkpoint()}}{
+\if{html}{\out{<a id="method-DoubleVariable-save_state"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-save_state}{}}}
+\subsection{Method \code{save_state()}}{
+save the state of the variable
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$.checkpoint()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$save_state()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DoubleVariable-.restore"></a>}}
-\if{latex}{\out{\hypertarget{method-DoubleVariable-.restore}{}}}
-\subsection{Method \code{.restore()}}{
+\if{html}{\out{<a id="method-DoubleVariable-restore_state"></a>}}
+\if{latex}{\out{\hypertarget{method-DoubleVariable-restore_state}{}}}
+\subsection{Method \code{restore_state()}}{
+restore the variable from a previously saved state.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$.restore(values)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DoubleVariable$restore_state(timestep, state)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{timestep}}{the timestep at which simulation is resumed. This
+parameter's value is ignored, it only exists to conform to a uniform
+interface with events.}
+
+\item{\code{state}}{the previously saved state, as returned by the
+\code{save_state} method. NULL is passed when restoring from a saved
+simulation in which this variable did not exist.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DoubleVariable-clone"></a>}}

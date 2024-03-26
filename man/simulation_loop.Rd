@@ -26,6 +26,9 @@ simulation_loop(
 
 \item{restore_random_state}{if TRUE, restore R's global random number generator's state from the checkpoint.}
 }
+\value{
+Invisibly, the saved state at the end of the simulation, suitable for later resuming.
+}
 \description{
 Run a simulation where event listeners take precedence
 over processes for state changes.

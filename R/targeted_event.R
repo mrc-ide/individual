@@ -118,11 +118,21 @@ TargetedEvent <- R6Class(
 
     .resize = function() targeted_event_resize(self$.event),
 
-    .checkpoint = function() {
+    #' @description save the state of the event
+    save_state = function() {
       targeted_event_checkpoint(self$.event)
     },
-    .restore = function(time, schedule) {
-      targeted_event_restore(self$.event, time, schedule)
+
+    #' @description restore the event from a previously saved state.
+    #' @param timestep the timestep at which simulation is resumed.
+    #' @param state the previously saved state, as returned by the
+    #' \code{save_state} method. NULL is passed when restoring from a saved
+    #' simulation in which this variable did not exist.
+    restore_state = function(timestep, state) {
+      event_base_set_timestep(self$.event, timestep)
+      if (!is.null(state)) {
+        targeted_event_restore(self$.event, state)
+      }
     }
   )
 )

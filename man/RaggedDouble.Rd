@@ -18,8 +18,8 @@ This is a ragged array which stores doubles (numeric values).
 \item \href{#method-RaggedDouble-size}{\code{RaggedDouble$size()}}
 \item \href{#method-RaggedDouble-.update}{\code{RaggedDouble$.update()}}
 \item \href{#method-RaggedDouble-.resize}{\code{RaggedDouble$.resize()}}
-\item \href{#method-RaggedDouble-.checkpoint}{\code{RaggedDouble$.checkpoint()}}
-\item \href{#method-RaggedDouble-.restore}{\code{RaggedDouble$.restore()}}
+\item \href{#method-RaggedDouble-save_state}{\code{RaggedDouble$save_state()}}
+\item \href{#method-RaggedDouble-restore_state}{\code{RaggedDouble$restore_state()}}
 \item \href{#method-RaggedDouble-clone}{\code{RaggedDouble$clone()}}
 }
 }
@@ -177,22 +177,37 @@ get the size of the variable
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-RaggedDouble-.checkpoint"></a>}}
-\if{latex}{\out{\hypertarget{method-RaggedDouble-.checkpoint}{}}}
-\subsection{Method \code{.checkpoint()}}{
+\if{html}{\out{<a id="method-RaggedDouble-save_state"></a>}}
+\if{latex}{\out{\hypertarget{method-RaggedDouble-save_state}{}}}
+\subsection{Method \code{save_state()}}{
+save the state of the variable
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RaggedDouble$.checkpoint()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RaggedDouble$save_state()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-RaggedDouble-.restore"></a>}}
-\if{latex}{\out{\hypertarget{method-RaggedDouble-.restore}{}}}
-\subsection{Method \code{.restore()}}{
+\if{html}{\out{<a id="method-RaggedDouble-restore_state"></a>}}
+\if{latex}{\out{\hypertarget{method-RaggedDouble-restore_state}{}}}
+\subsection{Method \code{restore_state()}}{
+restore the variable from a previously saved state.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RaggedDouble$.restore(values)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RaggedDouble$restore_state(timestep, state)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{timestep}}{the timestep at which simulation is resumed. This
+parameter's value is ignored, it only exists to conform to a uniform
+interface with events.}
+
+\item{\code{state}}{the previously saved state, as returned by the
+\code{save_state} method. NULL is passed when restoring from a saved
+simulation in which this variable did not exist.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RaggedDouble-clone"></a>}}

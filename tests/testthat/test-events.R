@@ -123,9 +123,9 @@ test_that("events can be saved and restored", {
 
   new_event <- Event$new()
   new_event$add_listener(listener)
-  new_event$.restore(
+  new_event$restore_state(
     old_event$.timestep(),
-    old_event$.checkpoint())
+    old_event$save_state())
 
   expect_equal(new_event$.timestep(), 3)
 
@@ -152,9 +152,9 @@ test_that("events are cleared when restored", {
   # Schedule at t=2. This will be cleared and overridden when restoring,
   # replaced by the earlier t=4 schedule.
   new_event$schedule(1)
-  new_event$.restore(
+  new_event$restore_state(
     old_event$.timestep(),
-    old_event$.checkpoint())
+    old_event$save_state())
 
   #time=1
   new_event$.process()
@@ -197,9 +197,9 @@ test_that("event is not cleared when restore is disabled", {
   new_event$schedule(5) # t=6, this will trigger
 
   # This should restore the timestep, but not any of the old event's schedule.
-  new_event$.restore(
+  new_event$restore_state(
     old_event$.timestep(),
-    old_event$.checkpoint())
+    old_event$save_state())
 
   expect_equal(new_event$.timestep(), 3)
 
@@ -224,6 +224,38 @@ test_that("event is not cleared when restore is disabled", {
   mockery::expect_called(listener, 1)
   mockery::expect_args(listener, 1, t = 6)
   new_event$.tick()
+})
+
+test_that("event can be restored from NULL state", {
+  listener <- mockery::mock()
+
+  event <- Event$new()
+  event$schedule(6) # t=7
+  event$add_listener(listener)
+
+  event$restore_state(5, NULL)
+  expect_equal(event$.timestep(), 5)
+
+  # time = 5
+  event$.process()
+  mockery::expect_called(listener, 0)
+  event$.tick()
+
+  # time = 6
+  event$.process()
+  mockery::expect_called(listener, 0)
+  event$.tick()
+
+  # time = 7
+  event$.process()
+  mockery::expect_called(listener, 1)
+  mockery::expect_args(listener, 1, t = 7)
+  event$.tick()
+
+  # time = 8
+  event$.process()
+  mockery::expect_called(listener, 1)
+  event$.tick()
 })
 
 test_that("empty event never triggers", {

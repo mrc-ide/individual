@@ -46,6 +46,7 @@ protected:
 public:
     virtual void tick();
     virtual size_t get_time() const;
+    virtual void set_time(size_t time) = 0;
     
     virtual bool should_trigger() = 0;
     virtual ~EventBase() = default;
@@ -70,10 +71,8 @@ inline size_t EventBase::get_time() const {
 class Event : public EventBase {
 
     std::set<size_t> simple_schedule;
-    bool restoreable;
 
 public:
-    Event(bool restoreable);
     virtual ~Event() = default;
 
     virtual void process(Rcpp::XPtr<listener_t> listener);
@@ -83,16 +82,14 @@ public:
     virtual void schedule(std::vector<double> delays);
     virtual void clear_schedule();
 
+    virtual void set_time(size_t time) override;
     virtual std::vector<size_t> checkpoint();
-    virtual void restore(size_t time, std::vector<size_t> schedule);
+    virtual void restore(std::vector<size_t> schedule);
 };
 
 //' @title process an event by calling a listener
 inline void Event::process(Rcpp::XPtr<listener_t> listener) {
     (*listener)(get_time());
-}
-
-inline Event::Event(bool restoreable) : restoreable(restoreable) {
 }
 
 //' @title should first event fire on this timestep?
@@ -126,18 +123,16 @@ inline std::vector<size_t> Event::checkpoint() {
     return {simple_schedule.begin(), simple_schedule.end()};
 }
 
-//' @title restore this event's state from a previous checkpoint
-inline void Event::restore(size_t time, std::vector<size_t> schedule) {
+inline void Event::set_time(size_t time) {
     t = time;
-    if (restoreable) {
-        simple_schedule.clear();
-        simple_schedule.insert(schedule.begin(), schedule.end());
-    } else {
-        // We don't restore the event, but it is possible that the resume time
-        // is beyond some already scheduled timesteps. These need to be removed.
-        auto it = simple_schedule.lower_bound(time);
-        simple_schedule.erase(simple_schedule.begin(), it);
-    }
+    auto it = simple_schedule.lower_bound(time);
+    simple_schedule.erase(simple_schedule.begin(), it);
+}
+
+//' @title restore this event's state from a previous checkpoint
+inline void Event::restore(std::vector<size_t> schedule) {
+    simple_schedule.clear();
+    simple_schedule.insert(schedule.begin(), schedule.end());
 }
 
 //' @title a targeted event in the simulation
@@ -186,7 +181,8 @@ public:
     virtual individual_index_t get_scheduled() const;
 
     virtual std::vector<std::pair<size_t, individual_index_t>> checkpoint() const;
-    virtual void restore(size_t time, std::vector<std::pair<size_t, individual_index_t>> schedule);
+    virtual void set_time(size_t time) override;
+    virtual void restore(std::vector<std::pair<size_t, individual_index_t>> schedule);
 };
 
 inline TargetedEvent::TargetedEvent(size_t size)
@@ -402,12 +398,16 @@ TargetedEvent::checkpoint() const {
     return {targeted_schedule.begin(), targeted_schedule.end()};
 }
 
+inline void TargetedEvent::set_time(size_t time) {
+    t = time;
+    auto it = targeted_schedule.lower_bound(time);
+    targeted_schedule.erase(targeted_schedule.begin(), it);
+}
+
 //' @title restore this event's state from a previous checkpoint
 inline void TargetedEvent::restore(
-        size_t time,
         std::vector<std::pair<size_t, individual_index_t>> schedule
 ) {
-    t = time;
     targeted_schedule.clear();
     targeted_schedule.insert(schedule.begin(), schedule.end());
 }
