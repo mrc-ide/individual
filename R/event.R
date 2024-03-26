@@ -39,15 +39,16 @@ EventBase <- R6Class(
 Event <- R6Class(
   'Event',
   inherit = EventBase,
+  private = list(
+    should_restore = FALSE
+  ),
   public = list(
-    .should_restore = FALSE,
-
     #' @description Initialise an Event.
     #' @param restore if true, the schedule of this event is restored when
     #' restoring from a saved simulation.
     initialize = function(restore = TRUE) {
       self$.event <- create_event()
-      self$.should_restore = restore
+      private$should_restore = restore
     },
 
     #' @description Schedule this event to occur in the future.
@@ -91,7 +92,7 @@ Event <- R6Class(
     #' simulation in which this variable did not exist.
     restore_state = function(timestep, state) {
       event_base_set_timestep(self$.event, timestep)
-      if (self$.should_restore && !is.null(state)) {
+      if (private$should_restore && !is.null(state)) {
         event_restore(self$.event, state)
       }
     }

@@ -8,7 +8,7 @@ restore_simulation_state(state, variables, events, restore_random_state)
 }
 \arguments{
 \item{state}{the simulation state to restore, as returned by
-\code{\link[individual]{restore_simulation_state}}.}
+\code{\link[individual]{save_simulation_state}}.}
 
 \item{variables}{the list of Variables}
 

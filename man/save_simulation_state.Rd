@@ -14,7 +14,7 @@ save_simulation_state(timesteps, variables, events)
 \item{events}{the list of Events}
 }
 \value{
-the saved simulation state
+the saved simulation state.
 }
 \description{
 Save the simulation state in an R object, allowing it to be

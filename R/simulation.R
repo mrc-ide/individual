@@ -87,7 +87,7 @@ simulation_loop <- function(
 #' @param timesteps the number of time steps that have already been simulated
 #' @param variables the list of Variables
 #' @param events the list of Events
-#' @return the saved simulation state
+#' @return the saved simulation state.
 save_simulation_state <- function(timesteps, variables, events) {
   random_state <- .GlobalEnv$.Random.seed
   list(
@@ -99,9 +99,12 @@ save_simulation_state <- function(timesteps, variables, events) {
 }
 
 #' @title Save the state of a simulation object or set of objects.
-#' @param objects a simulation object (ie. a variable or event), or list
-#' thereof.
-#' @return the saved states of the objects
+#' @param objects a simulation object (eg. a variable or event) or an
+#' arbitrarily nested list structure of such objects.
+#' @return the saved states of the objects. This has the same shape as the given
+#' \code{objects}: if a list was passed as an argument, this returns the
+#' corresponding list of saved states. If a singular object was passed, this
+#' returns just that particular object's state.
 #' @export
 save_object_state <- function(objects) {
   if (is.list(objects)) {
@@ -116,7 +119,7 @@ save_object_state <- function(objects) {
 #' The state of passed events and variables is overwritten to match the state
 #' they had when the simulation was checkpointed.
 #' @param state the simulation state to restore, as returned by
-#' \code{\link[individual]{restore_simulation_state}}.
+#' \code{\link[individual]{save_simulation_state}}.
 #' @param variables the list of Variables
 #' @param events the list of Events
 #' @param restore_random_state if TRUE, restore R's global random number
@@ -153,8 +156,15 @@ is_uniquely_named <- function(x) {
 #' extended with more features upon resuming. In this case, the
 #' \code{restore_state} method is called with a \code{NULL} argument.
 #'
-#' @param objects a simulation object (ie. a variable or event), or list
-#' thereof.
+#' @param timesteps the number of time steps that have already been simulated
+#' @param objects a simulation object (eg. a variable or event) or an
+#' arbitrarily nested list structure of such objects.
+#' @param state a saved simulation state for the given objects, as returned by
+#' \code{\link[individual]{save_object_state}}. This should have the same shape
+#' as the \code{objects} argument: if a list of objects is given, then
+#' \code{state} should be a list of corresponding states. If NULL is passed,
+#' then each object's \code{restore_state} method is called with NULL as
+#' its argument.
 #' @export
 restore_object_state <- function(timesteps, objects, state) {
   if (is.list(objects)) {
@@ -176,6 +186,7 @@ restore_object_state <- function(timesteps, objects, state) {
     } else {
       stop("Saved state does not match resumed objects")
     }
+
     for (k in keys) {
       restore_object_state(timesteps, objects[[k]], state[[k]])
     }

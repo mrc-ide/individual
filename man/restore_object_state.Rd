@@ -7,8 +7,17 @@
 restore_object_state(timesteps, objects, state)
 }
 \arguments{
-\item{objects}{a simulation object (ie. a variable or event), or list
-thereof.}
+\item{timesteps}{the number of time steps that have already been simulated}
+
+\item{objects}{a simulation object (eg. a variable or event) or an
+arbitrarily nested list structure of such objects.}
+
+\item{state}{a saved simulation state for the given objects, as returned by
+\code{\link[individual]{save_object_state}}. This should have the same shape
+as the \code{objects} argument: if a list of objects is given, then
+\code{state} should be a list of corresponding states. If NULL is passed,
+then each object's \code{restore_state} method is called with NULL as
+its argument.}
 }
 \description{
 Restore the state of one or more simulation objects. The

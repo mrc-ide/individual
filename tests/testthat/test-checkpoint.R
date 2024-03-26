@@ -207,3 +207,169 @@ test_that("cannot resume with smaller timesteps", {
     simulation_loop(timesteps = 10, state = state),
     "Restored state is already longer than timesteps")
 })
+
+MockState <- R6Class(
+  'MockState',
+  private = list(value = NULL),
+  public = list(
+    save_state = function() private$value,
+    restore_state = NULL,
+    initialize = function(value = NULL) {
+      private$value <- value
+      self$restore_state <- mockery::mock()
+    }
+  )
+)
+
+test_that("saved object's state is returned", {
+  o <- MockState$new("foo")
+  state <- save_object_state(o)
+  expect_identical(state, "foo")
+})
+
+test_that("saved objects' state is returned as list", {
+  o1 <- MockState$new("foo")
+  o2 <- MockState$new("bar")
+  state <- save_object_state(list(o1, o2))
+  expect_identical(state, list("foo", "bar"))
+})
+
+test_that("saved objects' state preserves names", {
+  o1 <- MockState$new("foo")
+  o2 <- MockState$new("bar")
+  state <- save_object_state(list(x=o1, y=o2))
+  expect_identical(state, list(x="foo", y="bar"))
+})
+
+test_that("saved objects' state preserves nested structure", {
+  o1 <- MockState$new("foo")
+  o2 <- MockState$new("bar")
+  o3 <- MockState$new("baz")
+
+  state <- save_object_state(list(x=o1, y=list(o2, o3)))
+  expect_identical(state, list(x="foo", y=list("bar", "baz")))
+})
+
+test_that("empty list is returned for empty list of objects", {
+  state <- save_object_state(list())
+  expect_identical(state, list())
+})
+
+test_that("restore_state method is called on object", {
+  o <- MockState$new()
+  restore_object_state(123, o, "state")
+  mockery::expect_called(o$restore_state, 1)
+  mockery::expect_args(o$restore_state, 1, 123, "state")
+})
+
+test_that("restore_state method is called on object list", {
+  o1 <- MockState$new()
+  o2 <- MockState$new()
+  restore_object_state(123, list(o1, o2), list("hello", "world"))
+
+  mockery::expect_called(o1$restore_state, 1)
+  mockery::expect_args(o1$restore_state, 1, 123, "hello")
+
+  mockery::expect_called(o2$restore_state, 1)
+  mockery::expect_args(o2$restore_state, 1, 123, "world")
+})
+
+test_that("restore_state method is called on named object list", {
+  o1 <- MockState$new()
+  o2 <- MockState$new()
+
+  # Lists get paired up by name, even if the order is different
+  restore_object_state(123, list(x=o1, y=o2), list(y="world", x="hello"))
+
+  mockery::expect_called(o1$restore_state, 1)
+  mockery::expect_args(o1$restore_state, 1, 123, "hello")
+
+  mockery::expect_called(o2$restore_state, 1)
+  mockery::expect_args(o2$restore_state, 1, 123, "world")
+})
+
+test_that("restore_state method is called on nested object list", {
+  o1 <- MockState$new()
+  o2 <- MockState$new()
+  o3 <- MockState$new()
+
+  restore_object_state(
+    123,
+    list(list(o1, o2), o3),
+    list(list("foo", "bar"), "baz"))
+
+  mockery::expect_called(o1$restore_state, 1)
+  mockery::expect_args(o1$restore_state, 1, 123, "foo")
+
+  mockery::expect_called(o2$restore_state, 1)
+  mockery::expect_args(o2$restore_state, 1, 123, "bar")
+
+  mockery::expect_called(o3$restore_state, 1)
+  mockery::expect_args(o3$restore_state, 1, 123, "baz")
+})
+
+test_that("restore_state method is called with NULL for new objects", {
+  o1 <- MockState$new()
+  o2 <- MockState$new()
+  o3 <- MockState$new()
+
+  restore_object_state(
+    123,
+    list(x=o1, y=o2, z=o3),
+    list(x="foo", z="baz"))
+
+  mockery::expect_called(o1$restore_state, 1)
+  mockery::expect_args(o1$restore_state, 1, 123, "foo")
+
+  mockery::expect_called(o2$restore_state, 1)
+  mockery::expect_args(o2$restore_state, 1, 123, NULL)
+
+  mockery::expect_called(o3$restore_state, 1)
+  mockery::expect_args(o3$restore_state, 1, 123, "baz")
+})
+
+test_that("cannot restore objects with partial unnamed list", {
+  o1 <- MockState$new()
+  o2 <- MockState$new()
+
+  expect_error(
+    restore_object_state(123, list(o1, o2), list("foo")),
+    "Saved state does not match resumed objects")
+})
+
+test_that("restore_state method is called with NULL for new list of objects", {
+  o1 <- MockState$new()
+  o2 <- MockState$new()
+  o3 <- MockState$new()
+
+  restore_object_state(
+    123,
+    list(x=o1, y=list(o2, o3)),
+    list(x="foo"))
+
+  mockery::expect_called(o1$restore_state, 1)
+  mockery::expect_args(o1$restore_state, 1, 123, "foo")
+
+  mockery::expect_called(o2$restore_state, 1)
+  mockery::expect_args(o2$restore_state, 1, 123, NULL)
+
+  mockery::expect_called(o3$restore_state, 1)
+  mockery::expect_args(o3$restore_state, 1, 123, NULL)
+})
+
+test_that("restore_state method is called with NULL for all objects", {
+  o1 <- MockState$new()
+  o2 <- MockState$new()
+  o3 <- MockState$new()
+
+  restore_object_state(123, list(x=o1, y=o2, z=o3), NULL)
+
+  mockery::expect_called(o1$restore_state, 1)
+  mockery::expect_args(o1$restore_state, 1, 123, NULL)
+
+  mockery::expect_called(o2$restore_state, 1)
+  mockery::expect_args(o2$restore_state, 1, 123, NULL)
+
+  mockery::expect_called(o3$restore_state, 1)
+  mockery::expect_args(o3$restore_state, 1, 123, NULL)
+})

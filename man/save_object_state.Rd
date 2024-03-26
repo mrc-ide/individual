@@ -7,11 +7,14 @@
 save_object_state(objects)
 }
 \arguments{
-\item{objects}{a simulation object (ie. a variable or event), or list
-thereof.}
+\item{objects}{a simulation object (eg. a variable or event) or an
+arbitrarily nested list structure of such objects.}
 }
 \value{
-the saved states of the objects
+the saved states of the objects. This has the same shape as the given
+\code{objects}: if a list was passed as an argument, this returns the
+corresponding list of saved states. If a singular object was passed, this
+returns just that particular object's state.
 }
 \description{
 Save the state of a simulation object or set of objects.
