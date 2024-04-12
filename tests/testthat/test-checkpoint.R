@@ -173,14 +173,14 @@ test_that("cannot add unnamed variables when resuming", {
   )), "Saved state does not match resumed objects")
 })
 
-test_that("cannot remove variables when resuming", {
+test_that("can remove variables when resuming", {
   state <- simulation_loop(timesteps = 5, variables = list(
     a = DoubleVariable$new(1:10),
     b = DoubleVariable$new(1:10)
   ))
-  expect_error(simulation_loop(timesteps = 10, state = state, variables = list(
+  expect_no_error(simulation_loop(timesteps = 10, state = state, variables = list(
     a = DoubleVariable$new(1:10)
-  )), "Saved state contains more objects than expected: b")
+  )))
 })
 
 test_that("can add events when resuming", {
@@ -372,4 +372,20 @@ test_that("restore_state method is called with NULL for all objects", {
 
   mockery::expect_called(o3$restore_state, 1)
   mockery::expect_args(o3$restore_state, 1, 123, NULL)
+})
+
+test_that("restore_state method is called even when other objects are absent", {
+  o1 <- MockState$new()
+  o2 <- MockState$new()
+
+  restore_object_state(
+    123,
+    list(x=o1, z=o2),
+    list(x="foo", y="bar", z="baz"))
+
+  mockery::expect_called(o1$restore_state, 1)
+  mockery::expect_args(o1$restore_state, 1, 123, "foo")
+
+  mockery::expect_called(o2$restore_state, 1)
+  mockery::expect_args(o2$restore_state, 1, 123, "baz")
 })
