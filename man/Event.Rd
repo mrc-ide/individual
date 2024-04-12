@@ -18,8 +18,8 @@ Describes a general event in the simulation.
 \item \href{#method-Event-.process_listener}{\code{Event$.process_listener()}}
 \item \href{#method-Event-.process_listener_cpp}{\code{Event$.process_listener_cpp()}}
 \item \href{#method-Event-.resize}{\code{Event$.resize()}}
-\item \href{#method-Event-.checkpoint}{\code{Event$.checkpoint()}}
-\item \href{#method-Event-.restore}{\code{Event$.restore()}}
+\item \href{#method-Event-save_state}{\code{Event$save_state()}}
+\item \href{#method-Event-restore_state}{\code{Event$restore_state()}}
 \item \href{#method-Event-clone}{\code{Event$clone()}}
 }
 }
@@ -45,8 +45,8 @@ Initialise an Event.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{restore}}{if true, the schedule of this event is restored when restoring from a saved
-simulation.}
+\item{\code{restore}}{if true, the schedule of this event is restored when
+restoring from a saved simulation.}
 }
 \if{html}{\out{</div>}}
 }
@@ -108,22 +108,37 @@ Stop a future event from triggering.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Event-.checkpoint"></a>}}
-\if{latex}{\out{\hypertarget{method-Event-.checkpoint}{}}}
-\subsection{Method \code{.checkpoint()}}{
+\if{html}{\out{<a id="method-Event-save_state"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-save_state}{}}}
+\subsection{Method \code{save_state()}}{
+save the state of the event
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Event$.checkpoint()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Event$save_state()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Event-.restore"></a>}}
-\if{latex}{\out{\hypertarget{method-Event-.restore}{}}}
-\subsection{Method \code{.restore()}}{
+\if{html}{\out{<a id="method-Event-restore_state"></a>}}
+\if{latex}{\out{\hypertarget{method-Event-restore_state}{}}}
+\subsection{Method \code{restore_state()}}{
+restore the event from a previously saved state.
+If the event was constructed with \code{restore = FALSE}, the state
+argument is ignored.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Event$.restore(time, schedule)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Event$restore_state(timestep, state)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{timestep}}{the timestep at which simulation is resumed.}
+
+\item{\code{state}}{the previously saved state, as returned by the
+\code{save_state} method. NULL is passed when restoring from a saved
+simulation in which this variable did not exist.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Event-clone"></a>}}

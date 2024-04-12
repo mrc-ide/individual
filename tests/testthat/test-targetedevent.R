@@ -552,9 +552,9 @@ test_that("targeted events can be saved and restored", {
 
   new_event <- TargetedEvent$new(10)
   new_event$add_listener(listener)
-  new_event$.restore(
+  new_event$restore_state(
     old_event$.timestep(),
-    old_event$.checkpoint())
+    old_event$save_state())
 
   #time = 4
   new_event$.process()
@@ -577,9 +577,9 @@ test_that("targeted events are cleared when restored", {
   new_event$schedule(c(1, 3), 2)
   new_event$schedule(c(5), 3)
 
-  new_event$.restore(
+  new_event$restore_state(
     old_event$.timestep(),
-    old_event$.checkpoint())
+    old_event$save_state())
 
   #time=1
   new_event$.process()
@@ -601,6 +601,12 @@ test_that("targeted events are cleared when restored", {
   #time=4
   new_event$.process()
   mockery::expect_called(listener, 1)
+})
+
+test_that("targeted event can be restored from NULL state", {
+  event <- TargetedEvent$new(10)
+  event$restore_state(5, NULL)
+  expect_equal(event$.timestep(), 5)
 })
 
 test_that("empty targeted event never triggers", {

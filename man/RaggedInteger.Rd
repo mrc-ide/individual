@@ -18,8 +18,8 @@ This is a ragged array which stores integers (numeric values).
 \item \href{#method-RaggedInteger-size}{\code{RaggedInteger$size()}}
 \item \href{#method-RaggedInteger-.update}{\code{RaggedInteger$.update()}}
 \item \href{#method-RaggedInteger-.resize}{\code{RaggedInteger$.resize()}}
-\item \href{#method-RaggedInteger-.checkpoint}{\code{RaggedInteger$.checkpoint()}}
-\item \href{#method-RaggedInteger-.restore}{\code{RaggedInteger$.restore()}}
+\item \href{#method-RaggedInteger-save_state}{\code{RaggedInteger$save_state()}}
+\item \href{#method-RaggedInteger-restore_state}{\code{RaggedInteger$restore_state()}}
 \item \href{#method-RaggedInteger-clone}{\code{RaggedInteger$clone()}}
 }
 }
@@ -177,22 +177,37 @@ get the size of the variable
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-RaggedInteger-.checkpoint"></a>}}
-\if{latex}{\out{\hypertarget{method-RaggedInteger-.checkpoint}{}}}
-\subsection{Method \code{.checkpoint()}}{
+\if{html}{\out{<a id="method-RaggedInteger-save_state"></a>}}
+\if{latex}{\out{\hypertarget{method-RaggedInteger-save_state}{}}}
+\subsection{Method \code{save_state()}}{
+save the state of the variable
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RaggedInteger$.checkpoint()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RaggedInteger$save_state()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-RaggedInteger-.restore"></a>}}
-\if{latex}{\out{\hypertarget{method-RaggedInteger-.restore}{}}}
-\subsection{Method \code{.restore()}}{
+\if{html}{\out{<a id="method-RaggedInteger-restore_state"></a>}}
+\if{latex}{\out{\hypertarget{method-RaggedInteger-restore_state}{}}}
+\subsection{Method \code{restore_state()}}{
+restore the variable from a previously saved state.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RaggedInteger$.restore(values)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RaggedInteger$restore_state(timestep, state)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{timestep}}{the timestep at which simulation is resumed. This
+parameter's value is ignored, it only exists to conform to a uniform
+interface with events.}
+
+\item{\code{state}}{the previously saved state, as returned by the
+\code{save_state} method. NULL is passed when restoring from a saved
+simulation in which this variable did not exist.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-RaggedInteger-clone"></a>}}
