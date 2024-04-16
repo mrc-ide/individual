@@ -76,9 +76,6 @@
     <loc>/reference/categorical_count_renderer_process.html</loc>
   </url>
   <url>
-    <loc>/reference/checkpoint_state.html</loc>
-  </url>
-  <url>
     <loc>/reference/filter_bitset.html</loc>
   </url>
   <url>
@@ -100,7 +97,16 @@
     <loc>/reference/reschedule_listener.html</loc>
   </url>
   <url>
-    <loc>/reference/restore_state.html</loc>
+    <loc>/reference/restore_object_state.html</loc>
+  </url>
+  <url>
+    <loc>/reference/restore_simulation_state.html</loc>
+  </url>
+  <url>
+    <loc>/reference/save_object_state.html</loc>
+  </url>
+  <url>
+    <loc>/reference/save_simulation_state.html</loc>
   </url>
   <url>
     <loc>/reference/simulation_loop.html</loc>
