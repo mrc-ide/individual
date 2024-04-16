@@ -1,3 +1,7 @@
+# individual 0.1.16
+
+  * Allow events and variables to be added and removed when restoring the simulation.
+
 # individual 0.1.15
 
   * Added an `all.equal` implementation for bitsets.
