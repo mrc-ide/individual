@@ -27,5 +27,7 @@ reference:
 - title: "Simulation"
 - contents:
   - simulation_loop
-  - checkpoint_state
-  - restore_state
+  - restore_simulation_state
+  - save_simulation_state
+  - save_object_state
+  - restore_object_state

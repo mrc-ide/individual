@@ -96,21 +96,31 @@ CategoricalVariable <- R6Class(
     .update = function() variable_update(self$.variable),
     .resize = function() variable_resize(self$.variable),
 
-    .checkpoint = function() {
+    #' @description save the state of the variable
+    save_state = function() {
       categories <- self$get_categories()
       values <- lapply(categories, function(c) self$get_index_of(c)$to_vector())
       names(values) <- categories
       values
     },
 
-    .restore = function(values) {
-      stopifnot(names(values) == self$get_categories())
-      stopifnot(sum(sapply(values, length)) == categorical_variable_get_size(self$.variable))
+    #' @description restore the variable from a previously saved state.
+    #' @param timestep the timestep at which simulation is resumed. This
+    #' parameter's value is ignored, it only exists to conform to a uniform
+    #' interface with events.
+    #' @param state the previously saved state, as returned by the
+    #' \code{save_state} method. NULL is passed when restoring from a saved
+    #' simulation in which this variable did not exist.
+    restore_state = function(timestep, state) {
+      if (!is.null(state)) {
+        stopifnot(names(state) == self$get_categories())
+        stopifnot(sum(sapply(state, length)) == categorical_variable_get_size(self$.variable))
 
-      for (c in names(values)) {
-        self$queue_update(c, values[[c]])
+        for (c in names(state)) {
+          self$queue_update(c, state[[c]])
+        }
+        self$.update()
       }
-      self$.update()
     }
   )
 )

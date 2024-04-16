@@ -39,12 +39,16 @@ EventBase <- R6Class(
 Event <- R6Class(
   'Event',
   inherit = EventBase,
+  private = list(
+    should_restore = FALSE
+  ),
   public = list(
     #' @description Initialise an Event.
-    #' @param restore if true, the schedule of this event is restored when restoring from a saved
-    #' simulation.
+    #' @param restore if true, the schedule of this event is restored when
+    #' restoring from a saved simulation.
     initialize = function(restore = TRUE) {
-      self$.event <- create_event(restore)
+      self$.event <- create_event()
+      private$should_restore = restore
     },
 
     #' @description Schedule this event to occur in the future.
@@ -74,11 +78,23 @@ Event <- R6Class(
     # NOTE: intentionally empty
     .resize = function() {},
 
-    .checkpoint = function() {
+    #' @description save the state of the event
+    save_state = function() {
       event_checkpoint(self$.event)
     },
-    .restore = function(time, schedule) {
-      event_restore(self$.event, time, schedule)
+
+    #' @description restore the event from a previously saved state.
+    #' If the event was constructed with \code{restore = FALSE}, the state
+    #' argument is ignored.
+    #' @param timestep the timestep at which simulation is resumed.
+    #' @param state the previously saved state, as returned by the
+    #' \code{save_state} method. NULL is passed when restoring from a saved
+    #' simulation in which this variable did not exist.
+    restore_state = function(timestep, state) {
+      event_base_set_timestep(self$.event, timestep)
+      if (private$should_restore && !is.null(state)) {
+        event_restore(self$.event, state)
+      }
     }
   )
 )
