@@ -138,3 +138,37 @@ test_that("deterministic state & variable model works", {
 
   expect_mapequal(true_render, render$to_dataframe())
 })
+
+test_that("Can give names to processes", {
+  names <- NULL
+
+  simulation_loop(
+    processes = list(
+      foo = function(t) {
+        names <<- c(names, deparse(sys.call()[[1]]))
+      },
+      bar = function(t) {
+        names <<- c(names, deparse(sys.call()[[1]]))
+      }
+    ),
+    timesteps = 1)
+
+  expect_equal(names, c("foo", "bar"))
+})
+
+test_that("Can give two processes the same name", {
+  names <- NULL
+
+  simulation_loop(
+    processes = list(
+      foo = function(t) {
+        names <<- c(names, deparse(sys.call()[[1]]))
+      },
+      foo = function(t) {
+        names <<- c(names, deparse(sys.call()[[1]]))
+      }
+    ),
+    timesteps = 1)
+
+  expect_equal(names, c("foo", "foo"))
+})
