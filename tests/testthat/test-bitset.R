@@ -80,6 +80,31 @@ test_that("bitset or works", {
   expect_equal(a$to_vector(), c(1, 3, 5, 6, 7))
 })
 
+test_that("bitset assign works", {
+  a <- Bitset$new(10)
+  a$insert(c(1, 5, 6))
+  b <- Bitset$new(10)
+  b$insert(c(1, 3, 7))
+
+  a$assign(b)
+  expect_equal(a$to_vector(), c(1, 3, 7))
+
+  # Check the two bitsets aren't aliases of each other.
+  b$clear()
+  expect_equal(a$to_vector(), c(1, 3, 7))
+  expect_equal(b$to_vector(), numeric(0))
+})
+
+test_that("bitset assign requires bitsets to have same max size", {
+  a <- Bitset$new(8)
+  a$insert(c(1, 5, 6))
+  b <- Bitset$new(10)
+  b$insert(c(1, 3, 7))
+
+  expect_error(a$assign(b), "Incompatible bitmap sizes")
+})
+
+
 test_that("bitset set difference works for sets with intersection", {
   
   a <- Bitset$new(20)

@@ -89,6 +89,17 @@ void bitset_or(
 }
 
 //[[Rcpp::export]]
+void bitset_assign(
+    const Rcpp::XPtr<individual_index_t> a,
+    const Rcpp::XPtr<individual_index_t> b
+    ) {
+    if (a->max_size() != b->max_size()) {
+        Rcpp::stop("Incompatible bitmap sizes");
+    }
+    (*a) = (*b);
+}
+
+//[[Rcpp::export]]
 void bitset_xor(
     const Rcpp::XPtr<individual_index_t> a,
     const Rcpp::XPtr<individual_index_t> b

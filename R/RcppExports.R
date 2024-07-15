@@ -41,6 +41,10 @@ bitset_or <- function(a, b) {
     invisible(.Call(`_individual_bitset_or`, a, b))
 }
 
+bitset_assign <- function(a, b) {
+    invisible(.Call(`_individual_bitset_assign`, a, b))
+}
+
 bitset_xor <- function(a, b) {
     invisible(.Call(`_individual_bitset_xor`, a, b))
 }

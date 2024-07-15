@@ -110,6 +110,17 @@ Bitset <- list(
 
       #' ```{r echo=FALSE, results="asis"}
       #' bitset_method_doc(
+      #'   "assign",
+      #'   "overwrite the value of a bitset from another bitset",
+      #'   other = "the other bitset.")
+      #' ```
+      assign = function(other) {
+        bitset_assign(self$.bitset, other$.bitset)
+        self
+      },
+
+      #' ```{r echo=FALSE, results="asis"}
+      #' bitset_method_doc(
       #'   "size",
       #'   "get the number of elements in the set.")
       #' ```

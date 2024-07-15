@@ -61,6 +61,18 @@ clear the bitset.
 }
 }
 \if{html}{\out{<hr>}}
+\subsection{Method \code{assign()}}{
+overwrite the value of a bitset from another bitset
+\subsection{Usage}{
+\preformatted{b$assign(other)}
+}
+\subsection{Arguments}{
+\describe{
+\item{\code{other}}{the other bitset.}
+}
+}
+}
+\if{html}{\out{<hr>}}
 \subsection{Method \code{size()}}{
 get the number of elements in the set.
 \subsection{Usage}{
