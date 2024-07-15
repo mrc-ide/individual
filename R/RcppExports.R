@@ -69,6 +69,10 @@ filter_bitset_bitset <- function(b, other) {
     .Call(`_individual_filter_bitset_bitset`, b, other)
 }
 
+filter_bitset_logical <- function(bitset, other) {
+    .Call(`_individual_filter_bitset_logical`, bitset, other)
+}
+
 bitset_choose <- function(b, k) {
     invisible(.Call(`_individual_bitset_choose`, b, k))
 }

@@ -261,12 +261,14 @@ filter_bset <- bench::press(
     index <- individual::Bitset$new(size = limit)$insert(1:limit)
     vector_idx <- create_random_data(size = size, limit = limit)
     bset_idx <- individual::Bitset$new(size = limit)$insert(vector_idx)
+    logical_idx <- 1:limit %in% vector_idx
     bench::mark(
       min_iterations = 50,
       check = FALSE, 
       filter_gc = TRUE,
       vector = {individual::filter_bitset(bitset = index, other = vector_idx)},
-      bset = {individual::filter_bitset(bitset = index, other = bset_idx)}
+      bset = {individual::filter_bitset(bitset = index, other = bset_idx)},
+      logical = {individual::filter_bitset(bitset = index, other = logical_idx)},
     )
   }, 
   .grid = args_grid

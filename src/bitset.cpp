@@ -164,6 +164,28 @@ Rcpp::XPtr<individual_index_t> filter_bitset_bitset(
 }
 
 //[[Rcpp::export]]
+Rcpp::XPtr<individual_index_t> filter_bitset_logical(
+    const Rcpp::XPtr<individual_index_t> bitset,
+    Rcpp::LogicalVector other
+    ) {
+    if (bitset->size() != other.size()) {
+        Rcpp::stop("vector of logicals must equal the size of the bitset");
+    }
+
+    individual_index_t result(bitset->max_size());
+
+    auto bitset_it = bitset->begin();
+    auto other_it = other.begin();
+    for (; bitset_it != bitset->end() && other_it != other.end(); ++bitset_it, ++other_it) {
+        if (*other_it) {
+            result.insert(*bitset_it);
+        }
+    }
+
+    return Rcpp::XPtr<individual_index_t>(new individual_index_t(std::move(result)), true);
+}
+
+//[[Rcpp::export]]
 void bitset_choose(
         const Rcpp::XPtr<individual_index_t> b,
         const size_t k

@@ -74,8 +74,8 @@ probs <- runif(n)
 
 keep <- probs >= 0.5
 
-stay <- filter_bitset(bitset = bset,other = which(keep))
-leave <- filter_bitset(bitset = bset,other = which(!keep))
+stay <- filter_bitset(bitset = bset, other = keep)
+leave <- filter_bitset(bitset = bset, other = !keep)
 ```
 
 This pattern is almost always slower than using the sample method with a set difference:
