@@ -267,7 +267,7 @@ filter_bitset = function(bitset, other) {
       return(Bitset$new(from = filter_bitset_logical(bitset$.bitset, other)))
   } else {
     if (length(other) > 0) {
-      return(Bitset$new(from = filter_bitset_vector(bitset$.bitset, as.integer(other))))
+      return(Bitset$new(from = filter_bitset_integer(bitset$.bitset, as.integer(other))))
     } else {
       return(Bitset$new(size = bitset$max_size))
     }

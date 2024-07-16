@@ -129,7 +129,7 @@ std::vector<size_t> bitset_to_vector(const Rcpp::XPtr<individual_index_t> b) {
 }
 
 //[[Rcpp::export]]
-Rcpp::XPtr<individual_index_t> filter_bitset_vector(
+Rcpp::XPtr<individual_index_t> filter_bitset_integer(
     const Rcpp::XPtr<individual_index_t> b,
     std::vector<size_t> other
     ) {
