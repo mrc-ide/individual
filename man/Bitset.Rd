@@ -61,18 +61,6 @@ clear the bitset.
 }
 }
 \if{html}{\out{<hr>}}
-\subsection{Method \code{assign()}}{
-overwrite the value of a bitset from another bitset
-\subsection{Usage}{
-\preformatted{b$assign(other)}
-}
-\subsection{Arguments}{
-\describe{
-\item{\code{other}}{the other bitset.}
-}
-}
-}
-\if{html}{\out{<hr>}}
 \subsection{Method \code{size()}}{
 get the number of elements in the set.
 \subsection{Usage}{
@@ -172,8 +160,26 @@ k should be chosen such that \eqn{0 \le k \le N}.}
 \if{html}{\out{<hr>}}
 \subsection{Method \code{copy()}}{
 returns a copy of the bitset.
+
+In cases where a destination bitset already exists, it may be more
+performant to use the \code{copy_from} method instead.
 \subsection{Usage}{
 \preformatted{b$copy()}
+}
+}
+\if{html}{\out{<hr>}}
+\subsection{Method \code{copy_from()}}{
+overwrite the value of the bitset from another bitset.
+
+This is similar to calling \code{other$copy()}, but can be more
+efficient by reusing the resources of the existing bitset.
+\subsection{Usage}{
+\preformatted{b$copy_from(other)}
+}
+\subsection{Arguments}{
+\describe{
+\item{\code{other}}{the other bitset.}
+}
 }
 }
 \if{html}{\out{<hr>}}

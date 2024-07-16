@@ -89,7 +89,7 @@ void bitset_or(
 }
 
 //[[Rcpp::export]]
-void bitset_assign(
+void bitset_copy_from(
     const Rcpp::XPtr<individual_index_t> a,
     const Rcpp::XPtr<individual_index_t> b
     ) {

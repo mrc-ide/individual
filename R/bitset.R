@@ -110,17 +110,6 @@ Bitset <- list(
 
       #' ```{r echo=FALSE, results="asis"}
       #' bitset_method_doc(
-      #'   "assign",
-      #'   "overwrite the value of a bitset from another bitset",
-      #'   other = "the other bitset.")
-      #' ```
-      assign = function(other) {
-        bitset_assign(self$.bitset, other$.bitset)
-        self
-      },
-
-      #' ```{r echo=FALSE, results="asis"}
-      #' bitset_method_doc(
       #'   "size",
       #'   "get the number of elements in the set.")
       #' ```
@@ -221,9 +210,27 @@ Bitset <- list(
       #' ```{r echo=FALSE, results="asis"}
       #' bitset_method_doc(
       #'   "copy",
-      #'   "returns a copy of the bitset.")
+      #'   "returns a copy of the bitset.
+      #'
+      #'    In cases where a destination bitset already exists, it may be more
+      #'    performant to use the \\code{copy_from} method instead.")
       #' ```
       copy = function() Bitset$new(from = bitset_copy(self$.bitset)),
+
+
+      #' ```{r echo=FALSE, results="asis"}
+      #' bitset_method_doc(
+      #'   "copy_from",
+      #'   "overwrite the value of the bitset from another bitset.
+      #'
+      #'    This is similar to calling \\code{other$copy()}, but can be more
+      #'    efficient by reusing the resources of the existing bitset.",
+      #'   other = "the other bitset.")
+      #' ```
+      copy_from = function(other) {
+        bitset_copy_from(self$.bitset, other$.bitset)
+        self
+      },
 
       #' ```{r echo=FALSE, results="asis"}
       #' bitset_method_doc(
