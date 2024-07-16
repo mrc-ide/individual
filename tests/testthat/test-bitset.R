@@ -296,7 +296,7 @@ test_that("bitset filtering works for logical input", {
   expect_equal(filter_bitset(b, f)$to_vector(), c(1, 6))
 })
 
-test_that("bitset filtering works for logical input", {
+test_that("bitset filtering errors when logical vector is too short", {
   b <- Bitset$new(10)$insert(c(1, 5, 6))
   f <- c(TRUE, FALSE)
   expect_error(
