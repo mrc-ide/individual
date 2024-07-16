@@ -179,15 +179,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// filter_bitset_vector
-Rcpp::XPtr<individual_index_t> filter_bitset_vector(const Rcpp::XPtr<individual_index_t> b, std::vector<size_t> other);
-RcppExport SEXP _individual_filter_bitset_vector(SEXP bSEXP, SEXP otherSEXP) {
+// filter_bitset_integer
+Rcpp::XPtr<individual_index_t> filter_bitset_integer(const Rcpp::XPtr<individual_index_t> b, std::vector<size_t> other);
+RcppExport SEXP _individual_filter_bitset_integer(SEXP bSEXP, SEXP otherSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
     Rcpp::traits::input_parameter< std::vector<size_t> >::type other(otherSEXP);
-    rcpp_result_gen = Rcpp::wrap(filter_bitset_vector(b, other));
+    rcpp_result_gen = Rcpp::wrap(filter_bitset_integer(b, other));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -200,6 +200,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type b(bSEXP);
     Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type other(otherSEXP);
     rcpp_result_gen = Rcpp::wrap(filter_bitset_bitset(b, other));
+    return rcpp_result_gen;
+END_RCPP
+}
+// filter_bitset_logical
+Rcpp::XPtr<individual_index_t> filter_bitset_logical(const Rcpp::XPtr<individual_index_t> bitset, Rcpp::LogicalVector other);
+RcppExport SEXP _individual_filter_bitset_logical(SEXP bitsetSEXP, SEXP otherSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<individual_index_t> >::type bitset(bitsetSEXP);
+    Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type other(otherSEXP);
+    rcpp_result_gen = Rcpp::wrap(filter_bitset_logical(bitset, other));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1469,8 +1481,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_bitset_sample", (DL_FUNC) &_individual_bitset_sample, 2},
     {"_individual_bitset_sample_vector", (DL_FUNC) &_individual_bitset_sample_vector, 2},
     {"_individual_bitset_to_vector", (DL_FUNC) &_individual_bitset_to_vector, 1},
-    {"_individual_filter_bitset_vector", (DL_FUNC) &_individual_filter_bitset_vector, 2},
+    {"_individual_filter_bitset_integer", (DL_FUNC) &_individual_filter_bitset_integer, 2},
     {"_individual_filter_bitset_bitset", (DL_FUNC) &_individual_filter_bitset_bitset, 2},
+    {"_individual_filter_bitset_logical", (DL_FUNC) &_individual_filter_bitset_logical, 2},
     {"_individual_bitset_choose", (DL_FUNC) &_individual_bitset_choose, 2},
     {"_individual_create_categorical_variable", (DL_FUNC) &_individual_create_categorical_variable, 2},
     {"_individual_categorical_variable_get_size", (DL_FUNC) &_individual_categorical_variable_get_size, 1},

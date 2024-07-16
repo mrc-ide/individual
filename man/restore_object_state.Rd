@@ -27,5 +27,7 @@ and the \code{restore_state} method of each object is called.
 If the list of object is named, more objects may be specified than were
 originally present in the saved simulation, allowing a simulation to be
 extended with more features upon resuming. In this case, the
-\code{restore_state} method is called with a \code{NULL} argument.
+\code{restore_state} method of the new objects is called with a \code{NULL}
+argument. Conversly, the list of objects may omit certain entries, in which
+case their state to be restored is ignored.
 }

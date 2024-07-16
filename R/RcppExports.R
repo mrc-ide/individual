@@ -61,12 +61,16 @@ bitset_to_vector <- function(b) {
     .Call(`_individual_bitset_to_vector`, b)
 }
 
-filter_bitset_vector <- function(b, other) {
-    .Call(`_individual_filter_bitset_vector`, b, other)
+filter_bitset_integer <- function(b, other) {
+    .Call(`_individual_filter_bitset_integer`, b, other)
 }
 
 filter_bitset_bitset <- function(b, other) {
     .Call(`_individual_filter_bitset_bitset`, b, other)
+}
+
+filter_bitset_logical <- function(bitset, other) {
+    .Call(`_individual_filter_bitset_logical`, bitset, other)
 }
 
 bitset_choose <- function(b, k) {

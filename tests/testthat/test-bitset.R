@@ -290,6 +290,20 @@ test_that("bitset filtering works for vector input", {
   expect_equal(filter_bitset(b, f)$to_vector(), c(1, 6))
 })
 
+test_that("bitset filtering works for logical input", {
+  b <- Bitset$new(10)$insert(c(1, 5, 6))
+  f <- c(TRUE, FALSE, TRUE)
+  expect_equal(filter_bitset(b, f)$to_vector(), c(1, 6))
+})
+
+test_that("bitset filtering errors when logical vector is too short", {
+  b <- Bitset$new(10)$insert(c(1, 5, 6))
+  f <- c(TRUE, FALSE)
+  expect_error(
+    filter_bitset(b, f),
+    "vector of logicals must equal the size of the bitset")
+})
+
 test_that("bitset filtering works for vector input with jump at the start", {
   b <- Bitset$new(10)$insert(c(1, 5, 6, 10))
   f <- c(2, 4)
