@@ -1,3 +1,10 @@
+# individual 0.1.17
+
+  * Add a `copy_from` method to the `Bitset` class.
+  * Improve performance of bitset operations by making `num_bits` a compile-time constant expression.
+  * Support vectors of logicals as an argument to `filter_bitset`.
+  * Allow processes to be named, in order to produce more useful call stacks.
+
 # individual 0.1.16
 
   * Allow events and variables to be added and removed when restoring the simulation.
