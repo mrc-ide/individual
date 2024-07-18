@@ -1,117 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/articles/API.html</loc>
-  </url>
-  <url>
-    <loc>/articles/Changing_Populations.html</loc>
-  </url>
-  <url>
-    <loc>/articles/Checkpoint.html</loc>
-  </url>
-  <url>
-    <loc>/articles/Contributing.html</loc>
-  </url>
-  <url>
-    <loc>/articles/Performance.html</loc>
-  </url>
-  <url>
-    <loc>/articles/Tutorial.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Bitset.html</loc>
-  </url>
-  <url>
-    <loc>/reference/CategoricalVariable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DoubleVariable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Event.html</loc>
-  </url>
-  <url>
-    <loc>/reference/EventBase.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IntegerVariable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/RaggedDouble.html</loc>
-  </url>
-  <url>
-    <loc>/reference/RaggedInteger.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Render.html</loc>
-  </url>
-  <url>
-    <loc>/reference/TargetedEvent.html</loc>
-  </url>
-  <url>
-    <loc>/reference/bernoulli_process.html</loc>
-  </url>
-  <url>
-    <loc>/reference/categorical_count_renderer_process.html</loc>
-  </url>
-  <url>
-    <loc>/reference/filter_bitset.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fixed_probability_multinomial_process.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/infection_age_process.html</loc>
-  </url>
-  <url>
-    <loc>/reference/multi_probability_bernoulli_process.html</loc>
-  </url>
-  <url>
-    <loc>/reference/multi_probability_multinomial_process.html</loc>
-  </url>
-  <url>
-    <loc>/reference/reschedule_listener.html</loc>
-  </url>
-  <url>
-    <loc>/reference/restore_object_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/restore_simulation_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/save_object_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/save_simulation_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/simulation_loop.html</loc>
-  </url>
-  <url>
-    <loc>/reference/update_category_listener.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/API.html</loc></url>
+<url><loc>/articles/Changing_Populations.html</loc></url>
+<url><loc>/articles/Checkpoint.html</loc></url>
+<url><loc>/articles/Contributing.html</loc></url>
+<url><loc>/articles/Performance.html</loc></url>
+<url><loc>/articles/Tutorial.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/Bitset.html</loc></url>
+<url><loc>/reference/CategoricalVariable.html</loc></url>
+<url><loc>/reference/DoubleVariable.html</loc></url>
+<url><loc>/reference/Event.html</loc></url>
+<url><loc>/reference/EventBase.html</loc></url>
+<url><loc>/reference/IntegerVariable.html</loc></url>
+<url><loc>/reference/RaggedDouble.html</loc></url>
+<url><loc>/reference/RaggedInteger.html</loc></url>
+<url><loc>/reference/Render.html</loc></url>
+<url><loc>/reference/TargetedEvent.html</loc></url>
+<url><loc>/reference/bernoulli_process.html</loc></url>
+<url><loc>/reference/categorical_count_renderer_process.html</loc></url>
+<url><loc>/reference/filter_bitset.html</loc></url>
+<url><loc>/reference/fixed_probability_multinomial_process.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/infection_age_process.html</loc></url>
+<url><loc>/reference/multi_probability_bernoulli_process.html</loc></url>
+<url><loc>/reference/multi_probability_multinomial_process.html</loc></url>
+<url><loc>/reference/reschedule_listener.html</loc></url>
+<url><loc>/reference/restore_object_state.html</loc></url>
+<url><loc>/reference/restore_simulation_state.html</loc></url>
+<url><loc>/reference/save_object_state.html</loc></url>
+<url><loc>/reference/save_simulation_state.html</loc></url>
+<url><loc>/reference/simulation_loop.html</loc></url>
+<url><loc>/reference/update_category_listener.html</loc></url>
 </urlset>
+
