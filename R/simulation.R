@@ -57,9 +57,13 @@ simulation_loop <- function(
   flat_events <- unlist(events)
   flat_variables <- unlist(variables)
 
+  processes <- lapply(seq_along(processes), function(i) {
+    prepare_process(processes[[i]], names(processes)[[i]])
+  })
+
   for (t in seq(start, timesteps)) {
-    for (process in processes) {
-      execute_any_process(process, t)
+    for (p in processes) {
+      p(t)
     }
     for (event in flat_events) {
       event$.process()
@@ -194,14 +198,24 @@ restore_object_state <- function(timesteps, objects, state) {
   }
 }
 
-#' @title Execute a C++ or R process in the simulation
-#' @param p the process to execute
-#' @param t the timestep to pass to the process
+#' @title Prepare a process function for execution
+#' @description Wraps an R or C++ process into an R function, allowing either to
+#' be called uniformly. Additionally, if a name is provided, it will be used
+#' in creating the stack frame when calling the function.
+#' @param p an R or C++ process
+#' @param name the name to use for the process. This will appear in stack
+#' traces and profiles.
+#' @return an R function
 #' @noRd
-execute_any_process <- function(p, t) {
+prepare_process <- function(p, name = NULL) {
   if (inherits(p, "externalptr")) {
-    execute_process(p, t)
-  } else {
-    p(t)
+    ptr <- p
+    p <- function(t) execute_process(ptr, t)
   }
+  if (!is.null(name)) {
+    env <- new.env()
+    assign(name, p, envir=env)
+    p <- function(t) eval(call(name, t), env)
+  }
+  p
 }

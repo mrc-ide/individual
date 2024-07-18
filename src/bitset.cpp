@@ -89,6 +89,17 @@ void bitset_or(
 }
 
 //[[Rcpp::export]]
+void bitset_copy_from(
+    const Rcpp::XPtr<individual_index_t> a,
+    const Rcpp::XPtr<individual_index_t> b
+    ) {
+    if (a->max_size() != b->max_size()) {
+        Rcpp::stop("Incompatible bitmap sizes");
+    }
+    (*a) = (*b);
+}
+
+//[[Rcpp::export]]
 void bitset_xor(
     const Rcpp::XPtr<individual_index_t> a,
     const Rcpp::XPtr<individual_index_t> b
@@ -129,7 +140,7 @@ std::vector<size_t> bitset_to_vector(const Rcpp::XPtr<individual_index_t> b) {
 }
 
 //[[Rcpp::export]]
-Rcpp::XPtr<individual_index_t> filter_bitset_vector(
+Rcpp::XPtr<individual_index_t> filter_bitset_integer(
     const Rcpp::XPtr<individual_index_t> b,
     std::vector<size_t> other
     ) {
@@ -161,6 +172,28 @@ Rcpp::XPtr<individual_index_t> filter_bitset_bitset(
         ),
         true
     );
+}
+
+//[[Rcpp::export]]
+Rcpp::XPtr<individual_index_t> filter_bitset_logical(
+    const Rcpp::XPtr<individual_index_t> bitset,
+    Rcpp::LogicalVector other
+    ) {
+    if (bitset->size() != other.size()) {
+        Rcpp::stop("vector of logicals must equal the size of the bitset");
+    }
+
+    individual_index_t result(bitset->max_size());
+
+    auto bitset_it = bitset->begin();
+    auto other_it = other.begin();
+    for (; bitset_it != bitset->end() && other_it != other.end(); ++bitset_it, ++other_it) {
+        if (*other_it) {
+            result.insert(*bitset_it);
+        }
+    }
+
+    return Rcpp::XPtr<individual_index_t>(new individual_index_t(std::move(result)), true);
 }
 
 //[[Rcpp::export]]

@@ -80,7 +80,7 @@ test_that("Multinomial process samples probabilities correctly", {
     rate = l_p,
     destination_probabilities = d_p
   )
-  individual:::execute_any_process(mult_process,1)
+  individual:::prepare_process(mult_process)(1)
   state$.update()
   state_new <- sapply(X = LETTERS[1:5],FUN = function(l){state$get_size_of(l)})
 
@@ -117,7 +117,7 @@ test_that("Overdispersed multinomial process samples probabilities correctly", {
     rate_variable = rate,
     destination_probabilities = d_p
   )
-  individual:::execute_any_process(mult_process,1)
+  individual:::prepare_process(mult_process)(1)
   state$.update()
 
   state_a <- state$get_index_of(values = "A")$to_vector()
@@ -145,7 +145,7 @@ test_that("Overdispersed multinomial process doesn't move people it shouldn't", 
     rate_variable = rate,
     destination_probabilities = d_p
   )
-  individual:::execute_any_process(mult_process,1)
+  individual:::prepare_process(mult_process)(1)
   state$.update()
 
   state_a <- state$get_index_of(values = "A")$to_vector()
@@ -172,7 +172,7 @@ test_that("Overdispersed bernoulli process works correctly", {
     rate_variable = rate 
   )
 
-  individual:::execute_any_process(multi_bp,1)
+  individual:::prepare_process(multi_bp)(1)
   state$.update()
 
   state_s <- state$get_index_of(values = "S")$to_vector()

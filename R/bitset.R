@@ -210,9 +210,27 @@ Bitset <- list(
       #' ```{r echo=FALSE, results="asis"}
       #' bitset_method_doc(
       #'   "copy",
-      #'   "returns a copy of the bitset.")
+      #'   "returns a copy of the bitset.
+      #'
+      #'    In cases where a destination bitset already exists, it may be more
+      #'    performant to use the \\code{copy_from} method instead.")
       #' ```
       copy = function() Bitset$new(from = bitset_copy(self$.bitset)),
+
+
+      #' ```{r echo=FALSE, results="asis"}
+      #' bitset_method_doc(
+      #'   "copy_from",
+      #'   "overwrite the value of the bitset from another bitset.
+      #'
+      #'    This is similar to calling \\code{other$copy()}, but can be more
+      #'    efficient by reusing the resources of the existing bitset.",
+      #'   other = "the other bitset.")
+      #' ```
+      copy_from = function(other) {
+        bitset_copy_from(self$.bitset, other$.bitset)
+        self
+      },
 
       #' ```{r echo=FALSE, results="asis"}
       #' bitset_method_doc(
@@ -246,23 +264,28 @@ all.equal.Bitset <- function(target, current, ...) {
 #' @description This non-modifying function returns a new \code{\link{Bitset}}
 #' object of the same maximum size as the original but which only contains
 #' those values at the indices specified by the argument \code{other}.
-#' Indices in \code{other} may be specified either as a vector of integers or as
-#' another bitset. Please note that filtering by another bitset is not a
-#' "bitwise and" intersection, and will have the same behavior as providing
-#' an equivalent vector of integer indices.
+#'
+#' Indices in \code{other} may be specified either as a vector of logicals, a
+#' vector of integers or as another bitset. If a vector of logicals is
+#' specified, it must be of the same size as the bitset. Please note that
+#' filtering by another bitset is not a "bitwise and" intersection, and will
+#' have the same behavior as providing an equivalent vector of integer indices.
 #' @param bitset the \code{\link{Bitset}} to filter
-#' @param other the values to keep (may be a vector of intergers or another \code{\link{Bitset}})
+#' @param other the values to keep (may be a vector of integers, logicals, or
+#' another \code{\link{Bitset}})
 #' @export
 filter_bitset = function(bitset, other) {
-  if ( inherits(other, "Bitset")) {
+  if (inherits(other, "Bitset")) {
     if (other$size() > 0) {
       return(Bitset$new(from = filter_bitset_bitset(bitset$.bitset, other$.bitset)))
     } else {
       return(Bitset$new(size = bitset$max_size))
     }
+  } else if (inherits(other, "logical")) {
+      return(Bitset$new(from = filter_bitset_logical(bitset$.bitset, other)))
   } else {
     if (length(other) > 0) {
-      return(Bitset$new(from = filter_bitset_vector(bitset$.bitset, as.integer(other))))
+      return(Bitset$new(from = filter_bitset_integer(bitset$.bitset, as.integer(other))))
     } else {
       return(Bitset$new(size = bitset$max_size))
     }

@@ -1,6 +1,6 @@
 Package: individual
 Title: Framework for Specifying and Simulating Individual Based Models
-Version: 0.1.16
+Version: 0.1.17
 Authors@R: c(
   person(
     given = "Giovanni",
@@ -65,7 +65,7 @@ Suggests:
     testthat (>= 2.1.0),
     xml2,
     bench
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 VignetteBuilder: knitr
 LinkingTo:
   Rcpp,

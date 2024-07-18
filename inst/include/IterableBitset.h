@@ -24,9 +24,11 @@ class IterableBitset;
 //' Each integer stores the existance of sizeof(A) * 8 elements in the set.
 template<class A>
 class IterableBitset {
+    static constexpr size_t num_bits = sizeof(A) * 8;
+
     size_t max_n;
     size_t n;
-    size_t num_bits;
+
     bool exists(size_t) const;
     void set(size_t);
     void unset(size_t);
@@ -203,7 +205,6 @@ inline typename IterableBitset<A>::const_iterator::reference IterableBitset<A>::
 
 template<class A>
 inline IterableBitset<A>::IterableBitset(size_t size) : max_n(size){
-    num_bits = sizeof(A) * 8;
     bitmap = std::vector<A>(size/num_bits + 1, 0);
     n = 0;
 }

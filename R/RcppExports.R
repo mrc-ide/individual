@@ -41,6 +41,10 @@ bitset_or <- function(a, b) {
     invisible(.Call(`_individual_bitset_or`, a, b))
 }
 
+bitset_copy_from <- function(a, b) {
+    invisible(.Call(`_individual_bitset_copy_from`, a, b))
+}
+
 bitset_xor <- function(a, b) {
     invisible(.Call(`_individual_bitset_xor`, a, b))
 }
@@ -61,12 +65,16 @@ bitset_to_vector <- function(b) {
     .Call(`_individual_bitset_to_vector`, b)
 }
 
-filter_bitset_vector <- function(b, other) {
-    .Call(`_individual_filter_bitset_vector`, b, other)
+filter_bitset_integer <- function(b, other) {
+    .Call(`_individual_filter_bitset_integer`, b, other)
 }
 
 filter_bitset_bitset <- function(b, other) {
     .Call(`_individual_filter_bitset_bitset`, b, other)
+}
+
+filter_bitset_logical <- function(bitset, other) {
+    .Call(`_individual_filter_bitset_logical`, bitset, other)
 }
 
 bitset_choose <- function(b, k) {
