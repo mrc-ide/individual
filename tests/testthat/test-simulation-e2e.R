@@ -172,3 +172,20 @@ test_that("Can give two processes the same name", {
 
   expect_equal(names, c("foo", "foo"))
 })
+
+test_that("Can give a name to just one process", {
+  names <- NULL
+
+  simulation_loop(
+    processes = list(
+      function(t) {
+        names <<- c(names, deparse(sys.call()[[1]]))
+      },
+      foo = function(t) {
+        names <<- c(names, deparse(sys.call()[[1]]))
+      }
+    ),
+    timesteps = 1)
+
+  expect_equal(names[[2]], "foo")
+})
