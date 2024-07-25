@@ -212,7 +212,7 @@ prepare_process <- function(p, name = NULL) {
     ptr <- p
     p <- function(t) execute_process(ptr, t)
   }
-  if (!is.null(name)) {
+  if (!is.null(name) && name != "") {
     env <- new.env()
     assign(name, p, envir=env)
     p <- function(t) eval(call(name, t), env)
