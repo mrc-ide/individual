@@ -438,3 +438,41 @@ test_that("bitset is not equal to other types", {
   a$insert(c(1,4,5))
   expect_equal(all.equal(a, c(1,4,5)), "'current' is not a Bitset")
 })
+
+test_that("bitset_count_and can return the the count of overlapping betsets", {
+  a <- Bitset$new(10)$insert(c(1,4,5))
+  b <- Bitset$new(10)$insert(c(4,6,9))
+  c <- Bitset$new(10)$insert(c(4,5,9))
+  d <- Bitset$new(10)$insert(c(1,4,5,9))
+  expect_equal(bitset_count_and(a, b), 1)
+  expect_equal(bitset_count_and(a, c), 2)
+  expect_equal(bitset_count_and(a, d), 3)
+})
+
+test_that("bitset_count_and returns 0 for non-overlapping betsets", {
+  a <- Bitset$new(10)$insert(c(1,4,5))
+  b <- Bitset$new(10)$insert(c(2,6,9))
+  expect_equal(bitset_count_and(a, b), 0)
+})
+
+test_that("bitset_count_and doesn't mutate", {
+  a <- Bitset$new(10)$insert(c(1,4,5))
+  b <- Bitset$new(10)$insert(c(4,6,9))
+  c <- a$copy()
+  d <- b$copy()
+  bitset_count_and(a, b)
+  expect_equal(a, c)
+  expect_equal(b, d)
+})
+
+test_that("bitset_count_and doesn't work for differing sizes", {
+  a <- Bitset$new(10)$insert(c(1,4,5))
+  b <- Bitset$new(15)$insert(c(4,6,9))
+  c <- a$copy()
+  d <- b$copy()
+  expect_error(
+    bitset_count_and(a, b),
+    'Incompatible bitmap sizes'
+  )
+})
+

@@ -203,3 +203,11 @@ void bitset_choose(
 ) {
     bitset_choose_internal(*b, k);
 }
+
+//[[Rcpp::export]]
+size_t bitset_count_and_cpp(
+        const Rcpp::XPtr<individual_index_t> a,
+        const Rcpp::XPtr<individual_index_t> b
+) {
+    return a->count_and(*b);
+}
