@@ -291,3 +291,15 @@ filter_bitset = function(bitset, other) {
     }
   }
 }
+
+#' @title Count bitset and
+#' @description This non-modifying function returns the number of intersecting 
+#' elements between two bitsets \code{a} and \code{b}. This should be faster than
+#' writing \code{a$copy()$and(b)$size()} as it avoids the memory allocations of $copy().
+#'
+#' @param a a \code{\link{Bitset}}
+#' @param b another \code{\link{Bitset}}
+#' @export
+bitset_count_and = function(a, b) {
+  bitset_count_and_cpp(a$.bitset, b$.bitset)
+}

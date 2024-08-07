@@ -79,6 +79,7 @@ public:
     IterableBitset& operator&=(const IterableBitset&);
     IterableBitset& operator|=(const IterableBitset&);
     IterableBitset& operator^=(const IterableBitset&);
+    size_t count_and(const IterableBitset&) const;
     IterableBitset& clear();
     IterableBitset& inverse();
     iterator begin();
@@ -291,6 +292,18 @@ inline IterableBitset<A>& IterableBitset<A>::operator &=(const IterableBitset<A>
         n += popcount(bitmap[i]);
     }
     return *this;
+}
+
+template<class A>
+inline size_t IterableBitset<A>::count_and(const IterableBitset<A>& other) const {
+    if (max_size() != other.max_size()) {
+        Rcpp::stop("Incompatible bitmap sizes");
+    }
+    auto n = 0u;
+    for (auto i = 0u; i < bitmap.size(); ++i) {
+        n += popcount(bitmap[i] & other.bitmap[i]);
+    }
+    return n;
 }
 
 template<class A>

@@ -81,6 +81,10 @@ bitset_choose <- function(b, k) {
     invisible(.Call(`_individual_bitset_choose`, b, k))
 }
 
+bitset_count_and_cpp <- function(a, b) {
+    .Call(`_individual_bitset_count_and_cpp`, a, b)
+}
+
 create_categorical_variable <- function(categories, values) {
     .Call(`_individual_create_categorical_variable`, categories, values)
 }
@@ -495,5 +499,5 @@ variable_resize <- function(variable) {
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call(`_individual_RcppExport_registerCCallable`)
+    .Call('_individual_RcppExport_registerCCallable', PACKAGE = 'individual')
 })
