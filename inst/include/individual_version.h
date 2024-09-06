@@ -1,6 +1,6 @@
 #ifndef INDIVIDUAL_VERSION_H_
 #define INDIVIDUAL_VERSION_H_
 
-#define INDIVIDUAL_VERSION "0.1.17"
+#define INDIVIDUAL_VERSION "0.1.18"
 
 #endif
