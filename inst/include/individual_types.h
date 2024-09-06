@@ -16,5 +16,6 @@
 #include "RaggedDouble.h"
 #include "Event.h"
 #include "RenderVector.h"
+#include "individual_version.h"
 
 #endif /* INDIVIDUAL_TYPES_H_ */
