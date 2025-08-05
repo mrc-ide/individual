@@ -30,6 +30,7 @@ struct IntegerVariable : public NumericVariable<int> {
     virtual size_t get_size_of_set(const std::vector<int>&) const;
     virtual size_t get_size_of_set(const int) const;
     virtual size_t get_size_of_range(const int, const int) const;
+    virtual individual_index_t get_modulo_differences(const int, const int) const;
 };
 
 inline IntegerVariable::IntegerVariable(const std::vector<int>& values)
@@ -59,6 +60,23 @@ inline individual_index_t IntegerVariable::get_index_of_set(
     auto result = individual_index_t(size());
     for (auto i = 0u; i < values.size(); ++i) {
         if ( values[i] == value ) {
+            result.insert(i);
+        }
+    }
+    
+    return result;
+}
+
+//' @title return bitset giving index of individuals whose difference between
+// the current value and the queried value is a multiple of the queried difference
+inline individual_index_t IntegerVariable::get_modulo_differences(
+    const int value,
+    const int difference
+) const {
+    
+    auto result = individual_index_t(size());
+    for (auto i = 0u; i < values.size(); ++i) {
+        if ( (values[i] - value) % difference == 0 ) {
             result.insert(i);
         }
     }

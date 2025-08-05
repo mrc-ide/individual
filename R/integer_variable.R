@@ -39,6 +39,15 @@ IntegerVariable <- R6Class(
 
     },
 
+    #' @description Return a vector of individuals with 0 modulo difference from input value
+    #' and the distance being compared
+    #' @param value the value to check
+    #' @param difference the difference to check, e.g. difference = 2 checks whether the
+    #' difference is even
+    get_modulo_differences = function(value, difference){
+      integer_variable_get_modulo_differences(self$.variable, value, difference)
+    },
+
     #' @description Return a \code{\link[individual]{Bitset}} for individuals with some subset of values.
     #' Either search for indices corresponding to values in \code{set}, or
     #' for indices corresponding to values in range \eqn{[a,b]}. Either \code{set}
