@@ -10,7 +10,6 @@
 
 #include <Rcpp.h>
 #include "CategoricalVariable.h"
-// #include "FunctionalVariable.h"
 #include "IntegerVariable.h"
 #include "DoubleVariable.h"
 #include "RaggedInteger.h"
