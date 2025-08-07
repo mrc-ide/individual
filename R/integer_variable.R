@@ -45,9 +45,7 @@ IntegerVariable <- R6Class(
     #' @param difference the difference to check, e.g. difference = 2 checks whether the
     #' difference is even
     get_modulo_differences = function(value, difference){
-      stopifnot(!is.null(value))
       stopifnot(is.finite(value))
-      stopifnot(!is.null(difference))
       stopifnot(is.finite(difference))
       integer_variable_get_modulo_differences(self$.variable, value, difference)
     },

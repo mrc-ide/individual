@@ -49,7 +49,6 @@ CategoricalVariable <- R6Class(
       stopifnot(is.finite(index))
       stopifnot(index > 0)
       if (length(index) == 0){
-        # temp_inds <- 
         results <- categorical_variable_get_values(self$.variable)
       }
       else{
