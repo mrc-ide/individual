@@ -77,6 +77,10 @@ Our review process is based off of [RESIDE's PR review process](https://reside-i
 
 ## Microbenchmarks
 
+We have R based benchmarks in tests/performance. Please add new benchmarks for performance critical code.
+
+Please note the google benchmarks are deprecated. The below instructions will not work since building requires including R and Rcpp.
+
 We use [google benchmark](https://github.com/google/benchmark) for our
 microbenchmarks. You can compile and run the benchmarks like this:
 
