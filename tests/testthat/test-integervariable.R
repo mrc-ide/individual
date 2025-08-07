@@ -23,6 +23,29 @@ test_that("IntegerVariable get values returns correct values without index", {
   expect_equal(variable$get_values(c(1, 1, 2, 2)), c(1, 1, 2, 2))
 })
 
+test_that("IntegerVariables returns correct modulo differences", {
+  size <- 10
+  variable <- IntegerVariable$new(seq_len(size))
+  vals <- variable$get_values()
+  x <- 3
+  d <- 3
+  expected_modulo_differences <- c()
+  ind <- 1
+  for(i in seq_len(size)){
+    val <- vals[i]
+    if ((val - x) %% d == 0){
+      expected_modulo_differences[ind] <- i - 1
+      ind <- ind + 1
+    }
+  }
+  expect_equal(variable$get_modulo_differences(x, d), expected_modulo_differences)
+})
+
+test_that("IntegerVariables errors for invalid modulo differences", {
+  expect_error(variable$get_modulo_differences())
+  expect_error(variable$get_modulo_differences("a", 1))
+  expect_error(variable$get_modulo_differences(1, "1"))
+})
 test_that("IntegerVariable get values returns correct values with vector index", {
   size <- 10
   variable <- IntegerVariable$new(seq_len(size))

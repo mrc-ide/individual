@@ -15,6 +15,7 @@ household or age bin.
 \itemize{
 \item \href{#method-IntegerVariable-new}{\code{IntegerVariable$new()}}
 \item \href{#method-IntegerVariable-get_values}{\code{IntegerVariable$get_values()}}
+\item \href{#method-IntegerVariable-get_modulo_differences}{\code{IntegerVariable$get_modulo_differences()}}
 \item \href{#method-IntegerVariable-get_index_of}{\code{IntegerVariable$get_index_of()}}
 \item \href{#method-IntegerVariable-get_size_of}{\code{IntegerVariable$get_size_of()}}
 \item \href{#method-IntegerVariable-queue_update}{\code{IntegerVariable$queue_update()}}
@@ -60,6 +61,27 @@ Get the variable values.
 \item{\code{index}}{optionally return a subset of the variable vector. If
 \code{NULL}, return all values; if passed a \code{\link[individual]{Bitset}}
 or integer vector, return values of those individuals.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-IntegerVariable-get_modulo_differences"></a>}}
+\if{latex}{\out{\hypertarget{method-IntegerVariable-get_modulo_differences}{}}}
+\subsection{Method \code{get_modulo_differences()}}{
+Return a vector of individuals with 0 modulo difference from input value
+and the distance being compared
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{IntegerVariable$get_modulo_differences(value, difference)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{value}}{the value to check}
+
+\item{\code{difference}}{the difference to check, e.g. difference = 2 checks whether the
+difference is even}
 }
 \if{html}{\out{</div>}}
 }
