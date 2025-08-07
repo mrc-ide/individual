@@ -106,6 +106,14 @@ void categorical_variable_queue_shrink_bitset(
 
 //[[Rcpp::export]]
 std::vector<std::string> categorical_variable_get_values(
+    Rcpp::XPtr<CategoricalVariable> variable
+    ) {
+    std::vector<std::string> results;
+    results = variable->get_values();
+    return results;
+}
+//[[Rcpp::export]]
+std::vector<std::string> categorical_variable_get_values_with_index(
     Rcpp::XPtr<CategoricalVariable> variable,
     std::vector<size_t>& index
     ) {

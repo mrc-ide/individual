@@ -125,8 +125,12 @@ categorical_variable_queue_shrink_bitset <- function(variable, index) {
     invisible(.Call(`_individual_categorical_variable_queue_shrink_bitset`, variable, index))
 }
 
-categorical_variable_get_values <- function(variable, index) {
-    .Call(`_individual_categorical_variable_get_values`, variable, index)
+categorical_variable_get_values <- function(variable) {
+    .Call(`_individual_categorical_variable_get_values`, variable)
+}
+
+categorical_variable_get_values_with_index <- function(variable, index) {
+    .Call(`_individual_categorical_variable_get_values_with_index`, variable, index)
 }
 
 create_double_variable <- function(values) {

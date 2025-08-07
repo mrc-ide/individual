@@ -53,6 +53,7 @@ public:
     virtual size_t size() const override;
     virtual void update() override;
     virtual std::vector<std::string> get_values(const std::vector<size_t>&);
+    virtual std::vector<std::string> get_values();
 };
 
 
@@ -243,6 +244,27 @@ inline std::vector<std::string> CategoricalVariable::get_values(const std::vecto
                 Rcpp::stop(message.str());
             }
             if (indices.at(cat).find(index[i]) != indices.at(cat).end()) {
+                result[i] = cat;
+                break;
+            }
+        }
+    }
+    return result;
+}
+//' @title get values of full variable
+inline std::vector<std::string> CategoricalVariable::get_values(){
+    
+    // Generate empty output vector
+    auto result = std::vector<std::string>(size());
+    for(auto i = 0u; i < size(); ++i){
+        // Determine which category the individual is within
+        for (auto cat: categories) {
+            if (indices.find(cat) == indices.end()) {
+                std::stringstream message;
+                message << "unknown category: " << cat;
+                Rcpp::stop(message.str());
+            }
+            if (indices.at(cat).find(i) != indices.at(cat).end()) {
                 result[i] = cat;
                 break;
             }

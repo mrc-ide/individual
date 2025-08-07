@@ -8,6 +8,29 @@ test_that("Creating CategoricalVariables errors with bad input", {
   expect_error(CategoricalVariable$new(categories = character(0), initial_values = letters[1:2]))
 })
 
+test_that("CategoricalVariables returns correct values", {
+  categories = c('S', 'S', 'R', 'I')
+  
+  # standard case
+  variable <- CategoricalVariable$new(SIR, categories)
+  expect_equal(variable$get_values(seq(1,4)), categories)
+  expect_equal(variable$get_values(c(2,4)), c(categories[c(2,4)]))
+  
+  # empty case
+  variable <- CategoricalVariable$new(SIR, character(0))
+  expect_equal(variable$get_values() , character(0))
+})
+
+test_that("CategoricalVariables returns correct values after update", {
+  categories = c('S', 'S', 'R', 'I')
+  
+  # standard case
+  variable <- CategoricalVariable$new(SIR, categories)
+  variable$queue_update('I', 1)
+  variable$.update()
+  expect_equal(variable$get_values(seq(1,4)), c('I', 'S', 'R', 'I'))
+})
+
 test_that("CategoricalVariable get index works returns correct values", {
   size <- 10
   state <- CategoricalVariable$new(SIR, rep('S', size))

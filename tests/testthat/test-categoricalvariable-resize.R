@@ -10,6 +10,16 @@ test_that("CategoricalVariable extending variables returns the new values", {
   expect_equal(x$get_index_of('R')$to_vector(), 13)
 })
 
+test_that("CategoricalVariables returns correct values after resize", {
+  categories = c('S', 'S', 'R', 'I')
+  
+  # standard case
+  x <- CategoricalVariable$new(SIR, categories)
+  x$queue_extend(values = rep('I', 2))
+  x$.resize()
+  expect_equal(x$get_values(seq(1:length(c(categories, rep('I', 2))))), c(categories, rep('I', 2)))
+})
+
 test_that("CategoricalVariable shrinking variables removes values (bitset)", {
   x <- CategoricalVariable$new(SIR, rep('S', 10))
   x$queue_shrink(index = Bitset$new(10)$insert(1:5))
