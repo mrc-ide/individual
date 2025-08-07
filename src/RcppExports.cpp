@@ -362,6 +362,29 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// categorical_variable_get_values
+std::vector<std::string> categorical_variable_get_values(Rcpp::XPtr<CategoricalVariable> variable);
+RcppExport SEXP _individual_categorical_variable_get_values(SEXP variableSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    rcpp_result_gen = Rcpp::wrap(categorical_variable_get_values(variable));
+    return rcpp_result_gen;
+END_RCPP
+}
+// categorical_variable_get_values_with_index
+std::vector<std::string> categorical_variable_get_values_with_index(Rcpp::XPtr<CategoricalVariable> variable, std::vector<size_t>& index);
+RcppExport SEXP _individual_categorical_variable_get_values_with_index(SEXP variableSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<CategoricalVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t>& >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(categorical_variable_get_values_with_index(variable, index));
+    return rcpp_result_gen;
+END_RCPP
+}
 // dummy
 void dummy();
 static SEXP _individual_dummy_try() {
@@ -851,6 +874,19 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
     rcpp_result_gen = Rcpp::wrap(integer_variable_get_values(variable));
+    return rcpp_result_gen;
+END_RCPP
+}
+// integer_variable_get_modulo_differences
+individual_index_t integer_variable_get_modulo_differences(Rcpp::XPtr<IntegerVariable> variable, const int value, const int difference);
+RcppExport SEXP _individual_integer_variable_get_modulo_differences(SEXP variableSEXP, SEXP valueSEXP, SEXP differenceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<IntegerVariable> >::type variable(variableSEXP);
+    Rcpp::traits::input_parameter< const int >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< const int >::type difference(differenceSEXP);
+    rcpp_result_gen = Rcpp::wrap(integer_variable_get_modulo_differences(variable, value, difference));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1508,6 +1544,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_categorical_variable_queue_extend", (DL_FUNC) &_individual_categorical_variable_queue_extend, 2},
     {"_individual_categorical_variable_queue_shrink", (DL_FUNC) &_individual_categorical_variable_queue_shrink, 2},
     {"_individual_categorical_variable_queue_shrink_bitset", (DL_FUNC) &_individual_categorical_variable_queue_shrink_bitset, 2},
+    {"_individual_categorical_variable_get_values", (DL_FUNC) &_individual_categorical_variable_get_values, 1},
+    {"_individual_categorical_variable_get_values_with_index", (DL_FUNC) &_individual_categorical_variable_get_values_with_index, 2},
     {"_individual_dummy", (DL_FUNC) &_individual_dummy, 0},
     {"_individual_create_double_variable", (DL_FUNC) &_individual_create_double_variable, 1},
     {"_individual_double_variable_get_values", (DL_FUNC) &_individual_double_variable_get_values, 1},
@@ -1550,6 +1588,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_individual_process_targeted_listener", (DL_FUNC) &_individual_process_targeted_listener, 3},
     {"_individual_create_integer_variable", (DL_FUNC) &_individual_create_integer_variable, 1},
     {"_individual_integer_variable_get_values", (DL_FUNC) &_individual_integer_variable_get_values, 1},
+    {"_individual_integer_variable_get_modulo_differences", (DL_FUNC) &_individual_integer_variable_get_modulo_differences, 3},
     {"_individual_integer_variable_get_values_at_index", (DL_FUNC) &_individual_integer_variable_get_values_at_index, 2},
     {"_individual_integer_variable_get_values_at_index_vector", (DL_FUNC) &_individual_integer_variable_get_values_at_index_vector, 2},
     {"_individual_integer_variable_get_index_of_set_vector", (DL_FUNC) &_individual_integer_variable_get_index_of_set_vector, 2},

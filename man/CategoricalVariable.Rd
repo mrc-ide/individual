@@ -17,6 +17,7 @@ if possible because certain operations will be faster.
 \item \href{#method-CategoricalVariable-get_index_of}{\code{CategoricalVariable$get_index_of()}}
 \item \href{#method-CategoricalVariable-get_size_of}{\code{CategoricalVariable$get_size_of()}}
 \item \href{#method-CategoricalVariable-get_categories}{\code{CategoricalVariable$get_categories()}}
+\item \href{#method-CategoricalVariable-get_values}{\code{CategoricalVariable$get_values()}}
 \item \href{#method-CategoricalVariable-queue_update}{\code{CategoricalVariable$queue_update()}}
 \item \href{#method-CategoricalVariable-queue_extend}{\code{CategoricalVariable$queue_extend()}}
 \item \href{#method-CategoricalVariable-queue_shrink}{\code{CategoricalVariable$queue_shrink()}}
@@ -94,6 +95,23 @@ unordered storage type.
 \if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$get_categories()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CategoricalVariable-get_values"></a>}}
+\if{latex}{\out{\hypertarget{method-CategoricalVariable-get_values}{}}}
+\subsection{Method \code{get_values()}}{
+return the value of the variable for the given individuals
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CategoricalVariable$get_values(index = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{index}}{the indices of individuals whose categories will be returned}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CategoricalVariable-queue_update"></a>}}
