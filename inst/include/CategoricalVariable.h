@@ -52,6 +52,8 @@ public:
     virtual void resize() override;
     virtual size_t size() const override;
     virtual void update() override;
+    virtual std::vector<std::string> get_values(const std::vector<size_t>&);
+    virtual std::vector<std::string> get_values();
 };
 
 
@@ -228,5 +230,46 @@ inline size_t CategoricalVariable::size() const {
 inline const std::vector<std::string>& CategoricalVariable::get_categories() const {
     return categories;
 }
-
+//' @title get values at index given by a vector
+inline std::vector<std::string> CategoricalVariable::get_values(const std::vector<size_t>& index){
+    
+    // Generate empty output vector
+    auto result = std::vector<std::string>(index.size());
+    for (auto i = 0u; i < index.size(); ++i) {
+        // Determine which category the individual is within
+        for (auto cat: categories) {
+            if (indices.find(cat) == indices.end()) {
+                std::stringstream message;
+                message << "unknown category: " << cat;
+                Rcpp::stop(message.str());
+            }
+            if (indices.at(cat).find(index[i]) != indices.at(cat).end()) {
+                result[i] = cat;
+                break;
+            }
+        }
+    }
+    return result;
+}
+//' @title get values of full variable
+inline std::vector<std::string> CategoricalVariable::get_values(){
+    
+    // Generate empty output vector
+    auto result = std::vector<std::string>(size());
+    for(auto i = 0u; i < size(); ++i){
+        // Determine which category the individual is within
+        for (auto cat: categories) {
+            if (indices.find(cat) == indices.end()) {
+                std::stringstream message;
+                message << "unknown category: " << cat;
+                Rcpp::stop(message.str());
+            }
+            if (indices.at(cat).find(i) != indices.at(cat).end()) {
+                result[i] = cat;
+                break;
+            }
+        }
+    }
+    return result;
+}
 #endif /* INST_INCLUDE_CATEGORICAL_VARIABLE_H_ */

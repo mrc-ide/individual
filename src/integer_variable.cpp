@@ -27,6 +27,15 @@ const std::vector<int>& integer_variable_get_values(
 }
 
 //[[Rcpp::export]]
+individual_index_t integer_variable_get_modulo_differences(
+    Rcpp::XPtr<IntegerVariable> variable,
+    const int value,
+    const int difference
+) {
+    return variable->get_modulo_differences(value, difference);
+}
+
+//[[Rcpp::export]]
 std::vector<int> integer_variable_get_values_at_index(
     Rcpp::XPtr<IntegerVariable> variable,
     Rcpp::XPtr<individual_index_t> index

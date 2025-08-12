@@ -12,6 +12,7 @@ reference:
   - RaggedDouble
   - Bitset
   - filter_bitset
+  - bitset_count_and
 - title: "Events & Rendering"
   desc: "Classes for events and rendering output."
 - contents:

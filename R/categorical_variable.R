@@ -43,6 +43,20 @@ CategoricalVariable <- R6Class(
       categorical_variable_get_categories(self$.variable)
     },
 
+    #' @description return the value of the variable for the given individuals
+    #' @param index the indices of individuals whose categories will be returned
+    get_values = function(index = NULL) {
+      stopifnot(is.finite(index))
+      stopifnot(index > 0)
+      if (length(index) == 0){
+        results <- categorical_variable_get_values(self$.variable)
+      }
+      else{
+        results <- categorical_variable_get_values_with_index(self$.variable, index)
+      }
+      return(results)
+    },
+
     #' @description queue an update for this variable
     #' @param value the new value
     #' @param index the indices of individuals whose value will be updated

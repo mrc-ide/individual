@@ -81,6 +81,10 @@ bitset_choose <- function(b, k) {
     invisible(.Call(`_individual_bitset_choose`, b, k))
 }
 
+bitset_count_and_cpp <- function(a, b) {
+    .Call(`_individual_bitset_count_and_cpp`, a, b)
+}
+
 create_categorical_variable <- function(categories, values) {
     .Call(`_individual_create_categorical_variable`, categories, values)
 }
@@ -123,6 +127,14 @@ categorical_variable_queue_shrink <- function(variable, index) {
 
 categorical_variable_queue_shrink_bitset <- function(variable, index) {
     invisible(.Call(`_individual_categorical_variable_queue_shrink_bitset`, variable, index))
+}
+
+categorical_variable_get_values <- function(variable) {
+    .Call(`_individual_categorical_variable_get_values`, variable)
+}
+
+categorical_variable_get_values_with_index <- function(variable, index) {
+    .Call(`_individual_categorical_variable_get_values_with_index`, variable, index)
 }
 
 create_double_variable <- function(values) {
@@ -287,6 +299,10 @@ create_integer_variable <- function(values) {
 
 integer_variable_get_values <- function(variable) {
     .Call(`_individual_integer_variable_get_values`, variable)
+}
+
+integer_variable_get_modulo_differences <- function(variable, value, difference) {
+    .Call(`_individual_integer_variable_get_modulo_differences`, variable, value, difference)
 }
 
 integer_variable_get_values_at_index <- function(variable, index) {
