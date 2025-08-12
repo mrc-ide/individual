@@ -1,3 +1,9 @@
+# individual 0.1.18
+
+  * add $get_values to CategoricalVariable
+  * add $get_modulo_differences to IntegerVariable
+  * add bitset_count_and for quick intersection counts
+
 # individual 0.1.17
 
   * Add a `copy_from` method to the `Bitset` class.
