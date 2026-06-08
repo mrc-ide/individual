@@ -1,3 +1,8 @@
+# individual 0.1.19
+
+  * add support for R 4.6 (C++20 fixes)
+  * fix small bug in bernoulli sampling
+
 # individual 0.1.18
 
   * add $get_values to CategoricalVariable
