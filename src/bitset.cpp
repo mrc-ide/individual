@@ -179,7 +179,7 @@ Rcpp::XPtr<individual_index_t> filter_bitset_logical(
     const Rcpp::XPtr<individual_index_t> bitset,
     Rcpp::LogicalVector other
     ) {
-    if (bitset->size() != other.size()) {
+    if (bitset->size() != static_cast<size_t>(other.size())) {
         Rcpp::stop("vector of logicals must equal the size of the bitset");
     }
 

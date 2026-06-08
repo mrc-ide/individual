@@ -34,23 +34,21 @@ class IterableBitset {
     void unset(size_t);
     std::vector<A> bitmap;
 public:
-    using allocator_type = std::allocator<size_t>;
-    using value_type = allocator_type::value_type;
-    using reference = allocator_type::reference;
-    using const_reference = allocator_type::const_reference;
-    using difference_type = allocator_type::difference_type;
-    using size_type = allocator_type::size_type;
-    using input_iterator_type = std::iterator<std::input_iterator_tag, size_t>;
+    using value_type = size_t;
+    using reference = size_t&;
+    using const_reference = const size_t&;
+    using difference_type = std::ptrdiff_t;
+    using size_type = std::size_t;
 
     class const_iterator {
     private:
         const IterableBitset& index;
         size_t p;
     public:
-        using difference_type = allocator_type::difference_type;
-        using value_type = allocator_type::value_type;
-        using reference = allocator_type::reference;
-        using pointer = const allocator_type::pointer;
+        using difference_type = std::ptrdiff_t;
+        using value_type = size_t;
+        using reference = size_t&;
+        using pointer = const size_t*;
         using iterator_category = std::forward_iterator_tag;
 
         const_iterator(const IterableBitset&, size_t);
@@ -608,7 +606,7 @@ struct fast_bernouilli {
             // `probability_log` rounded to zero, which we can't inverse. Treat
             // these probabilties the same as 0.
             if (probability_log == 0.0) {
-                probability = 0.;
+                this->probability = 0.;
             } else {
                 inverse_log = 1 / probability_log;
             }
@@ -641,7 +639,7 @@ struct fast_bernouilli {
 
     private:
         double probability;
-        double inverse_log;
+        double inverse_log = 0.0;
 };
 
 //' Sample values from the bitset.
