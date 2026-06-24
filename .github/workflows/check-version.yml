@@ -1,0 +1,32 @@
+on:
+  pull_request:
+    branches:
+      - dev
+      - master
+
+name: Check Version
+
+jobs:
+  all:
+    runs-on: ubuntu-latest
+
+    name: Check Version
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Check version format and availability
+        run: |
+          cpp_version=$(sed -n 's/^#define\s\+INDIVIDUAL_VERSION\s\+"\(.*\)"/\1/p' inst/include/individual_version.h)
+          r_version=$(sed -n 's/^Version: \(.*\)/\1/p' DESCRIPTION)
+          echo "Version found in individual_version.h: $cpp_version"
+          echo "Version found in DESCRIPTION: $r_version"
+          if [[ $cpp_version != $r_version ]]; then
+            echo "Versions do not match, exiting"
+            exit 1
+          fi
